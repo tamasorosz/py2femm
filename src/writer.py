@@ -32,6 +32,15 @@ class FemmFields(Enum):
     HEAT_FLOW = "heat_flow"
 
 
+class LengthUnit(Enum):
+    INCHES = "inches"
+    MILLIMETERS = "millimeters"
+    CENTIMETERS = "centimeters"
+    MILS = "mils"
+    METERS = "meters"
+    MICROMETERS = "micrometers"
+
+
 class FemmWriter:
     """Writes out a model snapshot"""
 
@@ -50,13 +59,6 @@ class FemmWriter:
             raise ValueError(f"({self.field}) != {shouldbe}")
 
         return True
-
-    def validate_units(self, unit):
-        valid_units = {"inches", "millimeters", "centimeters", "mils", "meters", "micrometers"}
-        if unit not in valid_units:
-            raise ValueError(f"There is no {unit} unit.")
-        return True
-
     def write(self, file_name):
         """Generate a runnable lua-script for a FEMM calculation.
 
@@ -877,7 +879,7 @@ class FemmWriter:
 
         # problem commands for the magnetic problem
 
-    def magnetic_problem(self, freq, unit, type, precision=1e-8, depth=1, minangle=30, acsolver=0):
+    def magnetic_problem(self, freq, unit: LengthUnit, type, precision=1e-8, depth=1, minangle=30, acsolver=0):
         """
          Definition of the magnetic problem, like probdef(0,'inches','axi',1e-8,0,30);
     
@@ -906,12 +908,11 @@ class FemmWriter:
         """
 
         self.validate_field(FemmFields.MAGNETIC)
-        self.validate_units(unit)
 
         cmd = Template("mi_probdef($frequency,$units,$type,$precision, $depth, $minangle, $acsolver)")
         cmd = cmd.substitute(
             frequency=freq,
-            units=r"'" + unit + r"'",
+            units=r"'" + unit.value + r"'",
             type=r"'" + type + r"'",
             precision=precision,
             depth=depth,
@@ -926,7 +927,7 @@ class FemmWriter:
 
     def heat_problem(
             self,
-            units,
+            units: LengthUnit,
             type,
             precision=1e-8,
             depth=1,
@@ -942,11 +943,7 @@ class FemmWriter:
         :param minangle: Minimum angle constraint sen to the mesh generator
         :param prevsoln: Indicates the solution from the previous time step assuming transient time problems
         """
-        cmd = None
         self.validate_field(FemmFields.HEAT_FLOW)
-
-        self.validate_units(units)
-
         if type not in {"planar", "axi"}:
             raise ValueError(f"Choose either 'planar' or 'axi', not {type}. ")
 
@@ -954,14 +951,14 @@ class FemmWriter:
             prevsoln = ""
             timestep = 0
 
-        cmd = f'hi_probdef("{units}", "{type}", {precision}, {depth}, {minangle}, "{prevsoln}", {timestep})'
+        cmd = f'hi_probdef("{units.value}", "{type}", {precision}, {depth}, {minangle}, "{prevsoln}", {timestep})'
 
         if FemmWriter.push:
             self.lua_model.append(cmd)
 
         return cmd
 
-    def electrostatic_problem(self, units, type, precision=1e-8, depth=1, minangle=30):
+    def electrostatic_problem(self, units: LengthUnit, type, precision=1e-8, depth=1, minangle=30):
         """
         :param units: "inches", "millimeters", "centimeters", "mils", "meters", "micrometers"
         :param type: "planar", "axi",
@@ -970,36 +967,26 @@ class FemmWriter:
         :param minangle: Minimum angle constraint sen to the mesh generator
         """
 
-        cmd = None
         self.validate_field(FemmFields.ELECTROSTATIC)
-
-        self.validate_units(units)
 
         if type not in {"planar", "axi"}:
             raise ValueError(f"Choose either 'planar' or 'axi', not {type}. ")
 
-        cmd = f'ei_probdef("{units}", "{type}", {precision}, {depth}, {minangle})'
+        cmd = f'ei_probdef("{units.value}", "{type}", {precision}, {depth}, {minangle})'
 
         if FemmWriter.push:
             self.lua_model.append(cmd)
 
         return cmd
 
-    def currentflow_problem(self, units, type, frequency=0, precision=1e-8, depth=1, minangle=30):
-        # TODO: add docstring
-        """
-        -
-        """
+    def currentflow_problem(self, units: LengthUnit, type, frequency=0, precision=1e-8, depth=1, minangle=30):
 
-        cmd = None
         self.validate_field(FemmFields.CURRENT_FLOW)
-
-        self.validate_units(units)
 
         if type not in {"planar", "axi"}:
             raise ValueError(f"Choose either 'planar' or 'axi', not {type}. ")
 
-        cmd = f'ci_probdef("{units}", "{type}", {frequency}, {precision}, {depth}, {minangle})'
+        cmd = f'ci_probdef("{units.value}", "{type}", {frequency}, {precision}, {depth}, {minangle})'
 
         if FemmWriter.push:
             self.lua_model.append(cmd)
@@ -1216,7 +1203,7 @@ class FemmWriter:
 
         self.clear_selected()
 
-    def set_boundary_definition(self, selection_point:Node, boundary: Union[Boundary, None], elementsize=None):
+    def set_boundary_definition(self, selection_point: Node, boundary: Union[Boundary, None], elementsize=None):
         self.select_segment(selection_point.x, selection_point.y)
         if elementsize:
             automesh = AutoMeshOption.CUSTOM_MESH.value
