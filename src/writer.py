@@ -20,8 +20,6 @@ from src.general import Material, AutoMeshOption, Boundary, FemmFields, LengthUn
 class FemmWriter:
     """Writes out a model snapshot"""
 
-    push = True
-
     def __init__(self):
         self.field = FemmFields.MAGNETIC
         self.lua_model = []
@@ -169,10 +167,6 @@ class FemmWriter:
         """Adds a node to the given point (x,y)"""
         cmd = Template("${field}_addnode($x_coord, $y_coord)")
         cmd = cmd.substitute(field=self.field.to_string(), x_coord=x, y_coord=y)
-
-        if FemmWriter.push:
-            self.lua_model.append(cmd)
-
         return cmd
 
     def add_segment(self, x1, y1, x2, y2, push=True):
@@ -180,48 +174,17 @@ class FemmWriter:
         Add a new line segment from the node closest to (x1,y1) to the node closest to
         (x2,y2)
         """
-
-        cmd = None
-
-        if self.field == FemmFields.MAGNETIC:
-            cmd = Template("mi_addsegment($x1_coord, $y1_coord, $x2_coord, $y2_coord)")
-
-        if self.field == FemmFields.ELECTROSTATIC:
-            cmd = Template("ei_addsegment($x1_coord, $y1_coord, $x2_coord, $y2_coord)")
-
-        if self.field == FemmFields.HEAT_FLOW:
-            cmd = Template("hi_addsegment($x1_coord, $y1_coord, $x2_coord, $y2_coord)")
-
-        if self.field == FemmFields.CURRENT_FLOW:
-            cmd = Template("ci_addsegment($x1_coord, $y1_coord, $x2_coord, $y2_coord)")
-
-        cmd = cmd.substitute(x1_coord=x1, y1_coord=y1, x2_coord=x2, y2_coord=y2)
-
-        if FemmWriter.push:
-            self.lua_model.append(cmd)
-
+        cmd = Template("${field}_addsegment($x1_coord, $y1_coord, $x2_coord, $y2_coord)")
+        cmd = cmd.substitute(field=self.field.to_string(), x1_coord=x1, y1_coord=y1, x2_coord=x2, y2_coord=y2)
+        self.lua_model.append(cmd)
         return cmd
 
     def add_blocklabel(self, x, y):
         """Add a new block label at (x,y)"""
-        cmd = None
-        if self.field == FemmFields.MAGNETIC:
-            cmd = Template("mi_addblocklabel($x_coord, $y_coord)")
-
-        if self.field == FemmFields.ELECTROSTATIC:
-            cmd = Template("ei_addblocklabel($x_coord, $y_coord)")
-
-        if self.field == FemmFields.HEAT_FLOW:
-            cmd = Template("hi_addblocklabel($x_coord, $y_coord)")
-
-        if self.field == FemmFields.CURRENT_FLOW:
-            cmd = Template("ci_addblocklabel($x_coord, $y_coord)")
-
-        cmd = cmd.substitute(x_coord=x, y_coord=y)
-
-        if FemmWriter.push:
-            self.lua_model.append(cmd)
-
+        #     cmd = Template("ci_addblocklabel($x_coord, $y_coord)")
+        cmd = Template("${field}_addblocklabel($x_coord, $y_coord)")
+        cmd = cmd.substitute(field=self.field.to_string(), x_coord=x, y_coord=y)
+        self.lua_model.append(cmd)
         return cmd
 
     def add_arc(self, x1, y1, x2, y2, angle, maxseg):
@@ -229,24 +192,9 @@ class FemmWriter:
         Add a new arc segment from the nearest node to (x1,y1) to the nearest
         node to (x2,y2) with angle 'angle' divided into 'maxseg' segments.
         """
-        cmd = None
-
-        if self.field == FemmFields.MAGNETIC:
-            cmd = Template("mi_addarc($x_1, $y_1, $x_2, $y_2, $angle, $maxseg)")
-
-        if self.field == FemmFields.ELECTROSTATIC:
-            cmd = Template("ei_addarc($x_1, $y_1, $x_2, $y_2, $angle, $maxseg)")
-
-        if self.field == FemmFields.HEAT_FLOW:
-            cmd = Template("hi_addarc($x_1, $y_1, $x_2, $y_2, $angle, $maxseg)")
-
-        if self.field == FemmFields.CURRENT_FLOW:
-            cmd = Template("ci_addarc($x_1, $y_1, $x_2, $y_2, $angle, $maxseg)")
-
-        cmd = cmd.substitute(x_1=x1, y_1=y1, x_2=x2, y_2=y2, angle=angle, maxseg=maxseg)
-
-        if FemmWriter.push:
-            self.lua_model.append(cmd)
+        cmd = Template("${field}_addarc($x_1, $y_1, $x_2, $y_2, $angle, $maxseg)")
+        cmd = cmd.substitute(field=self.field.to_string(), x_1=x1, y_1=y1, x_2=x2, y_2=y2, angle=angle, maxseg=maxseg)
+        self.lua_model.append(cmd)
 
         return cmd
 
@@ -254,10 +202,8 @@ class FemmWriter:
         """
         :param boundary: checks the type of the boundary parameter, then
         """
-        cmd = None
-        if FemmWriter.push:
-            self.lua_model.append(str(boundary))
-
+        cmd = str(boundary)
+        self.lua_model.append(cmd)
         return cmd
 
     def add_material(self, material: Material):
@@ -266,34 +212,16 @@ class FemmWriter:
         Returns:
             str: The FEMM command string added to the Lua model.
         """
-
-        cmd = None
         cmd = str(material)
         if cmd is not None:
-            if FemmWriter.push:
-                self.lua_model.append(cmd)
-
+            self.lua_model.append(cmd)
         return cmd
 
     def delete_selected(self):
         """Delete all selected objects"""
 
-        cmd = None
-        if self.field == FemmFields.MAGNETIC:
-            cmd = "mi_deleteselected"
-
-        if self.field == FemmFields.ELECTROSTATIC:
-            cmd = "ei_deleteselected"
-
-        if self.field == FemmFields.HEAT_FLOW:
-            cmd = "hi_deleteselected"
-
-        if self.field == FemmFields.CURRENT_FLOW:
-            cmd = "ci_deleteselected"
-
-        if FemmWriter.push:
-            self.lua_model.append(cmd)
-
+        cmd = f"{self.field.to_string()}_deleteselected"
+        self.lua_model.append(cmd)
         return cmd
 
     def delete_selected_nodes(self):
@@ -301,81 +229,30 @@ class FemmWriter:
         Delete all selected nodes. The object should be selected using the node
         selection command.
         """
-        cmd = None
-        if self.field == FemmFields.MAGNETIC:
-            cmd = "mi_deleteselectednodes"
-
-        if self.field == FemmFields.ELECTROSTATIC:
-            cmd = "ei_deleteselectednodes"
-
-        if self.field == FemmFields.HEAT_FLOW:
-            cmd = "hi_deleteselectednodes"
-
-        if self.field == FemmFields.CURRENT_FLOW:
-            cmd = "ci_deleteselectednodes"
-
-        if FemmWriter.push:
-            self.lua_model.append(cmd)
-
+        cmd = f"{self.field.to_string()}_deleteselectednodes"
+        self.lua_model.append(cmd)
         return cmd
 
     def delete_selected_labels(self):
         """Delete all selected labels."""
-        cmd = None
-        if self.field == FemmFields.MAGNETIC:
-            cmd = "mi_deleteselectedlabels"
 
-        if self.field == FemmFields.ELECTROSTATIC:
-            cmd = "ei_deleteselectedlabels"
-
-        if self.field == FemmFields.HEAT_FLOW:
-            cmd = "hi_deleteselectedlabels"
-
-        if self.field == FemmFields.CURRENT_FLOW:
-            cmd = "ci_deleteselectedlabels"
-
-        if FemmWriter.push:
-            self.lua_model.append(cmd)
+        cmd = f"{self.field.to_string()}_deleteselectedlabels"
+        self.lua_model.append(cmd)
 
         return cmd
 
     def delete_selected_segments(self):
         """Delete all selected segments."""
-        cmd = None
-        if self.field == FemmFields.MAGNETIC:
-            cmd = "mi_deleteselectedsegments"
-
-        if self.field == FemmFields.ELECTROSTATIC:
-            cmd = "ei_deleteselectedsegments"
-
-        if self.field == FemmFields.HEAT_FLOW:
-            cmd = "hi_deleteselectedsegments"
-
-        if self.field == FemmFields.CURRENT_FLOW:
-            cmd = "ci_deleteselectedsegments"
-
-        if FemmWriter.push:
-            self.lua_model.append(cmd)
+        cmd = f"{self.field.to_string()}_deleteselectedsegments"
+        self.lua_model.append(cmd)
 
         return cmd
 
     def delete_selected_arc_segments(self):
         """Delete all selected arc segments."""
-        cmd = None
-        if self.field == FemmFields.MAGNETIC:
-            cmd = "mi_deleteselectedarcsegments"
 
-        if self.field == FemmFields.ELECTROSTATIC:
-            cmd = "ei_deleteselectedarcsegments"
-
-        if self.field == FemmFields.HEAT_FLOW:
-            cmd = "hi_deleteselectedarcsegments"
-
-        if self.field == FemmFields.CURRENT_FLOW:
-            cmd = "ci_deleteselectedarcsegments"
-
-        if FemmWriter.push:
-            self.lua_model.append(cmd)
+        cmd = f"{self.field.to_string()}_deleteselectedarcsegments"
+        self.lua_model.append(cmd)
 
         return cmd
 
@@ -445,101 +322,35 @@ class FemmWriter:
 
     def clear_selected(self):
         """Clears all selected nodes, blocks, segments, and arc segments."""
-        cmd = None
-        if self.field == FemmFields.MAGNETIC:
-            cmd = "mi_clearselected()"
-
-        elif self.field == FemmFields.ELECTROSTATIC:
-            cmd = "ei_clearselected()"
-
-        elif self.field == FemmFields.HEAT_FLOW:
-            cmd = "hi_clearselected()"
-
-        elif self.field == FemmFields.CURRENT_FLOW:
-            cmd = "ci_clearselected()"
-
-        if FemmWriter.push:
-            self.lua_model.append(cmd)
+        cmd = f"{self.field.to_string()}_clearselected()"
+        self.lua_model.append(cmd)
 
         return cmd
 
     def select_segment(self, x, y):
         """Select the line segment closest to (x, y)"""
-        cmd = None
-        if self.field == FemmFields.MAGNETIC:
-            cmd = f'mi_selectsegment({x}, {y})'
-
-        elif self.field == FemmFields.ELECTROSTATIC:
-            cmd = f'ei_selectsegment({x}, {y})'
-
-        elif self.field == FemmFields.HEAT_FLOW:
-            cmd = f'hi_selectsegment({x}, {y})'
-
-        elif self.field == FemmFields.CURRENT_FLOW:
-            cmd = f'ci_selectsegment({x}, {y})'
-
-        if FemmWriter.push:
-            self.lua_model.append(cmd)
+        cmd = f"{self.field.to_string()}_selectsegment({x}, {y})"
+        self.lua_model.append(cmd)
 
         return cmd
 
     def select_arc_segment(self, x, y):
         """Select the arc segment closest to (x, y)"""
-        cmd = None
-        if self.field == FemmFields.MAGNETIC:
-            cmd = f'mi_selectarcsegment({x}, {y})'
-
-        elif self.field == FemmFields.ELECTROSTATIC:
-            cmd = f'ei_selectarcsegment({x}, {y})'
-
-        elif self.field == FemmFields.HEAT_FLOW:
-            cmd = f'hi_selectarcsegment({x}, {y})'
-
-        elif self.field == FemmFields.CURRENT_FLOW:
-            cmd = f'ci_selectarcsegment({x}, {y})'
-
-        if FemmWriter.push:
-            self.lua_model.append(cmd)
+        cmd = f"{self.field.to_string()}_selectarcsegment({x}, {y})"
+        self.lua_model.append(cmd)
 
         return cmd
 
     def select_node(self, x, y):
         """Select the node closest to (x, y) and return its coordinates."""
-        cmd = None
-        if self.field == FemmFields.MAGNETIC:
-            cmd = f'mi_selectnode({x}, {y})'
-
-        elif self.field == FemmFields.ELECTROSTATIC:
-            cmd = f'ei_selectnode({x}, {y})'
-
-        elif self.field == FemmFields.HEAT_FLOW:
-            cmd = f'hi_selectnode({x}, {y})'
-
-        elif self.field == FemmFields.CURRENT_FLOW:
-            cmd = f'ci_selectnode({x}, {y})'
-
-        if FemmWriter.push:
-            self.lua_model.append(cmd)
-
+        cmd = f"{self.field.to_string()}_selectnode({x}, {y})"
+        self.lua_model.append(cmd)
         return cmd
 
     def select_label(self, x, y):
         """Select the label closest to (x, y) and return its coordinates."""
-        cmd = None
-        if self.field == FemmFields.MAGNETIC:
-            cmd = f'mi_selectlabel({x}, {y})'
-
-        elif self.field == FemmFields.ELECTROSTATIC:
-            cmd = f'ei_selectlabel({x}, {y})'
-
-        elif self.field == FemmFields.HEAT_FLOW:
-            cmd = f'hi_selectlabel({x}, {y})'
-
-        elif self.field == FemmFields.CURRENT_FLOW:
-            cmd = f'ci_selectlabel({x}, {y})'
-
-        if FemmWriter.push:
-            self.lua_model.append(cmd)
+        cmd = f"{self.field.to_string()}_selectlabel({x}, {y})"
+        self.lua_model.append(cmd)
 
         return cmd
 
@@ -575,24 +386,9 @@ class FemmWriter:
         all entity types are to be selected.
         """
 
-        cmd = None
-        if self.field == FemmFields.MAGNETIC:
-            cmd = Template("mi_selectcircle($xp, $yp, $Rp, $Editmode)")
-
-        if self.field == FemmFields.ELECTROSTATIC:
-            cmd = Template("ei_selectcircle($xp, $yp, $Rp, $Editmode)")
-
-        if self.field == FemmFields.HEAT_FLOW:
-            cmd = Template("hi_selectcircle($xp, $yp, $Rp, $Editmode)")
-
-        if self.field == FemmFields.CURRENT_FLOW:
-            cmd = Template("ci_selectcircle($xp, $yp, $Rp, $Editmode)")
-
-        cmd = cmd.substitute(xp=x, yp=y, Rp=R, Editmode=editmode)
-
-        if FemmWriter.push:
-            self.lua_model.append(cmd)
-
+        cmd = Template("${field}_selectcircle($xp, $yp, $Rp, $Editmode)")
+        cmd = cmd.substitute(field=self.field.to_string(), xp=x, yp=y, Rp=R, Editmode=editmode)
+        self.lua_model.append(cmd)
         return cmd
 
     def select_rectangle(self, x1, y1, x2, y2, editmode):
@@ -603,24 +399,9 @@ class FemmWriter:
         entity types are to be selected.
         """
 
-        cmd = None
-        if self.field == FemmFields.MAGNETIC:
-            cmd = Template("mi_selectrectangle($x1p,$y1p,$x2p,$y2p,$Editmode)")
-
-        if self.field == FemmFields.ELECTROSTATIC:
-            cmd = Template("ei_selectrectangle($x1p,$y1p,$x2p,$y2p,$Editmode)")
-
-        if self.field == FemmFields.HEAT_FLOW:
-            cmd = Template("hi_selectrectangle($x1p,$y1p,$x2p,$y2p,$Editmode)")
-
-        if self.field == FemmFields.CURRENT_FLOW:
-            cmd = Template("ci_selectrectangle($x1p,$y1p,$x2p,$y2p,$Editmode)")
-
-        cmd = cmd.substitute(x1p=x1, y1p=y1, x2p=x2, y2p=y2, Editmode=editmode)
-
-        if FemmWriter.push:
-            self.lua_model.append(cmd)
-
+        cmd = Template("${field}_selectrectangle($x1p,$y1p,$x2p,$y2p,$Editmode)")
+        cmd = cmd.substitute(field=self.field.to_string(), x1p=x1, y1p=y1, x2p=x2, y2p=y2, Editmode=editmode)
+        self.lua_model.append(cmd)
         return cmd
 
     def set_pointprop(self, propname, groupno=0, inductor="<None>"):
@@ -629,22 +410,8 @@ class FemmWriter:
         :param groupno: Set the selected nodes to have the group number 'groupno'
         :param inductor: Specifies which conductor the node belongs to. Default value is '<None>'
         """
-        prefix = None
-        cmd = None
-        if self.field == FemmFields.MAGNETIC:
-            prefix = "mi"
-        elif self.field == FemmFields.HEAT_FLOW:
-            prefix = "hi"
-        elif self.field == FemmFields.CURRENT_FLOW:
-            prefix = "ci"
-        elif self.field == FemmFields.ELECTROSTATIC:
-            prefix = "ei"
-
-        cmd = f'{prefix}_setnodeprop("{propname}", {groupno}, "{inductor}")'
-
-        if FemmWriter.push:
-            self.lua_model.append(cmd)
-
+        cmd = f'{self.field.to_string()}_setnodeprop("{propname}", {groupno}, "{inductor}")'
+        self.lua_model.append(cmd)
         return cmd
 
     def set_segment_prop(
@@ -671,20 +438,8 @@ class FemmWriter:
                          conductor, this parameter can be specified as
                          "<None>".
         """
-        prefix = None
-        if self.field == FemmFields.MAGNETIC:
-            prefix = "mi"
-        elif self.field == FemmFields.HEAT_FLOW:
-            prefix = "hi"
-        elif self.field == FemmFields.CURRENT_FLOW:
-            prefix = "ci"
-        elif self.field == FemmFields.ELECTROSTATIC:
-            prefix = "ei"
-
-        cmd = f'{prefix}_setsegmentprop("{propname}", {elementsize}, {automesh}, {hide}, {group}, "{inductor}")'
-
-        if FemmWriter.push:
-            self.lua_model.append(cmd)
+        cmd = f'{self.field.to_string()}_setsegmentprop("{propname}", {elementsize}, {automesh}, {hide}, {group}, "{inductor}")'
+        self.lua_model.append(cmd)
 
         return cmd
 
