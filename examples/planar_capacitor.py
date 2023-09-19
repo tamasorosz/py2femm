@@ -1,5 +1,6 @@
 from src.electrostatics import ElectrostaticMaterial, ElectrostaticSurfaceCharge, ElectrostaticFixedVoltage
-from src.writer import FemmWriter, FemmFields, LengthUnit
+from src.writer import FemmWriter
+from src.general import FemmFields, LengthUnit
 from src.geometry import Geometry, Node, Line, CircleArc
 
 

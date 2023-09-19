@@ -9,7 +9,8 @@ from src.geometry import Geometry, Node, Line, CircleArc
 from src.heatflow import HeatFlowMaterial, HeatFlowFixedTemperature, HeatFlowHeatFlux, HeatFlowConvection, \
     HeatFlowRadiation, HeatFlowPeriodic, HeatFlowAntiPeriodic
 from src.magnetics import MagneticMaterial, MagneticDirichlet, MagneticMixed
-from src.writer import FemmWriter, FemmFields
+from src.writer import FemmWriter
+from src.general import FemmFields
 
 
 class FemmTester(TestCase):

@@ -10,35 +10,11 @@ generation in different subfields
 from math import asin, degrees
 from pathlib import Path
 from string import Template
-from enum import Enum
 from typing import Union
 
-from src.current_flow import CurrentFlowMaterial, CurrentFlowFixedVoltage, CurrentFlowMixed, CurrentFlowSurfaceCurrent, \
-    CurrentFlowPeriodic, CurrentFlowAntiPeriodic
-from src.electrostatics import ElectrostaticMaterial, ElectrostaticFixedVoltage, ElectrostaticMixed, \
-    ElectrostaticSurfaceCharge, ElectrostaticPeriodic, ElectrostaticAntiPeriodic
-from src.heatflow import HeatFlowMaterial, HeatFlowFixedTemperature, HeatFlowHeatFlux, HeatFlowConvection, \
-    HeatFlowRadiation, HeatFlowPeriodic, HeatFlowAntiPeriodic
-from src.magnetics import MagneticMaterial, MagneticDirichlet, MagneticMixed, MagneticAnti, MagneticPeriodic, \
-    MagneticAntiPeriodicAirgap, MagneticPeriodicAirgap
-from src.geometry import Geometry, Node, Line, CircleArc
-from src.general import Material, AutoMeshOption, Boundary
-
-
-class FemmFields(Enum):
-    CURRENT_FLOW = "current_flow"
-    ELECTROSTATIC = "electrostatic"
-    MAGNETIC = "magnetic"
-    HEAT_FLOW = "heat_flow"
-
-
-class LengthUnit(Enum):
-    INCHES = "inches"
-    MILLIMETERS = "millimeters"
-    CENTIMETERS = "centimeters"
-    MILS = "mils"
-    METERS = "meters"
-    MICROMETERS = "micrometers"
+from src.magnetics import MagneticMaterial
+from src.geometry import Geometry, Node
+from src.general import Material, AutoMeshOption, Boundary, FemmFields, LengthUnit
 
 
 class FemmWriter:

@@ -19,3 +19,19 @@ class Material(ABC):
 class Boundary(ABC):
     name: str
     type: int
+
+
+class FemmFields(Enum):
+    CURRENT_FLOW = "current_flow"
+    ELECTROSTATIC = "electrostatic"
+    MAGNETIC = "magnetic"
+    HEAT_FLOW = "heat_flow"
+
+
+class LengthUnit(Enum):
+    INCHES = "inches"
+    MILLIMETERS = "millimeters"
+    CENTIMETERS = "centimeters"
+    MILS = "mils"
+    METERS = "meters"
+    MICROMETERS = "micrometers"

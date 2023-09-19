@@ -1,7 +1,8 @@
 import unittest
 
 from src.electrostatics import ElectrostaticMaterial
-from src.writer import FemmWriter, FemmFields, LengthUnit
+from src.writer import FemmWriter
+from src.general import FemmFields, LengthUnit
 
 
 class TestFemmElectrostaticProblem(unittest.TestCase):
