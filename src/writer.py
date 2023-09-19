@@ -306,22 +306,6 @@ class FemmWriter:
         cmd = None
         self.validate_field()
 
-        # # Current Flow
-        # if self.field == FemmFields.CURRENT_FLOW and isinstance(boundary, CurrentFlowFixedVoltage):
-        #     cmd = f'ci_addboundprop("{boundary.name}", {boundary.Vs}, 0, 0, 0, 0)'
-        #
-        # if self.field == FemmFields.CURRENT_FLOW and isinstance(boundary, CurrentFlowMixed):
-        #     cmd = f'ci_addboundprop("{boundary.name}", 0, 0, {boundary.c0}, {boundary.c1}, 2)'
-        #
-        # if self.field == FemmFields.CURRENT_FLOW and isinstance(boundary, CurrentFlowSurfaceCurrent):
-        #     cmd = f'ci_addboundprop("{boundary.name}", 0, {boundary.qs}, 0, 0, 2)'
-        #
-        # if self.field == FemmFields.CURRENT_FLOW and isinstance(boundary, CurrentFlowPeriodic):
-        #     cmd = f'ci_addboundprop("{boundary.name}", 0, 0, 0, 0, 3)'
-        #
-        # if self.field == FemmFields.CURRENT_FLOW and isinstance(boundary, CurrentFlowAntiPeriodic):
-        #     cmd = f'ci_addboundprop("{boundary.name}", 0, 0, 0, 0, 4)'
-
         if FemmWriter.push:
             self.lua_model.append(str(boundary))
 

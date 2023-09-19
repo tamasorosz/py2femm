@@ -1,9 +1,10 @@
 from dataclasses import dataclass
 from string import Template
+from general import Material, Boundary
 
 
 @dataclass(kw_only=True)
-class CurrentFlowMaterial:
+class CurrentFlowMaterial(Material):
     material_name: str
     ox: float
     oy: float
@@ -26,31 +27,51 @@ class CurrentFlowMaterial:
         return cmd
 
 
+@dataclass(kw_only=True)
+class CurrentFlowBaseClass(Boundary):
+    type: int
+    Vs: float = 0.0
+    c0: float = 0.0
+    c1: float = 0.0
+    qs: float = 0.0
+
+    def __str__(self):
+        return f'ci_addboundprop("{self.name}",{self.Vs}, {self.qs},{self.c0}, {self.c1}, {self.type})'
+
+
 # Current Flow Boundary Conditions
-@dataclass
-class CurrentFlowFixedVoltage:
-    name: str
-    Vs: float
+class CurrentFlowFixedVoltage(CurrentFlowBaseClass):
+    def __init__(self, name: str, Vs: float):
+        self.name = name
+        self.Vs = Vs
+        self.type = 0
 
 
-@dataclass
-class CurrentFlowMixed:
-    name: str
-    c0: float
-    c1: float
+class CurrentFlowMixed(CurrentFlowBaseClass):
+
+    def __init__(self, name: str, c0: float, c1: float):
+        self.name = name
+        self.c0 = c0
+        self.c1 = c1
+        self.type = 1
 
 
-@dataclass
-class CurrentFlowSurfaceCurrent:
-    name: str
-    qs: float
+class CurrentFlowSurfaceCurrent(CurrentFlowBaseClass):
+    def __init__(self, name: str, qs: float):
+        self.name = name
+        self.q = qs
+        self.type = 2
 
 
-@dataclass
-class CurrentFlowPeriodic:
-    name: str
+
+class CurrentFlowPeriodic(CurrentFlowBaseClass):
+    def __init__(self, name: str, qs: float):
+        self.name = name
+        self.type = 3
 
 
-@dataclass
-class CurrentFlowAntiPeriodic:
-    name: str
+
+class CurrentFlowAntiPeriodic(CurrentFlowBaseClass):
+    def __init__(self, name: str, qs: float):
+        self.name = name
+        self.type = 4
