@@ -9,19 +9,19 @@ from src.geometry import Geometry, Node, Line, CircleArc
 from src.heatflow import HeatFlowMaterial, HeatFlowFixedTemperature, HeatFlowHeatFlux, HeatFlowConvection, \
     HeatFlowRadiation, HeatFlowPeriodic, HeatFlowAntiPeriodic
 from src.magnetics import MagneticMaterial, MagneticDirichlet, MagneticMixed
-from src.writer import FemmWriter
+from src.femm_problem import FemmProblem
 from src.general import FemmFields
 
 
 class FemmTester(TestCase):
     def test_not_defined_writer(self):
-        writer = FemmWriter()
+        writer = FemmProblem()
         writer.field = None
 
         self.assertRaises(ValueError)
 
     def test_validate_field(self):
-        writer = FemmWriter()
+        writer = FemmProblem()
         writer.field = FemmFields.ELECTROSTATIC
         self.assertEqual(writer.validate_field(), True)
 
@@ -35,7 +35,7 @@ class FemmTester(TestCase):
         self.assertEqual(writer.validate_field(), True)
 
     def test_validate_units(self):
-        writer = FemmWriter()
+        writer = FemmProblem()
         self.assertEqual(True, writer.validate_units("inches"))
         self.assertEqual(True, writer.validate_units("millimeters"))
         self.assertEqual(True, writer.validate_units("centimeters"))
@@ -45,7 +45,7 @@ class FemmTester(TestCase):
         self.assertRaises(ValueError, writer.validate_units, "alma")
 
     def test_write(self):
-        writer = FemmWriter()
+        writer = FemmProblem()
         writer.field = FemmFields.HEAT_FLOW
         writer.lua_model.append("alma")
         writer.write("test_write.lua")
@@ -57,22 +57,22 @@ class FemmTester(TestCase):
         y = 0.0
 
         # magnetic field
-        res = FemmWriter().add_node(Node(x, y))
+        res = FemmProblem().add_node(Node(x, y))
         self.assertEqual("mi_addnode(1.0, 0.0)", res)
 
         # current flow
-        fmw = FemmWriter()
+        fmw = FemmProblem()
         fmw.field = FemmFields.CURRENT_FLOW
         res = fmw.add_node(Node(x, y))
         self.assertEqual("ci_addnode(1.0, 0.0)", res)
 
         # electrostatic
-        fmw = FemmWriter()
+        fmw = FemmProblem()
         fmw.field = FemmFields.ELECTROSTATIC
         res = fmw.add_node(Node(x, y))
         self.assertEqual("ei_addnode(1.0, 0.0)", res)
 
-        fmw = FemmWriter()
+        fmw = FemmProblem()
         fmw.field = FemmFields.HEAT_FLOW
         res = fmw.add_node(Node(x, y))
         self.assertEqual("hi_addnode(1.0, 0.0)", res)
@@ -84,23 +84,23 @@ class FemmTester(TestCase):
         x2 = 1.0
         y2 = 1.0
 
-        res = FemmWriter().add_segment(x1, y1, x2, y2)
+        res = FemmProblem().add_segment(x1, y1, x2, y2)
         self.assertEqual("mi_addsegment(1.0, 0.0, 1.0, 1.0)", res)
 
         # current field
-        fmw = FemmWriter()
+        fmw = FemmProblem()
         fmw.field = FemmFields.CURRENT_FLOW
         res = fmw.add_segment(x1, y1, x2, y2)
         self.assertEqual("ci_addsegment(1.0, 0.0, 1.0, 1.0)", res)
 
         # electrostatic field
-        fmw = FemmWriter()
+        fmw = FemmProblem()
         fmw.field = FemmFields.ELECTROSTATIC
         res = fmw.add_segment(x1, y1, x2, y2)
         self.assertEqual("ei_addsegment(1.0, 0.0, 1.0, 1.0)", res)
 
         # heat flow
-        fmw = FemmWriter()
+        fmw = FemmProblem()
         fmw.field = FemmFields.HEAT_FLOW
         res = fmw.add_segment(x1, y1, x2, y2)
         self.assertEqual("hi_addsegment(1.0, 0.0, 1.0, 1.0)", res)
@@ -109,10 +109,10 @@ class FemmTester(TestCase):
         x = 1.0
         y = 0.0
 
-        res = FemmWriter().add_blocklabel(x, y)
+        res = FemmProblem().add_blocklabel(x, y)
         self.assertEqual("mi_addblocklabel(1.0, 0.0)", res)
 
-        fmw = FemmWriter()
+        fmw = FemmProblem()
         fmw.field = FemmFields.CURRENT_FLOW
         res = fmw.add_blocklabel(x, y)
         self.assertEqual("ci_addblocklabel(1.0, 0.0)", res)
@@ -129,10 +129,10 @@ class FemmTester(TestCase):
         x1, x2 = 1.0, 1.0
         y1, y2 = 0.0, 1.0
 
-        res = FemmWriter().add_arc(x1, y1, x2, y2, 90.0, 1)
+        res = FemmProblem().add_arc(x1, y1, x2, y2, 90.0, 1)
         self.assertEqual("mi_addarc(1.0, 0.0, 1.0, 1.0, 90.0, 1)", res)
 
-        fmw = FemmWriter()
+        fmw = FemmProblem()
         fmw.field = FemmFields.CURRENT_FLOW
         res = fmw.add_arc(x1, y1, x2, y2, 90.0, 1)
         self.assertEqual("ci_addarc(1.0, 0.0, 1.0, 1.0, 90.0, 1)", res)
@@ -146,9 +146,9 @@ class FemmTester(TestCase):
         self.assertEqual("hi_addarc(1.0, 0.0, 1.0, 1.0, 90.0, 1)", res)
 
     def test_delete_selected(self):
-        self.assertEqual("mi_deleteselected", FemmWriter().delete_selected())
+        self.assertEqual("mi_deleteselected", FemmProblem().delete_selected())
 
-        fmw = FemmWriter()
+        fmw = FemmProblem()
         fmw.field = FemmFields.CURRENT_FLOW
         self.assertEqual("ci_deleteselected", fmw.delete_selected())
 
@@ -159,9 +159,9 @@ class FemmTester(TestCase):
         self.assertEqual("ei_deleteselected", fmw.delete_selected())
 
     def test_delete_selected_nodes(self):
-        self.assertEqual("mi_deleteselectednodes", FemmWriter().delete_selected_nodes())
+        self.assertEqual("mi_deleteselectednodes", FemmProblem().delete_selected_nodes())
 
-        fmw = FemmWriter()
+        fmw = FemmProblem()
         fmw.field = FemmFields.CURRENT_FLOW
         self.assertEqual("ci_deleteselectednodes", fmw.delete_selected_nodes())
 
@@ -172,9 +172,9 @@ class FemmTester(TestCase):
         self.assertEqual("ei_deleteselectednodes", fmw.delete_selected_nodes())
 
     def test_delete_selected_labels(self):
-        self.assertEqual("mi_deleteselectedlabels", FemmWriter().delete_selected_labels())
+        self.assertEqual("mi_deleteselectedlabels", FemmProblem().delete_selected_labels())
 
-        fmw = FemmWriter()
+        fmw = FemmProblem()
         fmw.field = FemmFields.CURRENT_FLOW
         self.assertEqual("ci_deleteselectedlabels", fmw.delete_selected_labels())
 
@@ -185,9 +185,9 @@ class FemmTester(TestCase):
         self.assertEqual("ei_deleteselectedlabels", fmw.delete_selected_labels())
 
     def test_delete_selected_segments(self):
-        self.assertEqual("mi_deleteselectedsegments", FemmWriter().delete_selected_segments())
+        self.assertEqual("mi_deleteselectedsegments", FemmProblem().delete_selected_segments())
 
-        fmw = FemmWriter()
+        fmw = FemmProblem()
         fmw.field = FemmFields.CURRENT_FLOW
         self.assertEqual("ci_deleteselectedsegments", fmw.delete_selected_segments())
 
@@ -200,10 +200,10 @@ class FemmTester(TestCase):
     def test_delete_selected_arc_segments(self):
         self.assertEqual(
             "mi_deleteselectedarcsegments",
-            FemmWriter().delete_selected_arc_segments(),
+            FemmProblem().delete_selected_arc_segments(),
         )
 
-        fmw = FemmWriter()
+        fmw = FemmProblem()
         fmw.field = FemmFields.CURRENT_FLOW
         self.assertEqual("ci_deleteselectedarcsegments", fmw.delete_selected_arc_segments())
 
@@ -214,9 +214,9 @@ class FemmTester(TestCase):
         self.assertEqual("ei_deleteselectedarcsegments", fmw.delete_selected_arc_segments())
 
     def test_clear_seelcted(self):
-        self.assertEqual("mi_clearselected()", FemmWriter().clear_selected())
+        self.assertEqual("mi_clearselected()", FemmProblem().clear_selected())
 
-        fmw = FemmWriter()
+        fmw = FemmProblem()
         fmw.field = FemmFields.CURRENT_FLOW
         self.assertEqual("ci_clearselected()", fmw.clear_selected())
 
@@ -227,9 +227,9 @@ class FemmTester(TestCase):
         self.assertEqual("ei_clearselected()", fmw.clear_selected())
 
     def test_select_segment(self):
-        self.assertEqual("mi_selectsegment(1.0, 1.0)", FemmWriter().select_segment(1.0, 1.0))
+        self.assertEqual("mi_selectsegment(1.0, 1.0)", FemmProblem().select_segment(1.0, 1.0))
 
-        fmw = FemmWriter()
+        fmw = FemmProblem()
         fmw.field = FemmFields.CURRENT_FLOW
         self.assertEqual("ci_selectsegment(1.0, 1.0)", fmw.select_segment(1.0, 1.0))
 
@@ -240,9 +240,9 @@ class FemmTester(TestCase):
         self.assertEqual("ei_selectsegment(1.0, 1.0)", fmw.select_segment(1.0, 1.0))
 
     def test_select_node(self):
-        self.assertEqual("mi_selectnode(1.0, 1.0)", FemmWriter().select_node(1.0, 1.0))
+        self.assertEqual("mi_selectnode(1.0, 1.0)", FemmProblem().select_node(1.0, 1.0))
 
-        fmw = FemmWriter()
+        fmw = FemmProblem()
         fmw.field = FemmFields.CURRENT_FLOW
         self.assertEqual("ci_selectnode(1.0, 1.0)", fmw.select_node(1.0, 1.0))
 
@@ -253,9 +253,9 @@ class FemmTester(TestCase):
         self.assertEqual("ei_selectnode(1.0, 1.0)", fmw.select_node(1.0, 1.0))
 
     def test_select_label(self):
-        self.assertEqual("mi_selectlabel(1.0, 1.0)", FemmWriter().select_label(1.0, 1.0))
+        self.assertEqual("mi_selectlabel(1.0, 1.0)", FemmProblem().select_label(1.0, 1.0))
 
-        fmw = FemmWriter()
+        fmw = FemmProblem()
         fmw.field = FemmFields.CURRENT_FLOW
         self.assertEqual("ci_selectlabel(1.0, 1.0)", fmw.select_label(1.0, 1.0))
 
@@ -266,9 +266,9 @@ class FemmTester(TestCase):
         self.assertEqual("ei_selectlabel(1.0, 1.0)", fmw.select_label(1.0, 1.0))
 
     def test_select_group(self):
-        self.assertEqual("mi_selectgroup(4)", FemmWriter().select_group(4))
+        self.assertEqual("mi_selectgroup(4)", FemmProblem().select_group(4))
 
-        fmw = FemmWriter()
+        fmw = FemmProblem()
         fmw.field = FemmFields.CURRENT_FLOW
         self.assertEqual("ci_selectgroup(4)", fmw.select_group(4))
 
@@ -281,10 +281,10 @@ class FemmTester(TestCase):
     def test_select_circle(self):
         self.assertEqual(
             "mi_selectcircle(1.0, 2.0, 0.4, 3)",
-            FemmWriter().select_circle(1.0, 2.0, 0.4, 3),
+            FemmProblem().select_circle(1.0, 2.0, 0.4, 3),
         )
 
-        fmw = FemmWriter()
+        fmw = FemmProblem()
         fmw.field = FemmFields.CURRENT_FLOW
         self.assertEqual(
             "ci_selectcircle(1.0, 2.0, 0.4, 3)",
@@ -306,10 +306,10 @@ class FemmTester(TestCase):
     def test_select_rectangle(self):
         self.assertEqual(
             "mi_selectrectangle(1.0,2.0,3.0,4.0,3)",
-            FemmWriter().select_rectangle(1.0, 2.0, 3.0, 4.0, 3),
+            FemmProblem().select_rectangle(1.0, 2.0, 3.0, 4.0, 3),
         )
 
-        fmw = FemmWriter()
+        fmw = FemmProblem()
         fmw.field = FemmFields.CURRENT_FLOW
         self.assertEqual(
             "ci_selectrectangle(1.0,2.0,3.0,4.0,3)",
@@ -331,11 +331,11 @@ class FemmTester(TestCase):
     def test_magnetic_problem(self):
         self.assertEqual(
             r"mi_probdef(50,'millimeters','axi',1e-08, 1, 30, 0)",
-            FemmWriter().magnetic_problem(50, "millimeters", "axi"),
+            FemmProblem().magnetic_problem(50, "millimeters", "axi"),
         )
 
     def test_heat_problem(self):
-        writer = FemmWriter()
+        writer = FemmProblem()
         writer.field = FemmFields.HEAT_FLOW
         self.assertEqual(
             'hi_probdef("inches", "planar", 1e-08, 1, 30, "", 0)',
@@ -345,7 +345,7 @@ class FemmTester(TestCase):
         self.assertRaises(ValueError, writer.heat_problem, "meters", "qwertz")
 
     def test_current_flow_problem(self):
-        writer = FemmWriter()
+        writer = FemmProblem()
         writer.field = FemmFields.CURRENT_FLOW
         self.assertEqual(
             'ci_probdef("inches", "planar", 100, 1e-08, 1, 30)',
@@ -355,7 +355,7 @@ class FemmTester(TestCase):
         self.assertRaises(ValueError, writer.currentflow_problem, "meters", "qwertz")
 
     def test_electrostatic_problem(self):
-        writer = FemmWriter()
+        writer = FemmProblem()
         writer.field = FemmFields.ELECTROSTATIC
         self.assertEqual(
             'ei_probdef("inches", "planar", 1e-08, 1, 30)',
@@ -365,7 +365,7 @@ class FemmTester(TestCase):
         self.assertRaises(ValueError, writer.electrostatic_problem, "mils", "planadawdawr")
 
     def test_init_problem(self):
-        writer = FemmWriter()
+        writer = FemmProblem()
         writer.field = FemmFields.MAGNETIC
         print(writer.init_problem())
         self.assertEqual("newdocument(0)", writer.init_problem()[1])
@@ -380,7 +380,7 @@ class FemmTester(TestCase):
         self.assertEqual("newdocument(3)", writer.init_problem()[1])
 
     def test_close(self):
-        writer = FemmWriter()
+        writer = FemmProblem()
         writer.field = FemmFields.ELECTROSTATIC
         self.assertEqual("eo_close()", writer.close()[1])
         self.assertEqual("ei_close()", writer.close()[2])
@@ -400,7 +400,7 @@ class FemmTester(TestCase):
     def test_add_circ_prop(self):
         self.assertEqual(
             'mi_addcircprop("test",1,0)',
-            FemmWriter().add_circuit_property("test", 1, 0),
+            FemmProblem().add_circuit_property("test", 1, 0),
         )
 
     def test_add_material(self):
@@ -408,11 +408,11 @@ class FemmTester(TestCase):
 
         self.assertEqual(
             "mi_addmaterial('coil', 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0)",
-            FemmWriter().add_material(coil),
+            FemmProblem().add_material(coil),
         )
 
         # Electrostatics
-        writer = FemmWriter()
+        writer = FemmProblem()
         writer.field = FemmFields.ELECTROSTATIC
         mat = ElectrostaticMaterial("Teflon", 2.1, 2.1, 0)
         self.assertEqual('ei_addmaterial("Teflon", 2.1, 2.1, 0)', writer.add_material(mat))
@@ -437,18 +437,18 @@ class FemmTester(TestCase):
         dirichlet_boundary = MagneticDirichlet("dirichlet", 1, 2, 3, 4)
         self.assertEqual(
             "mi_addboundprop('dirichlet', 1, 2, 3, 4, 0, 0, 0, 0, 0, 0, 0)",
-            FemmWriter().add_boundary(dirichlet_boundary),
+            FemmProblem().add_boundary(dirichlet_boundary),
         )
 
         # mixed boundary condition
         mixed_boundary = MagneticMixed("mixed_test", 1, 2)
         self.assertEqual(
             "mi_addboundprop('mixed_test', 0, 0, 0, 0, 0, 0, 1, 2, 2, 0, 0)",
-            FemmWriter().add_boundary(mixed_boundary),
+            FemmProblem().add_boundary(mixed_boundary),
         )
 
         # Heatflow tests
-        writer = FemmWriter()
+        writer = FemmProblem()
         writer.field = FemmFields.HEAT_FLOW
 
         ht_bc = HeatFlowFixedTemperature("Alma", 110)
@@ -488,7 +488,7 @@ class FemmTester(TestCase):
         )
 
         # Electrostatic tests
-        writer = FemmWriter()
+        writer = FemmProblem()
         writer.field = FemmFields.ELECTROSTATIC
 
         el_bc = ElectrostaticFixedVoltage("eper", 10)
@@ -539,7 +539,7 @@ class FemmTester(TestCase):
         self.assertEqual('ci_addboundprop("alma", 0, 0, 0, 0, 4)', writer.add_boundary(el_bc))
 
     def test_addpointprop(self):
-        writer = FemmWriter()
+        writer = FemmProblem()
         writer.field = FemmFields.ELECTROSTATIC
         self.assertEqual(
             'ei_addpointprop("alma", 10, 0)',
@@ -587,7 +587,7 @@ class FemmTester(TestCase):
     def test_block_prop(self):
         self.assertEqual(
             "mi_setblockprop('coil', 0, 0.05, 'icoil', 0, 0, 100)",
-            FemmWriter().set_blockprop(
+            FemmProblem().set_blockprop(
                 "coil",
                 0,
                 0.05,
@@ -598,7 +598,7 @@ class FemmTester(TestCase):
             ),
         )
 
-        writer = FemmWriter()
+        writer = FemmProblem()
         writer.field = FemmFields.ELECTROSTATIC
         self.assertEqual(
             'ei_setblockprop("alma", 1, 2, 3)',
@@ -620,11 +620,11 @@ class FemmTester(TestCase):
     def test_setarcsegment(self):
         self.assertEqual(
             "mi_setarcsegmentprop(5, 'abc', 0, 0)",
-            FemmWriter().set_arc_segment_prop(5, "abc", 0, 0),
+            FemmProblem().set_arc_segment_prop(5, "abc", 0, 0),
         )
 
     def test_setpointprop(self):
-        writer = FemmWriter()
+        writer = FemmProblem()
         writer.field = FemmFields.ELECTROSTATIC
         self.assertEqual('ei_setnodeprop("eper", 0, "<None>")', writer.set_pointprop("eper"))
         self.assertEqual(
@@ -662,7 +662,7 @@ class FemmTester(TestCase):
         self.assertEqual('mi_setnodeprop("alma", 0, "<None>")', writer.set_pointprop("alma"))
 
     def test_setsegmentprop(self):
-        writer = FemmWriter()
+        writer = FemmProblem()
         writer.field = FemmFields.HEAT_FLOW
         self.assertEqual(
             'hi_setsegmentprop("alma", 1, 0, 1, 0, "<None>")',
@@ -688,7 +688,7 @@ class FemmTester(TestCase):
         )
 
     def test_run_analysis(self):
-        writer = FemmWriter()
+        writer = FemmProblem()
         writer.field = FemmFields.ELECTROSTATIC
         self.assertEqual("ei_analyze(1)", writer.analyze(1))
 
@@ -702,7 +702,7 @@ class FemmTester(TestCase):
         self.assertEqual("mi_analyze(2)", writer.analyze(2))
 
     def test_save_as_command(self):
-        writer = FemmWriter()
+        writer = FemmProblem()
         writer.field = FemmFields.ELECTROSTATIC
         self.assertIn("ei_saveas(", writer.save_as("test"))
 
@@ -718,11 +718,11 @@ class FemmTester(TestCase):
     def test_get_circuit_name(self):
         self.assertEqual(
             "current, volt, flux = mo_getcircuitproperties('icoil')",
-            FemmWriter().get_circuit_properties("icoil"),
+            FemmProblem().get_circuit_properties("icoil"),
         )
 
     def test_load_solution(self):
-        writer = FemmWriter()
+        writer = FemmProblem()
         writer.field = FemmFields.ELECTROSTATIC
         self.assertEqual("ei_loadsolution()", writer.load_solution())
 
@@ -736,13 +736,13 @@ class FemmTester(TestCase):
         self.assertEqual("hi_loadsolution()", writer.load_solution())
 
     def test_line_integral(self):
-        self.assertEqual("mo_lineintegral(0)", FemmWriter().line_integral(0))
+        self.assertEqual("mo_lineintegral(0)", FemmProblem().line_integral(0))
 
     def test_block_integral(self):
-        self.assertEqual("mo_blockintegral(30)", FemmWriter().block_integral(30))
+        self.assertEqual("mo_blockintegral(30)", FemmProblem().block_integral(30))
 
     def test_get_point_values(self):
-        self.assertEqual("mo_getpointvalues(0.01, 0)", FemmWriter().get_point_values(0.01, 0))
+        self.assertEqual("mo_getpointvalues(0.01, 0)", FemmProblem().get_point_values(0.01, 0))
 
     def test_create_geometry(self):
         """create basic objects: nodes, lines and a circle arc to test the basic functionality of the command."""
@@ -759,7 +759,7 @@ class FemmTester(TestCase):
         geo.lines = [Line(start_pt=a, end_pt=b), Line(start_pt=a, end_pt=c)]
         geo.circle_arcs = [CircleArc(start_pt=c, center_pt=a, end_pt=b)]
 
-        cmds = FemmWriter().create_geometry(geo)
+        cmds = FemmProblem().create_geometry(geo)
 
         self.assertIn("mi_addnode(0.0, 0.0)", cmds)
         self.assertIn("mi_addsegment(0.0, 0.0, 0.0, 1.0)", cmds)

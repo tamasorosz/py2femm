@@ -1,14 +1,14 @@
 import unittest
 
 from src.electrostatics import ElectrostaticMaterial
-from src.writer import FemmWriter
+from src.femm_problem import FemmProblem
 from src.general import FemmFields, LengthUnit
 
 
 class TestFemmElectrostaticProblem(unittest.TestCase):
     # integration test ignored from the unittest list
     def test_electrostatic_problem(self):
-        writer = FemmWriter()
+        writer = FemmProblem()
         writer.field = FemmFields.ELECTROSTATIC
         writer.init_problem("electrostatic_data.csv")
 

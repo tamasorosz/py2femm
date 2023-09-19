@@ -17,7 +17,7 @@ from src.geometry import Geometry, Node
 from src.general import Material, AutoMeshOption, Boundary, FemmFields, LengthUnit
 
 
-class FemmWriter:
+class FemmProblem:
     """Writes out a model snapshot"""
 
     def __init__(self):
@@ -137,7 +137,7 @@ class FemmWriter:
         cmd = cmd.substitute(field=self.field.to_string(), x_coord=x, y_coord=y)
         return cmd
 
-    def add_segment(self, x1, y1, x2, y2, push=True):
+    def add_segment(self, x1, y1, x2, y2):
         """
         Add a new line segment from the node closest to (x1,y1) to the node closest to
         (x2,y2)
@@ -149,7 +149,6 @@ class FemmWriter:
 
     def add_blocklabel(self, x, y):
         """Add a new block label at (x,y)"""
-        #     cmd = Template("ci_addblocklabel($x_coord, $y_coord)")
         cmd = Template("${field}_addblocklabel($x_coord, $y_coord)")
         cmd = cmd.substitute(field=self.field.to_string(), x_coord=x, y_coord=y)
         self.lua_model.append(cmd)
