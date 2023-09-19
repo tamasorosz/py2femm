@@ -26,15 +26,6 @@ class FemmWriter:
         self.field = FemmFields.MAGNETIC
         self.lua_model = []
         self.out_file = "femm_data.csv"
-
-    def validate_field(self, shouldbe=None):
-        if self.field not in FemmFields:
-            raise ValueError(f"The physical field ({self.field}) is not defined!")
-
-        if shouldbe and shouldbe != self.field:
-            raise ValueError(f"({self.field}) != {shouldbe}")
-
-        return True
     def write(self, file_name):
         """Generate a runnable lua-script for a FEMM calculation.
 
@@ -155,7 +146,6 @@ class FemmWriter:
         specify 0. For a minimized window, flag should be set to 1.
         """
         cmd = None
-        self.validate_field()
 
         if self.field == FemmFields.MAGNETIC:
             cmd = Template("mi_analyze($flag)")
@@ -177,7 +167,6 @@ class FemmWriter:
     def add_node(self, x, y):
         """Adds a node to the given point (x,y)"""
         cmd = None
-        self.validate_field()
 
         if self.field == FemmFields.MAGNETIC:
             cmd = Template("mi_addnode($x_coord, $y_coord)")
@@ -205,7 +194,6 @@ class FemmWriter:
         """
 
         cmd = None
-        self.validate_field()
 
         if self.field == FemmFields.MAGNETIC:
             cmd = Template("mi_addsegment($x1_coord, $y1_coord, $x2_coord, $y2_coord)")
@@ -229,8 +217,6 @@ class FemmWriter:
     def add_blocklabel(self, x, y):
         """Add a new block label at (x,y)"""
         cmd = None
-        self.validate_field()
-
         if self.field == FemmFields.MAGNETIC:
             cmd = Template("mi_addblocklabel($x_coord, $y_coord)")
 
@@ -256,7 +242,6 @@ class FemmWriter:
         node to (x2,y2) with angle 'angle' divided into 'maxseg' segments.
         """
         cmd = None
-        self.validate_field()
 
         if self.field == FemmFields.MAGNETIC:
             cmd = Template("mi_addarc($x_1, $y_1, $x_2, $y_2, $angle, $maxseg)")
@@ -282,8 +267,6 @@ class FemmWriter:
         :param boundary: checks the type of the boundary parameter, then
         """
         cmd = None
-        self.validate_field()
-
         if FemmWriter.push:
             self.lua_model.append(str(boundary))
 
@@ -297,8 +280,6 @@ class FemmWriter:
         """
 
         cmd = None
-        self.validate_field()
-
         cmd = str(material)
         if cmd is not None:
             if FemmWriter.push:
@@ -310,8 +291,6 @@ class FemmWriter:
         """Delete all selected objects"""
 
         cmd = None
-        self.validate_field()
-
         if self.field == FemmFields.MAGNETIC:
             cmd = "mi_deleteselected"
 
@@ -335,8 +314,6 @@ class FemmWriter:
         selection command.
         """
         cmd = None
-        self.validate_field()
-
         if self.field == FemmFields.MAGNETIC:
             cmd = "mi_deleteselectednodes"
 
@@ -357,8 +334,6 @@ class FemmWriter:
     def delete_selected_labels(self):
         """Delete all selected labels."""
         cmd = None
-        self.validate_field()
-
         if self.field == FemmFields.MAGNETIC:
             cmd = "mi_deleteselectedlabels"
 
@@ -379,8 +354,6 @@ class FemmWriter:
     def delete_selected_segments(self):
         """Delete all selected segments."""
         cmd = None
-        self.validate_field()
-
         if self.field == FemmFields.MAGNETIC:
             cmd = "mi_deleteselectedsegments"
 
@@ -401,8 +374,6 @@ class FemmWriter:
     def delete_selected_arc_segments(self):
         """Delete all selected arc segments."""
         cmd = None
-        self.validate_field()
-
         if self.field == FemmFields.MAGNETIC:
             cmd = "mi_deleteselectedarcsegments"
 
@@ -442,7 +413,6 @@ class FemmWriter:
             - qp: point current density qp (A / m)
         """
         cmd = None
-        self.validate_field()
 
         if self.field == FemmFields.ELECTROSTATIC:
             Vp = kwargs.get("Vp", 0)
@@ -488,8 +458,6 @@ class FemmWriter:
     def clear_selected(self):
         """Clears all selected nodes, blocks, segments, and arc segments."""
         cmd = None
-        self.validate_field()
-
         if self.field == FemmFields.MAGNETIC:
             cmd = "mi_clearselected()"
 
@@ -510,8 +478,6 @@ class FemmWriter:
     def select_segment(self, x, y):
         """Select the line segment closest to (x, y)"""
         cmd = None
-        self.validate_field()
-
         if self.field == FemmFields.MAGNETIC:
             cmd = f'mi_selectsegment({x}, {y})'
 
@@ -532,8 +498,6 @@ class FemmWriter:
     def select_arc_segment(self, x, y):
         """Select the arc segment closest to (x, y)"""
         cmd = None
-        self.validate_field()
-
         if self.field == FemmFields.MAGNETIC:
             cmd = f'mi_selectarcsegment({x}, {y})'
 
@@ -554,8 +518,6 @@ class FemmWriter:
     def select_node(self, x, y):
         """Select the node closest to (x, y) and return its coordinates."""
         cmd = None
-        self.validate_field()
-
         if self.field == FemmFields.MAGNETIC:
             cmd = f'mi_selectnode({x}, {y})'
 
@@ -576,8 +538,6 @@ class FemmWriter:
     def select_label(self, x, y):
         """Select the label closest to (x, y) and return its coordinates."""
         cmd = None
-        self.validate_field()
-
         if self.field == FemmFields.MAGNETIC:
             cmd = f'mi_selectlabel({x}, {y})'
 
@@ -601,8 +561,6 @@ class FemmWriter:
         Clears all previously selected elements and sets the edit mode to 4 (group).
         """
         cmd = None
-        self.validate_field()
-
         if self.field == FemmFields.MAGNETIC:
             cmd = f'mi_selectgroup({n})'
 
@@ -630,8 +588,6 @@ class FemmWriter:
         """
 
         cmd = None
-        self.validate_field()
-
         if self.field == FemmFields.MAGNETIC:
             cmd = Template("mi_selectcircle($xp, $yp, $Rp, $Editmode)")
 
@@ -660,8 +616,6 @@ class FemmWriter:
         """
 
         cmd = None
-        self.validate_field()
-
         if self.field == FemmFields.MAGNETIC:
             cmd = Template("mi_selectrectangle($x1p,$y1p,$x2p,$y2p,$Editmode)")
 
@@ -754,8 +708,6 @@ class FemmWriter:
         :param group: a member of group number group
         """
         cmd = None
-        self.validate_field()
-
         if self.field == FemmFields.MAGNETIC:
             cmd = Template("mi_setarcsegmentprop($maxsegdeg, $propname, $hide, $group)")
             cmd = cmd.substitute(
@@ -804,8 +756,6 @@ class FemmWriter:
         circuit_name = kwargs.get("circuit_name", "<None>")
         magdirection = kwargs.get("magdirection", 0)
         turns = kwargs.get("turns", 0)
-
-        self.validate_field()
 
         if self.field == FemmFields.MAGNETIC:
             cmd = Template(
@@ -883,7 +833,6 @@ class FemmWriter:
          for AC problems.
         """
 
-        self.validate_field(FemmFields.MAGNETIC)
 
         cmd = Template("mi_probdef($frequency,$units,$type,$precision, $depth, $minangle, $acsolver)")
         cmd = cmd.substitute(
@@ -919,7 +868,6 @@ class FemmWriter:
         :param minangle: Minimum angle constraint sen to the mesh generator
         :param prevsoln: Indicates the solution from the previous time step assuming transient time problems
         """
-        self.validate_field(FemmFields.HEAT_FLOW)
         if type not in {"planar", "axi"}:
             raise ValueError(f"Choose either 'planar' or 'axi', not {type}. ")
 
@@ -943,8 +891,6 @@ class FemmWriter:
         :param minangle: Minimum angle constraint sen to the mesh generator
         """
 
-        self.validate_field(FemmFields.ELECTROSTATIC)
-
         if type not in {"planar", "axi"}:
             raise ValueError(f"Choose either 'planar' or 'axi', not {type}. ")
 
@@ -956,8 +902,6 @@ class FemmWriter:
         return cmd
 
     def currentflow_problem(self, units: LengthUnit, type, frequency=0, precision=1e-8, depth=1, minangle=30):
-
-        self.validate_field(FemmFields.CURRENT_FLOW)
 
         if type not in {"planar", "axi"}:
             raise ValueError(f"Choose either 'planar' or 'axi', not {type}. ")
@@ -979,7 +923,6 @@ class FemmWriter:
         """
 
         cmd = None
-        self.validate_field()
         file_name = str(Path(file_name).resolve().as_posix())
 
         if self.field == FemmFields.MAGNETIC:
@@ -1005,7 +948,6 @@ class FemmWriter:
         """Loads  and displays the solution."""
 
         cmd = None
-        self.validate_field()
 
         if self.field == FemmFields.MAGNETIC:
             cmd = "mi_loadsolution()"
@@ -1038,7 +980,6 @@ class FemmWriter:
         4 -- Stress Tensor Torque --- total (B.n)^2, avg (B.n)^2
         """
 
-        self.validate_field()
 
         if self.field == FemmFields.MAGNETIC:
             cmd = Template("mo_lineintegral($type)")
@@ -1089,7 +1030,6 @@ class FemmWriter:
         """
 
         cmd = None
-        self.validate_field()
 
         if self.field == FemmFields.MAGNETIC:
             cmd = Template("mo_blockintegral($type)")
@@ -1122,8 +1062,6 @@ class FemmWriter:
         """
 
         cmd = None
-        self.validate_field()
-
         if self.field == FemmFields.MAGNETIC:
             cmd = Template("mo_getpointvalues($x, $y)")
             cmd = cmd.substitute(x=x, y=y)
@@ -1142,8 +1080,6 @@ class FemmWriter:
         """
 
         cmd = None
-        self.validate_field()
-
         if self.field == FemmFields.MAGNETIC:
             cmd = Template("$result = mo_getcircuitproperties($circuit)")
 
