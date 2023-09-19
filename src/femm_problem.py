@@ -21,10 +21,10 @@ from src.general import Material, AutoMeshOption, Boundary, FemmFields, LengthUn
 class FemmProblem:
     """Writes out a model snapshot"""
 
-    def __init__(self):
-        self.field = FemmFields.MAGNETIC
+    def __init__(self, out_file="fem_data.csv"):
+        self.field = None
         self.lua_script = []
-        self.out_file = "femm_data.csv"
+        self.out_file = out_file
 
     def write(self, file_name):
         """Generate a runnable lua-script for a FEMM calculation.
@@ -296,15 +296,15 @@ class FemmProblem:
 
         return cmd
 
-    def select_node(self, x, y):
+    def select_node(self, node: Node):
         """Select the node closest to (x, y) and return its coordinates."""
-        cmd = f"{self.field.input_to_string()}_selectnode({x}, {y})"
+        cmd = f"{self.field.input_to_string()}_selectnode({node.x}, {node.y})"
         self.lua_script.append(cmd)
         return cmd
 
-    def select_label(self, x, y):
+    def select_label(self, label: Node):
         """Select the label closest to (x, y) and return its coordinates."""
-        cmd = f"{self.field.input_to_string()}_selectlabel({x}, {y})"
+        cmd = f"{self.field.input_to_string()}_selectlabel({label.x}, {label.y})"
         self.lua_script.append(cmd)
 
         return cmd
@@ -512,6 +512,8 @@ class FemmProblem:
          for AC problems.
         """
 
+        self.field = FemmFields.MAGNETIC
+        self.init_problem(out_file=self.out_file)
         cmd = Template("mi_probdef($frequency,$units,$type,$precision, $depth, $minangle, $acsolver)")
         cmd = cmd.substitute(
             frequency=freq,
@@ -544,6 +546,8 @@ class FemmProblem:
         :param minangle: Minimum angle constraint sen to the mesh generator
         :param prevsoln: Indicates the solution from the previous time step assuming transient time problems
         """
+        self.field = FemmFields.HEAT_FLOW
+        self.init_problem(out_file=self.out_file)
         if type not in {"planar", "axi"}:
             raise ValueError(f"Choose either 'planar' or 'axi', not {type}. ")
 
@@ -564,6 +568,8 @@ class FemmProblem:
         :param depth: Depth of the problem into the page for 2D problems
         :param minangle: Minimum angle constraint sen to the mesh generator
         """
+        self.field = FemmFields.ELECTROSTATIC
+        self.init_problem(out_file=self.out_file)
 
         if type not in {"planar", "axi"}:
             raise ValueError(f"Choose either 'planar' or 'axi', not {type}. ")
@@ -574,6 +580,9 @@ class FemmProblem:
         return cmd
 
     def currentflow_problem(self, units: LengthUnit, type, frequency=0, precision=1e-8, depth=1, minangle=30):
+
+        self.field = FemmFields.CURRENT_FLOW
+        self.init_problem(out_file=self.out_file)
 
         if type not in {"planar", "axi"}:
             raise ValueError(f"Choose either 'planar' or 'axi', not {type}. ")
@@ -725,10 +734,10 @@ class FemmProblem:
         self.lua_script.append(cmd)
         return cmd
 
-    def define_block_label(self, x: float, y: float, material: Material):
+    def define_block_label(self, label: Node, material: Material):
         # simplifying the material definition
-        self.add_blocklabel(x, y)
-        self.select_label(x, y)
+        self.add_blocklabel(label)
+        self.select_label(label)
 
         if isinstance(material, MagneticMaterial):
             self.set_blockprop(blockname=material.material_name, automesh=material.auto_mesh,
@@ -740,7 +749,7 @@ class FemmProblem:
 
         self.clear_selected()
 
-    def set_boundary_definition(self, selection_point: Point, boundary: Union[Boundary, None], elementsize=None):
+    def set_boundary_definition(self, selection_point: Node, boundary: Union[Boundary, None], elementsize=None):
         self.select_segment(selection_point.x, selection_point.y)
         if elementsize:
             automesh = AutoMeshOption.CUSTOM_MESH.value

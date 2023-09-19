@@ -6,9 +6,9 @@ from src.geometry import Geometry, Line, CircleArc, Node
 
 def create_geometry(width, thickness, d):
     # problem definition
-    planar_problem = FemmProblem()
-    planar_problem.field = FemmFields.ELECTROSTATIC
-    planar_problem.init_problem("electrostatic_data.csv")
+    planar_problem = FemmProblem(out_file="electrostatic_data.csv")
+    # planar_problem.field = FemmFields.ELECTROSTATIC
+    # planar_problem.init_problem("electrostatic_data.csv")
     planar_problem.electrostatic_problem(LengthUnit.METERS, "planar")
 
     # geometry definition
@@ -63,11 +63,11 @@ def create_geometry(width, thickness, d):
     planar_problem.add_material(air)
     planar_problem.add_material(metal)
 
-    planar_problem.define_block_label(0.0, 0.0, epoxy)
-    planar_problem.define_block_label(0.0, 0.2, air)
+    planar_problem.define_block_label(Node(0.0, 0.0), epoxy)
+    planar_problem.define_block_label(Node(0.0, 0.2), air)
 
-    planar_problem.define_block_label(0.0, d / 2 + thickness / 2, metal)
-    planar_problem.define_block_label(0.0, - d / 2 - thickness / 2, metal)
+    planar_problem.define_block_label(Node(0.0, d / 2 + thickness / 2, metal))
+    planar_problem.define_block_label(Node(0.0, - d / 2 - thickness / 2, metal))
 
     # Boundary conditions
     v0 = ElectrostaticFixedVoltage("U0", 10.0)
@@ -97,10 +97,9 @@ def create_geometry(width, thickness, d):
 
     planar_problem.write("planar.lua")
 
-
-if __name__ == '__main__':
-    # create geometry
-    width = 0.2  # m
+    if __name__ == '__main__':
+        # create geometry
+        width = 0.2  # m
     thickness = 0.005  # m
     d = 0.01  # m
 
