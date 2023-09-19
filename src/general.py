@@ -15,6 +15,7 @@ class Material(ABC):
     auto_mesh: AutoMeshOption = AutoMeshOption.AUTOMESH
     mesh_size: float = 0.0
 
+
 @dataclass
 class Boundary(ABC):
     name: str
@@ -26,6 +27,19 @@ class FemmFields(Enum):
     ELECTROSTATIC = "electrostatic"
     MAGNETIC = "magnetic"
     HEAT_FLOW = "heat_flow"
+
+    def to_string(self):
+        if self == FemmFields.CURRENT_FLOW:
+            return "ci"
+        elif self == FemmFields.ELECTROSTATIC:
+            return "ei"
+        elif self == FemmFields.MAGNETIC:
+            return "mi"
+        elif self == FemmFields.HEAT_FLOW:
+            return "hi"
+        else:
+            raise ValueError("Invalid FemmFields value")
+
 
 
 class LengthUnit(Enum):

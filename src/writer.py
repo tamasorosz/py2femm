@@ -26,6 +26,7 @@ class FemmWriter:
         self.field = FemmFields.MAGNETIC
         self.lua_model = []
         self.out_file = "femm_data.csv"
+
     def write(self, file_name):
         """Generate a runnable lua-script for a FEMM calculation.
 
@@ -166,21 +167,8 @@ class FemmWriter:
 
     def add_node(self, x, y):
         """Adds a node to the given point (x,y)"""
-        cmd = None
-
-        if self.field == FemmFields.MAGNETIC:
-            cmd = Template("mi_addnode($x_coord, $y_coord)")
-
-        if self.field == FemmFields.ELECTROSTATIC:
-            cmd = Template("ei_addnode($x_coord, $y_coord)")
-
-        if self.field == FemmFields.HEAT_FLOW:
-            cmd = Template("hi_addnode($x_coord, $y_coord)")
-
-        if self.field == FemmFields.CURRENT_FLOW:
-            cmd = Template("ci_addnode($x_coord, $y_coord)")
-
-        cmd = cmd.substitute(x_coord=x, y_coord=y)
+        cmd = Template("${field}_addnode($x_coord, $y_coord)")
+        cmd = cmd.substitute(field=self.field.to_string(), x_coord=x, y_coord=y)
 
         if FemmWriter.push:
             self.lua_model.append(cmd)
@@ -833,7 +821,6 @@ class FemmWriter:
          for AC problems.
         """
 
-
         cmd = Template("mi_probdef($frequency,$units,$type,$precision, $depth, $minangle, $acsolver)")
         cmd = cmd.substitute(
             frequency=freq,
@@ -979,7 +966,6 @@ class FemmWriter:
         3 -- Stress Tensor Force --- DC r/x force, DC y/z force, 2x r/x force, 2x y/z force
         4 -- Stress Tensor Torque --- total (B.n)^2, avg (B.n)^2
         """
-
 
         if self.field == FemmFields.MAGNETIC:
             cmd = Template("mo_lineintegral($type)")
