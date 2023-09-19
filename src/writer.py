@@ -21,6 +21,7 @@ from src.heatflow import HeatFlowMaterial, HeatFlowFixedTemperature, HeatFlowHea
 from src.magnetics import MagneticMaterial, MagneticDirichlet, MagneticMixed, MagneticAnti, MagneticPeriodic, \
     MagneticAntiPeriodicAirgap, MagneticPeriodicAirgap
 from src.geometry import Geometry, Node, Line, CircleArc
+from src.general import Material, AutoMeshOption
 
 
 class FemmFields(Enum):
@@ -528,14 +529,9 @@ class FemmWriter:
 
         return cmd
 
-    def add_material(self, material):
+    def add_material(self, material: Material):
         """
         Add a material definition to the FEMM simulation.
-
-        Args:
-            material (Union[MagneticMaterial, ElectrostaticMaterial, HeatFlowMaterial, CurrentFlowMaterial]):
-                The material to be added.
-
         Returns:
             str: The FEMM command string added to the Lua model.
         """
@@ -543,60 +539,7 @@ class FemmWriter:
         cmd = None
         self.validate_field()
 
-        if self.field == FemmFields.MAGNETIC and isinstance(material, MagneticMaterial):
-            cmd = Template(
-                "mi_addmaterial($materialname, $mux, $muy, $Hc, $J, $Cduct, $Lamd, $Phi_hmax, $lamfill, "
-                "$LamType, $Phi_hx, $Phi_hy, $NStrands, $WireD)"
-            )
-
-            cmd = cmd.substitute(
-                materialname=f"'{material.material_name}'",
-                mux=material.mu_x,
-                muy=material.mu_y,
-                Hc=material.H_c,
-                J=material.J,
-                Cduct=material.Cduct,
-                Lamd=material.Lam_d,
-                Phi_hmax=material.Phi_hmax,
-                lamfill=material.lam_fill,
-                LamType=material.LamType,
-                Phi_hx=material.Phi_hx,
-                Phi_hy=material.Phi_hy,
-                NStrands=material.NStrands,
-                WireD=material.WireD,
-            )
-
-        if self.field == FemmFields.ELECTROSTATIC and isinstance(material, ElectrostaticMaterial):
-            cmd = Template("ei_addmaterial($materialname, $ex, $ey, $qv)")
-            cmd = cmd.substitute(
-                materialname=f'"{material.material_name}"',
-                ex=material.ex,
-                ey=material.ey,
-                qv=material.qv,
-            )
-
-        if self.field == FemmFields.HEAT_FLOW and isinstance(material, HeatFlowMaterial):
-            cmd = Template("hi_addmaterial($materialname, $kx, $ky, $qv, $kt)")
-            cmd = cmd.substitute(
-                materialname=f'"{material.material_name}"',
-                kx=material.kx,
-                ky=material.ky,
-                qv=material.qv,
-                kt=material.kt,
-            )
-
-        if self.field == FemmFields.CURRENT_FLOW and isinstance(material, CurrentFlowMaterial):
-            cmd = Template("ci_addmaterial($materialname, $ox, $oy, $ex, $ey, $ltx, $lty)")
-            cmd = cmd.substitute(
-                materialname=f'"{material.material_name}"',
-                ox=material.ox,
-                oy=material.oy,
-                ex=material.ex,
-                ey=material.ey,
-                ltx=material.ltx,
-                lty=material.lty,
-            )
-
+        cmd = str(material)
         if cmd is not None:
             if FemmWriter.push:
                 self.lua_model.append(cmd)
@@ -1076,7 +1019,8 @@ class FemmWriter:
 
         return cmd
 
-    def set_blockprop(self, blockname, automesh=1, meshsize=1, group=0, **kwargs):
+    def set_blockprop(self, blockname, automesh: AutoMeshOption = AutoMeshOption.AUTOMESH, meshsize=1, group=0,
+                      **kwargs):
         """
         :param meshsize: default value is None -> invokes automesh
             this command will use automesh option as the default, if the mesh size is not defined
@@ -1109,7 +1053,7 @@ class FemmWriter:
             )
             cmd = cmd.substitute(
                 blockname="'" + blockname + "'",
-                automesh=automesh,
+                automesh=automesh.value,
                 meshsize=meshsize,
                 incircuit="'" + circuit_name + "'",
                 magdirection=magdirection,
@@ -1121,7 +1065,7 @@ class FemmWriter:
             cmd = Template("hi_setblockprop($blockname, $automesh, $meshsize, $group)")
             cmd = cmd.substitute(
                 blockname=f'"{blockname}"',
-                automesh=automesh,
+                automesh=automesh.value,
                 meshsize=meshsize,
                 group=group,
             )
@@ -1130,7 +1074,7 @@ class FemmWriter:
             cmd = Template("ei_setblockprop($blockname, $automesh, $meshsize, $group)")
             cmd = cmd.substitute(
                 blockname=f'"{blockname}"',
-                automesh=automesh,
+                automesh=automesh.value,
                 meshsize=meshsize,
                 group=group,
             )
@@ -1139,7 +1083,7 @@ class FemmWriter:
             cmd = Template("ci_setblockprop($blockname, $automesh, $meshsize, $group)")
             cmd = cmd.substitute(
                 blockname=f'"{blockname}"',
-                automesh=automesh,
+                automesh=automesh.value,
                 meshsize=meshsize,
                 group=group,
             )
@@ -1474,3 +1418,18 @@ class FemmWriter:
             self.lua_model.append(cmd)
 
         return cmd
+
+    def define_block_label(self, x: float, y: float, material: Material):
+        # simplifying the material definition
+        self.add_blocklabel(x, y)
+        self.select_label(x, y)
+
+        if isinstance(material, MagneticMaterial):
+            self.set_blockprop(blockname=material.material_name, automesh=material.auto_mesh,
+                               meshsize=material.mesh_size,
+                               magdirection=material.remanence_angle)
+        else:
+            self.set_blockprop(blockname=material.material_name, automesh=material.auto_mesh,
+                               meshsize=material.mesh_size)
+
+        self.clear_selected()

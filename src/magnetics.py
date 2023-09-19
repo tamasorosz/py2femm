@@ -1,5 +1,8 @@
 from dataclasses import dataclass
 from enum import Enum
+from string import Template
+
+from src.general import Material
 
 
 # Enums
@@ -13,9 +16,8 @@ class LamType(Enum):
     SQUARE_WIRE = 6
 
 
-@dataclass
-class MagneticMaterial:
-    material_name: str
+@dataclass(kw_only=True)
+class MagneticMaterial(Material):
     mu_x: float
     mu_y: float
     H_c: float
@@ -29,6 +31,30 @@ class MagneticMaterial:
     Phi_hy: float
     NStrands: int
     WireD: float
+
+    def __str__(self):
+        cmd = Template(
+            "mi_addmaterial($materialname, $mux, $muy, $Hc, $J, $Cduct, $Lamd, $Phi_hmax, $lamfill, "
+            "$LamType, $Phi_hx, $Phi_hy, $NStrands, $WireD)"
+        )
+
+        cmd = cmd.substitute(
+            materialname=f"'{self.material_name}'",
+            mux=self.mu_x,
+            muy=self.mu_y,
+            Hc=self.H_c,
+            J=self.J,
+            Cduct=self.Cduct,
+            Lamd=self.Lam_d,
+            Phi_hmax=self.Phi_hmax,
+            lamfill=self.lam_fill,
+            LamType=self.LamType,
+            Phi_hx=self.Phi_hx,
+            Phi_hy=self.Phi_hy,
+            NStrands=self.NStrands,
+            WireD=self.WireD,
+        )
+        return cmd
 
 
 # Magnetic Boundary Conditions

@@ -56,24 +56,24 @@ class FemmTester(TestCase):
         y = 0.0
 
         # magnetic field
-        res = FemmWriter().add_node(x, y)
+        res = FemmWriter().add_node(Node(x, y))
         self.assertEqual("mi_addnode(1.0, 0.0)", res)
 
         # current flow
         fmw = FemmWriter()
         fmw.field = FemmFields.CURRENT_FLOW
-        res = fmw.add_node(x, y)
+        res = fmw.add_node(Node(x, y))
         self.assertEqual("ci_addnode(1.0, 0.0)", res)
 
         # electrostatic
         fmw = FemmWriter()
         fmw.field = FemmFields.ELECTROSTATIC
-        res = fmw.add_node(x, y)
+        res = fmw.add_node(Node(x, y))
         self.assertEqual("ei_addnode(1.0, 0.0)", res)
 
         fmw = FemmWriter()
         fmw.field = FemmFields.HEAT_FLOW
-        res = fmw.add_node(x, y)
+        res = fmw.add_node(Node(x, y))
         self.assertEqual("hi_addnode(1.0, 0.0)", res)
 
     def test_add_segment(self):

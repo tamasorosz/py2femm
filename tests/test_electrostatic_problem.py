@@ -1,9 +1,7 @@
 import unittest
-from collections import Counter
-
-from importlib.resources import files
 
 from src.electrostatics import ElectrostaticMaterial
+from src.geometry import Node
 from src.writer import FemmWriter, FemmFields
 
 

@@ -1,7 +1,8 @@
 from dataclasses import dataclass
+from string import Template
 
 
-@dataclass
+@dataclass(kw_only=True)
 class CurrentFlowMaterial:
     material_name: str
     ox: float
@@ -10,6 +11,19 @@ class CurrentFlowMaterial:
     ey: float
     ltx: float
     lty: float
+
+    def __str__(self):
+        cmd = Template("ci_addmaterial($materialname, $ox, $oy, $ex, $ey, $ltx, $lty)")
+        cmd = cmd.substitute(
+            materialname=f'"{self.material_name}"',
+            ox=self.ox,
+            oy=self.oy,
+            ex=self.ex,
+            ey=self.ey,
+            ltx=self.ltx,
+            lty=self.lty,
+        )
+        return cmd
 
 
 # Current Flow Boundary Conditions

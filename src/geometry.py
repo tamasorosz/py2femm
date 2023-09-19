@@ -101,3 +101,46 @@ class Geometry:
         self.nodes = []
         self.lines = []
         self.circle_arcs = []
+
+    def export_geometry_element(self, e, boundary=None):
+
+        if isinstance(e, Node):
+            self.write(self.writer.add_node(e.x, e.y))
+
+        if isinstance(e, Line):
+            self.write(self.writer.add_segment(e.start_pt.x, e.start_pt.y, e.end_pt.x, e.end_pt.y))
+            if boundary:
+                # we should give an internal point to select the line
+                m_x = (e.start_pt.x + e.end_pt.x) * 0.5
+                m_y = (e.start_pt.y + e.end_pt.y) * 0.5
+
+                self.write(self.writer.select_segment(m_x, m_y))
+                self.write(self.writer.set_segment_prop(boundary or "<None>", automesh=0, elementsize=e.meshScaling))
+                self.write(self.writer.clear_selected())
+
+        if isinstance(e, CircleArc):
+            # we should find an internal point of the circle arc
+            # to achieve this the start node rotated with deg/2
+            radius = e.start_pt.distance_to(e.center_pt)
+            clamp = e.start_pt.distance_to(e.end_pt) / 2.0
+
+            try:
+                theta = round(math.asin(clamp / radius) * 180 / pi * 2, 2)
+            except ValueError:
+                theta = 180
+
+            self.write(
+                self.writer.add_arc(
+                    e.start_pt.x,
+                    e.start_pt.y,
+                    e.end_pt.x,
+                    e.end_pt.y,
+                    theta,
+                    e.max_seg_deg,
+                )
+            )
+
+            if boundary:
+                self.write(self.writer.select_arc_segment(e.apex_pt.x, e.apex_pt.y))
+                self.write(self.writer.set_arc_segment_prop(e.max_seg_deg, boundary, 0, 0))
+                self.write(self.writer.clear_selected())
