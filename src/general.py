@@ -12,7 +12,7 @@ class AutoMeshOption(Enum):
 @dataclass
 class Material(ABC):
     material_name: str
-    auto_mesh: AutoMeshOption = AutoMeshOption.AUTOMESH
+    auto_mesh: AutoMeshOption = AutoMeshOption.AUTOMESH.value
     mesh_size: float = 0.0
 
 
@@ -28,7 +28,7 @@ class FemmFields(Enum):
     MAGNETIC = "magnetic"
     HEAT_FLOW = "heat_flow"
 
-    def to_string(self):
+    def input_to_string(self):
         if self == FemmFields.CURRENT_FLOW:
             return "ci"
         elif self == FemmFields.ELECTROSTATIC:
@@ -37,6 +37,18 @@ class FemmFields(Enum):
             return "mi"
         elif self == FemmFields.HEAT_FLOW:
             return "hi"
+        else:
+            raise ValueError("Invalid FemmFields value")
+
+    def output_to_string(self):
+        if self == FemmFields.CURRENT_FLOW:
+            return "co"
+        elif self == FemmFields.ELECTROSTATIC:
+            return "eo"
+        elif self == FemmFields.MAGNETIC:
+            return "mo"
+        elif self == FemmFields.HEAT_FLOW:
+            return "ho"
         else:
             raise ValueError("Invalid FemmFields value")
 

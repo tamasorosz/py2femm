@@ -23,10 +23,10 @@ class ElectrostaticMaterial(Material):
 
 @dataclass(kw_only=True)
 class ElectrostaticBoundaryBase(Boundary):
-    Vs: float = 0.0
-    c0: float = 0.0
-    c1: float = 0.0
-    qs: float = 0.0
+    Vs: float = 0
+    c0: float = 0
+    c1: float = 0
+    qs: float = 0
 
     def __str__(self):
         return f'ei_addboundprop("{self.name}", {self.Vs}, {self.qs}, {self.c0}, {self.c1}, {self.type})'
@@ -52,7 +52,7 @@ class ElectrostaticMixed(ElectrostaticBoundaryBase):
 class ElectrostaticSurfaceCharge(ElectrostaticBoundaryBase):
     def __init__(self, name: str, qs: float):
         self.name = name
-        self.q = qs
+        self.qs = qs
         self.type = 2
 
 

@@ -1,7 +1,7 @@
 from src.electrostatics import ElectrostaticMaterial, ElectrostaticSurfaceCharge, ElectrostaticFixedVoltage
 from src.femm_problem import FemmProblem
 from src.general import FemmFields, LengthUnit
-from src.geometry import Geometry, Node, Line, CircleArc
+from src.geometry import Geometry, Line, CircleArc, Node
 
 
 def create_geometry(width, thickness, d):
@@ -14,15 +14,15 @@ def create_geometry(width, thickness, d):
     # geometry definition
     geo = Geometry()
 
-    n1 = Node(x=-width / 2, y=d / 2)
-    n2 = Node(x=-width / 2, y=d / 2 + thickness)
-    n3 = Node(x=width / 2, y=d / 2 + thickness)
-    n4 = Node(x=width / 2, y=d / 2)
+    n1 = Node(-width / 2, d / 2)
+    n2 = Node(-width / 2, d / 2 + thickness)
+    n3 = Node(width / 2, d / 2 + thickness)
+    n4 = Node(width / 2, d / 2)
 
-    n5 = Node(x=-width / 2, y=-d / 2)
-    n6 = Node(x=-width / 2, y=-d / 2 - thickness)
-    n7 = Node(x=width / 2, y=-d / 2 - thickness)
-    n8 = Node(x=width / 2, y=-d / 2)
+    n5 = Node(-width / 2, -d / 2)
+    n6 = Node(-width / 2, -d / 2 - thickness)
+    n7 = Node(width / 2, -d / 2 - thickness)
+    n8 = Node(width / 2, -d / 2)
 
     l1 = Line(n1, n2)
     l2 = Line(n2, n3)
@@ -37,11 +37,11 @@ def create_geometry(width, thickness, d):
     l9 = Line(n1, n5)
     l10 = Line(n8, n4)
 
-    center = Node(x=0, y=0)
-    out1 = Node(x=0.0, y=0.3)
-    out2 = Node(x=-0.3, y=0.0)
-    out3 = Node(x=0.0, y=-0.3)
-    out4 = Node(x=0.3, y=0.0)
+    center = Node(0, 0)
+    out1 = Node(0.0, 0.3)
+    out2 = Node(-0.3, 0.0)
+    out3 = Node(0.0, -0.3)
+    out4 = Node(0.3, 0.0)
 
     arc1 = CircleArc(out1, center, out2)
     arc2 = CircleArc(out2, center, out3)
@@ -90,7 +90,7 @@ def create_geometry(width, thickness, d):
     planar_problem.set_boundary_definition(l8.selection_point(), gnd)
 
     # outer surface of the geometry
-    planar_problem.set_boundary_definition(arc1.selection_point(),  neumann)
+    planar_problem.set_boundary_definition(arc1.selection_point(), neumann)
     planar_problem.set_boundary_definition(arc2.selection_point(), neumann)
     planar_problem.set_boundary_definition(arc3.selection_point(), neumann)
     planar_problem.set_boundary_definition(arc4.selection_point(), neumann)

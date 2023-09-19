@@ -13,7 +13,7 @@ class HeatFlowMaterial(Material):
     def __str__(self):
         cmd = Template("hi_addmaterial($materialname, $kx, $ky, $qv, $kt)")
         cmd = cmd.substitute(
-            selfname=f'"{self.material_name}"',
+            materialname=f'"{self.material_name}"',
             kx=self.kx,
             ky=self.ky,
             qv=self.qv,
@@ -25,10 +25,11 @@ class HeatFlowMaterial(Material):
 @dataclass(kw_only=True)
 class HeatFlowBaseClass(Boundary):
     type: int
-    qs: float = 0.0
-    Tinf: float = 0.0
-    h: float = 0.0
-    beta: float = 0.0
+    Tset: float = 0
+    qs: float = 0
+    Tinf: float = 0
+    h: float = 0
+    beta: float = 0
 
     def __str__(self):
         cmd = Template("hi_addboundprop($propname, $BdryFormat, $Tset, $qs, $Tinf, $h, $beta)")

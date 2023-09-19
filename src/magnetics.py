@@ -1,9 +1,8 @@
-from abc import ABC
 from dataclasses import dataclass
 from enum import Enum
 from string import Template
 
-from src.general import Material
+from src.general import Material, Boundary
 
 
 # Enums
@@ -49,7 +48,7 @@ class MagneticMaterial(Material):
             Lamd=self.Lam_d,
             Phi_hmax=self.Phi_hmax,
             lamfill=self.lam_fill,
-            LamType=self.LamType,
+            LamType=self.LamType.value,
             Phi_hx=self.Phi_hx,
             Phi_hy=self.Phi_hy,
             NStrands=self.NStrands,
@@ -58,9 +57,8 @@ class MagneticMaterial(Material):
         return cmd
 
 
-@dataclass
-class MagneticBoundaryBaseClass(ABC):
-    name: str
+@dataclass(kw_only=True)
+class MagneticBoundaryBaseClass(Boundary):
     boundary_format: int  # this is an identifier for the applied boundary
     A0: float = 0
     A1: float = 0
@@ -75,33 +73,34 @@ class MagneticBoundaryBaseClass(ABC):
 
     def __str__(self):
         cmd = Template(
-            "mi_addboundprop($propname, $A0, $A1, $A2, $Phi, $Mu, $Sig, $c0, $c1, $BdryFormat, $ia, $oa)"
+            "mi_addboundprop($propname, $A0, $A1, $A2, $Phi, $Mu, $Sig, $c0, $c1, $boundary_format, $ia, $oa)"
         )
         cmd = cmd.substitute(
             propname="'" + self.name + "'",
-            A0=0,
-            A1=0,
-            A2=0,
-            Phi=0,
-            Mu=0,
-            Sig=0,
-            c0=0,
-            c1=0,
-            BdryFormat=6,
-            ia=0,
-            oa=self.angle,
+            A0=self.A0,
+            A1=self.A1,
+            A2=self.A2,
+            Phi=self.Phi,
+            Mu=self.Mu,
+            Sig=self.Sig,
+            c0=self.c0,
+            c1=self.c1,
+            boundary_format=self.boundary_format,
+            ia=self.ia,
+            oa=self.oa,
         )
+        return cmd
 
 
 # Magnetic Boundary Conditions
 class MagneticDirichlet(MagneticBoundaryBaseClass):
 
-    def __init__(self, name, a_0=0.0, a_1=0.0, a_2=0.0, phi=0.0):
+    def __init__(self, name:str, a_0:float, a_1:float, a_2:float, phi:float):
         self.name = name
-        self.a_0 = a_0
-        self.a_1 = a_1
-        self.a_2 = a_2
-        self.phi = phi
+        self.A0 = a_0
+        self.A1 = a_1
+        self.A2 = a_2
+        self.Phi = phi
         self.boundary_format = 0
 
 
@@ -109,8 +108,8 @@ class MagneticMixed(MagneticBoundaryBaseClass):
 
     def __init__(self, name, c_0=0.0, c_1=0.0):
         self.name = name
-        self.c_0 = c_0
-        self.c_1 = c_1
+        self.c0 = c_0
+        self.c1 = c_1
         self.boundary_format = 2
 
 
