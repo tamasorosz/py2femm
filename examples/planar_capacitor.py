@@ -1,4 +1,4 @@
-from src.electrostatics import ElectrostaticMaterial
+from src.electrostatics import ElectrostaticMaterial, ElectrostaticSurfaceCharge, ElectrostaticFixedVoltage
 from src.writer import FemmWriter, FemmFields
 from src.geometry import Geometry, Node, Line, CircleArc
 
@@ -52,11 +52,50 @@ def create_geometry(width, thickness, d):
     geo.circle_arcs = [arc1, arc2, arc3, arc4]
 
     planar_problem.create_geometry(geo)
+
+    # materials
     epoxy = ElectrostaticMaterial(material_name="epoxy", ex=3.7, ey=3.7, qv=0.0)
+    air = ElectrostaticMaterial(material_name="air", ex=1.0, ey=1.0, qv=0.0)
+    metal = ElectrostaticMaterial(material_name="metal", ex=1.0, ey=1.0, qv=0.0)
+
     planar_problem.add_material(epoxy)
+    planar_problem.add_material(air)
+    planar_problem.add_material(metal)
+
     planar_problem.define_block_label(0.0, 0.0, epoxy)
+    planar_problem.define_block_label(0.0, 0.2, air)
+
+    planar_problem.define_block_label(0.0, d / 2 + thickness / 2, metal)
+    planar_problem.define_block_label(0.0, - d / 2 - thickness / 2, metal)
+
+    # Boundary conditions
+    v0 = ElectrostaticFixedVoltage("U0", 10.0)
+    gnd = ElectrostaticFixedVoltage("GND", 0.0)
+    neumann = ElectrostaticSurfaceCharge('outline', 0.0)
+    planar_problem.add_boundary(neumann)
+    planar_problem.add_boundary(gnd)
+    planar_problem.add_boundary(v0)
+
+    # voltage electrode
+    planar_problem.set_boundary_definition(l1.selection_point(), v0)
+    planar_problem.set_boundary_definition(l2.selection_point(), v0)
+    planar_problem.set_boundary_definition(l3.selection_point(), v0)
+    planar_problem.set_boundary_definition(l4.selection_point(), v0)
+
+    # gnd electrode
+    planar_problem.set_boundary_definition(l5.selection_point(), gnd)
+    planar_problem.set_boundary_definition(l6.selection_point(), gnd)
+    planar_problem.set_boundary_definition(l7.selection_point(), gnd)
+    planar_problem.set_boundary_definition(l8.selection_point(), gnd)
+
+    # outer surface of the geometry
+    planar_problem.set_boundary_definition(arc1.selection_point(),  neumann)
+    planar_problem.set_boundary_definition(arc2.selection_point(), neumann)
+    planar_problem.set_boundary_definition(arc3.selection_point(), neumann)
+    planar_problem.set_boundary_definition(arc4.selection_point(), neumann)
 
     planar_problem.write("planar.lua")
+
 
 if __name__ == '__main__':
     # create geometry

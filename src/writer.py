@@ -11,6 +11,7 @@ from math import asin, degrees
 from pathlib import Path
 from string import Template
 from enum import Enum
+from typing import Union
 
 from src.current_flow import CurrentFlowMaterial, CurrentFlowFixedVoltage, CurrentFlowMixed, CurrentFlowSurfaceCurrent, \
     CurrentFlowPeriodic, CurrentFlowAntiPeriodic
@@ -21,7 +22,7 @@ from src.heatflow import HeatFlowMaterial, HeatFlowFixedTemperature, HeatFlowHea
 from src.magnetics import MagneticMaterial, MagneticDirichlet, MagneticMixed, MagneticAnti, MagneticPeriodic, \
     MagneticAntiPeriodicAirgap, MagneticPeriodicAirgap
 from src.geometry import Geometry, Node, Line, CircleArc
-from src.general import Material, AutoMeshOption
+from src.general import Material, AutoMeshOption, Boundary
 
 
 class FemmFields(Enum):
@@ -298,234 +299,234 @@ class FemmWriter:
 
         return cmd
 
-    def add_boundary(self, boundary):
+    def add_boundary(self, boundary: Boundary):
         """
         :param boundary: checks the type of the boundary parameter, then
         """
         cmd = None
         self.validate_field()
 
-        if self.field == FemmFields.MAGNETIC and isinstance(boundary, MagneticDirichlet):
-            cmd = Template(
-                "mi_addboundprop($propname, $A0, $A1, $A2, $Phi, $Mu, $Sig, " "$c0, $c1, $BdryFormat, $ia, $oa)"
-            )
-            cmd = cmd.substitute(
-                propname="'" + boundary.name + "'",
-                A0=boundary.a_0,
-                A1=boundary.a_1,
-                A2=boundary.a_2,
-                Phi=boundary.phi,
-                Mu=0,
-                Sig=0,
-                c0=0,
-                c1=0,
-                BdryFormat=0,
-                ia=0,
-                oa=0,
-            )
-
-        if self.field == FemmFields.MAGNETIC and isinstance(boundary, MagneticMixed):
-            cmd = Template(
-                "mi_addboundprop($propname, $A0, $A1, $A2, $Phi, $Mu, $Sig, " "$c0, $c1, $BdryFormat, $ia, $oa)"
-            )
-            cmd = cmd.substitute(
-                propname="'" + boundary.name + "'",
-                A0=0,
-                A1=0,
-                A2=0,
-                Phi=0,
-                Mu=0,
-                Sig=0,
-                c0=boundary.c0,
-                c1=boundary.c1,
-                BdryFormat=2,
-                ia=0,
-                oa=0,
-            )
-
-        if self.field == FemmFields.MAGNETIC and isinstance(boundary, MagneticAnti):
-            cmd = Template(
-                "mi_addboundprop($propname, $A0, $A1, $A2, $Phi, " "$Mu, $Sig, $c0, $c1, $BdryFormat, $ia, $oa)"
-            )
-            cmd = cmd.substitute(
-                propname="'" + boundary.name + "'",
-                A0=0,
-                A1=0,
-                A2=0,
-                Phi=0,
-                Mu=0,
-                Sig=0,
-                c0=0,
-                c1=0,
-                BdryFormat=5,
-                ia=0,
-                oa=0,
-            )
-
-        if self.field == FemmFields.MAGNETIC and isinstance(boundary, MagneticPeriodic):
-            cmd = Template(
-                "mi_addboundprop($propname, $A0, $A1, $A2, $Phi, $Mu, $Sig, $c0, $c1, $BdryFormat, $ia, $oa)"
-            )
-            cmd = cmd.substitute(
-                propname="'" + boundary.name + "'",
-                A0=0,
-                A1=0,
-                A2=0,
-                Phi=0,
-                Mu=0,
-                Sig=0,
-                c0=0,
-                c1=0,
-                BdryFormat=4,
-                ia=0,
-                oa=0,
-            )
-        if self.field == FemmFields.MAGNETIC and isinstance(boundary, MagneticAntiPeriodicAirgap):
-            cmd = Template(
-                "mi_addboundprop($propname, $A0, $A1, $A2, $Phi, $Mu, $Sig, $c0, $c1, $BdryFormat, $ia, $oa)"
-            )
-            cmd = cmd.substitute(
-                propname="'" + boundary.name + "'",
-                A0=0,
-                A1=0,
-                A2=0,
-                Phi=0,
-                Mu=0,
-                Sig=0,
-                c0=0,
-                c1=0,
-                BdryFormat=7,
-                ia=0,
-                oa=boundary.angle,
-            )
-
-        if self.field == FemmFields.MAGNETIC and isinstance(boundary, MagneticPeriodicAirgap):
-            cmd = Template(
-                "mi_addboundprop($propname, $A0, $A1, $A2, $Phi, $Mu, $Sig, $c0, $c1, $BdryFormat, $ia, $oa)"
-            )
-            cmd = cmd.substitute(
-                propname="'" + boundary.name + "'",
-                A0=0,
-                A1=0,
-                A2=0,
-                Phi=0,
-                Mu=0,
-                Sig=0,
-                c0=0,
-                c1=0,
-                BdryFormat=6,
-                ia=0,
-                oa=boundary.angle,
-            )
-
-        # HEATFLOW
-
-        if self.field == FemmFields.HEAT_FLOW and isinstance(boundary, HeatFlowFixedTemperature):
-            cmd = Template("hi_addboundprop($propname, $BdryFormat, $Tset, $qs, $Tinf, $h, $beta)")
-            cmd = cmd.substitute(
-                propname=f'"{boundary.name}"',
-                BdryFormat=0,
-                Tset=boundary.Tset,
-                qs=0,
-                Tinf=0,
-                h=0,
-                beta=0,
-            )
-
-        if self.field == FemmFields.HEAT_FLOW and isinstance(boundary, HeatFlowHeatFlux):
-            cmd = Template("hi_addboundprop($propname, $BdryFormat, $Tset, $qs, $Tinf, $h, $beta)")
-            cmd = cmd.substitute(
-                propname=f'"{boundary.name}"',
-                BdryFormat=1,
-                Tset=0,
-                qs=boundary.qs,
-                Tinf=0,
-                h=0,
-                beta=0,
-            )
-
-        if self.field == FemmFields.HEAT_FLOW and isinstance(boundary, HeatFlowConvection):
-            cmd = Template("hi_addboundprop($propname, $BdryFormat, $Tset, $qs, $Tinf, $h, $beta)")
-            cmd = cmd.substitute(
-                propname=f'"{boundary.name}"',
-                BdryFormat=2,
-                Tset=0,
-                qs=0,
-                Tinf=boundary.Tinf,
-                h=boundary.h,
-                beta=0,
-            )
-
-        if self.field == FemmFields.HEAT_FLOW and isinstance(boundary, HeatFlowRadiation):
-            cmd = Template("hi_addboundprop($propname, $BdryFormat, $Tset, $qs, $Tinf, $h, $beta)")
-            cmd = cmd.substitute(
-                propname=f'"{boundary.name}"',
-                BdryFormat=3,
-                Tset=0,
-                qs=0,
-                Tinf=boundary.Tinf,
-                h=0,
-                beta=boundary.beta,
-            )
-
-        if self.field == FemmFields.HEAT_FLOW and isinstance(boundary, HeatFlowPeriodic):
-            cmd = Template("hi_addboundprop($propname, $BdryFormat, $Tset, $qs, $Tinf, $h, $beta)")
-            cmd = cmd.substitute(
-                propname=f'"{boundary.name}"',
-                BdryFormat=4,
-                Tset=0,
-                qs=0,
-                Tinf=0,
-                h=0,
-                beta=0,
-            )
-
-        if self.field == FemmFields.HEAT_FLOW and isinstance(boundary, HeatFlowAntiPeriodic):
-            cmd = Template("hi_addboundprop($propname, $BdryFormat, $Tset, $qs, $Tinf, $h, $beta)")
-            cmd = cmd.substitute(
-                propname=f'"{boundary.name}"',
-                BdryFormat=5,
-                Tset=0,
-                qs=0,
-                Tinf=0,
-                h=0,
-                beta=0,
-            )
-
-        # Electrostatics
-        if self.field == FemmFields.ELECTROSTATIC and isinstance(boundary, ElectrostaticFixedVoltage):
-            cmd = f'ei_addboundprop("{boundary.name}", {boundary.Vs}, 0, 0, 0, 0)'
-
-        if self.field == FemmFields.ELECTROSTATIC and isinstance(boundary, ElectrostaticMixed):
-            cmd = f'ei_addboundprop("{boundary.name}", 0, 0, {boundary.c0}, {boundary.c1}, 1)'
-
-        if self.field == FemmFields.ELECTROSTATIC and isinstance(boundary, ElectrostaticSurfaceCharge):
-            cmd = f'ei_addboundprop("{boundary.name}", 0, {boundary.qs}, 0, 0, 2)'
-
-        if self.field == FemmFields.ELECTROSTATIC and isinstance(boundary, ElectrostaticPeriodic):
-            cmd = f'ei_addboundprop("{boundary.name}", 0, 0, 0, 0, 3)'
-
-        if self.field == FemmFields.ELECTROSTATIC and isinstance(boundary, ElectrostaticAntiPeriodic):
-            cmd = f'ei_addboundprop("{boundary.name}", 0, 0, 0, 0, 4)'
-
-        # Current Flow
-        if self.field == FemmFields.CURRENT_FLOW and isinstance(boundary, CurrentFlowFixedVoltage):
-            cmd = f'ci_addboundprop("{boundary.name}", {boundary.Vs}, 0, 0, 0, 0)'
-
-        if self.field == FemmFields.CURRENT_FLOW and isinstance(boundary, CurrentFlowMixed):
-            cmd = f'ci_addboundprop("{boundary.name}", 0, 0, {boundary.c0}, {boundary.c1}, 2)'
-
-        if self.field == FemmFields.CURRENT_FLOW and isinstance(boundary, CurrentFlowSurfaceCurrent):
-            cmd = f'ci_addboundprop("{boundary.name}", 0, {boundary.qs}, 0, 0, 2)'
-
-        if self.field == FemmFields.CURRENT_FLOW and isinstance(boundary, CurrentFlowPeriodic):
-            cmd = f'ci_addboundprop("{boundary.name}", 0, 0, 0, 0, 3)'
-
-        if self.field == FemmFields.CURRENT_FLOW and isinstance(boundary, CurrentFlowAntiPeriodic):
-            cmd = f'ci_addboundprop("{boundary.name}", 0, 0, 0, 0, 4)'
+        # # if self.field == FemmFields.MAGNETIC and isinstance(boundary, MagneticDirichlet):
+        # #     cmd = Template(
+        # #         "mi_addboundprop($propname, $A0, $A1, $A2, $Phi, $Mu, $Sig, " "$c0, $c1, $BdryFormat, $ia, $oa)"
+        # #     )
+        # #     cmd = cmd.substitute(
+        # #         propname="'" + boundary.name + "'",
+        # #         A0=boundary.a_0,
+        # #         A1=boundary.a_1,
+        # #         A2=boundary.a_2,
+        # #         Phi=boundary.phi,
+        # #         Mu=0,
+        # #         Sig=0,
+        # #         c0=0,
+        # #         c1=0,
+        # #         BdryFormat=0,
+        # #         ia=0,
+        # #         oa=0,
+        # #     )
+        #
+        # # if self.field == FemmFields.MAGNETIC and isinstance(boundary, MagneticMixed):
+        # #     cmd = Template(
+        # #         "mi_addboundprop($propname, $A0, $A1, $A2, $Phi, $Mu, $Sig, " "$c0, $c1, $BdryFormat, $ia, $oa)"
+        # #     )
+        # #     cmd = cmd.substitute(
+        # #         propname="'" + boundary.name + "'",
+        # #         A0=0,
+        # #         A1=0,
+        # #         A2=0,
+        # #         Phi=0,
+        # #         Mu=0,
+        # #         Sig=0,
+        # #         c0=boundary.c0,
+        # #         c1=boundary.c1,
+        # #         BdryFormat=2,
+        # #         ia=0,
+        # #         oa=0,
+        # #     )
+        #
+        # # if self.field == FemmFields.MAGNETIC and isinstance(boundary, MagneticAnti):
+        # #     cmd = Template(
+        # #         "mi_addboundprop($propname, $A0, $A1, $A2, $Phi, " "$Mu, $Sig, $c0, $c1, $BdryFormat, $ia, $oa)"
+        # #     )
+        # #     cmd = cmd.substitute(
+        # #         propname="'" + boundary.name + "'",
+        # #         A0=0,
+        # #         A1=0,
+        # #         A2=0,
+        # #         Phi=0,
+        # #         Mu=0,
+        # #         Sig=0,
+        # #         c0=0,
+        # #         c1=0,
+        # #         BdryFormat=5,
+        # #         ia=0,
+        # #         oa=0,
+        # #     )
+        #
+        # # if self.field == FemmFields.MAGNETIC and isinstance(boundary, MagneticPeriodic):
+        # #     cmd = Template(
+        # #         "mi_addboundprop($propname, $A0, $A1, $A2, $Phi, $Mu, $Sig, $c0, $c1, $BdryFormat, $ia, $oa)"
+        # #     )
+        # #     cmd = cmd.substitute(
+        # #         propname="'" + boundary.name + "'",
+        # #         A0=0,
+        # #         A1=0,
+        # #         A2=0,
+        # #         Phi=0,
+        # #         Mu=0,
+        # #         Sig=0,
+        # #         c0=0,
+        # #         c1=0,
+        # #         BdryFormat=4,
+        # #         ia=0,
+        # #         oa=0,
+        # #     )
+        # # if self.field == FemmFields.MAGNETIC and isinstance(boundary, MagneticAntiPeriodicAirgap):
+        # #     cmd = Template(
+        # #         "mi_addboundprop($propname, $A0, $A1, $A2, $Phi, $Mu, $Sig, $c0, $c1, $BdryFormat, $ia, $oa)"
+        # #     )
+        # #     cmd = cmd.substitute(
+        # #         propname="'" + boundary.name + "'",
+        # #         A0=0,
+        # #         A1=0,
+        # #         A2=0,
+        # #         Phi=0,
+        # #         Mu=0,
+        # #         Sig=0,
+        # #         c0=0,
+        # #         c1=0,
+        # #         BdryFormat=7,
+        # #         ia=0,
+        # #         oa=boundary.angle,
+        # #     )
+        #
+        # # if self.field == FemmFields.MAGNETIC and isinstance(boundary, MagneticPeriodicAirgap):
+        # #     cmd = Template(
+        # #         "mi_addboundprop($propname, $A0, $A1, $A2, $Phi, $Mu, $Sig, $c0, $c1, $BdryFormat, $ia, $oa)"
+        # #     )
+        # #     cmd = cmd.substitute(
+        # #         propname="'" + boundary.name + "'",
+        # #         A0=0,
+        # #         A1=0,
+        # #         A2=0,
+        # #         Phi=0,
+        # #         Mu=0,
+        # #         Sig=0,
+        # #         c0=0,
+        # #         c1=0,
+        # #         BdryFormat=6,
+        # #         ia=0,
+        # #         oa=boundary.angle,
+        # #     )
+        #
+        # # HEATFLOW
+        #
+        # if self.field == FemmFields.HEAT_FLOW and isinstance(boundary, HeatFlowFixedTemperature):
+        #     cmd = Template("hi_addboundprop($propname, $BdryFormat, $Tset, $qs, $Tinf, $h, $beta)")
+        #     cmd = cmd.substitute(
+        #         propname=f'"{boundary.name}"',
+        #         BdryFormat=0,
+        #         Tset=boundary.Tset,
+        #         qs=0,
+        #         Tinf=0,
+        #         h=0,
+        #         beta=0,
+        #     )
+        #
+        # if self.field == FemmFields.HEAT_FLOW and isinstance(boundary, HeatFlowHeatFlux):
+        #     cmd = Template("hi_addboundprop($propname, $BdryFormat, $Tset, $qs, $Tinf, $h, $beta)")
+        #     cmd = cmd.substitute(
+        #         propname=f'"{boundary.name}"',
+        #         BdryFormat=1,
+        #         Tset=0,
+        #         qs=boundary.qs,
+        #         Tinf=0,
+        #         h=0,
+        #         beta=0,
+        #     )
+        #
+        # if self.field == FemmFields.HEAT_FLOW and isinstance(boundary, HeatFlowConvection):
+        #     cmd = Template("hi_addboundprop($propname, $BdryFormat, $Tset, $qs, $Tinf, $h, $beta)")
+        #     cmd = cmd.substitute(
+        #         propname=f'"{boundary.name}"',
+        #         BdryFormat=2,
+        #         Tset=0,
+        #         qs=0,
+        #         Tinf=boundary.Tinf,
+        #         h=boundary.h,
+        #         beta=0,
+        #     )
+        #
+        # if self.field == FemmFields.HEAT_FLOW and isinstance(boundary, HeatFlowRadiation):
+        #     cmd = Template("hi_addboundprop($propname, $BdryFormat, $Tset, $qs, $Tinf, $h, $beta)")
+        #     cmd = cmd.substitute(
+        #         propname=f'"{boundary.name}"',
+        #         BdryFormat=3,
+        #         Tset=0,
+        #         qs=0,
+        #         Tinf=boundary.Tinf,
+        #         h=0,
+        #         beta=boundary.beta,
+        #     )
+        #
+        # if self.field == FemmFields.HEAT_FLOW and isinstance(boundary, HeatFlowPeriodic):
+        #     cmd = Template("hi_addboundprop($propname, $BdryFormat, $Tset, $qs, $Tinf, $h, $beta)")
+        #     cmd = cmd.substitute(
+        #         propname=f'"{boundary.name}"',
+        #         BdryFormat=4,
+        #         Tset=0,
+        #         qs=0,
+        #         Tinf=0,
+        #         h=0,
+        #         beta=0,
+        #     )
+        #
+        # if self.field == FemmFields.HEAT_FLOW and isinstance(boundary, HeatFlowAntiPeriodic):
+        #     cmd = Template("hi_addboundprop($propname, $BdryFormat, $Tset, $qs, $Tinf, $h, $beta)")
+        #     cmd = cmd.substitute(
+        #         propname=f'"{boundary.name}"',
+        #         BdryFormat=5,
+        #         Tset=0,
+        #         qs=0,
+        #         Tinf=0,
+        #         h=0,
+        #         beta=0,
+        #     )
+        #
+        # # Electrostatics
+        # #if self.field == FemmFields.ELECTROSTATIC and isinstance(boundary, ElectrostaticFixedVoltage):
+        # #    cmd = f'ei_addboundprop("{boundary.name}", {boundary.Vs}, 0, 0, 0, 0)'
+        # #
+        # # if self.field == FemmFields.ELECTROSTATIC and isinstance(boundary, ElectrostaticMixed):
+        # #     cmd = f'ei_addboundprop("{boundary.name}", 0, 0, {boundary.c0}, {boundary.c1}, 1)'
+        # #
+        # # if self.field == FemmFields.ELECTROSTATIC and isinstance(boundary, ElectrostaticSurfaceCharge):
+        # #     cmd = f'ei_addboundprop("{boundary.name}", 0, {boundary.qs}, 0, 0, 2)'
+        # #
+        # # if self.field == FemmFields.ELECTROSTATIC and isinstance(boundary, ElectrostaticPeriodic):
+        # #     cmd = f'ei_addboundprop("{boundary.name}", 0, 0, 0, 0, 3)'
+        # #
+        # # if self.field == FemmFields.ELECTROSTATIC and isinstance(boundary, ElectrostaticAntiPeriodic):
+        # #     cmd = f'ei_addboundprop("{boundary.name}", 0, 0, 0, 0, 4)'
+        #
+        # # Current Flow
+        # if self.field == FemmFields.CURRENT_FLOW and isinstance(boundary, CurrentFlowFixedVoltage):
+        #     cmd = f'ci_addboundprop("{boundary.name}", {boundary.Vs}, 0, 0, 0, 0)'
+        #
+        # if self.field == FemmFields.CURRENT_FLOW and isinstance(boundary, CurrentFlowMixed):
+        #     cmd = f'ci_addboundprop("{boundary.name}", 0, 0, {boundary.c0}, {boundary.c1}, 2)'
+        #
+        # if self.field == FemmFields.CURRENT_FLOW and isinstance(boundary, CurrentFlowSurfaceCurrent):
+        #     cmd = f'ci_addboundprop("{boundary.name}", 0, {boundary.qs}, 0, 0, 2)'
+        #
+        # if self.field == FemmFields.CURRENT_FLOW and isinstance(boundary, CurrentFlowPeriodic):
+        #     cmd = f'ci_addboundprop("{boundary.name}", 0, 0, 0, 0, 3)'
+        #
+        # if self.field == FemmFields.CURRENT_FLOW and isinstance(boundary, CurrentFlowAntiPeriodic):
+        #     cmd = f'ci_addboundprop("{boundary.name}", 0, 0, 0, 0, 4)'
 
         if FemmWriter.push:
-            self.lua_model.append(cmd)
+            self.lua_model.append(str(boundary))
 
         return cmd
 
@@ -1432,4 +1433,17 @@ class FemmWriter:
             self.set_blockprop(blockname=material.material_name, automesh=material.auto_mesh,
                                meshsize=material.mesh_size)
 
+        self.clear_selected()
+
+    def set_boundary_definition(self, selection_point:Node, boundary: Union[Boundary, None], elementsize=None):
+        # TODO: x,y should be nodes
+        self.select_segment(selection_point.x, selection_point.y)
+        if elementsize:
+            automesh = AutoMeshOption.CUSTOM_MESH.value
+            elementsize = elementsize
+
+        else:
+            automesh = AutoMeshOption.CUSTOM_MESH.value
+
+        self.set_segment_prop(boundary.name or "<None>", automesh=automesh, elementsize=elementsize)
         self.clear_selected()
