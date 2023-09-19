@@ -23,7 +23,7 @@ class FemmTester(TestCase):
     def test_write(self):
         writer = FemmProblem()
         writer.field = FemmFields.HEAT_FLOW
-        writer.lua_model.append("alma")
+        writer.lua_script.append("alma")
         writer.write("test_write.lua")
         self.assertEqual(True, os.path.exists("test_write.lua"))
         os.remove("test_write.lua")

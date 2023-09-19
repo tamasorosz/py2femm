@@ -23,7 +23,7 @@ class FemmProblem:
 
     def __init__(self):
         self.field = FemmFields.MAGNETIC
-        self.lua_model = []
+        self.lua_script = []
         self.out_file = "femm_data.csv"
 
     def write(self, file_name):
@@ -33,7 +33,7 @@ class FemmProblem:
                           geometry to the given code
         """
         with open(file_name, "w") as writer:
-            for line in self.lua_model:
+            for line in self.lua_script:
                 writer.write(line + "\n")
 
     def create_geometry(self, geometry: Geometry):
@@ -94,7 +94,7 @@ class FemmProblem:
         cmd = cmd.substitute(outfile=out_file)
         cmd_list.append(cmd)
 
-        self.lua_model.extend(cmd_list)
+        self.lua_script.extend(cmd_list)
 
         return cmd_list
 
@@ -105,7 +105,7 @@ class FemmProblem:
         cmd_list.append(f"{self.field.output_to_string()}_close()")
         cmd_list.append(f"{self.field.input_to_string()}_close()")
         cmd_list.append("quit()")
-        self.lua_model.extend(cmd_list)
+        self.lua_script.extend(cmd_list)
         return cmd_list
 
     def analyze(self, flag=1):
@@ -119,7 +119,7 @@ class FemmProblem:
         """
         cmd = Template("${field}_analyze($flag)")
         cmd = cmd.substitute(field=self.field.input_to_string(), flag=flag)
-        self.lua_model.append(cmd)
+        self.lua_script.append(cmd)
         return cmd
 
     def add_node(self, node: Node):
@@ -136,14 +136,14 @@ class FemmProblem:
         cmd = Template("${field}_addsegment($x1_coord, $y1_coord, $x2_coord, $y2_coord)")
         cmd = cmd.substitute(field=self.field.input_to_string(), x1_coord=start_pt.x, y1_coord=start_pt.y,
                              x2_coord=end_pt.x, y2_coord=end_pt.y)
-        self.lua_model.append(cmd)
+        self.lua_script.append(cmd)
         return cmd
 
     def add_blocklabel(self, label: Node):
         """Add a new block label at (x,y)"""
         cmd = Template("${field}_addblocklabel($x_coord, $y_coord)")
         cmd = cmd.substitute(field=self.field.input_to_string(), x_coord=label.x, y_coord=label.y)
-        self.lua_model.append(cmd)
+        self.lua_script.append(cmd)
         return cmd
 
     def add_arc(self, start_pt: Node, end_pt: Node, angle, maxseg):
@@ -154,7 +154,7 @@ class FemmProblem:
         cmd = Template("${field}_addarc($x_1, $y_1, $x_2, $y_2, $angle, $maxseg)")
         cmd = cmd.substitute(field=self.field.input_to_string(), x_1=start_pt.x, y_1=start_pt.y, x_2=end_pt.x,
                              y_2=end_pt.y, angle=angle, maxseg=maxseg)
-        self.lua_model.append(cmd)
+        self.lua_script.append(cmd)
 
         return cmd
 
@@ -163,7 +163,7 @@ class FemmProblem:
         :param boundary: checks the type of the boundary parameter, then
         """
         cmd = str(boundary)
-        self.lua_model.append(cmd)
+        self.lua_script.append(cmd)
         return cmd
 
     def add_material(self, material: Material):
@@ -174,14 +174,14 @@ class FemmProblem:
         """
         cmd = str(material)
         if cmd is not None:
-            self.lua_model.append(cmd)
+            self.lua_script.append(cmd)
         return cmd
 
     def delete_selected(self):
         """Delete all selected objects"""
 
         cmd = f"{self.field.input_to_string()}_deleteselected"
-        self.lua_model.append(cmd)
+        self.lua_script.append(cmd)
         return cmd
 
     def delete_selected_nodes(self):
@@ -190,21 +190,21 @@ class FemmProblem:
         selection command.
         """
         cmd = f"{self.field.input_to_string()}_deleteselectednodes"
-        self.lua_model.append(cmd)
+        self.lua_script.append(cmd)
         return cmd
 
     def delete_selected_labels(self):
         """Delete all selected labels."""
 
         cmd = f"{self.field.input_to_string()}_deleteselectedlabels"
-        self.lua_model.append(cmd)
+        self.lua_script.append(cmd)
 
         return cmd
 
     def delete_selected_segments(self):
         """Delete all selected segments."""
         cmd = f"{self.field.input_to_string()}_deleteselectedsegments"
-        self.lua_model.append(cmd)
+        self.lua_script.append(cmd)
 
         return cmd
 
@@ -212,7 +212,7 @@ class FemmProblem:
         """Delete all selected arc segments."""
 
         cmd = f"{self.field.input_to_string()}_deleteselectedarcsegments"
-        self.lua_model.append(cmd)
+        self.lua_script.append(cmd)
 
         return cmd
 
@@ -259,7 +259,7 @@ class FemmProblem:
             qp = kwargs.get("qp", 0)
             cmd = f'ci_addpointprop("{prop_name}", {Vp}, {qp})'
 
-        self.lua_model.append(cmd)
+        self.lua_script.append(cmd)
         return cmd
 
     def add_circuit_property(self, circuit_name, i, circuit_type):
@@ -272,40 +272,40 @@ class FemmProblem:
         - circuit_type: 0 for a parallel-connected circuit and 1 for a series-connected circuit
         """
         cmd = f'mi_addcircprop("{circuit_name}",{i},{circuit_type})'
-        self.lua_model.append(cmd)
+        self.lua_script.append(cmd)
         return cmd
 
     def clear_selected(self):
         """Clears all selected nodes, blocks, segments, and arc segments."""
         cmd = f"{self.field.input_to_string()}_clearselected()"
-        self.lua_model.append(cmd)
+        self.lua_script.append(cmd)
 
         return cmd
 
     def select_segment(self, x, y):
         """Select the line segment closest to (x, y)"""
         cmd = f"{self.field.input_to_string()}_selectsegment({x}, {y})"
-        self.lua_model.append(cmd)
+        self.lua_script.append(cmd)
 
         return cmd
 
     def select_arc_segment(self, x, y):
         """Select the arc segment closest to (x, y)"""
         cmd = f"{self.field.input_to_string()}_selectarcsegment({x}, {y})"
-        self.lua_model.append(cmd)
+        self.lua_script.append(cmd)
 
         return cmd
 
     def select_node(self, x, y):
         """Select the node closest to (x, y) and return its coordinates."""
         cmd = f"{self.field.input_to_string()}_selectnode({x}, {y})"
-        self.lua_model.append(cmd)
+        self.lua_script.append(cmd)
         return cmd
 
     def select_label(self, x, y):
         """Select the label closest to (x, y) and return its coordinates."""
         cmd = f"{self.field.input_to_string()}_selectlabel({x}, {y})"
-        self.lua_model.append(cmd)
+        self.lua_script.append(cmd)
 
         return cmd
 
@@ -315,7 +315,7 @@ class FemmProblem:
         Clears all previously selected elements and sets the edit mode to 4 (group).
         """
         cmd = f'{self.field.input_to_string()}_selectgroup({n})'
-        self.lua_model.append(cmd)
+        self.lua_script.append(cmd)
         return cmd
 
     def select_circle(self, x, y, R, editmode):
@@ -329,7 +329,7 @@ class FemmProblem:
 
         cmd = Template("${field}_selectcircle($xp, $yp, $Rp, $Editmode)")
         cmd = cmd.substitute(field=self.field.input_to_string(), xp=x, yp=y, Rp=R, Editmode=editmode)
-        self.lua_model.append(cmd)
+        self.lua_script.append(cmd)
         return cmd
 
     def select_rectangle(self, x1, y1, x2, y2, editmode):
@@ -342,7 +342,7 @@ class FemmProblem:
 
         cmd = Template("${field}_selectrectangle($x1p,$y1p,$x2p,$y2p,$Editmode)")
         cmd = cmd.substitute(field=self.field.input_to_string(), x1p=x1, y1p=y1, x2p=x2, y2p=y2, Editmode=editmode)
-        self.lua_model.append(cmd)
+        self.lua_script.append(cmd)
         return cmd
 
     def set_pointprop(self, propname, groupno=0, inductor="<None>"):
@@ -352,7 +352,7 @@ class FemmProblem:
         :param inductor: Specifies which conductor the node belongs to. Default value is '<None>'
         """
         cmd = f'{self.field.input_to_string()}_setnodeprop("{propname}", {groupno}, "{inductor}")'
-        self.lua_model.append(cmd)
+        self.lua_script.append(cmd)
         return cmd
 
     def set_segment_prop(
@@ -380,7 +380,7 @@ class FemmProblem:
                          "<None>".
         """
         cmd = f'{self.field.input_to_string()}_setsegmentprop("{propname}", {elementsize}, {automesh}, {hide}, {group}, "{inductor}")'
-        self.lua_model.append(cmd)
+        self.lua_script.append(cmd)
 
         return cmd
 
@@ -410,7 +410,7 @@ class FemmProblem:
                 group=group,
             )
 
-        self.lua_model.append(cmd)
+        self.lua_script.append(cmd)
         return cmd
 
     def set_blockprop(self, blockname, automesh: AutoMeshOption = AutoMeshOption.AUTOMESH, meshsize=1, group=0,
@@ -480,7 +480,7 @@ class FemmProblem:
                 group=group,
             )
 
-        self.lua_model.append(cmd)
+        self.lua_script.append(cmd)
         return cmd
 
     # problem commands for the magnetic problem
@@ -523,7 +523,7 @@ class FemmProblem:
             acsolver=acsolver,
         )
 
-        self.lua_model.append(cmd)
+        self.lua_script.append(cmd)
         return cmd
 
     def heat_problem(
@@ -553,7 +553,7 @@ class FemmProblem:
 
         cmd = f'hi_probdef("{units.value}", "{type}", {precision}, {depth}, {minangle}, "{prevsoln}", {timestep})'
 
-        self.lua_model.append(cmd)
+        self.lua_script.append(cmd)
         return cmd
 
     def electrostatic_problem(self, units: LengthUnit, type, precision=1e-8, depth=1, minangle=30):
@@ -570,7 +570,7 @@ class FemmProblem:
 
         cmd = f'ei_probdef("{units.value}", "{type}", {precision}, {depth}, {minangle})'
 
-        self.lua_model.append(cmd)
+        self.lua_script.append(cmd)
         return cmd
 
     def currentflow_problem(self, units: LengthUnit, type, frequency=0, precision=1e-8, depth=1, minangle=30):
@@ -580,7 +580,7 @@ class FemmProblem:
 
         cmd = f'ci_probdef("{units.value}", "{type}", {frequency}, {precision}, {depth}, {minangle})'
 
-        self.lua_model.append(cmd)
+        self.lua_script.append(cmd)
         return cmd
 
     def save_as(self, file_name):
@@ -595,13 +595,13 @@ class FemmProblem:
         file_name = str(Path(file_name).resolve().as_posix())
         cmd = Template("${field}_saveas($filename)")
         cmd = cmd.substitute(field=self.field.input_to_string(), filename='"' + file_name + '"')
-        self.lua_model.append(cmd)
+        self.lua_script.append(cmd)
         return cmd
 
     def load_solution(self):
         """Loads  and displays the solution."""
         cmd = f"{self.field.input_to_string()}_loadsolution()"
-        self.lua_model.append(cmd)
+        self.lua_script.append(cmd)
         return cmd
 
         # post processing commands --- data extraction
@@ -671,7 +671,7 @@ class FemmProblem:
         if self.field == FemmFields.MAGNETIC:
             cmd = Template("mo_blockintegral($type)")
             cmd = cmd.substitute(type=type)
-        self.lua_model.append(cmd)
+        self.lua_script.append(cmd)
         return cmd
 
     def get_point_values(self, x, y):
@@ -699,7 +699,7 @@ class FemmProblem:
         if self.field == FemmFields.MAGNETIC:
             cmd = Template("mo_getpointvalues($x, $y)")
             cmd = cmd.substitute(x=x, y=y)
-        self.lua_model.append(cmd)
+        self.lua_script.append(cmd)
         return cmd
 
     def get_circuit_properties(self, circuit_name, result="current, volt, flux"):
@@ -715,14 +715,14 @@ class FemmProblem:
             cmd = Template("$result = mo_getcircuitproperties($circuit)")
 
         cmd = cmd.substitute(circuit="'" + circuit_name + "'", result=result)
-        self.lua_model.append(cmd)
+        self.lua_script.append(cmd)
         return cmd
 
     def write_out_result(self, key, value):
         # writes out a key_value pair
         cmd = Template("write(file_out, '$key', ', ', $value, \"\\{}\")".format("n"))
         cmd = cmd.substitute(key=key, value=value)
-        self.lua_model.append(cmd)
+        self.lua_script.append(cmd)
         return cmd
 
     def define_block_label(self, x: float, y: float, material: Material):

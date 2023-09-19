@@ -46,22 +46,22 @@ class TestFemmElectrostaticProblem(unittest.TestCase):
 
         writer.select_node(0, 0)
         writer.set_pointprop("Ug")
-        writer.lua_model.append("ei_clearselected()")
+        writer.lua_script.append("ei_clearselected()")
 
         writer.select_node(a / 2, a / 2)
         writer.set_pointprop("U0")
-        writer.lua_model.append("ei_clearselected()")
+        writer.lua_script.append("ei_clearselected()")
 
-        writer.lua_model.append("ei_zoomnatural()")
-        writer.lua_model.append("ei_zoomout()")
-        writer.lua_model.append("hideconsole()")
+        writer.lua_script.append("ei_zoomnatural()")
+        writer.lua_script.append("ei_zoomout()")
+        writer.lua_script.append("hideconsole()")
         writer.save_as("electrostatic_test.fee")
         writer.analyze()
         writer.load_solution()
 
         # Examine the results
-        writer.lua_model.append(f"eo_selectblock({a / 4}, {a / 4})")
-        writer.lua_model.append("E = eo_blockintegral(0)")  # Stored Energy
+        writer.lua_script.append(f"eo_selectblock({a / 4}, {a / 4})")
+        writer.lua_script.append("E = eo_blockintegral(0)")  # Stored Energy
         writer.write_out_result("E", "E")
         writer.close()
         writer.write("test_files/electrostatic_test.lua")
