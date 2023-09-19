@@ -1,5 +1,5 @@
 from src.electrostatics import ElectrostaticMaterial, ElectrostaticSurfaceCharge, ElectrostaticFixedVoltage
-from src.writer import FemmWriter, FemmFields
+from src.writer import FemmWriter, FemmFields, LengthUnit
 from src.geometry import Geometry, Node, Line, CircleArc
 
 
@@ -8,7 +8,7 @@ def create_geometry(width, thickness, d):
     planar_problem = FemmWriter()
     planar_problem.field = FemmFields.ELECTROSTATIC
     planar_problem.init_problem("electrostatic_data.csv")
-    planar_problem.electrostatic_problem("meters", "planar")
+    planar_problem.electrostatic_problem(LengthUnit.METERS, "planar")
 
     # geometry definition
     geo = Geometry()

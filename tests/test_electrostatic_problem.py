@@ -1,8 +1,7 @@
 import unittest
 
 from src.electrostatics import ElectrostaticMaterial
-from src.geometry import Node
-from src.writer import FemmWriter, FemmFields
+from src.writer import FemmWriter, FemmFields, LengthUnit
 
 
 class TestFemmElectrostaticProblem(unittest.TestCase):
@@ -12,7 +11,7 @@ class TestFemmElectrostaticProblem(unittest.TestCase):
         writer.field = FemmFields.ELECTROSTATIC
         writer.init_problem("electrostatic_data.csv")
 
-        writer.electrostatic_problem("centimeters", "planar")
+        writer.electrostatic_problem(LengthUnit.CENTIMETERS, "planar")
 
         a = 10  # cm
         epsilon_r = 2.1  # -
@@ -34,7 +33,7 @@ class TestFemmElectrostaticProblem(unittest.TestCase):
 
         # Adding material properties
         blocklabel = (a / 4, a / 4)
-        mat = ElectrostaticMaterial("Teflon", epsilon_r, epsilon_r, 0)
+        mat = ElectrostaticMaterial(material_name="Teflon", ex=epsilon_r,ey=epsilon_r, qv=0)
         writer.add_material(mat)
         writer.add_blocklabel(*blocklabel)
         writer.select_label(*blocklabel)

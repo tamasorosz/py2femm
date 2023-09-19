@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from string import Template
-from general import Material, Boundary
+from src.general import Material, Boundary
 
 
 @dataclass(kw_only=True)
