@@ -1,4 +1,4 @@
-# femm-from-py
+# py2femm
 
 An alternative library to run FEMM simulations under windows or linux environments, as well.
 
