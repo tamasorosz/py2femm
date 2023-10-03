@@ -46,13 +46,13 @@ class FemmProblem:
 
         The field type should be defined separately.
         """
-        lua_geometry = []
+
 
         # 1 - generate the nodes
-        [lua_geometry.append(self.add_node(node)) for node in geometry.nodes]
+        [self.lua_script.append(self.add_node(node)) for node in geometry.nodes]
 
         for line in geometry.lines:
-            lua_geometry.append(self.add_segment(line.start_pt, line.end_pt))
+            self.lua_script.append(self.add_segment(line.start_pt, line.end_pt))
 
         for arc in geometry.circle_arcs:
             # calculate the angle for the femm circle arc generation
@@ -61,7 +61,7 @@ class FemmProblem:
 
             deg = 2 * round(degrees(asin(clamp / radius)), 2)
 
-            lua_geometry.append(
+            self.lua_script.append(
                 self.add_arc(
                     arc.start_pt,
                     arc.end_pt,
@@ -70,7 +70,6 @@ class FemmProblem:
                 )
             )
 
-        return lua_geometry
 
     def init_problem(self, out_file="femm_data.csv"):
         """

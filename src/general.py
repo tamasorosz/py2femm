@@ -12,7 +12,7 @@ class AutoMeshOption(Enum):
 @dataclass
 class Material(ABC):
     material_name: str
-    auto_mesh: AutoMeshOption = AutoMeshOption.AUTOMESH.value
+    auto_mesh: AutoMeshOption = AutoMeshOption.AUTOMESH
     mesh_size: float = 0.0
 
 

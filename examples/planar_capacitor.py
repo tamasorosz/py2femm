@@ -65,8 +65,8 @@ def create_geometry(width, thickness, d):
     planar_problem.define_block_label(Node(0.0, 0.0), epoxy)
     planar_problem.define_block_label(Node(0.0, 0.2), air)
 
-    planar_problem.define_block_label(Node(0.0, d / 2 + thickness / 2, metal))
-    planar_problem.define_block_label(Node(0.0, - d / 2 - thickness / 2, metal))
+    planar_problem.define_block_label(Node(0.0, d / 2 + thickness / 2), metal)
+    planar_problem.define_block_label(Node(0.0, - d / 2 - thickness / 2), metal)
 
     # Boundary conditions
     v0 = ElectrostaticFixedVoltage("U0", 10.0)
@@ -94,7 +94,7 @@ def create_geometry(width, thickness, d):
     planar_problem.set_boundary_definition(arc3.selection_point(), neumann)
     planar_problem.set_boundary_definition(arc4.selection_point(), neumann)
 
-    planar_problem.analyze()
+    # planar_problem.analyze()
 
     planar_problem.write("planar.lua")
 
