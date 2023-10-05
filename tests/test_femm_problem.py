@@ -783,7 +783,7 @@ class FemmTester(TestCase):
     def test_get_point_values(self):
         fmw = FemmProblem()
         fmw.field = FemmFields.MAGNETIC
-        self.assertEqual("mo_getpointvalues(0.01, 0)", fmw.get_point_values(0.01, 0))
+        self.assertEqual("mo_getpointvalues(0.01, 0)", fmw.get_point_values(Node(0.01, 0)))
 
     def test_create_geometry(self):
         """create basic objects: nodes, lines and a circle arc to test the basic functionality of the command."""
@@ -802,7 +802,9 @@ class FemmTester(TestCase):
 
         fmw = FemmProblem()
         fmw.field = FemmFields.MAGNETIC
-        cmds = fmw.create_geometry(geo)
+        fmw.create_geometry(geo)
+
+        cmds = fmw.lua_script
 
         self.assertIn("mi_addnode(0.0, 0.0)", cmds)
         self.assertIn("mi_addsegment(0.0, 0.0, 0.0, 1.0)", cmds)

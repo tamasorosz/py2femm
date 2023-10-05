@@ -47,7 +47,6 @@ class FemmProblem:
         The field type should be defined separately.
         """
 
-
         # 1 - generate the nodes
         [self.lua_script.append(self.add_node(node)) for node in geometry.nodes]
 
@@ -69,7 +68,6 @@ class FemmProblem:
                     maxseg=1,
                 )
             )
-
 
     def init_problem(self, out_file="femm_data.csv"):
         """
@@ -682,7 +680,7 @@ class FemmProblem:
         self.lua_script.append(cmd)
         return cmd
 
-    def get_point_values(self, x, y):
+    def get_point_values(self, node: Node):
         """
         Get the values associated with the point at x,y Return in order
     
@@ -706,7 +704,7 @@ class FemmProblem:
         cmd = None
         if self.field == FemmFields.MAGNETIC:
             cmd = Template("mo_getpointvalues($x, $y)")
-            cmd = cmd.substitute(x=x, y=y)
+            cmd = cmd.substitute(x=node.x, y=node.y)
         self.lua_script.append(cmd)
         return cmd
 
