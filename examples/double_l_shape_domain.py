@@ -1,8 +1,10 @@
+import os
+
 from src.electrostatics import ElectrostaticMaterial, ElectrostaticSurfaceCharge, ElectrostaticFixedVoltage
 from src.femm_problem import FemmProblem
 from src.general import FemmFields, LengthUnit
 from src.geometry import Geometry, Line, CircleArc, Node
-
+from src.executor import Executor
 import matplotlib.pyplot as plt
 
 
@@ -16,9 +18,9 @@ def double_l_shape_problem(h, l, delta, voltage=2500.0):
 
     r1 = Node(0.0, 0.0)
     r2 = Node(2.0 * h, 0.0)
-    r3 = Node(2.0 * h, 2.0 * l)
-    r4 = Node(2.0 * h, 2.0 * l + delta)
-    r5 = Node(0.0, 2.0 * l + delta)
+    r3 = Node(2.0 * h, 2.0 * l + delta)
+    r4 = Node(2.0 * h, 2.0 * l + 2.0*delta)
+    r5 = Node(0.0, 2.0 * l + 2.0*delta)
     r6 = Node(0.0, delta)
 
     l1 = Line(r1, r2)
@@ -58,6 +60,11 @@ def double_l_shape_problem(h, l, delta, voltage=2500.0):
     planar_problem.make_analysis('double_l_shape')
     planar_problem.get_point_values(middle_point)
     planar_problem.write("double_l_shape.lua")
+
+    femm = Executor()
+    current_dir = os.getcwd()
+    lua_file = current_dir+"/double_l_shape.lua"
+    femm.run( lua_file)
 
 
 def plot_solutions():
@@ -153,7 +160,9 @@ if __name__ == '__main__':
     delta = 0.08
 
     H = 0.056 / 2.
-    L = 0.168 / 2.
+    L = 0.084 / 2.
+
+    #L = 0.168 / 2.
     delta = 0.08
 
     print('Gamma:', L / H)

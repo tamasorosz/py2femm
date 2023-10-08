@@ -720,11 +720,10 @@ class FemmProblem:
         if self.field == FemmFields.ELECTROSTATIC:
             cmd = f"V, Dx, Dy, Ex, Ey, ex, ey, nrg = eo_getpointvalues({node.x}, {node.y})"
             self.lua_script.append(cmd)
-
-        cmd = f'write(file_out, \'x = \', {round(node.x, 4)}, \'y = \',{round(node.y, 4)}, \'E_x =\', Ex, \'\\n\')'
-        self.lua_script.append(cmd)
-        cmd = f'write(file_out, \'x = \', {round(node.x, 4)}, \'y = \',{round(node.y, 4)}, \'E_y =\', Ey, \'\\n\')'
-        self.lua_script.append(cmd)
+            cmd = f'write(file_out, \"x = \", {round(node.x, 4)}, \"y = \",{round(node.y, 4)}, \"E_x =\", Ex,\"\\n\")'
+            self.lua_script.append(cmd)
+            cmd = f'write(file_out, \"x = \", {round(node.x, 4)}, \"y = \",{round(node.y, 4)}, \"E_y =\", Ey, \"\\n\")'
+            self.lua_script.append(cmd)
         return cmd
 
     def get_integral_values(self, label_list: list, save_image: bool, variable_name: str):
