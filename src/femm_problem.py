@@ -705,8 +705,61 @@ class FemmProblem:
         if self.field == FemmFields.MAGNETIC:
             cmd = Template("mo_getpointvalues($x, $y)")
             cmd = cmd.substitute(x=node.x, y=node.y)
+
+        # Symbol Definition
+        # -----------------
+        # V Voltage
+        # Dx x- or r- direction component of displacement
+        # Dy y- or z- direction component of displacement
+        # Ex x- or r- direction component of electric field intensity
+        # Ey y- or z- direction component of electric field intensity
+        # ex x- or r- direction component of permittivity
+        # ey y- or z- direction component of permittivity
+        # nrg electric field energy density
+        #
+        if self.field == FemmFields.ELECTROSTATIC:
+            cmd = f"V, Dx, Dy, Ex, Ey, ex, ey, nrg = eo_getpointvalues({node.x}, {node.y})"
+            self.lua_script.append(cmd)
+
+        cmd = f'write(file_out, \'x = \', {round(node.x, 4)}, \'y = \',{round(node.y, 4)}, \'E_x =\', Ex, \'\\n\')'
+        self.lua_script.append(cmd)
+        cmd = f'write(file_out, \'x = \', {round(node.x, 4)}, \'y = \',{round(node.y, 4)}, \'E_y =\', Ey, \'\\n\')'
         self.lua_script.append(cmd)
         return cmd
+
+    def get_integral_values(self, label_list: list, save_image: bool, variable_name: str):
+        if self.field == FemmFields.MAGNETIC:
+            int_type = {"Fx": 18, "Fy": 19, "Area": 5, "Energy": 2, "Torque": 22, "Flux": 1, "Current": 7}
+            for node in label_list:
+                self.lua_script.append(f"{self.field.output_to_string()}_selectblock({node.x}, {node.y})")
+
+            self.lua_script.append(
+                f"{variable_name} = {self.field.input_to_string}_blockintegral({int_type[variable_name]})")
+            if variable_name == "Flux":
+                self.lua_script.append(f"coil_area = {self.field.input_to_string}_blockintegral(5)")
+            self.lua_script.append(f"{self.field.input_to_string}_clearblock()")
+            if variable_name == "Flux":
+                self.lua_script.append(f'write(file_out, "{self.out_file}, ", {variable_name}/coil_area, "\\n")')
+            else:
+                self.lua_script.append(f'write(file_out, "{self.out_file}, ", {variable_name}, "\\n")')
+
+        if self.field == FemmFields.ELECTROSTATIC:
+            int_type = {"Energy": 0}
+
+            for node in label_list:
+                self.lua_script.append(f"{self.field.output_to_string()}_selectblock({node.x}, {node.y})")
+
+            self.lua_script.append(
+                f"{variable_name} = {self.field.output_to_string()}_blockintegral({int_type[variable_name]})")
+            self.lua_script.append(f"{self.field.output_to_string()}_clearblock()")
+            self.lua_script.append(f'write(file_out, "{self.out_file}, ", {variable_name}, "\\n")')
+
+        if save_image == "saveimage":
+            self.lua_script.append(f"{self.field.output_to_string()}_showdensityplot(0, 0, 0.0, 0.1, 'bmag')")
+            self.lua_script.append(f"{self.field.output_to_string()}_showcontourplot(-1)")
+            self.lua_script.append(f"{self.field.output_to_string()}_resize(600, 600)")
+            self.lua_script.append(f"{self.field.output_to_string()}_refreshview()")
+            self.lua_script.append(f'{self.field.output_to_string()}_save_bitmap(f"{label_list.__str__()}.bmp");')
 
     def get_circuit_properties(self, circuit_name, result="current, volt, flux"):
         """Used primarily to obtain impedance information associated with circuit properties.
@@ -757,3 +810,18 @@ class FemmProblem:
 
         self.set_segment_prop(boundary.name or "<None>", automesh=automesh, elementsize=elementsize)
         self.clear_selected()
+
+    def make_analysis(self, filename="temp"):
+
+        if self.field == FemmFields.MAGNETIC:
+            filename += ".fem"
+        elif self.field == FemmFields.ELECTROSTATIC:
+            filename += ".fee"
+        elif self.field == FemmFields.CURRENT_FLOW:
+            filename += ".fec"
+        elif self.field == FemmFields.HEAT_FLOW:
+            filename += ".feh"
+
+        self.save_as(filename)
+        self.analyze()
+        self.load_solution()

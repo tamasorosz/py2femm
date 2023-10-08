@@ -36,7 +36,9 @@ def double_l_shape_problem(h, l, delta, voltage=2500.0):
     # Material definition
     air = ElectrostaticMaterial(material_name="air", ex=1.0, ey=1.0, qv=0.0)
     planar_problem.add_material(air)
-    planar_problem.define_block_label(Node((r1.x + r2.x) / 2, (r2.y + r4.y) / 2), air)
+    middle_point = Node((r1.x + r2.x) / 2, (r2.y + r4.y) / 2)
+    print(middle_point)
+    planar_problem.define_block_label(middle_point, air)
 
     # boundary definition
     v0 = ElectrostaticFixedVoltage("U0", voltage)
@@ -52,9 +54,10 @@ def double_l_shape_problem(h, l, delta, voltage=2500.0):
     planar_problem.set_boundary_definition(l4.selection_point(), v0)
     planar_problem.set_boundary_definition(l5.selection_point(), v0)
 
-    planar_problem.analyze()
-    planar_problem.get_point_values()
-    planar_problem.write("planar.lua")
+    # planar_problem.analyze()
+    planar_problem.make_analysis('double_l_shape')
+    planar_problem.get_point_values(middle_point)
+    planar_problem.write("double_l_shape.lua")
 
 
 def plot_solutions():
@@ -145,8 +148,14 @@ def plot_solutions():
 
 
 if __name__ == '__main__':
-    H = 0.07112
-    L = 0.3556
-    delta = 0.2032
+    L = 0.280 / 2.
+    H = 0.056 / 2.
+    delta = 0.08
+
+    H = 0.056 / 2.
+    L = 0.168 / 2.
+    delta = 0.08
+
+    print('Gamma:', L / H)
 
     double_l_shape_problem(H, L, delta)

@@ -62,7 +62,9 @@ def create_geometry(width, thickness, d):
     planar_problem.add_material(air)
     planar_problem.add_material(metal)
 
-    planar_problem.define_block_label(Node(0.0, 0.0), epoxy)
+    insulation_block = Node(0.0, 0.0)
+
+    planar_problem.define_block_label(insulation_block, epoxy)
     planar_problem.define_block_label(Node(0.0, 0.2), air)
 
     planar_problem.define_block_label(Node(0.0, d / 2 + thickness / 2), metal)
@@ -94,9 +96,11 @@ def create_geometry(width, thickness, d):
     planar_problem.set_boundary_definition(arc3.selection_point(), neumann)
     planar_problem.set_boundary_definition(arc4.selection_point(), neumann)
 
-    # planar_problem.analyze()
+    planar_problem.make_analysis('planar')
+    planar_problem.get_integral_values([insulation_block], save_image=True, variable_name="Energy")
 
     planar_problem.write("planar.lua")
+
 
 if __name__ == '__main__':
     # create geometry
