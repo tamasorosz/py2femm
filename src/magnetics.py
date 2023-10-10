@@ -18,19 +18,19 @@ class LamType(Enum):
 
 @dataclass(kw_only=True)
 class MagneticMaterial(Material):
-    mu_x: float
-    mu_y: float
-    H_c: float
-    J: float
-    Cduct: float
-    Lam_d: float
-    Phi_hmax: float
-    lam_fill: float
-    LamType: LamType
-    Phi_hx: float
-    Phi_hy: float
-    NStrands: int
-    WireD: float
+    mu_x: float = 1.0
+    mu_y: float = 1.0
+    H_c: float = 0.0
+    J: float = 0.0
+    Cduct: float = 0.0
+    Lam_d: float = 0.0
+    Phi_hmax: float = 0.0
+    lam_fill: float = 0.0
+    LamType: LamType = LamType.NOT_LAMINATED
+    Phi_hx: float = 0.0
+    Phi_hy: float = 0.0
+    NStrands: int = 0.0
+    WireD: float = 0.0
 
     def __str__(self):
         cmd = Template(
@@ -95,7 +95,7 @@ class MagneticBoundaryBaseClass(Boundary):
 # Magnetic Boundary Conditions
 class MagneticDirichlet(MagneticBoundaryBaseClass):
 
-    def __init__(self, name:str, a_0:float, a_1:float, a_2:float, phi:float):
+    def __init__(self, name: str, a_0: float, a_1: float, a_2: float, phi: float):
         self.name = name
         self.A0 = a_0
         self.A1 = a_1

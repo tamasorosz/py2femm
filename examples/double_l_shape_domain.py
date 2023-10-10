@@ -19,8 +19,8 @@ def double_l_shape_problem(h, l, delta, voltage=2500.0):
     r1 = Node(0.0, 0.0)
     r2 = Node(2.0 * h, 0.0)
     r3 = Node(2.0 * h, 2.0 * l + delta)
-    r4 = Node(2.0 * h, 2.0 * l + 2.0*delta)
-    r5 = Node(0.0, 2.0 * l + 2.0*delta)
+    r4 = Node(2.0 * h, 2.0 * l + 2.0 * delta)
+    r5 = Node(0.0, 2.0 * l + 2.0 * delta)
     r6 = Node(0.0, delta)
 
     l1 = Line(r1, r2)
@@ -38,8 +38,8 @@ def double_l_shape_problem(h, l, delta, voltage=2500.0):
     # Material definition
     air = ElectrostaticMaterial(material_name="air", ex=1.0, ey=1.0, qv=0.0)
     planar_problem.add_material(air)
+
     middle_point = Node((r1.x + r2.x) / 2, (r2.y + r4.y) / 2)
-    print(middle_point)
     planar_problem.define_block_label(middle_point, air)
 
     # boundary definition
@@ -63,8 +63,8 @@ def double_l_shape_problem(h, l, delta, voltage=2500.0):
 
     femm = Executor()
     current_dir = os.getcwd()
-    lua_file = current_dir+"/double_l_shape.lua"
-    femm.run( lua_file)
+    lua_file = current_dir + "/double_l_shape.lua"
+    femm.run(lua_file)
 
 
 def plot_solutions():
@@ -140,13 +140,18 @@ def plot_solutions():
     experimental_x_values = [item["value"][0] for item in experimental_data]
     experimental_y_values = [item["value"][1] for item in experimental_data]
 
-    # Diagram kirajzolása
-    plt.plot(schwarz_x_values, schwarz_y_values, label="Schwarz-Christoffel solution", color="r")
-    plt.plot(experimental_x_values, experimental_y_values, label="Experimental Data", color="b")
+    # FEMM values
+    femm_x_values = [1.5, 3.0, 5.0]
+    femm_y_values = [5.472, 0.51477, 0.0832]
 
-    plt.xlabel("L/H ")
-    plt.ylabel("Tilting angle of E-field")
-    plt.title("Schwarz-Christoffel vs. Experimental Data")
+    # Diagram kirajzolása
+    plt.scatter(schwarz_x_values, schwarz_y_values, label="Christoffel-Schwartz transzformáció", color="r", marker="*")
+    plt.plot(experimental_x_values, experimental_y_values, label="Mért adatok", color="b", marker="d")
+    plt.scatter(femm_x_values, femm_y_values, label="FEMM modell", color = '#88c999', marker='>')
+
+    plt.xlabel("L/H arány [-]")
+    plt.ylabel("Villamos térerősség dőlési szöge [$^\circ$]")
+    # plt.title("Schwarz-Christoffel vs. Experimental Data")
     plt.legend()
     plt.grid(True)
 
@@ -162,9 +167,10 @@ if __name__ == '__main__':
     H = 0.056 / 2.
     L = 0.084 / 2.
 
-    #L = 0.168 / 2.
+    # L = 0.168 / 2.
     delta = 0.08
 
     print('Gamma:', L / H)
 
     double_l_shape_problem(H, L, delta)
+    #plot_solutions()

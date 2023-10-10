@@ -790,8 +790,8 @@ class FemmProblem:
 
         if isinstance(material, MagneticMaterial):
             self.set_blockprop(blockname=material.material_name, automesh=material.auto_mesh,
-                               meshsize=material.mesh_size,
-                               magdirection=material.remanence_angle)
+                               meshsize=material.mesh_size)
+                               #magdirection=material.remanence_angle)
         else:
             self.set_blockprop(blockname=material.material_name, automesh=material.auto_mesh,
                                meshsize=material.mesh_size)
