@@ -18,4 +18,4 @@ we can use the same description of the part to create the thermal model.
 Some new commands are introduced, which execute the combination of some straightforward commands.
 
 
-Ge
+docs/geometry_generation.md
