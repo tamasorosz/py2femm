@@ -1,3 +1,6 @@
+---
+layout: home
+---
 # Manual for py2femm
 
 This library aims to provide a cross-platform, Python-based interface for [FEMM](https://www.femm.info/wiki/HomePage), a
