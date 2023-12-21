@@ -1,3 +1,7 @@
 theme: jekyll-theme-minimal
 title: py2femm
 description:  Manual for the py2femm library
+
+nav:
+  - 'index.md'
+  - 'geometry_generation.md'
