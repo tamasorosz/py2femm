@@ -1,12 +1,15 @@
+import os
+
 from src.electrostatics import ElectrostaticMaterial, ElectrostaticSurfaceCharge, ElectrostaticFixedVoltage
+from src.executor import Executor
 from src.femm_problem import FemmProblem
 from src.general import FemmFields, LengthUnit
 from src.geometry import Geometry, Line, CircleArc, Node
 
 
-def create_geometry(width, thickness, d):
+def planar_capacitor_problem(width, thickness, d):
     # problem definition
-    planar_problem = FemmProblem(out_file="electrostatic_data.csv")
+    planar_problem = FemmProblem(out_file="../electrostatic_data.csv")
     # planar_problem.field = FemmFields.ELECTROSTATIC
     # planar_problem.init_problem("electrostatic_data.csv")
     planar_problem.electrostatic_problem(LengthUnit.METERS, "planar")
@@ -101,6 +104,11 @@ def create_geometry(width, thickness, d):
 
     planar_problem.write("planar.lua")
 
+    femm = Executor()
+    current_dir = os.getcwd()
+    lua_file = current_dir + "/planar.lua"
+    femm.run(lua_file)
+
 
 if __name__ == '__main__':
     # create geometry
@@ -108,4 +116,4 @@ if __name__ == '__main__':
     thickness = 0.005  # m
     d = 0.01  # m
 
-    create_geometry(width, thickness, d)
+    planar_capacitor_problem(width, thickness, d)

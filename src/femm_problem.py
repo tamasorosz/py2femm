@@ -12,7 +12,6 @@ from pathlib import Path
 from string import Template
 from typing import Union
 
-from shapely import Point
 from src.magnetics import MagneticMaterial
 from src.geometry import Geometry, Node
 from src.general import Material, AutoMeshOption, Boundary, FemmFields, LengthUnit
@@ -26,12 +25,16 @@ class FemmProblem:
         self.lua_script = []
         self.out_file = out_file
 
-    def write(self, file_name):
+    def write(self, file_name, close_after=True):
         """Generate a runnable lua-script for a FEMM calculation.
 
         :param file_name: the code (re)writes the snapshot from the created
                           geometry to the given code
         """
+
+        if close_after:
+            self.close()
+
         with open(file_name, "w") as writer:
             for line in self.lua_script:
                 writer.write(line + "\n")
@@ -179,7 +182,7 @@ class FemmProblem:
 
         cmd = f"{self.field.input_to_string()}_deleteselected"
         self.lua_script.append(cmd)
-        return cmd
+        #return cmd
 
     def delete_selected_nodes(self):
         """
@@ -188,7 +191,7 @@ class FemmProblem:
         """
         cmd = f"{self.field.input_to_string()}_deleteselectednodes"
         self.lua_script.append(cmd)
-        return cmd
+        #return cmd
 
     def delete_selected_labels(self):
         """Delete all selected labels."""
@@ -196,7 +199,7 @@ class FemmProblem:
         cmd = f"{self.field.input_to_string()}_deleteselectedlabels"
         self.lua_script.append(cmd)
 
-        return cmd
+        #return cmd
 
     def delete_selected_segments(self):
         """Delete all selected segments."""
