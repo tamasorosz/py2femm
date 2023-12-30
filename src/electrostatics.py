@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from enum import Enum
 from string import Template
 
 from src.general import Material, Boundary
@@ -62,8 +63,21 @@ class ElectrostaticPeriodic(ElectrostaticBoundaryBase):
         self.name = name
         self.type = 3
 
+
 @dataclass
 class ElectrostaticAntiPeriodic(ElectrostaticBoundaryBase):
     def __init__(self, name: str):
         self.name = name
         self.type = 4
+
+
+class ElectrostaticIntegralType(Enum):
+    """ integral type values for evaluating the electrostatics results"""
+
+    StoredEnergy = 0
+    CrossSection = 1
+    Volume = 2
+    AvgD = 3  # Average D over the selected blocks
+    AvgE = 4  # Average E over the selected blocks
+    WForce = 5  # weighted stress tensor force
+    WTorque = 6 # weighted stress tensor torque

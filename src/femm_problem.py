@@ -7,6 +7,7 @@ The original FEMM code has separate scripting commands for the geometry
 generation in different subfields
 
 """
+from enum import Enum
 from math import asin, degrees
 from pathlib import Path
 from string import Template
@@ -15,6 +16,7 @@ from typing import Union
 from src.magnetics import MagneticMaterial
 from src.geometry import Geometry, Node
 from src.general import Material, AutoMeshOption, Boundary, FemmFields, LengthUnit
+from src.electrostatics import ElectrostaticIntegralType
 
 
 class FemmProblem:
@@ -24,6 +26,7 @@ class FemmProblem:
         self.field = None
         self.lua_script = []
         self.out_file = out_file
+        self.integral_counter = 0
 
     def write(self, file_name, close_after=True):
         """Generate a runnable lua-script for a FEMM calculation.
@@ -182,7 +185,7 @@ class FemmProblem:
 
         cmd = f"{self.field.input_to_string()}_deleteselected"
         self.lua_script.append(cmd)
-        #return cmd
+        # return cmd
 
     def delete_selected_nodes(self):
         """
@@ -191,7 +194,7 @@ class FemmProblem:
         """
         cmd = f"{self.field.input_to_string()}_deleteselectednodes"
         self.lua_script.append(cmd)
-        #return cmd
+        # return cmd
 
     def delete_selected_labels(self):
         """Delete all selected labels."""
@@ -199,7 +202,7 @@ class FemmProblem:
         cmd = f"{self.field.input_to_string()}_deleteselectedlabels"
         self.lua_script.append(cmd)
 
-        #return cmd
+        # return cmd
 
     def delete_selected_segments(self):
         """Delete all selected segments."""
@@ -729,32 +732,32 @@ class FemmProblem:
             self.lua_script.append(cmd)
         return cmd
 
-    def get_integral_values(self, label_list: list, save_image: bool, variable_name: str):
-        if self.field == FemmFields.MAGNETIC:
-            int_type = {"Fx": 18, "Fy": 19, "Area": 5, "Energy": 2, "Torque": 22, "Flux": 1, "Current": 7}
-            for node in label_list:
-                self.lua_script.append(f"{self.field.output_to_string()}_selectblock({node.x}, {node.y})")
+    def get_integral_values(self, label_list: list, save_image: bool, variable_name: Enum):
+        # if self.field == FemmFields.MAGNETIC:
+        #     int_type = {"Fx": 18, "Fy": 19, "Area": 5, "Energy": 2, "Torque": 22, "Flux": 1, "Current": 7}
+        #     for node in label_list:
+        #         self.lua_script.append(f"{self.field.output_to_string()}_selectblock({node.x}, {node.y})")
+        #
+        #     self.lua_script.append(
+        #         f"{variable_name} = {self.field.input_to_string}_blockintegral({int_type[variable_name]})")
+        #     if variable_name == "Flux":
+        #         self.lua_script.append(f"coil_area = {self.field.input_to_string}_blockintegral(5)")
+        #     self.lua_script.append(f"{self.field.input_to_string}_clearblock()")
+        #     if variable_name == "Flux":
+        #         self.lua_script.append(f'write(file_out, "{self.out_file}, ", {variable_name}/coil_area, "\\n")')
+        #     else:
+        #         self.lua_script.append(f'write(file_out, "{self.out_file}, ", {variable_name}, "\\n")')
 
-            self.lua_script.append(
-                f"{variable_name} = {self.field.input_to_string}_blockintegral({int_type[variable_name]})")
-            if variable_name == "Flux":
-                self.lua_script.append(f"coil_area = {self.field.input_to_string}_blockintegral(5)")
-            self.lua_script.append(f"{self.field.input_to_string}_clearblock()")
-            if variable_name == "Flux":
-                self.lua_script.append(f'write(file_out, "{self.out_file}, ", {variable_name}/coil_area, "\\n")')
-            else:
-                self.lua_script.append(f'write(file_out, "{self.out_file}, ", {variable_name}, "\\n")')
+        # if self.field == FemmFields.ELECTROSTATIC:
+        for node in label_list:
+            self.lua_script.append(f"{self.field.output_to_string()}_selectblock({node.x}, {node.y})")
 
-        if self.field == FemmFields.ELECTROSTATIC:
-            int_type = {"Energy": 0}
+        variable = str(variable_name.name)+"_"+str(self.integral_counter)
+        self.lua_script.append(
+            f"{variable} = {self.field.output_to_string()}_blockintegral({variable_name.value})")
+        self.lua_script.append(f"{self.field.output_to_string()}_clearblock()")
 
-            for node in label_list:
-                self.lua_script.append(f"{self.field.output_to_string()}_selectblock({node.x}, {node.y})")
-
-            self.lua_script.append(
-                f"{variable_name} = {self.field.output_to_string()}_blockintegral({int_type[variable_name]})")
-            self.lua_script.append(f"{self.field.output_to_string()}_clearblock()")
-            self.lua_script.append(f'write(file_out, "{self.out_file}, ", {variable_name}, "\\n")')
+        self.lua_script.append(f'write(file_out, "{variable}", " = ", {variable}, "\\n")')
 
         if save_image == "saveimage":
             self.lua_script.append(f"{self.field.output_to_string()}_showdensityplot(0, 0, 0.0, 0.1, 'bmag')")
@@ -794,7 +797,7 @@ class FemmProblem:
         if isinstance(material, MagneticMaterial):
             self.set_blockprop(blockname=material.material_name, automesh=material.auto_mesh,
                                meshsize=material.mesh_size)
-                               #magdirection=material.remanence_angle)
+            # magdirection=material.remanence_angle)
         else:
             self.set_blockprop(blockname=material.material_name, automesh=material.auto_mesh,
                                meshsize=material.mesh_size)

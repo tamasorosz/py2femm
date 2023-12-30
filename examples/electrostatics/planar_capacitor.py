@@ -1,6 +1,7 @@
 import os
 
-from src.electrostatics import ElectrostaticMaterial, ElectrostaticSurfaceCharge, ElectrostaticFixedVoltage
+from src.electrostatics import ElectrostaticMaterial, ElectrostaticSurfaceCharge, ElectrostaticFixedVoltage, \
+    ElectrostaticIntegralType
 from src.executor import Executor
 from src.femm_problem import FemmProblem
 from src.general import FemmFields, LengthUnit
@@ -9,9 +10,7 @@ from src.geometry import Geometry, Line, CircleArc, Node
 
 def planar_capacitor_problem(width, thickness, d):
     # problem definition
-    planar_problem = FemmProblem(out_file="../electrostatic_data.csv")
-    # planar_problem.field = FemmFields.ELECTROSTATIC
-    # planar_problem.init_problem("electrostatic_data.csv")
+    planar_problem = FemmProblem(out_file="planar_data.csv")
     planar_problem.electrostatic_problem(LengthUnit.METERS, "planar")
     # geometry definition
     geo = Geometry()
@@ -100,7 +99,15 @@ def planar_capacitor_problem(width, thickness, d):
     planar_problem.set_boundary_definition(arc4.selection_point(), neumann)
 
     planar_problem.make_analysis('planar')
-    planar_problem.get_integral_values([insulation_block], save_image=True, variable_name="Energy")
+
+    planar_problem.get_integral_values([insulation_block], save_image=True,
+                                       variable_name=ElectrostaticIntegralType.StoredEnergy)
+
+    planar_problem.get_integral_values([insulation_block], save_image=True,
+                                       variable_name=ElectrostaticIntegralType.AvgE)
+
+    planar_problem.get_integral_values([insulation_block], save_image=True,
+                                       variable_name=ElectrostaticIntegralType.AvgD)
 
     planar_problem.write("planar.lua")
 
