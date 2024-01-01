@@ -1,3 +1,5 @@
+import os
+
 from src.magnetics import MagneticMaterial, MagneticDirichlet
 from src.femm_problem import FemmProblem
 from src.general import FemmFields, LengthUnit
@@ -28,7 +30,7 @@ def solenoid(n, w, h, radius, gap):
     :return: the inductance of the coil
     """
 
-    problem = FemmProblem(out_file="magnetic_data.csv")
+    problem = FemmProblem(out_file="solenoid.csv")
     problem.magnetic_problem(0, LengthUnit.CENTIMETERS, "axi")
 
     geo = Geometry()
@@ -83,8 +85,16 @@ def solenoid(n, w, h, radius, gap):
         problem.define_block_label(Node(radius, z0), copper)
         z0 += gap + h
 
+
+    problem.make_analysis('solenoid')
+
     problem.write("solenoid.lua")
 
 
 if __name__ == '__main__':
     solenoid(10, 2, 2, 4,1)
+
+    femm = Executor()
+    current_dir = os.getcwd()
+    lua_file = current_dir + "/solenoid.lua"
+    femm.run(lua_file)

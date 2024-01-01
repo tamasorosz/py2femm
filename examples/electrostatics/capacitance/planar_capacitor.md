@@ -208,4 +208,4 @@ femm.run(lua_file)
 ```
 
 The resulting potential distribution is depicted in the following image:
-![image](./images/planar_capacitor_results.png "planar capacitor results").
+![image](images/planar_capacitor_results.png "planar capacitor results").

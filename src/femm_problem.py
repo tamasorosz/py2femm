@@ -725,7 +725,7 @@ class FemmProblem:
         if self.field == FemmFields.ELECTROSTATIC:
             cmd = f"V, Dx, Dy, Ex, Ey, ex, ey, nrg = eo_getpointvalues({node.x}, {node.y})"
             self.lua_script.append(cmd)
-            cmd = "write(file_out, \"\n Nodal results \\n\")"
+            cmd = "write(file_out, \"\\n Nodal results \\n\")"
             self.lua_script.append(cmd)
             cmd = "write(file_out, \"Node x:{0}, y:{0}, Voltage = \", V ,\"\\n\")".format(node.x, node.y)
             self.lua_script.append(cmd)
