@@ -708,8 +708,43 @@ class FemmProblem:
 
         cmd = None
         if self.field == FemmFields.MAGNETIC:
-            cmd = Template("mo_getpointvalues($x, $y)")
-            cmd = cmd.substitute(x=node.x, y=node.y)
+            cmd = f"A, B1, B2, Sig, E, H1, H2, Je, Js, Mu1, Mu2, Pe, Ph = mo_getpointvalues({node.x}, {node.y})"
+            self.lua_script.append(cmd)
+
+            cmd = "write(file_out, \"\\n Nodal results \\n\")"
+            self.lua_script.append(cmd)
+            cmd = "write(file_out, \"Node x:{0}, y:{1}, Vector potential = \", A ,\"\\n\")".format(node.x, node.y)
+            self.lua_script.append(cmd)
+
+            cmd = "write(file_out, \"Node x:{0}, y:{1}, Bx = \", B1 ,\"\\n\")".format(node.x, node.y)
+            self.lua_script.append(cmd)
+            cmd = "write(file_out, \"Node x:{0}, y:{1}, By = \", B2 ,\"\\n\")".format(node.x, node.y)
+            self.lua_script.append(cmd)
+
+            cmd = "write(file_out, \"Node x:{0}, y:{1}, Sigma = \", Sig ,\"\\n\")".format(node.x, node.y)
+            self.lua_script.append(cmd)
+            cmd = "write(file_out, \"Node x:{0}, y:{1}, E = \", E ,\"\\n\")".format(node.x, node.y)
+            self.lua_script.append(cmd)
+
+            cmd = "write(file_out, \"Node x:{0}, y:{1}, Hx = \", H1 ,\"\\n\")".format(node.x, node.y)
+            self.lua_script.append(cmd)
+            cmd = "write(file_out, \"Node x:{0}, y:{1}, Hy = \", H2 ,\"\\n\")".format(node.x, node.y)
+            self.lua_script.append(cmd)
+
+            cmd = "write(file_out, \"Node x:{0}, y:{1}, Je = \", Je ,\"\\n\")".format(node.x, node.y)
+            self.lua_script.append(cmd)
+            cmd = "write(file_out, \"Node x:{0}, y:{1}, Js = \", Js ,\"\\n\")".format(node.x, node.y)
+            self.lua_script.append(cmd)
+
+            cmd = "write(file_out, \"Node x:{0}, y:{1}, Mux = \", Mu1 ,\"\\n\")".format(node.x, node.y)
+            self.lua_script.append(cmd)
+            cmd = "write(file_out, \"Node x:{0}, y:{1}, Muy = \", Mu2 ,\"\\n\")".format(node.x, node.y)
+            self.lua_script.append(cmd)
+
+            cmd = "write(file_out, \"Node x:{0}, y:{1}, Pe = \", Pe ,\"\\n\")".format(node.x, node.y)
+            self.lua_script.append(cmd)
+            cmd = "write(file_out, \"Node x:{0}, y:{1}, Ph = \", Ph ,\"\\n\")".format(node.x, node.y)
+            self.lua_script.append(cmd)
 
         # Symbol Definition
         # -----------------
@@ -727,21 +762,21 @@ class FemmProblem:
             self.lua_script.append(cmd)
             cmd = "write(file_out, \"\\n Nodal results \\n\")"
             self.lua_script.append(cmd)
-            cmd = "write(file_out, \"Node x:{0}, y:{0}, Voltage = \", V ,\"\\n\")".format(node.x, node.y)
+            cmd = "write(file_out, \"Node x:{0}, y:{1}, Voltage = \", V ,\"\\n\")".format(node.x, node.y)
             self.lua_script.append(cmd)
-            cmd = "write(file_out, \"Node x:{0}, y:{0}, Dx = \", Dx ,\"\\n\")".format(node.x, node.y)
+            cmd = "write(file_out, \"Node x:{0}, y:{1}, Dx = \", Dx ,\"\\n\")".format(node.x, node.y)
             self.lua_script.append(cmd)
-            cmd = "write(file_out, \"Node x:{0}, y:{0}, Dy = \", Dy ,\"\\n\")".format(node.x, node.y)
+            cmd = "write(file_out, \"Node x:{0}, y:{1}, Dy = \", Dy ,\"\\n\")".format(node.x, node.y)
             self.lua_script.append(cmd)
-            cmd = "write(file_out, \"Node x:{0}, y:{0}, Ex = \", Ex ,\"\\n\")".format(node.x, node.y)
+            cmd = "write(file_out, \"Node x:{0}, y:{1}, Ex = \", Ex ,\"\\n\")".format(node.x, node.y)
             self.lua_script.append(cmd)
-            cmd = "write(file_out, \"Node x:{0}, y:{0}, Ey = \", Ey ,\"\\n\")".format(node.x, node.y)
+            cmd = "write(file_out, \"Node x:{0}, y:{1}, Ey = \", Ey ,\"\\n\")".format(node.x, node.y)
             self.lua_script.append(cmd)
-            cmd = "write(file_out, \"Node x:{0}, y:{0}, ex = \", ex ,\"\\n\")".format(node.x, node.y)
+            cmd = "write(file_out, \"Node x:{0}, y:{1}, ex = \", ex ,\"\\n\")".format(node.x, node.y)
             self.lua_script.append(cmd)
-            cmd = "write(file_out, \"Node x:{0}, y:{0}, ey = \", ey ,\"\\n\")".format(node.x, node.y)
+            cmd = "write(file_out, \"Node x:{0}, y:{1}, ey = \", ey ,\"\\n\")".format(node.x, node.y)
             self.lua_script.append(cmd)
-            cmd = "write(file_out, \"Node x:{0}, y:{0}, nrg = \", nrg ,\"\\n\")".format(node.x, node.y)
+            cmd = "write(file_out, \"Node x:{0}, y:{1}, nrg = \", nrg ,\"\\n\")".format(node.x, node.y)
             self.lua_script.append(cmd)
         return cmd
 

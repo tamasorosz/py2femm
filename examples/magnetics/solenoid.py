@@ -70,7 +70,7 @@ def solenoid(n, w, h, radius, gap):
     problem.set_boundary_definition(l4.selection_point(), a0)
 
     # Materials
-    copper = MagneticMaterial(material_name="copper", J=1/(w*h))
+    copper = MagneticMaterial(material_name="copper", J=1 / (w * h))
     air = MagneticMaterial(material_name="air")
 
     problem.add_material(copper)
@@ -85,14 +85,19 @@ def solenoid(n, w, h, radius, gap):
         problem.define_block_label(Node(radius, z0), copper)
         z0 += gap + h
 
-
     problem.make_analysis('solenoid')
+
+    # the goal in this task is to calculate the point values of the inductance in a 5x5 cm squared region
+    for i in range(11):
+        for j in range(11):
+            problem.get_point_values(Node(0.5 * i, 0.5 * j))
+            print(0.5*i,0.5*j)
 
     problem.write("solenoid.lua")
 
 
 if __name__ == '__main__':
-    solenoid(10, 2, 2, 4,1)
+    solenoid(10, 2, 2, 6, 1)
 
     femm = Executor()
     current_dir = os.getcwd()
