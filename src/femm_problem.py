@@ -748,7 +748,6 @@ class FemmProblem:
         #     else:
         #         self.lua_script.append(f'write(file_out, "{self.out_file}, ", {variable_name}, "\\n")')
 
-        # if self.field == FemmFields.ELECTROSTATIC:
         for node in label_list:
             self.lua_script.append(f"{self.field.output_to_string()}_selectblock({node.x}, {node.y})")
 
