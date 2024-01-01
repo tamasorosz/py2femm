@@ -4,7 +4,7 @@ from src.electrostatics import ElectrostaticMaterial, ElectrostaticSurfaceCharge
     ElectrostaticIntegralType
 from src.executor import Executor
 from src.femm_problem import FemmProblem
-from src.general import FemmFields, LengthUnit
+from src.general import LengthUnit
 from src.geometry import Geometry, Line, CircleArc, Node
 
 
