@@ -109,6 +109,7 @@ def planar_capacitor_problem(width, thickness, d):
     planar_problem.get_integral_values([insulation_block], save_image=True,
                                        variable_name=ElectrostaticIntegralType.AvgD)
 
+    planar_problem.get_point_values(center)
     planar_problem.write("planar.lua")
 
     femm = Executor()

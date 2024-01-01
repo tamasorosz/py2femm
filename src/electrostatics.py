@@ -80,4 +80,12 @@ class ElectrostaticIntegralType(Enum):
     AvgD = 3  # Average D over the selected blocks
     AvgE = 4  # Average E over the selected blocks
     WForce = 5  # weighted stress tensor force
-    WTorque = 6 # weighted stress tensor torque
+    WTorque = 6  # weighted stress tensor torque
+
+
+class ElectrostaticLineIntegral(Enum):
+    E_t = 0
+    D_n = 1
+    contour_length = 2
+    force_from_stress_tensor = 3
+    torque_from_stress_tensor = 4

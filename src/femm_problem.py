@@ -619,21 +619,20 @@ class FemmProblem:
         # post processing commands --- data extraction
 
     def line_integral(self, type):
-        """
-        Calculate the line integral of the defined contour.
-    
-        Parameter name, values 1, values 2, values 3, values 4
-        0 -- Bn ---  total Bn, avg Bn, - , -
-        1 -- Ht ---  total Ht, avg Ht, -, -
-        2 -- Contour length  --- surface area, - , - , -
-        3 -- Stress Tensor Force --- DC r/x force, DC y/z force, 2x r/x force, 2x y/z force
-        4 -- Stress Tensor Torque --- total (B.n)^2, avg (B.n)^2
-        """
+        # """
+        # Calculate the line integral of the defined contour.
+        #
+        # Parameter name, values 1, values 2, values 3, values 4
+        # 0 -- Bn ---  total Bn, avg Bn, - , -
+        # 1 -- Ht ---  total Ht, avg Ht, -, -
+        # 2 -- Contour length  --- surface area, - , - , -
+        # 3 -- Stress Tensor Force --- DC r/x force, DC y/z force, 2x r/x force, 2x y/z force
+        # 4 -- Stress Tensor Torque --- total (B.n)^2, avg (B.n)^2
+        # """
 
-        if self.field == FemmFields.MAGNETIC:
-            cmd = Template("mo_lineintegral($type)")
-            cmd = cmd.substitute(type=type)
-
+        cmd = Template(f"{self.field.output_to_string()}_lineintegral($type)")
+        cmd = cmd.substitute(type=type)
+        self.lua_script.append(cmd)
         return cmd
 
     def block_integral(self, type):
@@ -726,9 +725,23 @@ class FemmProblem:
         if self.field == FemmFields.ELECTROSTATIC:
             cmd = f"V, Dx, Dy, Ex, Ey, ex, ey, nrg = eo_getpointvalues({node.x}, {node.y})"
             self.lua_script.append(cmd)
-            cmd = f'write(file_out, \"x = \", {round(node.x, 4)}, \"y = \",{round(node.y, 4)}, \"E_x =\", Ex,\"\\n\")'
+            cmd = "write(file_out, \"\n Nodal results \\n\")"
             self.lua_script.append(cmd)
-            cmd = f'write(file_out, \"x = \", {round(node.x, 4)}, \"y = \",{round(node.y, 4)}, \"E_y =\", Ey, \"\\n\")'
+            cmd = "write(file_out, \"Node x:{0}, y:{0}, Voltage = \", V ,\"\\n\")".format(node.x, node.y)
+            self.lua_script.append(cmd)
+            cmd = "write(file_out, \"Node x:{0}, y:{0}, Dx = \", Dx ,\"\\n\")".format(node.x, node.y)
+            self.lua_script.append(cmd)
+            cmd = "write(file_out, \"Node x:{0}, y:{0}, Dy = \", Dy ,\"\\n\")".format(node.x, node.y)
+            self.lua_script.append(cmd)
+            cmd = "write(file_out, \"Node x:{0}, y:{0}, Ex = \", Ex ,\"\\n\")".format(node.x, node.y)
+            self.lua_script.append(cmd)
+            cmd = "write(file_out, \"Node x:{0}, y:{0}, Ey = \", Ey ,\"\\n\")".format(node.x, node.y)
+            self.lua_script.append(cmd)
+            cmd = "write(file_out, \"Node x:{0}, y:{0}, ex = \", ex ,\"\\n\")".format(node.x, node.y)
+            self.lua_script.append(cmd)
+            cmd = "write(file_out, \"Node x:{0}, y:{0}, ey = \", ey ,\"\\n\")".format(node.x, node.y)
+            self.lua_script.append(cmd)
+            cmd = "write(file_out, \"Node x:{0}, y:{0}, nrg = \", nrg ,\"\\n\")".format(node.x, node.y)
             self.lua_script.append(cmd)
         return cmd
 
@@ -751,7 +764,7 @@ class FemmProblem:
         for node in label_list:
             self.lua_script.append(f"{self.field.output_to_string()}_selectblock({node.x}, {node.y})")
 
-        variable = str(variable_name.name)+"_"+str(self.integral_counter)
+        variable = str(variable_name.name) + "_" + str(self.integral_counter)
         self.lua_script.append(
             f"{variable} = {self.field.output_to_string()}_blockintegral({variable_name.value})")
         self.lua_script.append(f"{self.field.output_to_string()}_clearblock()")
