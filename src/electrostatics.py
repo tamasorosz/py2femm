@@ -71,7 +71,7 @@ class ElectrostaticAntiPeriodic(ElectrostaticBoundaryBase):
         self.type = 4
 
 
-class ElectrostaticIntegralType(Enum):
+class ElectrostaticVolumeIntegral(Enum):
     """ integral type values for evaluating the electrostatics results"""
 
     StoredEnergy = 0

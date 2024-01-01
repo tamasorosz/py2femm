@@ -22,7 +22,7 @@ class MagneticMaterial(Material):
     mu_y: float = 1.0
     H_c: float = 0.0
     J: float = 0.0
-    Cduct: float = 0.0
+    Sigma: float = 0.0
     Lam_d: float = 0.0
     Phi_hmax: float = 0.0
     lam_fill: float = 0.0
@@ -44,7 +44,7 @@ class MagneticMaterial(Material):
             muy=self.mu_y,
             Hc=self.H_c,
             J=self.J,
-            Cduct=self.Cduct,
+            Cduct=self.Sigma,
             Lamd=self.Lam_d,
             Phi_hmax=self.Phi_hmax,
             lamfill=self.lam_fill,
@@ -139,3 +139,39 @@ class MagneticPeriodicAirgap(MagneticBoundaryBaseClass):
     def __init__(self, name):
         self.name = name
         self.boundary_format = 6
+
+
+class MagneticVolumeIntegral(Enum):
+    """ integral type values for evaluating the electrostatics results"""
+
+    AJ = 0
+    A = 1
+    Energy = 2
+    HysteresysLoss = 3
+    ResistiveLoss = 4
+    CrossSection = 5
+    TotalLosses = 6
+    TotalCurrent = 7
+    IntegralBx = 8
+    IntegralBy = 9
+    Volume = 10
+    Fx = 11  # x part of the steady-state lorentz force
+    Fy = 12  # y part of the steady-state lorentz force
+    Fxx = 13  # x part of the 2 x lorentz force
+    Fyy = 14  # y part of the 2 x lorentz force
+    Torque = 15  # steady state torque
+    DTorque = 16  # 2 x component of the steady state torque
+    CoEnergy = 17
+    wFx = 18
+    wFy = 19
+    wFxx = 20
+    wFyy = 21
+    wTorque = 22
+    wDTorque = 23
+    inertia_m = 24
+    wxFstress = 25
+    wyFstress = 26
+    wStTorque = 27
+    FxL = 28  # x stress tensor torque
+    FyL = 29  # y stress tensor torque
+    LorentzT = 30

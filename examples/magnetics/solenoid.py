@@ -1,9 +1,9 @@
 import os
 
-from src.magnetics import MagneticMaterial, MagneticDirichlet
+from src.magnetics import MagneticMaterial, MagneticDirichlet, MagneticVolumeIntegral
 from src.femm_problem import FemmProblem
-from src.general import FemmFields, LengthUnit
-from src.geometry import Geometry, Line, CircleArc, Node
+from src.general import LengthUnit
+from src.geometry import Geometry, Line, Node
 from src.executor import Executor
 
 
@@ -70,7 +70,7 @@ def solenoid(n, w, h, radius, gap):
     problem.set_boundary_definition(l4.selection_point(), a0)
 
     # Materials
-    copper = MagneticMaterial(material_name="copper", J=1 / (w * h))
+    copper = MagneticMaterial(material_name="copper", J=1 / (w * h), Sigma=58.0)
     air = MagneticMaterial(material_name="air")
 
     problem.add_material(copper)
@@ -91,7 +91,10 @@ def solenoid(n, w, h, radius, gap):
     for i in range(11):
         for j in range(11):
             problem.get_point_values(Node(0.5 * i, 0.5 * j))
-            print(0.5*i,0.5*j)
+
+    z0 = -(h + gap) * n / 2
+
+    problem.get_integral_values([Node(radius, z0)], save_image=True, variable_name=MagneticVolumeIntegral.ResistiveLoss)
 
     problem.write("solenoid.lua")
 

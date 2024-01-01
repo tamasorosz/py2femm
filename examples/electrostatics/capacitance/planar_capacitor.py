@@ -1,7 +1,7 @@
 import os
 
 from src.electrostatics import ElectrostaticMaterial, ElectrostaticSurfaceCharge, ElectrostaticFixedVoltage, \
-    ElectrostaticIntegralType
+    ElectrostaticVolumeIntegral
 from src.executor import Executor
 from src.femm_problem import FemmProblem
 from src.general import LengthUnit
@@ -101,13 +101,13 @@ def planar_capacitor_problem(width, thickness, d):
     planar_problem.make_analysis('planar')
 
     planar_problem.get_integral_values([insulation_block], save_image=True,
-                                       variable_name=ElectrostaticIntegralType.StoredEnergy)
+                                       variable_name=ElectrostaticVolumeIntegral.StoredEnergy)
 
     planar_problem.get_integral_values([insulation_block], save_image=True,
-                                       variable_name=ElectrostaticIntegralType.AvgE)
+                                       variable_name=ElectrostaticVolumeIntegral.AvgE)
 
     planar_problem.get_integral_values([insulation_block], save_image=True,
-                                       variable_name=ElectrostaticIntegralType.AvgD)
+                                       variable_name=ElectrostaticVolumeIntegral.AvgD)
 
     planar_problem.get_point_values(center)
     planar_problem.write("planar.lua")

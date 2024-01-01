@@ -415,7 +415,7 @@ class FemmTester(TestCase):
             mu_y=1,
             H_c=0,
             J=0,
-            Cduct=0,
+            Sigma=0,
             Lam_d=0,
             Phi_hmax=0,
             lam_fill=1,

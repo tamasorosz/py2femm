@@ -16,7 +16,7 @@ from typing import Union
 from src.magnetics import MagneticMaterial
 from src.geometry import Geometry, Node
 from src.general import Material, AutoMeshOption, Boundary, FemmFields, LengthUnit
-from src.electrostatics import ElectrostaticIntegralType
+from src.electrostatics import ElectrostaticVolumeIntegral
 
 
 class FemmProblem:
