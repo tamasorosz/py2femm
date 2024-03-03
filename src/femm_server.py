@@ -7,6 +7,7 @@ from pydantic import BaseModel, Extra
 from __init__ import __version__
 from src.executor import Executor
 
+
 class InputJson(BaseModel):
     simulation: Optional[dict] = {"lua_file": "default"}
     version: Optional[str] = __version__
@@ -25,10 +26,8 @@ async def process(item: InputJson):
     data = json.loads(item.model_dump_json())
     try:
         calculation = Executor.run(data['simulation'])
-    except Exception as e:
-
     finally:
-        return calculation.
+        return
 
 
 def run_femm_server(host: str = "0.0.0.0", port: int = 8900):
