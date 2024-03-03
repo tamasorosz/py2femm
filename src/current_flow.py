@@ -62,12 +62,10 @@ class CurrentFlowSurfaceCurrent(CurrentFlowBaseClass):
         self.type = 2
 
 
-
 class CurrentFlowPeriodic(CurrentFlowBaseClass):
     def __init__(self, name: str):
         self.name = name
         self.type = 3
-
 
 
 class CurrentFlowAntiPeriodic(CurrentFlowBaseClass):

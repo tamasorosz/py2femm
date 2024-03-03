@@ -781,21 +781,6 @@ class FemmProblem:
         return cmd
 
     def get_integral_values(self, label_list: list, save_image: bool, variable_name: Enum):
-        # if self.field == FemmFields.MAGNETIC:
-        #     int_type = {"Fx": 18, "Fy": 19, "Area": 5, "Energy": 2, "Torque": 22, "Flux": 1, "Current": 7}
-        #     for node in label_list:
-        #         self.lua_script.append(f"{self.field.output_to_string()}_selectblock({node.x}, {node.y})")
-        #
-        #     self.lua_script.append(
-        #         f"{variable_name} = {self.field.input_to_string}_blockintegral({int_type[variable_name]})")
-        #     if variable_name == "Flux":
-        #         self.lua_script.append(f"coil_area = {self.field.input_to_string}_blockintegral(5)")
-        #     self.lua_script.append(f"{self.field.input_to_string}_clearblock()")
-        #     if variable_name == "Flux":
-        #         self.lua_script.append(f'write(file_out, "{self.out_file}, ", {variable_name}/coil_area, "\\n")')
-        #     else:
-        #         self.lua_script.append(f'write(file_out, "{self.out_file}, ", {variable_name}, "\\n")')
-
         for node in label_list:
             self.lua_script.append(f"{self.field.output_to_string()}_selectblock({node.x}, {node.y})")
 

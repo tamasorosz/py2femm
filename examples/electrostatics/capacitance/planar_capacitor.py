@@ -9,6 +9,7 @@ from src.geometry import Geometry, Line, CircleArc, Node
 
 
 def planar_capacitor_problem(width, thickness, d):
+
     # problem definition
     planar_problem = FemmProblem(out_file="planar_data.csv")
     planar_problem.electrostatic_problem(LengthUnit.METERS, "planar")
@@ -120,6 +121,7 @@ def planar_capacitor_problem(width, thickness, d):
 
 if __name__ == '__main__':
     # create geometry
+    # width should be >> than thickness
     width = 0.2  # m
     thickness = 0.005  # m
     d = 0.01  # m

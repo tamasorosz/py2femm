@@ -3,9 +3,9 @@ Runs the FEMM on the given environment: windows or with wine under a linux envir
 The created models runs as input files.
 """
 from sys import platform
+from threading import Timer
 import subprocess
 from pathlib import Path
-from threading import Timer
 
 
 class Executor:
