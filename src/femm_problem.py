@@ -185,7 +185,7 @@ class FemmProblem:
 
         cmd = f"{self.field.input_to_string()}_deleteselected"
         self.lua_script.append(cmd)
-        # return cmd
+        return cmd
 
     def delete_selected_nodes(self):
         """
@@ -194,7 +194,7 @@ class FemmProblem:
         """
         cmd = f"{self.field.input_to_string()}_deleteselectednodes"
         self.lua_script.append(cmd)
-        # return cmd
+        return cmd
 
     def delete_selected_labels(self):
         """Delete all selected labels."""
@@ -202,7 +202,7 @@ class FemmProblem:
         cmd = f"{self.field.input_to_string()}_deleteselectedlabels"
         self.lua_script.append(cmd)
 
-        # return cmd
+        return cmd
 
     def delete_selected_segments(self):
         """Delete all selected segments."""
