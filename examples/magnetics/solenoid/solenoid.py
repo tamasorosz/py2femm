@@ -30,7 +30,7 @@ def solenoid(n, w, h, radius, gap):
     :return: the inductance of the coil
     """
 
-    problem = FemmProblem(out_file="solenoid.csv")
+    problem = FemmProblem(out_file="../solenoid.csv")
     problem.magnetic_problem(0, LengthUnit.CENTIMETERS, "axi")
 
     geo = Geometry()
