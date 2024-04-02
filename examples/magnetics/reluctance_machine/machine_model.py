@@ -86,7 +86,7 @@ if __name__ == '__main__':
     stator_enc = StatorEnclosingGeometry().create_geometry()
     stator_tooth_base = StatorToothGeometry().create_geometry()
 
-    stator_tooth_base.rotate_about(Node(0.0, 0.0), math.radians(180))
+    stator_tooth_base.rotate_about(Node(0.0, 0.0), math.radians(-15))
 
     geo = stator_tooth_base
 

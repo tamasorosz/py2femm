@@ -1,6 +1,9 @@
 import math
+from copy import copy
 from dataclasses import dataclass
 import uuid
+import ezdxf
+import sys
 
 """
 This class defines the basic entities, which can be used for the geometry description in FEMM. 
@@ -73,7 +76,7 @@ class Node:
         s, c = [f(rad) for f in (math.sin, math.cos)]
         x, y = (c * self.x - s * self.y, s * self.x + c * self.y)
 
-        return Node(round(x, self.precision), round(y, self.precision))
+        return Node(round(x, self.precision), round(y, self.precision), id=self.id)
 
     def rotate_about(self, p, theta):
         """Rotate counter-clockwise around a point, by theta degrees. The new position is returned as a new Point."""
@@ -81,17 +84,6 @@ class Node:
         result.move_xy(-p.x, -p.y)
         result = result.rotate(theta)
         result.move_xy(p.x, p.y)
-        return result
-
-    def rotate_about_without_copy(self, p, theta):
-        """Rotate counter-clockwise around a point, by theta degrees. The new position is returned as the same Point."""
-
-        delta_x = p.x - self.x
-        delta_y = p.y - self.y
-
-        self.move_xy(-delta_x, -delta_y)
-        result = self.rotate(theta)
-        result.move_xy(delta_x, delta_y)
         return result
 
 
@@ -139,6 +131,119 @@ class Geometry:
 
         return geo
 
+    def update_opbjects(self):
+
+        return
+
+    def append_node(self, new_node):
+        """Appends the node to the node list only if its not exists, gives back that node object"""
+        for i in range(len(self.nodes)):
+            if self.nodes[i].distance_to(new_node) < self.epsilon:
+                return self.nodes[i]
+
+        self.nodes.append(new_node)
+        return new_node
+
+    def import_dxf(self, dxf_file):
+        try:
+            doc = ezdxf.readfile(str(dxf_file))
+        except OSError:
+            print("Not a DXF file or a generic I/O error.")
+            sys.exit(1)
+        except ezdxf.DXFStructureError:
+            print("Invalid or corrupted DXF file.")
+            sys.exit(2)
+
+        # iterate over all entities in modelspace
+        # id start from the given number
+        id = 0
+
+        msp = doc.modelspace()
+        for e in msp:
+            if e.dxftype() == "LINE":
+                start = Node(e.dxf.start[0], e.dxf.start[1])
+                end = Node(e.dxf.end[0], e.dxf.end[1])
+                self.add_line(Line(start, end))
+                id += 3
+
+            if e.dxftype() == "ARC":
+                start = Node(e.start_point.x, e.start_point.y)
+                end = Node(e.end_point.x, e.end_point.y)
+                center = Node(e.dxf.center[0], e.dxf.center[1])
+
+                self.add_arc(CircleArc(start, center, end))
+
+                id += 4
+
+            if e.dxftype() == "POLYLINE":
+                print(e.__dict__)
+
+    @staticmethod
+    def approx_circle(circle: CircleArc):
+        """
+        This function gets a circle arc and divides it 10 lines, which approximates the outline of the curve.
+        :return: list of the lines
+        """
+
+        divisions = 10
+        lines = []
+        start_pt = copy(circle.start_pt)
+        for i in range(1, divisions + 1):
+            new_node = copy(circle.start_pt.rotate_about(circle.center_pt, i * circle.theta / 180.0 * 3.14 / divisions))
+            lines.append(Line(start_pt, new_node))
+            start_pt = copy(new_node)
+        return lines
+
+    @staticmethod
+    def casteljau(bezier: obj.CubicBezier):
+        """
+        Gets a Bezier object and makes only one Casteljau's iteration step on it without the recursion.
+
+        The algorithm splits the bezier into two, smaller parts denoted by r is the 'right-sides' and l denotes the
+        'left sided' one. The algorithm is limited to use cubic beziers only.
+
+        :return: 2 bezier objects, the right and the left one
+
+        """
+        # calculating the mid point [m]
+        m = (bezier.control1 + bezier.control2) * 0.5
+
+        l0 = bezier.start_pt
+        r3 = bezier.end_pt
+
+        l1 = (bezier.start_pt + bezier.control1) * 0.5
+        r2 = (bezier.control2 + bezier.end_pt) * 0.5
+
+        l2 = (l1 + m) * 0.5
+        r1 = (r2 + m) * 0.5
+
+        l3 = (l2 + r1) * 0.5
+        r0 = l3
+
+        r = CubicBezier(start_pt=r0, control1=r1, control2=r2, end_pt=r3)
+        l = CubicBezier(start_pt=l0, control1=l1, control2=l2, end_pt=l3)
+
+        return r, l
+
+    def delete_hanging_nodes(self):
+        """Delete all nodes, which not part of a another object (Line, Circle, etc)"""
+        temp = []
+        for node in self.nodes:
+            hanging = True
+            for line in self.lines:
+                if node.id == line.start_pt.id or node.id == line.end_pt.id:
+                    hanging = False
+
+            for arc in self.circle_arcs:
+                if node.id == arc.start_pt.id or node.id == arc.end_pt.id or node.id == arc.center_pt.id:
+                    hanging = False
+
+            if not hanging:
+                temp.append(node)
+
+        del self.nodes
+        self.nodes = temp
+
     def clone(self):
         """Return a full copy of this point."""
 
@@ -159,12 +264,10 @@ class Geometry:
     def rotate_about(self, p, theta):
         """Rotate counter-clockwise around a point, by theta degrees. The new position is returned as a new Geometry."""
 
-        #new_nodes = []
-        #node_pairs = {}  # node mapping
-        for index,node in enumerate(self.nodes):
+        # new_nodes = []
+        # node_pairs = {}  # node mapping
+        for index, node in enumerate(self.nodes):
             self.nodes[index] = node.rotate_about(p, theta)
-
-
 
     # def rotate_about(self, p, theta):
     #     """Rotate counter-clockwise around a point, by theta degrees. The new position is returned as a new Geometry."""
