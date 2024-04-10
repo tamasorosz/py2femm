@@ -2,7 +2,6 @@ from dataclasses import dataclass, field
 from enum import Enum
 from string import Template
 from typing import List
-from abc import ABC
 from src.general import Material, Boundary
 
 
