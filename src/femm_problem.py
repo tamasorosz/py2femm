@@ -13,7 +13,7 @@ from pathlib import Path
 from string import Template
 from typing import Union
 
-from src.magnetics import MagneticMaterial
+from src.magnetics import MagneticMaterial, BHCurve
 from src.geometry import Geometry, Node
 from src.general import Material, AutoMeshOption, Boundary, FemmFields, LengthUnit
 from src.electrostatics import ElectrostaticVolumeIntegral
@@ -104,14 +104,14 @@ class FemmProblem:
     def close(self):
 
         cmd_list = []
-        cmd_list.append("closefile(file_out)")
-        cmd_list.append(f"{self.field.output_to_string()}_close()")
-        cmd_list.append(f"{self.field.input_to_string()}_close()")
-        cmd_list.append("quit()")
+        # cmd_list.append("closefile(file_out)")
+        # cmd_list.append(f"{self.field.output_to_string()}_close()")
+        # cmd_list.append(f"{self.field.input_to_string()}_close()")
+        # cmd_list.append("quit()")
         self.lua_script.extend(cmd_list)
         return cmd_list
 
-    def analyze(self, flag=1):
+    def analyze(self, flag=0):
         """
         Runs a FEMM analysis to solve a problem. By default, the analysis runs
         in non-visible mode.
@@ -139,7 +139,7 @@ class FemmProblem:
         cmd = Template("${field}_addsegment($x1_coord, $y1_coord, $x2_coord, $y2_coord)")
         cmd = cmd.substitute(field=self.field.input_to_string(), x1_coord=start_pt.x, y1_coord=start_pt.y,
                              x2_coord=end_pt.x, y2_coord=end_pt.y)
-        self.lua_script.append(cmd)
+        # self.lua_script.append(cmd)
         return cmd
 
     def add_blocklabel(self, label: Node):
@@ -157,7 +157,7 @@ class FemmProblem:
         cmd = Template("${field}_addarc($x_1, $y_1, $x_2, $y_2, $angle, $maxseg)")
         cmd = cmd.substitute(field=self.field.input_to_string(), x_1=start_pt.x, y_1=start_pt.y, x_2=end_pt.x,
                              y_2=end_pt.y, angle=angle, maxseg=maxseg)
-        self.lua_script.append(cmd)
+        # self.lua_script.append(cmd)
 
         return cmd
 
@@ -176,6 +176,17 @@ class FemmProblem:
             str: The FEMM command string added to the Lua model.
         """
         cmd = str(material)
+        if cmd is not None:
+            self.lua_script.append(cmd)
+        return cmd
+
+    def add_BHCurve(self, curve: BHCurve):
+        """
+        Add a material definition to the FEMM simulation.
+        Returns:
+            str: The FEMM command string added to the Lua model.
+        """
+        cmd = str(curve)
         if cmd is not None:
             self.lua_script.append(cmd)
         return cmd
