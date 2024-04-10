@@ -1,7 +1,8 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum
 from string import Template
-
+from typing import List
+from abc import ABC
 from src.general import Material, Boundary
 
 
@@ -56,6 +57,20 @@ class MagneticMaterial(Material):
         )
         return cmd
 
+
+@dataclass(kw_only=True)
+class BHCurve:
+    M: str = 'name'
+    B: List[float] = field(default_factory=lambda: [1.0])
+    H: List[float] = field(default_factory=lambda: [1.0])
+
+    def __str__(self):
+        cmds = []
+        for b, h in zip(self.B, self.H):
+            cmd = Template("mi_addbhpoint($materialname, $Bcurve, $Hcurve)")
+            formatted_cmd = cmd.substitute(materialname=f"'{self.M}'", Bcurve=b, Hcurve=h)
+            cmds.append(formatted_cmd)
+        return "\n".join(cmds)
 
 @dataclass(kw_only=True)
 class MagneticBoundaryBaseClass(Boundary):
