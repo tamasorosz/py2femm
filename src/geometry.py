@@ -4,6 +4,9 @@ from dataclasses import dataclass
 import uuid
 import ezdxf
 import sys
+from itertools import pairwise
+
+from numpy import linspace
 
 """
 This class defines the basic entities, which can be used for the geometry description in FEMM. 
@@ -20,9 +23,12 @@ class Node:
     def __init__(self, x=0.0, y=0.0, id=None, label=None, precision=6):
         self.x = x
         self.y = y
-        self.id = uuid.uuid4()  # a node has to got a unique id to be translated or moved
         self.label = label  # can be used to denote a group of the elements and make some operation with them
         self.precision = precision  # number of the digits, every coordinate represented in the same precision
+        if id is None:
+            self.id = uuid.uuid4()  # a node has to got a unique id to be translated or moved
+        else:
+            self.id = id
 
     def __add__(self, p):
         """Point(x1+x2, y1+y2)"""
@@ -89,6 +95,7 @@ class Node:
 
 @dataclass
 class Line:
+    id = uuid.uuid4()
     start_pt: Node
     end_pt: Node
 
@@ -103,6 +110,7 @@ class CircleArc:
     start_pt: Node
     center_pt: Node
     end_pt: Node
+    id = uuid.uuid4()
 
     def selection_point(self):
         clamp = self.start_pt.distance_to(self.end_pt) / 2.0
@@ -113,6 +121,71 @@ class CircleArc:
         return selection_pt
 
 
+class CubicBezier:
+    def __init__(
+            self,
+            start_pt,
+            control1,
+            control2,
+            end_pt,
+            attributes: dict = {},
+            n_segment=51,
+    ):
+        self.start_pt = start_pt
+        self.control1 = control1
+        self.control2 = control2
+        self.end_pt = end_pt
+        self.id = uuid.uuid4()
+        self.attributes = attributes.copy()
+        self.n_segment = attributes.get("meshScaling", n_segment)
+        self.precision = 1e-5
+
+    def approximate(self):
+        X, Y = zip(*(self(ti) for ti in linspace(0, 1, self.n_segment + 1)))
+
+        for Xi, Yi in zip(pairwise(X), pairwise(Y)):
+            n0 = Node(Xi[0], Yi[0])
+            n1 = Node(Xi[1], Yi[1])
+            yield Line(n0, n1)
+
+    def __call__(self, t: float):
+        assert (0 <= t) and (t <= 1), f"t [0, 1] not {t}"
+        X = (
+                (1 - t) ** 3 * self.start_pt.x
+                + 3 * (1 - t) ** 2 * t * self.control1.x
+                + 3 * (1 - t) * t ** 2 * self.control2.x
+                + t ** 3 * self.end_pt.x
+        )
+
+        Y = (
+                (1 - t) ** 3 * self.start_pt.y
+                + 3 * (1 - t) ** 2 * t * self.control1.y
+                + 3 * (1 - t) * t ** 2 * self.control2.y
+                + t ** 3 * self.end_pt.y
+        )
+
+        return X, Y
+
+    def __eq__(self, other):
+        """
+        If 2 Bezier-Curves have the same set of points, then they are equal.
+        """
+
+        if math.dist(self.start_pt, other.start_pt) > self.precision:
+            return False
+
+        if math.dist(self.control1, other.control1) > self.precision:
+            return False
+
+        if math.dist(self.control2, other.control2) > self.precision:
+            return False
+
+        if math.dist(self.end_pt, other.end_pt) > self.precision:
+            return False
+
+        return True
+
+
 class Geometry:
     precision = 1e-5
 
@@ -120,6 +193,7 @@ class Geometry:
         self.nodes = []
         self.lines = []
         self.circle_arcs = []
+        self.cubic_beziers = []
 
     def __add__(self, g):
         """Geometry(g1+g2) means that the nodes and the arcs added"""
@@ -131,18 +205,150 @@ class Geometry:
 
         return geo
 
-    def update_opbjects(self):
+    def update_nodes(self, node: Node):
+        """Update all of the deprecated node ids after rotating the points """
 
+        # lines
+        for line in self.lines:
+            if line.start_pt.id == node.id:
+                line.start_pt = node
+            if line.end_pt.id == node.id:
+                line.end_pt = node
+
+        # arcs
+        for arc in self.circle_arcs:
+            if arc.start_pt.id == node.id:
+                arc.start_pt = node
+
+            if arc.center_pt == node.id:
+                arc.center_pt = node
+
+            if arc.end_pt.id == node.id:
+                arc.end_pt = node
+
+        # bezier
+        for bez in self.cubic_beziers:
+            if bez.start_pt.id == node.id:
+                bez.start_pt = node
+
+            if bez.end_pt == node.id:
+                bez.end_pt = node
+
+            if bez.control1.id == node.id:
+                bez.control1 = node
+
+            if bez.control2.id == node.id:
+                bez.control2 = node
         return
+
+    def rotate_about(self, node: Node, angle: float):
+        for index, item in enumerate(self.nodes):
+            self.nodes[index] = item.rotate_about(node, angle)
+            self.update_nodes(self.nodes[index])
 
     def append_node(self, new_node):
         """Appends the node to the node list only if its not exists, gives back that node object"""
         for i in range(len(self.nodes)):
-            if self.nodes[i].distance_to(new_node) < self.epsilon:
+            if self.nodes[i].distance_to(new_node) < self.precision:
                 return self.nodes[i]
 
         self.nodes.append(new_node)
         return new_node
+
+    def add_node(self, node):
+        # self.nodes.append(copy(node))
+        self.append_node(node)
+        return node
+
+    def add_line(self, line):
+        # save every start and end points for the geoemtry
+        line.start_pt = self.append_node(line.start_pt)
+        line.end_pt = self.append_node(line.end_pt)
+
+        if line not in self.lines:
+            self.lines.append(line)
+
+    def add_arc(self, arc):
+        # save every start and end points for the geoemtry if they are not exists
+        arc.start_pt = self.append_node(arc.start_pt)
+        arc.end_pt = self.append_node(arc.end_pt)
+
+        if arc not in self.circle_arcs:
+            self.circle_arcs.append(arc)
+
+    def add_cubic_bezier(self, cb):
+        # save every start and end points for the geoemtry if they are not exists
+        cb.start_pt = self.append_node(cb.start_pt)
+        cb.end_pt = self.append_node(cb.end_pt)
+
+        if cb not in self.cubic_beziers:
+            self.cubic_beziers.append(cb)
+
+    def delete_hanging_nodes(self):
+        """Delete all nodes, which not part of a another object (Line, Circle, etc)"""
+        temp = []
+        for node in self.nodes:
+            hanging = True
+            for line in self.lines:
+                if node.id == line.start_pt.id or node.id == line.end_pt.id:
+                    hanging = False
+
+            for arc in self.circle_arcs:
+                if node.id == arc.start_pt.id or node.id == arc.end_pt.id:
+                    hanging = False
+
+            if not hanging:
+                temp.append(node)
+
+        del self.nodes
+        self.nodes = temp
+
+    def append_node(self, new_node):
+        """Appends the node to the node list only if its not exists, gives back that node object"""
+        for i in range(len(self.nodes)):
+            if self.nodes[i].distance_to(new_node) < self.precision:
+                return self.nodes[i]
+
+        self.nodes.append(new_node)
+        return new_node
+
+    def merge_geometry(self, other):
+
+        for ni in other.nodes:
+            self.add_node(copy(ni))
+
+        for li in other.lines:
+            self.add_line(copy(li))
+
+        for i, ca in enumerate(other.circle_arcs):
+            self.add_arc(copy(ca))
+
+        for cb in other.cubic_beziers:
+            self.add_cubic_bezier(copy(cb))
+
+    def merge_lines(self):
+        lines = self.lines.copy()
+        self.lines.clear()
+
+        for li in lines:
+            if li not in self.lines:
+                self.add_line(li)
+
+    def meshi_it(self, mesh_strategy):
+        mesh = mesh_strategy(self.nodes, self.lines, self.circle_arcs, self.cubic_beziers)
+        return mesh
+
+    def delete_line(self, x: float, y: float):
+        """
+        This functin deletes the line from the geometry closest to the x, y coordinates.
+        """
+        closest_line = min(self.lines, key=lambda li: li.distance_to_point(x, y))
+        idx = self.lines.index(closest_line)
+        self.lines.pop(idx)
+
+    def find_node(self, id: int):
+        """Finds and gives back a node with the given id"""
+        return next((x for x in self.nodes if x.id == id), None)
 
     def import_dxf(self, dxf_file):
         try:
@@ -195,7 +401,7 @@ class Geometry:
         return lines
 
     @staticmethod
-    def casteljau(bezier: obj.CubicBezier):
+    def casteljau(bezier: CubicBezier):
         """
         Gets a Bezier object and makes only one Casteljau's iteration step on it without the recursion.
 
@@ -224,78 +430,3 @@ class Geometry:
         l = CubicBezier(start_pt=l0, control1=l1, control2=l2, end_pt=l3)
 
         return r, l
-
-    def delete_hanging_nodes(self):
-        """Delete all nodes, which not part of a another object (Line, Circle, etc)"""
-        temp = []
-        for node in self.nodes:
-            hanging = True
-            for line in self.lines:
-                if node.id == line.start_pt.id or node.id == line.end_pt.id:
-                    hanging = False
-
-            for arc in self.circle_arcs:
-                if node.id == arc.start_pt.id or node.id == arc.end_pt.id or node.id == arc.center_pt.id:
-                    hanging = False
-
-            if not hanging:
-                temp.append(node)
-
-        del self.nodes
-        self.nodes = temp
-
-    def clone(self):
-        """Return a full copy of this point."""
-
-        geo = Geometry()
-        geo.nodes = self.nodes
-        geo.lines = self.lines
-        geo.circle_arcs = self.circle_arcs
-
-        return geo
-
-    # def node_by_id(self, node_id):
-    #
-    #     for node in self.nodes:
-    #         if node.id == node_id:
-    #             return node
-    #     return None
-
-    def rotate_about(self, p, theta):
-        """Rotate counter-clockwise around a point, by theta degrees. The new position is returned as a new Geometry."""
-
-        # new_nodes = []
-        # node_pairs = {}  # node mapping
-        for index, node in enumerate(self.nodes):
-            self.nodes[index] = node.rotate_about(p, theta)
-
-    # def rotate_about(self, p, theta):
-    #     """Rotate counter-clockwise around a point, by theta degrees. The new position is returned as a new Geometry."""
-    #
-    #     new_nodes = []
-    #     node_pairs = {}  # node mapping
-    #     for node in self.nodes:
-    #         new_node = node.rotate_about(p, theta)
-    #         new_nodes.append(new_node)
-    #         node_pairs[node.id] = new_node.id
-    #
-    #     self.nodes = new_nodes
-    #
-    #     # create the connecting lines
-    #     new_lines = []
-    #     for line in self.lines:
-    #         start_node = self.node_by_id(node_pairs[line.start_pt.id])
-    #         end_node = self.node_by_id(node_pairs[line.end_pt.id])
-    #         new_lines.append(Line(start_node, end_node))
-    #     self.lines = new_lines
-    #
-    #     # create the bounding arcs for the project
-    #     new_arcs = []
-    #     for arc in self.circle_arcs:
-    #         start_node = self.node_by_id(node_pairs[arc.start_pt.id])
-    #         center_node = self.node_by_id(node_pairs[arc.center_pt.id])
-    #         end_node = self.node_by_id(node_pairs[arc.end_pt.id])
-    #         new_arcs.append(CircleArc(start_node, center_node, end_node))
-    #     self.circle_arcs = new_arcs
-    #
-    #     return self

@@ -31,9 +31,18 @@ class StatorEnclosingGeometry:
         a11 = CircleArc(self.h_1, self.n_0, self.v_1)
         a22 = CircleArc(self.h_2, self.n_0, self.v_2)
 
-        geom.nodes = [self.v_0, self.v_1, self.v_2, self.h_0, self.h_1, self.h_2]
-        geom.lines = [lv01, lv12, lh01, lh12]
-        geom.circle_arcs = [a00, a11, a22]
+        geom.add_line(lv01)
+        geom.add_line(lv12)
+        geom.add_line(lh01)
+        geom.add_line(lh12)
+
+        geom.add_arc(a00)
+        geom.add_arc(a11)
+        geom.add_arc(a22)
+
+        # geom.nodes = [self.v_0, self.v_1, self.v_2, self.h_0, self.h_1, self.h_2]
+        # geom.lines = [lv01, lv12, lh01, lh12]
+        # geom.circle_arcs = [a00, a11, a22]
 
         return geom
 
@@ -71,10 +80,23 @@ class StatorToothGeometry:
         at1 = CircleArc(self.trb4, self.n_0, self.tcb2)
         at2 = CircleArc(self.tcb2, self.n_0, self.tlb4)
 
-        geom.nodes = [self.tlb1, self.tlb2, self.tlb3, self.tlb4, self.trb1, self.trb2, self.trb3, self.trb4, self.tcb1,
-                      self.tcb2]
-        geom.lines = [ltl1, ltl2, ltl3, ltr1, ltr2, ltr3, ltc1, ltc2]
-        geom.circle_arcs = [at1, at2]
+        geom.add_line(ltl1)
+        geom.add_line(ltl2)
+        geom.add_line(ltl3)
+        geom.add_line(ltr1)
+        geom.add_line(ltr2)
+        geom.add_line(ltr3)
+
+        geom.add_line(ltc1)
+        geom.add_line(ltc2)
+
+        geom.add_arc(at1)
+        geom.add_arc(at2)
+
+        #geom.nodes = [self.tlb1, self.tlb2, self.tlb3, self.tlb4, self.trb1, self.trb2, self.trb3, self.trb4, self.tcb1,
+        #              self.tcb2]
+        #geom.lines = [ltl1, ltl2, ltl3, ltr1, ltr2, ltr3, ltc1, ltc2]
+        #geom.circle_arcs = [at1, at2]
 
         return geom
 
@@ -86,7 +108,7 @@ if __name__ == '__main__':
     stator_enc = StatorEnclosingGeometry().create_geometry()
     stator_tooth_base = StatorToothGeometry().create_geometry()
 
-    stator_tooth_base.rotate_about(Node(0.0, 0.0), math.radians(-15))
+    stator_tooth_base.rotate_about(Node(0.0, 0.0), math.radians(-75))
 
     geo = stator_tooth_base
 
