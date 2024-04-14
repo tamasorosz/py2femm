@@ -180,7 +180,25 @@ def material_definitions(femm_problem: FemmProblem):
     # define default materials
     # air
     air = MagneticMaterial(material_name="air")
+    air.mesh_size = 1.0
+    air.material_positions = [Node(81.5, 0.0).rotate(108.75, degrees=True),
+                              Node(81.5, 0.0).rotate(101.25, degrees=True),
+                              Node(81.5, 0.0).rotate(93.75, degrees=True),
+                              Node(81.5, 0.0).rotate(86.25, degrees=True),
+                              Node(81.5, 0.0).rotate(78.75, degrees=True),
+                              Node(81.5, 0.0).rotate(71.25, degrees=True), ]
     femm_problem.add_material(air)
+
+    # airgap material, to define different mesh size
+    air_gap = MagneticMaterial(material_name="air_gap")
+    air_gap.material_positions = [Node(0.0, 69.0), Node(-19.5, 73.5), Node(19.5, 73.5)]
+    air_gap.mesh_size = 0.5
+    femm_problem.add_material(air_gap)
+
+    air_rotor = MagneticMaterial(material_name="air_rotor")
+    air_rotor.material_positions = [Node(80.35, 0.0), Node(80.85, 0.0)]
+    air_rotor.mesh_size = 1.0
+    femm_problem.add_material(air_rotor)
 
     # wire
     wire = MagneticMaterial(material_name="19 AWG", LamType=LamType.MAGNET_WIRE, WireD=0.912, Sigma=58e6)
@@ -202,14 +220,6 @@ def material_definitions(femm_problem: FemmProblem):
 
     magnet = MagneticMaterial(material_name="N36Z_50", mu_x=1.03, mu_y=1.03, H_c=782000, Sigma=0.667e6)
     magnet.mesh_size = 1.0
-
-    air_gap = MagneticMaterial(material_name="airgap")
-    air_gap.name = 'airgap'
-    air_gap.mesh_size = 1.0
-
-    # Flux barrier material
-    airrot = MagneticMaterial(material_name="air_rotor")
-    airrot.mesh_size = 1.0
 
     # Coils
     # PHASE U
@@ -260,9 +270,6 @@ def material_definitions(femm_problem: FemmProblem):
     magnet_left.remanence_angle = -magnet_right.remanence_angle + 180
 
     # adding these materials to the femm problem
-    femm_problem.add_material(air)
-    femm_problem.add_material(air_gap)
-    femm_problem.add_material(airrot)
     femm_problem.add_material(phase_U_positive)
     femm_problem.add_material(phase_U_negative)
     femm_problem.add_material(phase_V_positive)

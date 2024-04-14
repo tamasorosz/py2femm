@@ -16,6 +16,8 @@ class Material(ABC):
     mesh_size: float = 0.0
     b = None
     h = None
+    material_positions: list = None
+
 
 @dataclass
 class Boundary(ABC):
@@ -52,7 +54,6 @@ class FemmFields(Enum):
             return "ho"
         else:
             raise ValueError("Invalid FemmFields value")
-
 
 
 class LengthUnit(Enum):
