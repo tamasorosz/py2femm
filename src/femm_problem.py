@@ -207,6 +207,11 @@ class FemmProblem:
 
         self.add_bh_curve(material_name=material.material_name, data_b=material.b, data_h=material.h)
 
+        # if the material definitions contains the nodal informations, it will be automatically defined
+        if material.material_positions:
+            for position in material.material_positions:
+                self.define_block_label(position, material)
+
         return cmd
 
     def add_BHCurve(self, curve: BHCurve):
