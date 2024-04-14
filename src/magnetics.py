@@ -31,6 +31,8 @@ class MagneticMaterial(Material):
     Phi_hy: float = 0.0
     NStrands: int = 0.0
     WireD: float = 0.0
+    h: list = None
+    b: list = None
 
     def __str__(self):
         cmd = Template(
@@ -55,6 +57,8 @@ class MagneticMaterial(Material):
             WireD=self.WireD,
         )
         return cmd
+
+
 
 
 @dataclass(kw_only=True)

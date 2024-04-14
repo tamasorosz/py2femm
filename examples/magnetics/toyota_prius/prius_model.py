@@ -7,6 +7,7 @@ from src.executor import Executor
 from src.femm_problem import FemmProblem
 from src.general import LengthUnit
 from src.geometry import Node, Geometry, Line, CircleArc, Sector
+from src.magnetics import MagneticMaterial, LamType
 
 ORIGIN = Node(0.0, 0.0)
 
@@ -48,6 +49,7 @@ class VariableParams:
     prob5x = 0.0
     prob5y = 0.0
 
+
 def stator():
     # stator outline
     stator_geo = Geometry()
@@ -82,9 +84,7 @@ def stator():
     return stator_geo
 
 
-def rotor_geometry(var_params:VariableParams):
-
-
+def rotor_geometry(var_params: VariableParams):
     rotor_geo = Geometry()
 
     dril = Node(Dri / 2, 0.0).rotate(112.5, degrees=True)
@@ -162,6 +162,45 @@ def rotor_geometry(var_params:VariableParams):
     return rotor_geo
 
 
+def material_definitions(femm_problem: FemmProblem):
+    # define default materials
+    # air
+    air = MagneticMaterial(material_name="air")
+    femm_problem.add_material(air)
+
+    # wire
+    wire = MagneticMaterial(material_name="19 AWG", LamType=LamType.MAGNET_WIRE, WireD=0.912, Sigma=58e6)
+    femm_problem.add_material(wire)
+
+    # magnetic steel
+    steel = MagneticMaterial(material_name="M19_29GSF094", Sigma=1.9e6, lam_fill=0.94, Lam_d=0.34)
+
+    steel.b = [0.000000, 0.047002, 0.094002, 0.141002, 0.338404, 0.507605,
+               0.611006, 0.930612, 1.128024, 1.203236, 1.250248, 1.278460,
+               1.353720, 1.429040, 1.485560, 1.532680, 1.570400, 1.693200,
+               1.788400, 1.888400, 1.988400, 2.188400, 2.388397, 2.452391,
+               3.668287]
+
+    steel.h = [0.000000, 22.28000, 25.46000, 31.83000, 47.74000, 63.66000,
+               79.57000, 159.1500, 318.3000, 477.4600, 636.6100, 795.7700,
+               1591.500, 3183.000, 4774.600, 6366.100, 7957.700, 15915.00,
+               31830.00, 111407.0, 190984.0, 350135.0, 509252.0, 560177.2,
+               1527756.0]
+
+    steel.mesh_size = 1.0
+    femm_problem.add_material(steel)
+
+    # # Materials
+    # copper = MagneticMaterial(material_name="copper", J=1 / (w * h), Sigma=58.0)
+    # air = MagneticMaterial(material_name="air")
+    #
+    # problem.add_material(copper)
+    # problem.add_material(air)
+    #
+    # air_block = Node(radius / 4.0, 0.0)
+    # problem.define_block_label(air_block, air)
+
+
 if __name__ == '__main__':
     problem = FemmProblem(out_file="../prius.csv")
     problem.magnetic_problem(50, LengthUnit.MILLIMETERS, "planar")
@@ -173,6 +212,8 @@ if __name__ == '__main__':
     geo.merge_geometry(rotor)
 
     problem.create_geometry(geo)
+    material_definitions(problem)
+
     problem.write("prius.lua")
 
     femm = Executor()
