@@ -4,7 +4,7 @@ import os
 from src.executor import Executor
 from src.femm_problem import FemmProblem
 from src.general import LengthUnit
-from src.geometry import Node, Geometry, Line, CircleArc
+from src.geometry import Node, Geometry, Line, CircleArc, Sector
 from dataclasses import dataclass
 
 
@@ -18,7 +18,7 @@ def pol2cart(rho, phi):
 
 @dataclass
 class MachineModel:
-    z: float = 1.0  # some parameter
+    z: float = .5  # some parameter
     J0 = 20.0
     v1y = 21.0
     h1x = 21.0
@@ -233,22 +233,211 @@ def rotor_geometry(machine: MachineModel):
     ###
     # Cutoff geometry
     ###
+    cutoff = Geometry()
+
+    # Outer cutoff parameters, check rotor_notes.pdf
+    acol = Sector(col_s, col_e, deg_coo)
+    acor = Sector(cor_e, cor_s, deg_coo)
+
+    cutoff.add_sector(acol)
+    cutoff.add_sector(acor)
+
+    # Inner cutoff parameters, check rotor_notes.pdf
+    coi_m = coi_m.rotate_about(n0, math.radians(-45))
+
+    acoil = Sector(coi_s, coi_m, deg_coi)
+    acoir = Sector(coi_m, coi_e, deg_coi)
+
+    cutoff.add_sector(acoil)
+    cutoff.add_sector(acoir)
+
+    rotorenc.merge_geometry(cutoff)
+
+    ### Magnet
+    magnet = Geometry()
+
+    # Left magnet pocket
+    mpl1s = pol2cart(22.00 - mphl, deg_mpl - ang_mpl / 2)
+    mpl1e = pol2cart(22.00 - mphl, deg_mpl + ang_mpl / 2)
+
+    lmpl1 = Line(mpl1s, mpl2s)
+    lmpl2 = Line(mpl1e, mpl2e)
+
+    magnet.add_line(lmpl1)
+    magnet.add_line(lmpl2)
+
+    # Right magnet pocket
+    mpr1s = pol2cart(22.00 - mphr, deg_mpr - ang_mpr / 2)
+    mpr1e = pol2cart(22.00 - mphr, deg_mpr + ang_mpr / 2)
+
+    lmpr1 = Line(mpr1s, mpr2s)
+    lmpr2 = Line(mpr1e, mpr2e)
+
+    magnet.add_line(lmpr1)
+    magnet.add_line(lmpr2)
+
+    # Left magnet
+    ml1s = pol2cart(22.00 - mbl, deg_ml - ang_ml / 2)
+    ml1e = pol2cart(22.00 - mbl, deg_ml + ang_ml / 2)
     #
-    # cutoff = Geometry()
+    ml2s = pol2cart(22.00 - mbl + mhl, deg_ml - ang_ml / 2)
+    ml2e = pol2cart(22.00 - mbl + mhl, deg_ml + ang_ml / 2)
     #
-    # # Outer cutoff parameters, check rotor_notes.pdf
-    # acol = CircleArc2(self.col_s, self.col_e, self.deg_coo)
-    # acor = CircleArc2(self.cor_e, self.cor_s, self.deg_coo)
-    #
-    # # Inner cutoff parameters, check rotor_notes.pdf
-    # coi_m = self.coi_m.rotate_about(self.n0, math.radians(-45))
-    #
-    # acoil = CircleArc2(self.coi_s, coi_m, self.deg_coi)
-    # acoir = CircleArc2(coi_m, self.coi_e, self.deg_coi)
-    #
-    # cutoff.nodes += [self.col_e, self.cor_e, self.coi_s, self.coi_e, coi_m]
-    #
-    # cutoff.circle_arcs2 += [acol, acor, acoil, acoir]
+    lml1 = Line(ml1s, ml2s)
+    lml2 = Line(ml1e, ml2e)
+
+    magnet.add_line(lml1)
+    magnet.add_line(lml2)
+
+    aml1 = CircleArc(mpl1s, n0, ml1s)
+    aml2 = CircleArc(ml1s, n0, ml1e)
+    aml3 = CircleArc(ml1e, n0, mpl1e)
+    aml4 = CircleArc(ml2s, n0, ml2e)
+
+    magnet.add_line(aml1)
+    magnet.add_line(aml2)
+    magnet.add_line(aml3)
+    magnet.add_line(aml4)
+
+    # Right magnet
+    mr1s = pol2cart(22.00 - mbr, deg_mr - ang_mr / 2)
+    mr1e = pol2cart(22.00 - mbr, deg_mr + ang_mr / 2)
+
+    mr2s = pol2cart(22.00 - mbr + mhr, deg_mr - ang_mr / 2)
+    mr2e = pol2cart(22.00 - mbr + mhr, deg_mr + ang_mr / 2)
+
+    lmr1 = Line(mr1s, mr2s)
+    lmr2 = Line(mr1e, mr2e)
+
+    magnet.add_line(lmr1)
+    magnet.add_line(lmr2)
+
+    amr1 = CircleArc(mpr1s, n0, mr1s)
+    amr2 = CircleArc(mr1s, n0, mr1e)
+    amr3 = CircleArc(mr1e, n0, mpr1e)
+    amr4 = CircleArc(mr2s, n0, mr2e)
+
+    magnet.add_line(amr1)
+    magnet.add_line(amr2)
+    magnet.add_line(amr3)
+    magnet.add_line(amr4)
+
+    rotorenc.merge_geometry(magnet)
+
+    # barrier
+
+    # BASE
+    barrier = Geometry()
+
+    # Top line
+    bul1 = Node(-bdu / 2, bhu)
+    bul2 = Node(-bdu / 2 - bwu, bhu)
+
+    bur1 = Node(bdu / 2, bhu)
+    bur2 = Node(bdu / 2 + bwu, bhu)
+
+    # Bottom line
+    bol1 = Node(-bdo / 2, bho)
+    bol2 = Node((-bdo / 2) - (math.tan(math.radians(225)) * bwo), bho + bwo)
+
+    bor1 = Node(bdo / 2, bho)
+    bor2 = Node((bdo / 2) + (math.tan(math.radians(225)) * bwo), bho + bwo)
+
+    # First rotation
+    a = math.radians(-22.5)
+
+    # Top line
+    bul1 = bul1.rotate_about(n0, a)
+    bul2 = bul2.rotate_about(n0, a)
+
+    bur1 = bur1.rotate_about(n0, a)
+    bur2 = bur2.rotate_about(n0, a)
+
+    lul = Line(bul1, bul2)
+    lur = Line(bur1, bur2)
+
+    # Bottom line
+    bol1 = bol1.rotate_about(n0, a)
+    bol2 = bol2.rotate_about(n0, a)
+
+    bor1 = bor1.rotate_about(n0, a)
+    bor2 = bor2.rotate_about(n0, a)
+
+    lol = Line(bol1, bol2)
+    lor = Line(bor1, bor2)
+
+    abul = Sector(bol2, bul2, deg_bu)
+    abur = Sector(bur2, bor2, deg_bu)
+    abol = Sector(bol1, bul1, deg_bo)
+    abor = Sector(bur1, bor1, deg_bo)
+
+    barrier.add_line(lul)
+    barrier.add_line(lur)
+    barrier.add_line(lol)
+    barrier.add_line(lor)
+
+    barrier.add_sector(abul)
+    barrier.add_sector(abur)
+    barrier.add_sector(abol)
+    barrier.add_sector(abor)
+
+    # Second rotation
+    a = math.radians(-45)
+
+    # Top line
+    bul1 = bul1.rotate_about(n0, a)
+    bul2 = bul2.rotate_about(n0, a)
+
+    bur1 = bur1.rotate_about(n0, a)
+    bur2 = bur2.rotate_about(n0, a)
+
+    lul = Line(bul1, bul2)
+    lur = Line(bur1, bur2)
+
+    # Bottom line
+    bol1 = bol1.rotate_about(n0, a)
+    bol2 = bol2.rotate_about(n0, a)
+
+    bor1 = bor1.rotate_about(n0, a)
+    bor2 = bor2.rotate_about(n0, a)
+
+    lol = Line(bol1, bol2)
+    lor = Line(bor1, bor2)
+
+    barrier.add_line(lul)
+    barrier.add_line(lur)
+    barrier.add_line(lol)
+    barrier.add_line(lor)
+
+    # Arc
+    abul = Sector(bol2, bul2, deg_bu)
+    abur = Sector(bur2, bor2, deg_bu)
+    abol = Sector(bol1, bul1, deg_bo)
+    abor = Sector(bur1, bor1, deg_bo)
+
+    barrier.add_sector(abul)
+    barrier.add_sector(abur)
+    barrier.add_sector(abol)
+    barrier.add_sector(abor)
+
+    rotorenc.merge_geometry(barrier)
+
+    ###  supplementary
+
+    supplementary = Geometry()
+
+    aml_gapl = CircleArc(mpl2e, n0, col_e)
+    amr_gapr = CircleArc(cor_e, n0, mpr2s)
+
+    aml_gapr = CircleArc(coi_s, n0, mpl2s)
+    amr_gapl = CircleArc(mpr2e, n0, coi_e)
+
+    supplementary.add_arc(aml_gapl)
+    supplementary.add_arc(amr_gapr)
+    supplementary.add_arc(amr_gapr)
+    supplementary.add_arc(amr_gapl)
+
+    rotorenc.merge_geometry(supplementary)
 
     return rotorenc
 
@@ -269,6 +458,7 @@ if __name__ == '__main__':
     geo = stator_tooth_base
     geo.merge_geometry(stator_enc)
     geo.merge_geometry(rotor)
+
     problem.create_geometry(geo)
     problem.write("machine.lua")
 

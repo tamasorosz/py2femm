@@ -121,6 +121,25 @@ class CircleArc:
         return selection_pt
 
 
+@dataclass
+class Sector:
+    start_pt: Node
+    end_pt: Node
+    degree: float
+    id = uuid.uuid4()
+
+    def convert(self):
+        """Converts back the sector into a circle arc. """
+        midpoint = Node((self.start_pt.x + self.end_pt.x) / 2, (self.start_pt.y + self.end_pt.y) / 2)
+        distance = math.sqrt(((self.end_pt.x - self.start_pt.x) ** 2) + ((self.end_pt.y - self.start_pt.y) ** 2))
+        theta = math.atan2(self.end_pt.y - self.start_pt.y, self.end_pt.x - self.start_pt.x) + math.pi / 2
+        radius = distance / (2 * math.tan(math.radians(self.degree / 2)))
+        center_x = midpoint.x + radius * math.cos(theta)
+        center_y = midpoint.y + radius * math.sin(theta)
+
+        return CircleArc(self.start_pt, Node(center_x, center_y),self.end_pt)
+
+
 class CubicBezier:
     def __init__(
             self,
@@ -275,6 +294,9 @@ class Geometry:
 
         if arc not in self.circle_arcs:
             self.circle_arcs.append(arc)
+
+    def add_sector(self, sector):
+        self.add_arc(sector.convert())
 
     def add_cubic_bezier(self, cb):
         # save every start and end points for the geoemtry if they are not exists
