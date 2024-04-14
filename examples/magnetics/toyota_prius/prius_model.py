@@ -217,6 +217,8 @@ def material_definitions(femm_problem: FemmProblem):
                31830.00, 111407.0, 190984.0, 350135.0, 509252.0, 560177.2,
                1527756.0]
     steel.mesh_size = 1.0
+    steel.material_positions = [Node(0.0, 79.0), Node(0.0, 120.0)]
+    femm_problem.add_material(steel)
 
     magnet = MagneticMaterial(material_name="N36Z_50", mu_x=1.03, mu_y=1.03, H_c=782000, Sigma=0.667e6)
     magnet.mesh_size = 1.0
@@ -226,58 +228,43 @@ def material_definitions(femm_problem: FemmProblem):
     phase_U_positive = copy(wire)
     phase_U_positive.material_name = "U+"
     phase_U_positive.Je = JU
+    phase_U_positive.material_positions = [Node(100.0, 0.0).rotate(109.0, degrees=True)]
 
-    phase_U_negative = copy(wire)
-    phase_U_negative.material_name = "U-"
-    phase_U_negative.Je = -JU
+    phase_W_negative = copy(wire)
+    phase_W_negative.material_name = "W-"
+    phase_W_negative.Je = -JW
+    phase_W_negative.material_positions = [Node(100.0, 0.0).rotate(101.5, degrees=True),
+                                           Node(100.0, 0.0).rotate(94.0, degrees=True)]
 
     # PHASE V
     phase_V_positive = copy(wire)
     phase_V_positive.material_name = "V+"
     phase_V_positive.Je = JV
+    phase_V_positive.material_positions = [Node(100.0, 0.0).rotate(86.5, degrees=True),
+                                           Node(100.0, 0.0).rotate(79.0, degrees=True)]
 
-    phase_V_negative = copy(wire)
-    phase_V_negative.material_name = "V-"
-    phase_V_negative.Je = -JV
-
-    # PHASE W
-    phase_W_positive = copy(wire)
-    phase_W_positive.material_name = "W+"
-    phase_W_positive.Je = JW
-
-    phase_W_negative = copy(wire)
-    phase_W_negative.material_name = "W-"
-    phase_W_negative.Je = -JW
-
-    # Stator steel
-    steel_stator = copy(steel)
-    steel_stator.material_name = 'steel_stator'
-    steel_stator.mesh_size = 1.0
-
-    # Rotor steel
-    steel_rotor = copy(steel)
-    steel_rotor.material_name = 'steel_rotor'
-    steel_rotor.mesh_size = 0.3
+    phase_U_negative = copy(wire)
+    phase_U_negative.material_name = "U-"
+    phase_U_negative.Je = -JU
+    phase_U_negative.material_positions = [Node(100.0, 0.0).rotate(71.5, degrees=True)]
 
     # Magnet right
     magnet_right = copy(magnet)
     magnet_right.material_name = 'magnet_right'
     magnet_right.remanence_angle = -90 + 90 - R3 / 2.0
+    magnet_right.material_positions = [Node(-10, R6)]
 
     # Magnet left
     magnet_left = copy(magnet)
     magnet_left.material_name = 'magnet_left'
     magnet_left.remanence_angle = -magnet_right.remanence_angle + 180
+    magnet_left.material_positions = [Node(10, R6)]
 
     # adding these materials to the femm problem
     femm_problem.add_material(phase_U_positive)
     femm_problem.add_material(phase_U_negative)
     femm_problem.add_material(phase_V_positive)
-    femm_problem.add_material(phase_V_negative)
-    femm_problem.add_material(phase_W_positive)
     femm_problem.add_material(phase_W_negative)
-    femm_problem.add_material(steel_stator)
-    femm_problem.add_material(steel_rotor)
     femm_problem.add_material(magnet_right)
     femm_problem.add_material(magnet_left)
 
