@@ -23,6 +23,7 @@ class Material(ABC):
 class Boundary(ABC):
     name: str
     type: int
+    boundary_edges: list = None
 
 
 class FemmFields(Enum):

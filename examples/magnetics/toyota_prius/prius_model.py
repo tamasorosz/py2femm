@@ -6,8 +6,8 @@ from copy import copy
 from src.executor import Executor
 from src.femm_problem import FemmProblem
 from src.general import LengthUnit
-from src.geometry import Node, Geometry, Line, CircleArc, Sector
-from src.magnetics import MagneticMaterial, LamType
+from src.geometry import Node, Geometry, Line, CircleArc
+from src.magnetics import MagneticMaterial, LamType, MagneticDirichlet, MagneticAnti, MagneticAntiPeriodicAirgap
 
 ORIGIN = Node(0.0, 0.0)
 
@@ -191,12 +191,12 @@ def material_definitions(femm_problem: FemmProblem):
 
     # airgap material, to define different mesh size
     air_gap = MagneticMaterial(material_name="air_gap")
-    air_gap.material_positions = [Node(0.0, 69.0), Node(-19.5, 73.5), Node(19.5, 73.5)]
+    air_gap.material_positions = [Node(0, 80.35), Node(0, 80.85)]
     air_gap.mesh_size = 0.5
     femm_problem.add_material(air_gap)
 
     air_rotor = MagneticMaterial(material_name="air_rotor")
-    air_rotor.material_positions = [Node(80.35, 0.0), Node(80.85, 0.0)]
+    air_rotor.material_positions = [Node(-19.5, 73.5), Node(19.5, 73.5)]
     air_rotor.mesh_size = 1.0
     femm_problem.add_material(air_rotor)
 
@@ -269,6 +269,24 @@ def material_definitions(femm_problem: FemmProblem):
     femm_problem.add_material(magnet_left)
 
 
+def boundary_definitions(femm_problem: FemmProblem):
+    # Boundary conditions
+    a0 = MagneticDirichlet(name="a0", a_0=0, a_1=0, a_2=0, phi=0)
+    femm_problem.add_boundary(a0)
+
+    pb1 = MagneticAnti("PB1")
+    pb2 = MagneticAnti("PB2")
+    pb3 = MagneticAnti("PB3")
+    pb4 = MagneticAnti("PB4")
+    apb = MagneticAntiPeriodicAirgap("APairgap")
+
+    femm_problem.add_boundary(pb1)
+    femm_problem.add_boundary(pb2)
+    femm_problem.add_boundary(pb3)
+    femm_problem.add_boundary(pb4)
+    femm_problem.add_boundary(apb)
+
+
 if __name__ == '__main__':
     problem = FemmProblem(out_file="../prius.csv")
     problem.magnetic_problem(50, LengthUnit.MILLIMETERS, "planar")
@@ -281,6 +299,7 @@ if __name__ == '__main__':
 
     problem.create_geometry(geo)
     material_definitions(problem)
+    boundary_definitions(problem)
 
     problem.write("prius.lua")
 
