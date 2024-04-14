@@ -68,7 +68,7 @@ class Node:
         self.x = round(self.x + dx, self.precision)
         self.y = round(self.y + dy, self.precision)
 
-    def rotate(self, rad):
+    def rotate(self, rad, degrees=False):
         """Rotate counter-clockwise by rad radians.
 
         Positive y goes *up,* as in traditional mathematics.
@@ -79,17 +79,30 @@ class Node:
 
         The new position is returned as a new Point.
         """
+        if degrees:
+            rad = math.radians(rad)
+
         s, c = [f(rad) for f in (math.sin, math.cos)]
         x, y = (c * self.x - s * self.y, s * self.x + c * self.y)
 
         return Node(round(x, self.precision), round(y, self.precision), id=self.id)
 
-    def rotate_about(self, p, theta):
+    def rotate_about(self, p, theta, degrees=False):
         """Rotate counter-clockwise around a point, by theta degrees. The new position is returned as a new Point."""
         result = self.clone()
         result.move_xy(-p.x, -p.y)
-        result = result.rotate(theta)
+        result = result.rotate(theta, degrees)
         result.move_xy(p.x, p.y)
+        return result
+
+    def mirror(self, coord=0):
+        result = self.clone()
+
+        if coord == 0:
+            result.x = -self.x
+        if coord == 1:
+            result.y = -self.y
+
         return result
 
 
@@ -137,7 +150,7 @@ class Sector:
         center_x = midpoint.x + radius * math.cos(theta)
         center_y = midpoint.y + radius * math.sin(theta)
 
-        return CircleArc(self.start_pt, Node(center_x, center_y),self.end_pt)
+        return CircleArc(self.start_pt, Node(center_x, center_y), self.end_pt)
 
 
 class CubicBezier:
@@ -224,6 +237,21 @@ class Geometry:
 
         return geo
 
+    def duplicate(self):
+
+        duplo = Geometry()
+
+        for g in self.lines:
+            duplo.add_line(Line(g.start_pt, g.end_pt))
+
+        for arc in self.circle_arcs:
+            duplo.add_arc(CircleArc(arc.start_pt, arc.center_pt, arc.end_pt))
+
+        for bez in self.cubic_beziers:
+            duplo.add_cubic_bezier(CubicBezier(bez.start_pt, bez.control1, bez.control2, bez.end_pt))
+
+        return duplo
+
     def update_nodes(self, node: Node):
         """Update all of the deprecated node ids after rotating the points """
 
@@ -260,9 +288,9 @@ class Geometry:
                 bez.control2 = node
         return
 
-    def rotate_about(self, node: Node, angle: float):
+    def rotate_about(self, node: Node, angle: float, degrees=False):
         for index, item in enumerate(self.nodes):
-            self.nodes[index] = item.rotate_about(node, angle)
+            self.nodes[index] = item.rotate_about(node, angle, degrees=degrees)
             self.update_nodes(self.nodes[index])
 
     def append_node(self, new_node):
@@ -452,3 +480,10 @@ class Geometry:
         l = CubicBezier(start_pt=l0, control1=l1, control2=l2, end_pt=l3)
 
         return r, l
+
+    def mirror(self, coord: int = 0):
+        """ param coord: case 0 is the x index, while case 1 is the y index """
+
+        for index, node in enumerate(self.nodes):
+            self.nodes[index] = node.mirror(coord)
+            self.update_nodes(self.nodes[index])
