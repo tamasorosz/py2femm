@@ -37,6 +37,20 @@ earlenght2y = 2.35  # Flux barrier geometry [mm]
 earlenght3y = 1.5  # Flux barrier geometry [mm]
 earlenght4 = 2.2  # Flux barrier geometry [mm]
 
+R3 = 145  # Magnet material point.
+R6 = 70  # Magnet material point.
+
+# Excitation parameters
+I0 = 250.0  # Stator current of one phase [A]
+alpha = 0.0  # Offset of the current [°]
+
+coil_area = 0.000142795  # area of the slot [m^2]
+Nturns = 9  # turns of the coil in one slot [u.]
+J0 = Nturns * I0 / coil_area
+JU = J0 * math.cos(math.radians(alpha))
+JV = J0 * math.cos(math.radians(alpha + 120))
+JW = J0 * math.cos(math.radians(alpha + 240))
+
 
 @dataclasses.dataclass
 class VariableParams:
@@ -170,11 +184,9 @@ def material_definitions(femm_problem: FemmProblem):
 
     # wire
     wire = MagneticMaterial(material_name="19 AWG", LamType=LamType.MAGNET_WIRE, WireD=0.912, Sigma=58e6)
-    femm_problem.add_material(wire)
 
     # magnetic steel
     steel = MagneticMaterial(material_name="M19_29GSF094", Sigma=1.9e6, lam_fill=0.94, Lam_d=0.34)
-
     steel.b = [0.000000, 0.047002, 0.094002, 0.141002, 0.338404, 0.507605,
                0.611006, 0.930612, 1.128024, 1.203236, 1.250248, 1.278460,
                1.353720, 1.429040, 1.485560, 1.532680, 1.570400, 1.693200,
@@ -186,19 +198,81 @@ def material_definitions(femm_problem: FemmProblem):
                1591.500, 3183.000, 4774.600, 6366.100, 7957.700, 15915.00,
                31830.00, 111407.0, 190984.0, 350135.0, 509252.0, 560177.2,
                1527756.0]
-
     steel.mesh_size = 1.0
-    femm_problem.add_material(steel)
 
-    # # Materials
-    # copper = MagneticMaterial(material_name="copper", J=1 / (w * h), Sigma=58.0)
-    # air = MagneticMaterial(material_name="air")
-    #
-    # problem.add_material(copper)
-    # problem.add_material(air)
-    #
-    # air_block = Node(radius / 4.0, 0.0)
-    # problem.define_block_label(air_block, air)
+    magnet = MagneticMaterial(material_name="N36Z_50", mu_x=1.03, mu_y=1.03, H_c=782000, Sigma=0.667e6)
+    magnet.mesh_size = 1.0
+
+    air_gap = MagneticMaterial(material_name="airgap")
+    air_gap.name = 'airgap'
+    air_gap.mesh_size = 1.0
+
+    # Flux barrier material
+    airrot = MagneticMaterial(material_name="air_rotor")
+    airrot.mesh_size = 1.0
+
+    # Coils
+    # PHASE U
+    phase_U_positive = copy(wire)
+    phase_U_positive.material_name = "U+"
+    phase_U_positive.Je = JU
+
+    phase_U_negative = copy(wire)
+    phase_U_negative.material_name = "U-"
+    phase_U_negative.Je = -JU
+
+    # PHASE V
+    phase_V_positive = copy(wire)
+    phase_V_positive.material_name = "V+"
+    phase_V_positive.Je = JV
+
+    phase_V_negative = copy(wire)
+    phase_V_negative.material_name = "V-"
+    phase_V_negative.Je = -JV
+
+    # PHASE W
+    phase_W_positive = copy(wire)
+    phase_W_positive.material_name = "W+"
+    phase_W_positive.Je = JW
+
+    phase_W_negative = copy(wire)
+    phase_W_negative.material_name = "W-"
+    phase_W_negative.Je = -JW
+
+    # Stator steel
+    steel_stator = copy(steel)
+    steel_stator.material_name = 'steel_stator'
+    steel_stator.mesh_size = 1.0
+
+    # Rotor steel
+    steel_rotor = copy(steel)
+    steel_rotor.material_name = 'steel_rotor'
+    steel_rotor.mesh_size = 0.3
+
+    # Magnet right
+    magnet_right = copy(magnet)
+    magnet_right.material_name = 'magnet_right'
+    magnet_right.remanence_angle = -90 + 90 - R3 / 2.0
+
+    # Magnet left
+    magnet_left = copy(magnet)
+    magnet_left.material_name = 'magnet_left'
+    magnet_left.remanence_angle = -magnet_right.remanence_angle + 180
+
+    # adding these materials to the femm problem
+    femm_problem.add_material(air)
+    femm_problem.add_material(air_gap)
+    femm_problem.add_material(airrot)
+    femm_problem.add_material(phase_U_positive)
+    femm_problem.add_material(phase_U_negative)
+    femm_problem.add_material(phase_V_positive)
+    femm_problem.add_material(phase_V_negative)
+    femm_problem.add_material(phase_W_positive)
+    femm_problem.add_material(phase_W_negative)
+    femm_problem.add_material(steel_stator)
+    femm_problem.add_material(steel_rotor)
+    femm_problem.add_material(magnet_right)
+    femm_problem.add_material(magnet_left)
 
 
 if __name__ == '__main__':
