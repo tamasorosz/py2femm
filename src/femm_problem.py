@@ -189,6 +189,12 @@ class FemmProblem:
         self.lua_script.append(cmd)
         return cmd
 
+    def add_bh_curve(self, material_name, data_b: list, data_h: list):
+        if isinstance(data_b, list):
+            assert len(data_b) == len(data_h), "B and H should have the same length"
+            for bi, hi in zip(data_b, data_h):
+                self.lua_script.append(f'mi_addbhpoint("{material_name}", {bi}, {hi})')
+
     def add_material(self, material: Material):
         """
         Add a material definition to the FEMM simulation.
@@ -198,6 +204,9 @@ class FemmProblem:
         cmd = str(material)
         if cmd is not None:
             self.lua_script.append(cmd)
+
+        self.add_bh_curve(material_name=material.material_name, data_b=material.b, data_h=material.h)
+
         return cmd
 
     def add_BHCurve(self, curve: BHCurve):

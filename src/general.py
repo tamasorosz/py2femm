@@ -14,7 +14,8 @@ class Material(ABC):
     material_name: str
     auto_mesh: AutoMeshOption = AutoMeshOption.AUTOMESH
     mesh_size: float = 0.0
-
+    b = None
+    h = None
 
 @dataclass
 class Boundary(ABC):
