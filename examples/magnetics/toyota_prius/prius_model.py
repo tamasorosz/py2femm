@@ -10,7 +10,7 @@ from src.geometry import Node, Geometry, Line, CircleArc, Sector
 
 ORIGIN = Node(0.0, 0.0)
 
-# Geometry parameters
+# Geometry parameters - Constants
 Dso = 269.0  # Stator outer diameter [mm]
 Dsi = 161.93  # Stator inner diameter [mm]
 Dro = 160.47  # Rotor outer diameter [mm]
@@ -35,6 +35,18 @@ earlenght2x = 1.90  # Flux barrier geometry [mm]
 earlenght2y = 2.35  # Flux barrier geometry [mm]
 earlenght3y = 1.5  # Flux barrier geometry [mm]
 earlenght4 = 2.2  # Flux barrier geometry [mm]
+
+
+@dataclasses.dataclass
+class VariableParams:
+    prob2x = 0.0
+    prob2y = 0.0
+    prob3x = 0.0
+    prob3y = 0.0
+    prob4x = 0.0
+    prob4y = 0.0
+    prob5x = 0.0
+    prob5y = 0.0
 
 def stator():
     # stator outline
@@ -70,16 +82,8 @@ def stator():
     return stator_geo
 
 
-def rotor_geometry():
+def rotor_geometry(var_params:VariableParams):
 
-    prob2x = 0.0
-    prob2y = 0.0
-    prob3x = 0.0
-    prob3y = 0.0
-    prob4x = 0.0
-    prob4y = 0.0
-    prob5x = 0.0
-    prob5y = 0.0
 
     rotor_geo = Geometry()
 
@@ -134,14 +138,14 @@ def rotor_geometry():
     remx = math.sqrt((earlenght4 ** 2) - (remy ** 2))
     ear5 = Node(ear4.x + remx, ear4.y + remy)
 
-    ear2.x = ear2.x + prob2x
-    ear2.y = ear2.y + prob2y
-    ear3.x = ear3.x + prob3x
-    ear3.y = ear3.y + prob3y
-    ear4.x = ear4.x + prob4x
-    ear4.y = ear4.y + prob4y
-    ear5.x = ear5.x + prob5x
-    ear5.y = ear5.y + prob5y
+    ear2.x = ear2.x + var_params.prob2x
+    ear2.y = ear2.y + var_params.prob2y
+    ear3.x = ear3.x + var_params.prob3x
+    ear3.y = ear3.y + var_params.prob3y
+    ear4.x = ear4.x + var_params.prob4x
+    ear4.y = ear4.y + var_params.prob4y
+    ear5.x = ear5.x + var_params.prob5x
+    ear5.y = ear5.y + var_params.prob5y
 
     rotor_slot.add_line(Line(ear1, ear2))
     rotor_slot.add_line(Line(ear3, ear2))
@@ -162,9 +166,10 @@ if __name__ == '__main__':
     problem = FemmProblem(out_file="../prius.csv")
     problem.magnetic_problem(50, LengthUnit.MILLIMETERS, "planar")
 
-    geo = stator()
+    variables = VariableParams()
 
-    rotor = rotor_geometry()
+    geo = stator()
+    rotor = rotor_geometry(variables)
     geo.merge_geometry(rotor)
 
     problem.create_geometry(geo)
