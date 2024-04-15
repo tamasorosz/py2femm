@@ -169,6 +169,15 @@ class FemmProblem:
         self.lua_script.append(cmd)
         return cmd
 
+    def modify_boundary(self, boundary: Boundary):
+        """
+        :param boundary: checks the type of the boundary parameter, then
+        """
+        cmd = str(boundary)
+        self.lua_script.append(cmd)
+        return cmd
+
+
     def add_bh_curve(self, material_name, data_b: list, data_h: list):
         if isinstance(data_b, list):
             assert len(data_b) == len(data_h), "B and H should have the same length"
@@ -850,7 +859,7 @@ class FemmProblem:
 
         self.clear_selected()
 
-    def set_boundary_definition(self, selection_point: Node, boundary: Union[Boundary, None], elementsize=None):
+    def set_boundary_definition_segment(self, selection_point: Node, boundary: Union[Boundary, None], elementsize=None):
         self.select_segment(selection_point.x, selection_point.y)
         if elementsize:
             automesh = AutoMeshOption.CUSTOM_MESH.value
@@ -860,6 +869,18 @@ class FemmProblem:
             automesh = AutoMeshOption.CUSTOM_MESH.value
 
         self.set_segment_prop(boundary.name or "<None>", automesh=automesh, elementsize=elementsize)
+        self.clear_selected()
+
+    def set_boundary_definition_arc(self, selection_point: Node, boundary: Union[Boundary, None], maxsegdeg=None):
+        self.select_arc_segment(selection_point.x, selection_point.y)
+
+        if maxsegdeg:
+            maxsegdeg = maxsegdeg
+
+        else:
+            maxsegdeg = 1
+
+        self.set_arc_segment_prop(propname=boundary.name or "<None>", maxsegdeg=maxsegdeg, hide=0, group=0)
         self.clear_selected()
 
     def make_analysis(self, filename="temp"):
