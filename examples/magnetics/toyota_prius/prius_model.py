@@ -309,8 +309,8 @@ def boundary_definitions(femm_problem: FemmProblem):
 
 
 if __name__ == '__main__':
-    problem = FemmProblem(out_file="../prius.csv")
-    problem.magnetic_problem(50, LengthUnit.MILLIMETERS, "planar")
+    problem = FemmProblem(out_file="/prius.csv")
+    problem.magnetic_problem(0, LengthUnit.MILLIMETERS, "planar")
 
     variables = VariableParams()
 
