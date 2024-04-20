@@ -169,5 +169,5 @@ def run_model(var: VariableParameters):
     femm.run(lua_file)
 
 
-# if __name__ == '__main__':
-#     run_model()
+if __name__ == '__main__':
+     run_model()

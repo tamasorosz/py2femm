@@ -286,6 +286,26 @@ def boundary_definitions(femm_problem: FemmProblem):
     femm_problem.add_boundary(pb4)
     femm_problem.add_boundary(apb)
 
+    # Add boundary conditions to stator segments
+    femm_problem.set_boundary_definition_segment(Node(70.0, 0.0).rotate(67.5), pb1)
+    femm_problem.set_boundary_definition_segment(Node(70.0, 0.0).rotate(112.5), pb1)
+
+    femm_problem.set_boundary_definition_segment(Node(80.25, 0.0).rotate(67.5), pb2)
+    femm_problem.set_boundary_definition_segment(Node(80.25, 0.0).rotate(112.5), pb2)
+
+    femm_problem.set_boundary_definition_segment(Node(80.8, 0.0).rotate(67.5), pb3)
+    femm_problem.set_boundary_definition_segment(Node(80.8, 0.0).rotate(112.5), pb3)
+
+    femm_problem.set_boundary_definition_segment(Node(110.0, 0.0).rotate(67.5), pb4)
+    femm_problem.set_boundary_definition_segment(Node(110.0, 0.0).rotate(112.5), pb4)
+
+    femm_problem.set_boundary_definition_arc(Node(0.0, 80.4494), apb)
+    femm_problem.set_boundary_definition_arc(Node(0.0, 80.7), apb)
+
+    femm_problem.set_boundary_definition_arc(Node(0.0,134.62), a0)
+    femm_problem.set_boundary_definition_arc(Node(0.0,55.319), a0)
+
+
 
 if __name__ == '__main__':
     problem = FemmProblem(out_file="../prius.csv")
