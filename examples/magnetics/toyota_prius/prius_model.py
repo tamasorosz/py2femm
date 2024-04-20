@@ -186,7 +186,8 @@ def material_definitions(femm_problem: FemmProblem):
                               Node(81.5, 0.0).rotate(93.75, degrees=True),
                               Node(81.5, 0.0).rotate(86.25, degrees=True),
                               Node(81.5, 0.0).rotate(78.75, degrees=True),
-                              Node(81.5, 0.0).rotate(71.25, degrees=True), ]
+                              Node(81.5, 0.0).rotate(71.25, degrees=True),
+                              Node(0.0, 67.5)]
     femm_problem.add_material(air)
 
     # airgap material, to define different mesh size
