@@ -288,17 +288,17 @@ def boundary_definitions(femm_problem: FemmProblem):
     femm_problem.add_boundary(apb)
 
     # Add boundary conditions to stator segments
-    femm_problem.set_boundary_definition_segment(Node(70.0, 0.0).rotate(67.5), pb1)
-    femm_problem.set_boundary_definition_segment(Node(70.0, 0.0).rotate(112.5), pb1)
+    femm_problem.set_boundary_definition_segment(Node(70.0, 0.0).rotate(67.5,degrees=True), pb1)
+    femm_problem.set_boundary_definition_segment(Node(70.0, 0.0).rotate(112.5,degrees=True), pb1)
 
-    femm_problem.set_boundary_definition_segment(Node(80.25, 0.0).rotate(67.5), pb2)
-    femm_problem.set_boundary_definition_segment(Node(80.25, 0.0).rotate(112.5), pb2)
+    femm_problem.set_boundary_definition_segment(Node(80.25, 0.0).rotate(67.5,degrees=True), pb2)
+    femm_problem.set_boundary_definition_segment(Node(80.25, 0.0).rotate(112.5,degrees=True), pb2)
 
-    femm_problem.set_boundary_definition_segment(Node(80.8, 0.0).rotate(67.5), pb3)
-    femm_problem.set_boundary_definition_segment(Node(80.8, 0.0).rotate(112.5), pb3)
+    femm_problem.set_boundary_definition_segment(Node(80.8, 0.0).rotate(67.5,degrees=True), pb3)
+    femm_problem.set_boundary_definition_segment(Node(80.8, 0.0).rotate(112.5,degrees=True), pb3)
 
-    femm_problem.set_boundary_definition_segment(Node(110.0, 0.0).rotate(67.5), pb4)
-    femm_problem.set_boundary_definition_segment(Node(110.0, 0.0).rotate(112.5), pb4)
+    femm_problem.set_boundary_definition_segment(Node(110.0, 0.0).rotate(67.5,degrees=True), pb4)
+    femm_problem.set_boundary_definition_segment(Node(110.0, 0.0).rotate(112.5,degrees=True), pb4)
 
     femm_problem.set_boundary_definition_arc(Node(0.0, 80.4494), apb)
     femm_problem.set_boundary_definition_arc(Node(0.0, 80.7), apb)
