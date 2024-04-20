@@ -169,6 +169,21 @@ class FemmProblem:
         self.lua_script.append(cmd)
         return cmd
 
+    def modify_boundary(self, boundary: Boundary):
+        """
+        :param boundary: checks the type of the boundary parameter, then
+        """
+        cmd = str(boundary)
+        self.lua_script.append(cmd)
+        return cmd
+
+
+    def add_bh_curve(self, material_name, data_b: list, data_h: list):
+        if isinstance(data_b, list):
+            assert len(data_b) == len(data_h), "B and H should have the same length"
+            for bi, hi in zip(data_b, data_h):
+                self.lua_script.append(f'mi_addbhpoint("{material_name}", {bi}, {hi})')
+
     def add_material(self, material: Material):
         """
         Add a material definition to the FEMM simulation.
@@ -178,6 +193,14 @@ class FemmProblem:
         cmd = str(material)
         if cmd is not None:
             self.lua_script.append(cmd)
+
+        self.add_bh_curve(material_name=material.material_name, data_b=material.b, data_h=material.h)
+
+        # if the material definitions contains the nodal informations, it will be automatically defined
+        if material.material_positions:
+            for position in material.material_positions:
+                self.define_block_label(position, material)
+
         return cmd
 
     def delete_selected(self):
@@ -836,7 +859,7 @@ class FemmProblem:
 
         self.clear_selected()
 
-    def set_boundary_definition(self, selection_point: Node, boundary: Union[Boundary, None], elementsize=None):
+    def set_boundary_definition_segment(self, selection_point: Node, boundary: Union[Boundary, None], elementsize=None):
         self.select_segment(selection_point.x, selection_point.y)
         if elementsize:
             automesh = AutoMeshOption.CUSTOM_MESH.value
@@ -846,6 +869,18 @@ class FemmProblem:
             automesh = AutoMeshOption.CUSTOM_MESH.value
 
         self.set_segment_prop(boundary.name or "<None>", automesh=automesh, elementsize=elementsize)
+        self.clear_selected()
+
+    def set_boundary_definition_arc(self, selection_point: Node, boundary: Union[Boundary, None], maxsegdeg=None):
+        self.select_arc_segment(selection_point.x, selection_point.y)
+
+        if maxsegdeg:
+            maxsegdeg = maxsegdeg
+
+        else:
+            maxsegdeg = 1
+
+        self.set_arc_segment_prop(propname=boundary.name or "<None>", maxsegdeg=maxsegdeg, hide=0, group=0)
         self.clear_selected()
 
     def make_analysis(self, filename="temp"):

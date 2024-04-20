@@ -82,22 +82,22 @@ def planar_capacitor_problem(width, thickness, d):
     planar_problem.add_boundary(v0)
 
     # voltage electrode
-    planar_problem.set_boundary_definition(l1.selection_point(), v0)
-    planar_problem.set_boundary_definition(l2.selection_point(), v0)
-    planar_problem.set_boundary_definition(l3.selection_point(), v0)
-    planar_problem.set_boundary_definition(l4.selection_point(), v0)
+    planar_problem.set_boundary_definition_segment(l1.selection_point(), v0)
+    planar_problem.set_boundary_definition_segment(l2.selection_point(), v0)
+    planar_problem.set_boundary_definition_segment(l3.selection_point(), v0)
+    planar_problem.set_boundary_definition_segment(l4.selection_point(), v0)
 
     # gnd electrode
-    planar_problem.set_boundary_definition(l5.selection_point(), gnd)
-    planar_problem.set_boundary_definition(l6.selection_point(), gnd)
-    planar_problem.set_boundary_definition(l7.selection_point(), gnd)
-    planar_problem.set_boundary_definition(l8.selection_point(), gnd)
+    planar_problem.set_boundary_definition_segment(l5.selection_point(), gnd)
+    planar_problem.set_boundary_definition_segment(l6.selection_point(), gnd)
+    planar_problem.set_boundary_definition_segment(l7.selection_point(), gnd)
+    planar_problem.set_boundary_definition_segment(l8.selection_point(), gnd)
 
     # outer surface of the geometry
-    planar_problem.set_boundary_definition(arc1.selection_point(), neumann)
-    planar_problem.set_boundary_definition(arc2.selection_point(), neumann)
-    planar_problem.set_boundary_definition(arc3.selection_point(), neumann)
-    planar_problem.set_boundary_definition(arc4.selection_point(), neumann)
+    planar_problem.set_boundary_definition_segment(arc1.selection_point(), neumann)
+    planar_problem.set_boundary_definition_segment(arc2.selection_point(), neumann)
+    planar_problem.set_boundary_definition_segment(arc3.selection_point(), neumann)
+    planar_problem.set_boundary_definition_segment(arc4.selection_point(), neumann)
 
     planar_problem.make_analysis('planar')
 

@@ -64,10 +64,10 @@ def solenoid(n, w, h, radius, gap):
     # Boundary conditions
     a0 = MagneticDirichlet(name="a0", a_0=0, a_1=0, a_2=0, phi=0)
     problem.add_boundary(a0)
-    problem.set_boundary_definition(l1.selection_point(), a0)
-    problem.set_boundary_definition(l2.selection_point(), a0)
-    problem.set_boundary_definition(l3.selection_point(), a0)
-    problem.set_boundary_definition(l4.selection_point(), a0)
+    problem.set_boundary_definition_segment(l1.selection_point(), a0)
+    problem.set_boundary_definition_segment(l2.selection_point(), a0)
+    problem.set_boundary_definition_segment(l3.selection_point(), a0)
+    problem.set_boundary_definition_segment(l4.selection_point(), a0)
 
     # Materials
     copper = MagneticMaterial(material_name="copper", J=1 / (w * h), Sigma=58.0)

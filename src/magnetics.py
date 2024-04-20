@@ -31,6 +31,8 @@ class MagneticMaterial(Material):
     Phi_hy: float = 0.0
     NStrands: int = 0.0
     WireD: float = 0.0
+    h: list = None
+    b: list = None
 
     def __str__(self):
         cmd = Template(
@@ -55,7 +57,6 @@ class MagneticMaterial(Material):
             WireD=self.WireD,
         )
         return cmd
-
 
 @dataclass(kw_only=True)
 class MagneticBoundaryBaseClass(Boundary):
@@ -133,12 +134,49 @@ class MagneticAntiPeriodicAirgap(MagneticBoundaryBaseClass):
         self.boundary_format = 7
 
 
-@dataclass
 class MagneticPeriodicAirgap(MagneticBoundaryBaseClass):
 
     def __init__(self, name):
         self.name = name
         self.boundary_format = 6
+
+@dataclass
+class MagneticBoundaryModification(Boundary):
+    propnum: float = 0
+    value: float = 0
+
+    def __str__(self):
+        cmd = Template(
+            "mi_modifyboundprop($propname, $propnum, $value)"
+        )
+        cmd = cmd.substitute(
+            propname="'" + self.name + "'",
+            propnum=self.propnum,
+            value=self.value
+        )
+        return cmd
+
+        # propnum
+        # 0 - Name of boundary property
+        # 1 - A0 Prescribed A parameter
+        # 2 - A1 Prescribed A parameter
+        # 3 - A2 Prescribed A parameter
+        # 4 - Prescribed A phase
+        # 5 - Small skin depth relative permeability
+        # 6 - Small skin depth conductivity, MS / m
+        # 7 - c0 Mixed BC parameter
+        # 8 - c1 Mixed BC parameter
+        # 9 - Type of boundary condition:
+        #   0 = Prescribed A
+        #   1 = Small skin depth
+        #   2 = Mixed
+        #   3 = Strategic Dual Image
+        #   4 = Periodic
+        #   5 = Antiperiodic
+        #   6 = Periodic Air Gap
+        #   7 = Antiperiodic Air Gap
+        # 10 - ia Inner boundary angle for air gap element
+        # 11 -oa Outer boundary angle for air gap element
 
 
 class MagneticVolumeIntegral(Enum):
