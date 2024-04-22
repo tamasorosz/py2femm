@@ -220,6 +220,71 @@ class Sector:
 
         return CircleArc(self.start_pt, Node(center_x, center_y), self.end_pt)
 
+    def selection_point(self):
+        midpoint = Node((self.start_pt.x + self.end_pt.x) / 2, (self.start_pt.y + self.end_pt.y) / 2)
+        distance = math.sqrt(((self.end_pt.x - self.start_pt.x) ** 2) + ((self.end_pt.y - self.start_pt.y) ** 2))
+        radius = distance / (2 * math.tan(math.radians(self.degree / 2)))
+
+        # Calculate the center of the circle
+        if self.degree == 0:
+            return None  # No arc, cannot determine center
+
+        elif self.start_pt.y - self.end_pt.y == 0:  # Horizontal line
+            center_x = midpoint.x
+            if self.start_pt.x < self.end_pt.x:  # Counterclockwise
+                center_y = midpoint.y + radius
+            else:  # Clockwise
+                center_y = midpoint.y - radius
+
+        elif self.start_pt.x - self.end_pt.x == 0:  # Vertical line
+            center_y = midpoint.y
+            if self.start_pt.y < self.end_pt.y:  # Counterclockwise
+                center_x = midpoint.x - radius
+            else:  # Clockwise
+                center_x = midpoint.x + radius
+
+        else:
+            theta = math.atan2(self.end_pt.y - self.start_pt.y, self.end_pt.x - self.start_pt.x) + math.pi / 2
+            center_x = midpoint.x + radius * math.cos(theta)
+            center_y = midpoint.y + radius * math.sin(theta)
+
+        centerpoint = Node(center_x, center_y)
+
+        selection_pt = self.start_pt.rotate_about(centerpoint, math.radians(self.degree / 2))
+        return selection_pt
+
+    def center_point(self):
+        midpoint = Node((self.start_pt.x + self.end_pt.x) / 2, (self.start_pt.y + self.end_pt.y) / 2)
+        distance = math.sqrt(((self.end_pt.x - self.start_pt.x) ** 2) + ((self.end_pt.y - self.start_pt.y) ** 2))
+        radius = distance / (2 * math.tan(math.radians(self.degree / 2)))
+
+        # Calculate the center of the circle
+        if self.degree == 0:
+            return None  # No arc, cannot determine center
+
+        elif self.start_pt.y - self.end_pt.y == 0:  # Horizontal line
+            center_x = midpoint.x
+            if self.start_pt.x < self.end_pt.x:  # Counterclockwise
+                center_y = midpoint.y + radius
+            else:  # Clockwise
+                center_y = midpoint.y - radius
+
+        elif self.start_pt.x - self.end_pt.x == 0:  # Vertical line
+            center_y = midpoint.y
+            if self.start_pt.y < self.end_pt.y:  # Counterclockwise
+                center_x = midpoint.x - radius
+            else:  # Clockwise
+                center_x = midpoint.x + radius
+
+        else:
+            theta = math.atan2(self.end_pt.y - self.start_pt.y, self.end_pt.x - self.start_pt.x) + math.pi / 2
+            center_x = midpoint.x + radius * math.cos(theta)
+            center_y = midpoint.y + radius * math.sin(theta)
+
+        centerpoint = Node(center_x, center_y)
+
+        return centerpoint
+
 
 class CubicBezier:
     def __init__(

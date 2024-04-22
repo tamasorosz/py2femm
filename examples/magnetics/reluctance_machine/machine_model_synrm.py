@@ -1,10 +1,11 @@
+import math
 import os
 from dataclasses import dataclass
 
 from src.executor import Executor
 from src.femm_problem import FemmProblem
 from src.general import LengthUnit
-from src.geometry import Geometry, Node
+from src.geometry import Geometry, Node, Sector, CircleArc, Line
 from src.magnetics import MagneticDirichlet, MagneticPeriodicAirgap, MagneticPeriodic, MagneticBoundaryModification, \
     MagneticMaterial, LamType
 
@@ -16,7 +17,7 @@ n0 = Node(0, 0)
 
 class VariableParameters:
 
-    def __init__(self, fold, out, counter, JAp, JAn, JBp, JBn, JCp, JCn):
+    def __init__(self, fold, out, counter, JAp, JAn, JBp, JBn, JCp, JCn, ang_co, deg_co, bd, bw, bh, bg):
         self.fold = fold
         self.out = out
         self.counter = counter
@@ -28,6 +29,13 @@ class VariableParameters:
         self.JCp = JCp
         self.JCn = JCn
 
+        self.ang_co = ang_co
+        self.deg_co = deg_co
+
+        self.bd = bd
+        self.bw = bw
+        self.bh = bh
+        self.bg = bg
 
 def stator_geometry(femm_problem: FemmProblem):
     # stator geometry imported from a .dxf file with airgap sliding band: https://www.femm.info/wiki/SlidingBand
@@ -38,8 +46,192 @@ def stator_geometry(femm_problem: FemmProblem):
     femm_problem.create_geometry(stator_geo)
 
 
-def rotor_geometry(femm_problem: FemmProblem):
-    pass
+def rotor_geometry(femm_problem: FemmProblem, var: VariableParameters):
+    rotor_geo = Geometry()
+
+    # define the nodes and sectors of the cut-off barriers
+    co_s = Node(22, 0).rotate_about(n0, 45 - var.ang_co / 2, degrees=True)
+    co_e = Node(22, 0).rotate_about(n0, 45 + var.ang_co / 2, degrees=True)
+    co_r = co_e.rotate_about(n0, -45, degrees=True)
+    co_l = co_s.rotate_about(n0, 45, degrees=True)
+
+    rotor_geo.add_node(co_s)
+    rotor_geo.add_node(co_e)
+    rotor_geo.add_node(co_r)
+    rotor_geo.add_node(co_l)
+
+    co_arc = Sector(co_e, co_s, var.deg_co)
+
+    rotor_geo.add_sector(co_arc)
+
+    co_arc_ep = co_arc.selection_point()
+    co_arc_ep_r = co_arc_ep.rotate_about(n0, -45, degrees=True)
+    co_arc_ep_l = co_arc_ep.rotate_about(n0, 45, degrees=True)
+
+    rotor_geo.add_node(co_arc_ep_r)
+    rotor_geo.add_node(co_arc_ep_l)
+
+    co_arcr = Sector(co_r, co_arc_ep_r, var.deg_co / 2)
+    co_arcl = Sector(co_arc_ep_l, co_l, var.deg_co / 2)
+
+    rotor_geo.add_sector(co_arcr)
+    rotor_geo.add_sector(co_arcl)
+
+    rot_arc_l = CircleArc(co_e, n0, co_l)
+    rot_arc_r = CircleArc(co_r, n0, co_s)
+
+    rotor_geo.add_arc(rot_arc_l)
+    rotor_geo.add_arc(rot_arc_r)
+
+    # define sliding band nodes, lines and arc
+    sb_l = Node(0.00, 22.10)
+    sb_r = Node(22.10, 0.00)
+
+    rotor_geo.add_node(sb_r)
+    rotor_geo.add_node(sb_l)
+
+    sbl_l = Line(sb_l, co_arc_ep_l)
+    sbl_r = Line(sb_r, co_arc_ep_r)
+
+    rotor_geo.add_line(sbl_l)
+    rotor_geo.add_line(sbl_r)
+
+    sb_arc = CircleArc(sb_r, n0, sb_l)
+
+    rotor_geo.add_arc(sb_arc)
+
+    # define the enclosing geometry
+    h0 = Node(6.00, 0.00)
+    v0 = h0.rotate_about(n0, 90, True)
+
+    rotor_geo.add_node(h0)
+    rotor_geo.add_node(v0)
+
+    encl_r = Line(h0, co_arc_ep_r)
+    encl_l = Line(v0, co_arc_ep_l)
+
+    rotor_geo.add_line(encl_r)
+    rotor_geo.add_line(encl_l)
+
+    enc_arc_0 = CircleArc(h0, n0, v0)
+
+    rotor_geo.add_arc(enc_arc_0)
+
+    # define inner barriers
+    co_arc_ep = co_arc.selection_point()  # Cut-off barrier arc point at 45 deg.
+    co_arc_cp = co_arc.center_point()  # Cut-off barrier arc center point.
+
+    # rotor_geo.add_node(co_arc_ep)
+
+    d_ep_cp = co_arc_ep.distance_to(co_arc_cp)
+    d_n0_ep = co_arc_ep.distance_to(n0)
+    d_n0_cp = co_arc_cp.distance_to(n0)
+
+    # define upper arc of inner barrier
+    ib_base1 = Node(d_n0_ep - var.bd, 0.00).rotate_about(n0, 45, True)
+
+    ib_1_ang = math.atan2(var.bw/2, (d_ep_cp + var.bd))
+    ib_1l = ib_base1.rotate_about( co_arc_cp, -ib_1_ang, False)
+    ib_1r = ib_base1.rotate_about(co_arc_cp, ib_1_ang, False)
+
+    ib_1l_r = ib_1l.rotate_about(n0, -45, True)
+    ib_1r_l = ib_1r.rotate_about(n0, 45, True)
+
+    # rotor_geo.add_node(ib_base1)
+    rotor_geo.add_node(ib_1l)
+    rotor_geo.add_node(ib_1r)
+    rotor_geo.add_node(ib_1r_l)
+    rotor_geo.add_node(ib_1l_r)
+
+    A = d_ep_cp + var.bd
+    B = d_n0_cp
+    C = 22 - var.bg
+    ib_3_ang = math.acos((A**2 + B**2 - C**2) / (2 * A * B))
+    ib_3l = ib_base1.rotate_about(co_arc_cp, -ib_3_ang, False)
+    ib_3r = ib_base1.rotate_about(co_arc_cp, ib_3_ang, False)
+
+    ib_3l_r = ib_3l.rotate_about(n0, -45, True)
+    ib_3r_l = ib_3r.rotate_about(n0, 45, True)
+
+    rotor_geo.add_node(ib_3l)
+    rotor_geo.add_node(ib_3r)
+    rotor_geo.add_node(ib_3r_l)
+    rotor_geo.add_node(ib_3l_r)
+
+    # define under arc of inner barrier
+    ib_base2 = Node(d_n0_ep - var.bd - var.bh, 0.00).rotate_about(n0, 45, True)
+
+    ib_2_ang = math.atan2(var.bw / 2, (d_ep_cp + var.bd + var.bh))
+    ib_2l = ib_base2.rotate_about(co_arc_cp, -ib_2_ang, False)
+    ib_2r = ib_base2.rotate_about(co_arc_cp, ib_2_ang, False)
+
+    ib_2l_r = ib_2l.rotate_about(n0, -45, True)
+    ib_2r_l = ib_2r.rotate_about(n0, 45, True)
+
+    # rotor_geo.add_node(ib_base)
+    rotor_geo.add_node(ib_2l)
+    rotor_geo.add_node(ib_2r)
+    rotor_geo.add_node(ib_2r_l)
+    rotor_geo.add_node(ib_2l_r)
+
+    A = d_ep_cp + var.bd + var.bh
+    B = d_n0_cp
+    C = 22 - var.bg
+    ib_4_ang = math.acos((A ** 2 + B ** 2 - C ** 2) / (2 * A * B))
+    ib_4l = ib_base2.rotate_about(co_arc_cp, -ib_4_ang, False)
+    ib_4r = ib_base2.rotate_about(co_arc_cp, ib_4_ang, False)
+
+    ib_4l_r = ib_4l.rotate_about(n0, -45, True)
+    ib_4r_l = ib_4r.rotate_about(n0, 45, True)
+
+    rotor_geo.add_node(ib_4l)
+    rotor_geo.add_node(ib_4r)
+    rotor_geo.add_node(ib_4r_l)
+    rotor_geo.add_node(ib_4l_r)
+
+    # define line between upper and under barrier arcs
+
+    ibl_1l = Line(ib_1l, ib_2l)
+    ibl_1r = Line(ib_1r, ib_2r)
+    ibl_2l = Line(ib_3l, ib_4l)
+    ibl_2r = Line(ib_3r, ib_4r)
+
+    ibl_1r_l = Line(ib_1r_l, ib_2r_l)
+    ibl_1l_r = Line(ib_1l_r, ib_2l_r)
+    ibl_2r_l = Line(ib_3r_l, ib_4r_l)
+    ibl_2l_r = Line(ib_3l_r, ib_4l_r)
+
+    rotor_geo.add_line(ibl_1l)
+    rotor_geo.add_line(ibl_1r)
+    rotor_geo.add_line(ibl_2l)
+    rotor_geo.add_line(ibl_2r)
+
+    rotor_geo.add_line(ibl_1l_r)
+    rotor_geo.add_line(ibl_1r_l)
+    rotor_geo.add_line(ibl_2l_r)
+    rotor_geo.add_line(ibl_2r_l)
+
+    iblu_arc = Sector(ib_3l, ib_1l, var.deg_co/2)
+    ibru_arc = Sector(ib_1r, ib_3r, var.deg_co / 2)
+    iblo_arc = Sector(ib_4l, ib_2l, var.deg_co / 2)
+    ibro_arc = Sector(ib_2r, ib_4r, var.deg_co / 2)
+
+    iblu_arc_l = Sector(ib_3l_r, ib_1l_r, var.deg_co / 2)
+    ibru_arc_r = Sector(ib_1r_l, ib_3r_l, var.deg_co / 2)
+    iblo_arc_l = Sector(ib_4l_r, ib_2l_r, var.deg_co / 2)
+    ibro_arc_r = Sector(ib_2r_l, ib_4r_l, var.deg_co / 2)
+
+    rotor_geo.add_sector(iblu_arc)
+    rotor_geo.add_sector(ibru_arc)
+    rotor_geo.add_sector(iblo_arc)
+    rotor_geo.add_sector(ibro_arc)
+    rotor_geo.add_sector(iblu_arc_l)
+    rotor_geo.add_sector(ibru_arc_r)
+    rotor_geo.add_sector(iblo_arc_l)
+    rotor_geo.add_sector(ibro_arc_r)
+
+    femm_problem.create_geometry(rotor_geo)
+
 
 
 def add_boundaries(femm_problem: FemmProblem):
@@ -148,11 +340,13 @@ def add_materials(femm_problem: FemmProblem, var: VariableParameters):
 
 def problem_definition(var: VariableParameters):
     problem = FemmProblem(out_file=os.path.join(folder_path, f'temp_{var.fold}/{var.out}{var.counter}.csv'))
-    variables = VariableParameters(var.fold, var.out, var.counter, var.JAp, var.JAn, var.JBp, var.JBn, var.JCp, var.JCn)
+    variables = VariableParameters(var.fold, var.out, var.counter, var.JAp, var.JAn, var.JBp, var.JBn, var.JCp, var.JCn,
+                                   var.ang_co, var.deg_co, var.bd, var.bw, var.bh, var.bg)
 
     problem.magnetic_problem(0, LengthUnit.MILLIMETERS, "planar", depth=40)
 
     stator_geometry(problem)
+    rotor_geometry(problem, variables)
     add_boundaries(problem)
     add_materials(problem, variables)
 
@@ -167,7 +361,6 @@ def run_model(var: VariableParameters):
     femm = Executor()
     lua_file = os.path.join(folder_path, f'temp_{var.fold}/{var.out}{var.counter}.lua')
     femm.run(lua_file)
-
 
 # if __name__ == '__main__':
 #     run_model()
