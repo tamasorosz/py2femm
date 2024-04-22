@@ -37,6 +37,7 @@ class VariableParameters:
         self.bh = bh
         self.bg = bg
 
+
 def stator_geometry(femm_problem: FemmProblem):
     # stator geometry imported from a .dxf file with airgap sliding band: https://www.femm.info/wiki/SlidingBand
     stator_geo = Geometry()
@@ -130,8 +131,8 @@ def rotor_geometry(femm_problem: FemmProblem, var: VariableParameters):
     # define upper arc of inner barrier
     ib_base1 = Node(d_n0_ep - var.bd, 0.00).rotate_about(n0, 45, True)
 
-    ib_1_ang = math.atan2(var.bw/2, (d_ep_cp + var.bd))
-    ib_1l = ib_base1.rotate_about( co_arc_cp, -ib_1_ang, False)
+    ib_1_ang = math.atan2(var.bw / 2, (d_ep_cp + var.bd))
+    ib_1l = ib_base1.rotate_about(co_arc_cp, -ib_1_ang, False)
     ib_1r = ib_base1.rotate_about(co_arc_cp, ib_1_ang, False)
 
     ib_1l_r = ib_1l.rotate_about(n0, -45, True)
@@ -146,7 +147,7 @@ def rotor_geometry(femm_problem: FemmProblem, var: VariableParameters):
     A = d_ep_cp + var.bd
     B = d_n0_cp
     C = 22 - var.bg
-    ib_3_ang = math.acos((A**2 + B**2 - C**2) / (2 * A * B))
+    ib_3_ang = math.acos((A ** 2 + B ** 2 - C ** 2) / (2 * A * B))
     ib_3l = ib_base1.rotate_about(co_arc_cp, -ib_3_ang, False)
     ib_3r = ib_base1.rotate_about(co_arc_cp, ib_3_ang, False)
 
@@ -211,27 +212,40 @@ def rotor_geometry(femm_problem: FemmProblem, var: VariableParameters):
     rotor_geo.add_line(ibl_2l_r)
     rotor_geo.add_line(ibl_2r_l)
 
-    iblu_arc = Sector(ib_3l, ib_1l, var.deg_co/2)
+    iblu_arc = Sector(ib_3l, ib_1l, var.deg_co / 2)
     ibru_arc = Sector(ib_1r, ib_3r, var.deg_co / 2)
     iblo_arc = Sector(ib_4l, ib_2l, var.deg_co / 2)
     ibro_arc = Sector(ib_2r, ib_4r, var.deg_co / 2)
 
-    iblu_arc_l = Sector(ib_3l_r, ib_1l_r, var.deg_co / 2)
-    ibru_arc_r = Sector(ib_1r_l, ib_3r_l, var.deg_co / 2)
-    iblo_arc_l = Sector(ib_4l_r, ib_2l_r, var.deg_co / 2)
-    ibro_arc_r = Sector(ib_2r_l, ib_4r_l, var.deg_co / 2)
+    iblu_arc_r = Sector(ib_3l_r, ib_1l_r, var.deg_co / 2)
+    ibru_arc_l = Sector(ib_1r_l, ib_3r_l, var.deg_co / 2)
+    iblo_arc_r = Sector(ib_4l_r, ib_2l_r, var.deg_co / 2)
+    ibro_arc_l = Sector(ib_2r_l, ib_4r_l, var.deg_co / 2)
 
     rotor_geo.add_sector(iblu_arc)
     rotor_geo.add_sector(ibru_arc)
     rotor_geo.add_sector(iblo_arc)
     rotor_geo.add_sector(ibro_arc)
-    rotor_geo.add_sector(iblu_arc_l)
-    rotor_geo.add_sector(ibru_arc_r)
-    rotor_geo.add_sector(iblo_arc_l)
-    rotor_geo.add_sector(ibro_arc_r)
+    rotor_geo.add_sector(iblu_arc_r)
+    rotor_geo.add_sector(ibru_arc_l)
+    rotor_geo.add_sector(iblo_arc_r)
+    rotor_geo.add_sector(ibro_arc_l)
+
+    # calculate the midpoint of every flux barrier to define material labels later on
+
+    ib_mp1 = Line(iblu_arc_r.selection_point(), iblo_arc_r.selection_point()).selection_point()
+    ib_mp2 = Line(ibru_arc.selection_point(), ibro_arc.selection_point()).selection_point()
+    ib_mp3 = Line(iblu_arc.selection_point(), iblo_arc.selection_point()).selection_point()
+    ib_mp4 = Line(ibru_arc_l.selection_point(), ibro_arc_l.selection_point()).selection_point()
+
+    # rotor_geo.add_node(ib_mp1)
+    # rotor_geo.add_node(ib_mp2)
+    # rotor_geo.add_node(ib_mp3)
+    # rotor_geo.add_node(ib_mp4)
 
     femm_problem.create_geometry(rotor_geo)
 
+    return ib_mp1, ib_mp2, ib_mp3, ib_mp4
 
 
 def add_boundaries(femm_problem: FemmProblem):
@@ -275,7 +289,7 @@ def add_boundaries(femm_problem: FemmProblem):
     femm_problem.set_boundary_definition_arc(a03, a0)
 
 
-def add_materials(femm_problem: FemmProblem, var: VariableParameters):
+def add_materials(femm_problem: FemmProblem, var: VariableParameters, rot: rotor_geometry):
     # Define wire material, air and steel material.
     # There is an interesting bug in FEMM, that you can't add source current density to magnet wire, but it is possible
     # using .lua code
@@ -337,6 +351,9 @@ def add_materials(femm_problem: FemmProblem, var: VariableParameters):
     femm_problem.define_block_label(Node(31, 0).rotate_about(n0, 20, True), copper_Cn)
     femm_problem.define_block_label(Node(31, 0).rotate_about(n0, 10, True), copper_Ap)
 
+    # Add block labels to the rotor
+    femm_problem.define_block_label(rot[0], air)
+
 
 def problem_definition(var: VariableParameters):
     problem = FemmProblem(out_file=os.path.join(folder_path, f'temp_{var.fold}/{var.out}{var.counter}.csv'))
@@ -346,9 +363,9 @@ def problem_definition(var: VariableParameters):
     problem.magnetic_problem(0, LengthUnit.MILLIMETERS, "planar", depth=40)
 
     stator_geometry(problem)
-    rotor_geometry(problem, variables)
+    rot = rotor_geometry(problem, variables)
     add_boundaries(problem)
-    add_materials(problem, variables)
+    add_materials(problem, variables, rot)
 
     problem.make_analysis(os.path.join(folder_path, f'temp_{var.fold}/{var.out}{var.counter}'))
 
