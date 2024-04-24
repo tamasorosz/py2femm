@@ -3,7 +3,7 @@ import math
 import os
 import pathlib
 import re
-
+import time
 
 import numpy as np
 import machine_model_synrm as model
@@ -16,6 +16,8 @@ from src.executor import Executor
 
 
 def execute_model(counter):
+    time.sleep(1)
+
     try:
         femm = Executor()
         current_file_path = os.path.abspath(__file__)
@@ -23,6 +25,8 @@ def execute_model(counter):
 
         lua_file = os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.lua')
         femm.run(lua_file)
+
+        time.sleep(1)
 
         with open(os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.csv'), 'r') as file:
             csvfile = [i for i in csv.reader(file)]
@@ -33,11 +37,16 @@ def execute_model(counter):
         del_ans = pathlib.Path(os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.fem'))
         del_lua = pathlib.Path(os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.ans'))
         del_csv = pathlib.Path(os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.csv'))
+        try:
+            time.sleep(0.1)
+            del_lua.unlink()
+            del_fem.unlink()
+            del_ans.unlink()
+            del_csv.unlink()
 
-        del_lua.unlink()
-        del_fem.unlink()
-        del_ans.unlink()
-        del_csv.unlink()
+        except PermissionError:
+            pass
+
     except IndexError:
         torque = 0.0
 
@@ -49,10 +58,15 @@ def execute_model(counter):
         del_lua = pathlib.Path(os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.ans'))
         del_csv = pathlib.Path(os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.csv'))
 
-        del_lua.unlink()
-        del_fem.unlink()
-        del_ans.unlink()
-        del_csv.unlink()
+        try:
+            time.sleep(0.1)
+            del_lua.unlink()
+            del_fem.unlink()
+            del_ans.unlink()
+            del_csv.unlink()
+
+        except PermissionError:
+            pass
 
         print(f'Error at avg_rip{counter}!')
 
@@ -60,7 +74,6 @@ def execute_model(counter):
 
 
 def torque_avg_rip(J0, ang_co, deg_co, bd, bw, bh, bg):
-
     initial = 90 + maxang.max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bg)
 
     resol = 16
@@ -92,7 +105,7 @@ def torque_avg_rip(J0, ang_co, deg_co, bd, bw, bh, bg):
                                              )
         model.problem_definition(variables)
 
-    with Pool(9) as p:
+    with Pool(8) as p:
         res = p.map(execute_model, list(range(0, resol)))
 
     torque_avg = np.average(list(res))

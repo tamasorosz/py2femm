@@ -7,7 +7,7 @@ import calc_torque_avg_rip
 import taguchi_def
 
 if __name__ == '__main__':
-    for J0 in [15]:
+    for J0 in [50]:
         avg = []
         rip = []
         for i in range(len(taguchi_def.df)):

@@ -3,7 +3,7 @@ import math
 import os
 import pathlib
 import re
-
+import time
 
 import numpy as np
 import machine_model_synrm as model
@@ -15,6 +15,8 @@ from src.executor import Executor
 
 
 def execute_model(counter):
+    time.sleep(1)
+
     try:
         femm = Executor()
         current_file_path = os.path.abspath(__file__)
@@ -22,6 +24,8 @@ def execute_model(counter):
 
         lua_file = os.path.join(folder_path, f'temp_ang/ang{counter}.lua')
         femm.run(lua_file)
+
+        time.sleep(1)
 
         with open(os.path.join(folder_path, f'temp_ang/ang{counter}.csv'), 'r') as file:
             csvfile = [i for i in csv.reader(file)]
@@ -33,10 +37,15 @@ def execute_model(counter):
         del_lua = pathlib.Path(os.path.join(folder_path, f'temp_ang/ang{counter}.ans'))
         del_csv = pathlib.Path(os.path.join(folder_path, f'temp_ang/ang{counter}.csv'))
 
-        del_lua.unlink()
-        del_fem.unlink()
-        del_ans.unlink()
-        del_csv.unlink()
+        try:
+            time.sleep(0.1)
+            del_lua.unlink()
+            del_fem.unlink()
+            del_ans.unlink()
+            del_csv.unlink()
+
+        except PermissionError:
+            pass
 
     except IndexError:
         torque = 0.0
@@ -49,10 +58,15 @@ def execute_model(counter):
         del_lua = pathlib.Path(os.path.join(folder_path, f'temp_ang/ang{counter}.ans'))
         del_csv = pathlib.Path(os.path.join(folder_path, f'temp_ang/ang{counter}.csv'))
 
-        del_lua.unlink()
-        del_fem.unlink()
-        del_ans.unlink()
-        del_csv.unlink()
+        try:
+            time.sleep(0.1)
+            del_lua.unlink()
+            del_fem.unlink()
+            del_ans.unlink()
+            del_csv.unlink()
+
+        except PermissionError:
+            pass
 
         print(f'Error at ang{counter}!')
 
