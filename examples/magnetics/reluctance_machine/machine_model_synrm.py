@@ -7,7 +7,7 @@ from src.femm_problem import FemmProblem
 from src.general import LengthUnit
 from src.geometry import Geometry, Node, Sector, CircleArc, Line
 from src.magnetics import MagneticDirichlet, MagneticPeriodicAirgap, MagneticPeriodic, MagneticBoundaryModification, \
-    MagneticMaterial, LamType
+    MagneticMaterial, LamType, MagneticVolumeIntegral
 
 current_file_path = os.path.abspath(__file__)
 folder_path = os.path.dirname(current_file_path)
@@ -17,7 +17,7 @@ n0 = Node(0, 0)
 
 class VariableParameters:
 
-    def __init__(self, fold, out, counter, JAp, JAn, JBp, JBn, JCp, JCn, ang_co, deg_co, bd, bw, bh, bg):
+    def __init__(self, fold, out, counter, JAp, JAn, JBp, JBn, JCp, JCn, ang_co, deg_co, bd, bw, bh, bg, ia):
         self.fold = fold
         self.out = out
         self.counter = counter
@@ -36,6 +36,8 @@ class VariableParameters:
         self.bw = bw
         self.bh = bh
         self.bg = bg
+
+        self.ia = ia
 
 
 def stator_geometry(femm_problem: FemmProblem):
@@ -243,12 +245,27 @@ def rotor_geometry(femm_problem: FemmProblem, var: VariableParameters):
     # rotor_geo.add_node(ib_mp3)
     # rotor_geo.add_node(ib_mp4)
 
+    rot_bound1_l = encl_l.selection_point()
+    rot_bound1_r = encl_r.selection_point()
+    rot_bound2_l = sbl_l.selection_point()
+    rot_bound2_r = sbl_r.selection_point()
+    rot_bound_arc1 = enc_arc_0.selection_point()
+    rot_bound_arc2 = sb_arc.selection_point()
+
+    # rotor_geo.add_node(rot_bound1_l)
+    # rotor_geo.add_node(rot_bound1_r)
+    # rotor_geo.add_node(rot_bound2_l)
+    # rotor_geo.add_node(rot_bound2_r)
+    # rotor_geo.add_node(rot_bound_arc1)
+    # rotor_geo.add_node(rot_bound_arc2)
+
     femm_problem.create_geometry(rotor_geo)
 
-    return ib_mp1, ib_mp2, ib_mp3, ib_mp4
+    return ib_mp1, ib_mp2, ib_mp3, ib_mp4, rot_bound1_l, rot_bound1_r, rot_bound2_l, rot_bound2_r, rot_bound_arc1, \
+           rot_bound_arc2
 
 
-def add_boundaries(femm_problem: FemmProblem):
+def add_boundaries(femm_problem: FemmProblem, var: VariableParameters, rot: rotor_geometry):
     # Define all boundary conditions
     a0 = MagneticDirichlet(name="a0", a_0=0, a_1=0, a_2=0, phi=0)  # A0 Boundary Condition
 
@@ -270,7 +287,7 @@ def add_boundaries(femm_problem: FemmProblem):
     # Modify Periodic Air Gap Boundary Condition Inner Angle to imitate rotation
     # modify_boundary added, because there is a FEMM bug with add_boundary, that ia is set by oa and oa is not possible
     # to set. If you need to set oa, you need modify_boundary.
-    pbca = MagneticBoundaryModification(pbca.name, pbca.boundary_format, propnum=10, value=1)
+    pbca = MagneticBoundaryModification(pbca.name, pbca.boundary_format, propnum=10, value=var.ia)
 
     # Add modified Periodic Air Gap Boundary Condition
     femm_problem.modify_boundary(pbca)
@@ -288,6 +305,15 @@ def add_boundaries(femm_problem: FemmProblem):
     femm_problem.set_boundary_definition_arc(a02, pbca)
     femm_problem.set_boundary_definition_arc(a03, a0)
 
+    # Add boundary conditions to rotor segments
+    femm_problem.set_boundary_definition_segment(rot[4], pbc1)
+    femm_problem.set_boundary_definition_segment(rot[5], pbc1)
+    femm_problem.set_boundary_definition_segment(rot[6], pbc2)
+    femm_problem.set_boundary_definition_segment(rot[7], pbc2)
+
+    # Add boundary conditions to rotor arcs
+    femm_problem.set_boundary_definition_arc(rot[8], a0)
+    femm_problem.set_boundary_definition_arc(rot[9], pbca)
 
 def add_materials(femm_problem: FemmProblem, var: VariableParameters, rot: rotor_geometry):
     # Define wire material, air and steel material.
@@ -304,6 +330,7 @@ def add_materials(femm_problem: FemmProblem, var: VariableParameters, rot: rotor
     air = MagneticMaterial(material_name="air")
 
     steel = MagneticMaterial(material_name="steel", Sigma=5.8, Lam_d=0.5, lam_fill=0.98)
+    FeSi65 = MagneticMaterial(material_name="FeSi65", Sigma=5.8, Lam_d=0, lam_fill=1)
 
     # Add wire material, air and steel material.
     femm_problem.add_material(copper_Ap)
@@ -314,6 +341,7 @@ def add_materials(femm_problem: FemmProblem, var: VariableParameters, rot: rotor
     femm_problem.add_material(copper_Cn)
     femm_problem.add_material(air)
     femm_problem.add_material(steel)
+    femm_problem.add_material(FeSi65)
 
     # Add BH curve for stator steel material.
     # There is an interesting bug in FEMM, that you can add any number of BH point, but it will only plot it manually
@@ -339,8 +367,30 @@ def add_materials(femm_problem: FemmProblem, var: VariableParameters, rot: rotor
                                       36551.72414, 37896.55172, 39241.37931, 40586.2069, 41931.03448, 43275.86207,
                                       44620.68966, 45965.51724, 47310.34483, 48655.17241, 50000])
 
+    femm_problem.add_bh_curve(material_name="FeSi65",
+                              data_b=[0, 0.358294627, 0.478028092, 0.563148872, 0.629244556, 0.683285138, 0.728997037,
+                                      0.768607936, 0.803556282, 0.834825031, 0.863115728, 0.888946635, 0.912711487,
+                                      0.934716448, 0.955204299, 1.030452669, 1.086202243, 1.130688402, 1.167706237,
+                                      1.199406524, 1.227126836, 1.251755988, 1.273914738, 1.294053804, 1.3125108,
+                                      1.329545176, 1.34536063, 1.360120017, 1.373955589, 1.402248493, 1.425268547,
+                                      1.443943891, 1.459657021, 1.473220258, 1.485151723, 1.495802219, 1.505420324,
+                                      1.514188618, 1.522245155, 1.529696862, 1.536628245, 1.54310725, 1.549189325,
+                                      1.554920311, 1.560338538, 1.565476384, 1.570361444, 1.575017432, 1.579464871,
+                                      1.583721646, 1.587803435, 1.591724059, 1.595495761, 1.599129443, 1.60263485,
+                                      1.606020731, 1.609294969, 1.612464692],
+                              data_h=[0, 235.7142857, 371.4285714, 507.1428571, 642.8571429, 778.5714286, 914.2857143,
+                                      1050, 1185.714286, 1321.428571, 1457.142857, 1592.857143, 1728.571429,
+                                      1864.285714, 2000, 2571.428571, 3142.857143, 3714.285714, 4285.714286,
+                                      4857.142857, 5428.571429, 6000, 6571.428571, 7142.857143, 7714.285714,
+                                      8285.714286, 8857.142857, 9428.57429, 10000, 11379.31034, 12758.62069,
+                                      14137.93103, 15517.24138, 16896.55172, 18275.86207, 19655.17241, 21034.48276,
+                                      22413.7931, 23793.10345, 25172.41379, 26551.72414, 27931.03448, 29310.34483,
+                                      30689.65517, 32068.96552, 33448.27586, 34827.58621, 6206.89655, 37586.2069,
+                                      38965.51724, 40344.82759, 41724.13793, 43103.44828, 44482.75862, 45862.06897,
+                                      47241.37931, 48620.68966, 50000])
+
     # Add block labels to the stator
-    femm_problem.define_block_label(Node(15.85, 15.85), air)
+    femm_problem.define_block_label(Node(17, 17), air)
 
     femm_problem.define_block_label(Node(28.00, 28.00), steel)
 
@@ -353,21 +403,31 @@ def add_materials(femm_problem: FemmProblem, var: VariableParameters, rot: rotor
 
     # Add block labels to the rotor
     femm_problem.define_block_label(rot[0], air)
+    femm_problem.define_block_label(rot[1], air)
+    femm_problem.define_block_label(rot[2], air)
+    femm_problem.define_block_label(rot[3], air)
+
+    femm_problem.define_block_label(Node(22.05, 0.00).rotate_about(n0, 45, True), air)
+    femm_problem.define_block_label(Node(7, 0.00).rotate_about(n0, 45, True), FeSi65)
 
 
 def problem_definition(var: VariableParameters):
     problem = FemmProblem(out_file=os.path.join(folder_path, f'temp_{var.fold}/{var.out}{var.counter}.csv'))
     variables = VariableParameters(var.fold, var.out, var.counter, var.JAp, var.JAn, var.JBp, var.JBn, var.JCp, var.JCn,
-                                   var.ang_co, var.deg_co, var.bd, var.bw, var.bh, var.bg)
+                                   var.ang_co, var.deg_co, var.bd, var.bw, var.bh, var.bg, var.ia)
 
     problem.magnetic_problem(0, LengthUnit.MILLIMETERS, "planar", depth=40)
 
     stator_geometry(problem)
     rot = rotor_geometry(problem, variables)
-    add_boundaries(problem)
+    add_boundaries(problem, variables, rot)
     add_materials(problem, variables, rot)
 
     problem.make_analysis(os.path.join(folder_path, f'temp_{var.fold}/{var.out}{var.counter}'))
+
+    problem.get_integral_values(label_list= [list(rot)[0], list(rot)[1], list(rot)[2], list(rot)[3], Node(5, 5)],
+                                save_image=False,
+                                variable_name=MagneticVolumeIntegral.wTorque)
 
     problem.write(os.path.join(folder_path, f'temp_{var.fold}/{var.out}{var.counter}.lua'))
 
@@ -378,6 +438,3 @@ def run_model(var: VariableParameters):
     femm = Executor()
     lua_file = os.path.join(folder_path, f'temp_{var.fold}/{var.out}{var.counter}.lua')
     femm.run(lua_file)
-
-# if __name__ == '__main__':
-#     run_model()
