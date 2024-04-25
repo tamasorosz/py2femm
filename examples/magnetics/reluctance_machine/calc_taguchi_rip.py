@@ -4,7 +4,7 @@ import pandas as pd
 
 import taguchi_def
 
-for C in [5, 10, 15, 20, 25, 50, 75, 100]:
+for C in [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75]:
     df = taguchi_def.l25()
 
     X = {}
