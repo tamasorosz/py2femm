@@ -20,10 +20,8 @@
 #                                                    ia=0
 #                                                    )
 # machine_model_synrm.run_model(variables)
+import numpy as np
 import pandas as pd
-
-import calc_max_torque_angle as calc
-import calc_torque_avg_rip as tg
 
 # if __name__ == '__main__':
 #     print(tg.torque_avg_rip(50, 10, 90, 2, 1, 2, 1))
@@ -41,21 +39,25 @@ import calc_torque_avg_rip as tg
 #
 # print(torque)
 
+#
+# # Sample DataFrames
+# data1 = {'X1': [1, 2], 'X2': [3, 4]}
+# data2 = {'X1': [5, 6], 'X2': [7, 8]}
+# df1 = pd.DataFrame(data1)
+# df2 = pd.DataFrame(data2)
+#
+# # Convert each row into a list
+# list1 = df1.iloc[0].tolist()
+# list2 = df2.iloc[0].tolist()
+#
+# # Concatenate the lists
+# combined_list = list1 + list2
+#
+# # Create a new DataFrame with the combined list as a new column
+# df_combined = pd.DataFrame({'X3': [combined_list]})
+#
+# print(df_combined)
+df = pd.DataFrame({'F': [[1, 2, 3], [4, 5, 6]],
+                   'X': [['A', 'B'], ['C', 'D']]})
 
-# Sample DataFrames
-data1 = {'X1': [1, 2], 'X2': [3, 4]}
-data2 = {'X1': [5, 6], 'X2': [7, 8]}
-df1 = pd.DataFrame(data1)
-df2 = pd.DataFrame(data2)
-
-# Convert each row into a list
-list1 = df1.iloc[0].tolist()
-list2 = df2.iloc[0].tolist()
-
-# Concatenate the lists
-combined_list = list1 + list2
-
-# Create a new DataFrame with the combined list as a new column
-df_combined = pd.DataFrame({'X3': [combined_list]})
-
-print(df_combined)
+print(df)

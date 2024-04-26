@@ -1,13 +1,11 @@
 import math
 import os
 
-from numpy import NaN
-
 import calc_torque_avg_rip
 import taguchi_def
 
 if __name__ == '__main__':
-    for J0 in [70, 75]:
+    for J0 in [30]:
         avg = []
         rip = []
         for i in range(len(taguchi_def.df)):
