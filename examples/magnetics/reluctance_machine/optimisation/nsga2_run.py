@@ -38,7 +38,7 @@ if __name__ == '__main__':
         eliminate_duplicates=True
     )
 
-    termination = get_termination("n_gen", 35)
+    termination = get_termination("n_gen", 280)
 
     res = minimize(problem,
                    algorithm,
@@ -55,7 +55,7 @@ if __name__ == '__main__':
                        'RIP': F[:, 1]})
     current_file_path = os.path.abspath(__file__)
     folder_path = os.path.dirname(current_file_path)
-    file_path = os.path.join(folder_path, f'results/nsga2.csv')
+    file_path = os.path.join(folder_path, f'results/nsga2_g280.csv')
     df.to_csv(file_path, encoding='utf-8', index=False)
 
     plt.figure(figsize=(7, 5))
