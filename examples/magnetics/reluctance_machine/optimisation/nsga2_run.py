@@ -19,7 +19,7 @@ if __name__ == '__main__':
             super().__init__(n_var=5,
                              n_obj=2,
                              n_ieq_constr=0,
-                             xl=np.array([16, 120, 1, 2, 1.5]),
+                             xl=np.array([16, 120, 1, 2, 2.0]),
                              xu=np.array([18, 160, 2, 3, 2.5]))
 
         def _evaluate(self, x, out, *args, **kwargs):
@@ -30,7 +30,7 @@ if __name__ == '__main__':
     problem = MyProblem()
 
     algorithm = NSGA2(
-        pop_size=50,
+        pop_size=100,
         n_offsprings=25,
         sampling=FloatRandomSampling(),
         crossover=SBX(prob=0.9, eta=15),
@@ -38,7 +38,7 @@ if __name__ == '__main__':
         eliminate_duplicates=True
     )
 
-    termination = get_termination("n_gen", 280)
+    termination = get_termination("n_gen", 125)
 
     res = minimize(problem,
                    algorithm,
@@ -55,7 +55,7 @@ if __name__ == '__main__':
                        'RIP': F[:, 1]})
     current_file_path = os.path.abspath(__file__)
     folder_path = os.path.dirname(current_file_path)
-    file_path = os.path.join(folder_path, f'results/nsga2_g280.csv')
+    file_path = os.path.join(folder_path, f'results/nsga2_p100o25g125.csv')
     df.to_csv(file_path, encoding='utf-8', index=False)
 
     plt.figure(figsize=(7, 5))
