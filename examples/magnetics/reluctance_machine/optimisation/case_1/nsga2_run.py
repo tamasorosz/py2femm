@@ -1,3 +1,4 @@
+import math
 import os
 
 import numpy as np
@@ -5,6 +6,7 @@ import pandas as pd
 from matplotlib import pyplot as plt
 from pymoo.core.problem import ElementwiseProblem
 from pymoo.algorithms.moo.nsga2 import NSGA2
+from pymoo.core.repair import Repair
 from pymoo.operators.crossover.sbx import SBX
 from pymoo.operators.mutation.pm import PM
 from pymoo.operators.sampling.rnd import FloatRandomSampling
@@ -18,27 +20,42 @@ if __name__ == '__main__':
         def __init__(self):
             super().__init__(n_var=5,
                              n_obj=2,
-                             n_ieq_constr=0,
-                             xl=np.array([16, 120, 1, 2, 2.0]),
-                             xu=np.array([18, 160, 2, 3, 2.5]))
+                             n_ieq_constr=1,
+                             n_eq_constr=0,
+                             xl=np.array([15, 90,  1, 1, 1.5]),
+                             xu=np.array([25, 150, 4, 4, 2.5]))
 
         def _evaluate(self, x, out, *args, **kwargs):
-            res = calc_torque_avg_rip.torque_avg_rip(30, x[0], x[1], x[2], 1, x[3], x[4])
-            out['F'] = [res[0], res[1]]
+            f = calc_torque_avg_rip.torque_avg_rip(30, x[0], x[1], x[2], 1, x[3], x[4])
 
+            out['F'] = [f[0], f[1]]
 
     problem = MyProblem()
 
+    class MyRepair(Repair):
+        problem = MyProblem()
+
+        def _do(self, problem, x, **kwargs):
+            for i in range(len(x)):
+                g = (math.tan(math.radians(x[i][0] / 2)) * (22 - x[i][4]) + x[i][2] + x[i][3]) - 8
+                if g > 0:
+                    x[i][3] = 8 - (math.tan(math.radians(x[i][0] / 2)) * (22 - x[i][4])) - x[i][2]
+                else:
+                    x[i][3] = x[i][3]
+            return x
+
+
     algorithm = NSGA2(
-        pop_size=100,
-        n_offsprings=25,
+        pop_size=10,
+        n_offsprings=1,
         sampling=FloatRandomSampling(),
         crossover=SBX(prob=0.9, eta=15),
         mutation=PM(eta=20),
-        eliminate_duplicates=True
+        eliminate_duplicates=True,
+        repair=MyRepair()
     )
 
-    termination = get_termination("n_gen", 125)
+    termination = get_termination("n_gen", 1)
 
     res = minimize(problem,
                    algorithm,
@@ -55,7 +72,7 @@ if __name__ == '__main__':
                        'RIP': F[:, 1]})
     current_file_path = os.path.abspath(__file__)
     folder_path = os.path.dirname(current_file_path)
-    file_path = os.path.join(folder_path, f'results/nsga2_p100o25g125.csv')
+    file_path = os.path.join(folder_path, f'results/nsga2_test.csv')
     df.to_csv(file_path, encoding='utf-8', index=False)
 
     plt.figure(figsize=(7, 5))
