@@ -17,7 +17,7 @@ n0 = Node(0, 0)
 
 class VariableParameters:
 
-    def __init__(self, fold, out, counter, JAp, JAn, JBp, JBn, JCp, JCn, ang_co, deg_co, bd, bw, bh, bg, ia):
+    def __init__(self, fold, out, counter, JAp, JAn, JBp, JBn, JCp, JCn, ang_co, deg_co, bd, bw, bh, bg, ia, ang_m, mh):
         self.fold = fold
         self.out = out
         self.counter = counter
@@ -38,6 +38,9 @@ class VariableParameters:
         self.bg = bg
 
         self.ia = ia
+
+        self.ang_m = ang_m
+        self.mh = mh
 
 
 def stator_geometry(femm_problem: FemmProblem):
@@ -259,10 +262,62 @@ def rotor_geometry(femm_problem: FemmProblem, var: VariableParameters):
     # rotor_geo.add_node(rot_bound_arc1)
     # rotor_geo.add_node(rot_bound_arc2)
 
+    # LEFT ROTOR MAGNET------------------------------------------------------------------------------------------------
+    nmbase_lo = Node(22, 0).rotate_about(n0, 67.5, True)
+    nmbase_lu = Node(22 - var.mh, 0).rotate_about(n0, 67.5, True)
+
+    nm_llo = nmbase_lo.rotate_about(n0, var.ang_m / 2, True)
+    nm_rlo = nmbase_lo.rotate_about(n0, -var.ang_m / 2, True)
+    nm_llu = nmbase_lu.rotate_about(n0, var.ang_m / 2, True)
+    nm_rlu = nmbase_lu.rotate_about(n0, -var.ang_m / 2, True)
+
+    rotor_geo.add_node(nm_llo)
+    rotor_geo.add_node(nm_rlo)
+    rotor_geo.add_node(nm_llu)
+    rotor_geo.add_node(nm_rlu)
+
+    lm_ll = Line(nm_llo, nm_llu)
+    lm_lr = Line(nm_rlo, nm_rlu)
+
+    rotor_geo.add_line(lm_ll)
+    rotor_geo.add_line(lm_lr)
+
+    am_lu = CircleArc(nm_rlu, n0, nm_llu)
+
+    rotor_geo.add_arc(am_lu)
+
+    lab_mag_l = Line(lm_ll.selection_point(), lm_lr.selection_point()).selection_point()
+
+    # RIGHT ROTOR MAGNET------------------------------------------------------------------------------------------------
+    nmbase_ro = Node(22, 0).rotate_about(n0, 22.5, True)
+    nmbase_ru = Node(22 - var.mh, 0).rotate_about(n0, 22.5, True)
+
+    nm_lro = nmbase_ro.rotate_about(n0, var.ang_m / 2, True)
+    nm_rro = nmbase_ro.rotate_about(n0, -var.ang_m / 2, True)
+    nm_lru = nmbase_ru.rotate_about(n0, var.ang_m / 2, True)
+    nm_rru = nmbase_ru.rotate_about(n0, -var.ang_m / 2, True)
+
+    rotor_geo.add_node(nm_lro)
+    rotor_geo.add_node(nm_rro)
+    rotor_geo.add_node(nm_lru)
+    rotor_geo.add_node(nm_rru)
+
+    lm_rl = Line(nm_lro, nm_lru)
+    lm_rr = Line(nm_rro, nm_rru)
+
+    rotor_geo.add_line(lm_rl)
+    rotor_geo.add_line(lm_rr)
+
+    am_ru = CircleArc(nm_rru, n0, nm_lru)
+
+    rotor_geo.add_arc(am_ru)
+
+    lab_mag_r = Line(lm_rl.selection_point(), lm_rr.selection_point()).selection_point()
+
     femm_problem.create_geometry(rotor_geo)
 
     return ib_mp1, ib_mp2, ib_mp3, ib_mp4, rot_bound1_l, rot_bound1_r, rot_bound2_l, rot_bound2_r, rot_bound_arc1, \
-           rot_bound_arc2
+           rot_bound_arc2, lab_mag_l, lab_mag_r
 
 
 def add_boundaries(femm_problem: FemmProblem, var: VariableParameters, rot: rotor_geometry):
@@ -314,6 +369,7 @@ def add_boundaries(femm_problem: FemmProblem, var: VariableParameters, rot: roto
     # Add boundary conditions to rotor arcs
     femm_problem.set_boundary_definition_arc(rot[8], a0)
     femm_problem.set_boundary_definition_arc(rot[9], pbca)
+
 
 def add_materials(femm_problem: FemmProblem, var: VariableParameters, rot: rotor_geometry):
     # Define wire material, air and steel material.
@@ -389,6 +445,21 @@ def add_materials(femm_problem: FemmProblem, var: VariableParameters, rot: rotor
                                       38965.51724, 40344.82759, 41724.13793, 43103.44828, 44482.75862, 45862.06897,
                                       47241.37931, 48620.68966, 50000])
 
+    ferrite_left = MagneticMaterial(material_name="Y30", H_c=200106)
+    ferrite_right = MagneticMaterial(material_name="Y30", H_c=200106)
+
+    ferrite_left.remanence_angle = 67.5
+    ferrite_right.remanence_angle = 202.5
+
+    femm_problem.add_material(ferrite_left)
+    femm_problem.add_material(ferrite_right)
+
+    femm_problem.add_bh_curve(material_name="Y30",
+                              data_b=[0.000000, 0.066000, 0.131390, 0.144000, 0.153280, 0.162400, 0.171530,
+                                      0.211680, 0.273720, 0.386860],
+                              data_h=[0.000000, 1160.000000, 2323.660000, 3490.000000, 6000.000000, 11630.000000,
+                                      18613.200000, 51192.200000, 102376.000000, 200106.000000])
+
     # Add block labels to the stator
     femm_problem.define_block_label(Node(17, 17), air)
 
@@ -410,11 +481,14 @@ def add_materials(femm_problem: FemmProblem, var: VariableParameters, rot: rotor
     femm_problem.define_block_label(Node(22.05, 0.00).rotate_about(n0, 45, True), air)
     femm_problem.define_block_label(Node(7, 0.00).rotate_about(n0, 45, True), FeSi65)
 
+    femm_problem.define_block_label(rot[10], ferrite_left)
+    femm_problem.define_block_label(rot[11], ferrite_right)
+
 
 def problem_definition(var: VariableParameters):
     problem = FemmProblem(out_file=os.path.join(folder_path, f'temp_{var.fold}/{var.out}{var.counter}.csv'))
     variables = VariableParameters(var.fold, var.out, var.counter, var.JAp, var.JAn, var.JBp, var.JBn, var.JCp, var.JCn,
-                                   var.ang_co, var.deg_co, var.bd, var.bw, var.bh, var.bg, var.ia)
+                                   var.ang_co, var.deg_co, var.bd, var.bw, var.bh, var.bg, var.ia, var.ang_m, var.mh)
 
     problem.magnetic_problem(0, LengthUnit.MILLIMETERS, "planar", depth=40)
 
@@ -425,7 +499,8 @@ def problem_definition(var: VariableParameters):
 
     problem.make_analysis(os.path.join(folder_path, f'temp_{var.fold}/{var.out}{var.counter}'))
 
-    problem.get_integral_values(label_list= [list(rot)[0], list(rot)[1], list(rot)[2], list(rot)[3], Node(5, 5)],
+    problem.get_integral_values(label_list=[list(rot)[0], list(rot)[1], list(rot)[2], list(rot)[3], list(rot)[10],
+                                            list(rot)[11], Node(5, 5)],
                                 save_image=False,
                                 variable_name=MagneticVolumeIntegral.wTorque)
 

@@ -7,7 +7,6 @@ import time
 
 import numpy as np
 import machine_model_synrm as model
-import matplotlib.pyplot as plt
 
 from multiprocessing import Pool
 
@@ -73,11 +72,11 @@ def execute_model(counter):
     return torque
 
 
-def max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bg):
+def max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, ang_m, mh):
 
-    resol = 13
-    a = 41
-    b = 47
+    resol = 51
+    a = 0
+    b = 50
     for counter, alpha in zip(range(0, resol), np.linspace(a, b, resol)):
         JUp = J0 * math.cos(math.radians(alpha))
         JUn = -JUp
@@ -100,15 +99,38 @@ def max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bg):
                                              bd=bd,
                                              bw=bw,
                                              bh=bh,
-                                             bg=bg,
-                                             ia=0
+                                             bg=mh + bgp,
+                                             ia=0,
+                                             ang_m=ang_m,
+                                             mh=mh
                                              )
         model.problem_definition(variables)
 
-    with Pool(8) as p:
+    with Pool(10) as p:
         res = p.map(execute_model, list(range(0, resol)))
 
-    ind = list(res).index((max(list(res))))
-    torque_ang = a + (ind) * ((b - a) / (resol - 1))
+    res = list(res)
+
+    for i in range(len(res)):
+        if res[i] > 3000 or res[i] < -3000:
+            res[i] = 0
+
+    corr = sum(i < 0 for i in res)
+
+    torque_ang = 0
+    j = 0
+
+    while torque_ang >= 50 or torque_ang <= 40:
+
+        ind = res.index((max(res)))
+        print(ind)
+        print(j)
+        torque_ang = corr + a + (ind) * ((b - a) / (resol - 1))
+        if torque_ang >= 50 or torque_ang <= 40:
+            res[ind] = 0
+            j = j + 1
+            if j > 10:
+                torque_ang = 0
+                break
 
     return torque_ang

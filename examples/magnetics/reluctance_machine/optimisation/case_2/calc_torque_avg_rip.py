@@ -8,7 +8,6 @@ import time
 import numpy as np
 import machine_model_synrm as model
 import calc_max_torque_angle as maxang
-import matplotlib.pyplot as plt
 
 from multiprocessing import Pool
 
@@ -73,42 +72,50 @@ def execute_model(counter):
     return torque
 
 
-def torque_avg_rip(J0, ang_co, deg_co, bd, bw, bh, bg):
-    initial = 90 + maxang.max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bg)
+def torque_avg_rip(J0, ang_co, deg_co, bd, bw, bh, bgp, ang_m, mh):
+    initial = 90 + maxang.max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, ang_m, mh)
 
-    resol = 16
-    e = 15
-    for counter, ia, alpha in zip(range(0, resol), np.linspace(0, e, resol), np.linspace(0, 4 * e, resol)):
-        JUp = J0 * math.cos(math.radians(initial + alpha))
-        JUn = -JUp
-        JVp = J0 * math.cos(math.radians(initial + alpha + 120))
-        JVn = -JVp
-        JWp = J0 * math.cos(math.radians(initial + alpha + 240))
-        JWn = -JWp
+    if initial == 90:
 
-        variables = model.VariableParameters(fold='avg_rip',
-                                             out='avg_rip',
-                                             counter=counter,
-                                             JAp=JUp,
-                                             JAn=JUn,
-                                             JBp=JVp,
-                                             JBn=JVn,
-                                             JCp=JWp,
-                                             JCn=JWn,
-                                             ang_co=ang_co,
-                                             deg_co=deg_co,
-                                             bd=bd,
-                                             bw=bw,
-                                             bh=bh,
-                                             bg=bg,
-                                             ia=ia
-                                             )
-        model.problem_definition(variables)
+        torque_avg = 0
+        torque_ripple = 0
 
-    with Pool(8) as p:
-        res = p.map(execute_model, list(range(0, resol)))
+    else:
+        resol = 16
+        e = 15
+        for counter, ia, alpha in zip(range(0, resol), np.linspace(0, e, resol), np.linspace(0, 4 * e, resol)):
+            JUp = J0 * math.cos(math.radians(initial + alpha))
+            JUn = -JUp
+            JVp = J0 * math.cos(math.radians(initial + alpha + 120))
+            JVn = -JVp
+            JWp = J0 * math.cos(math.radians(initial + alpha + 240))
+            JWn = -JWp
 
-    torque_avg = -1 * np.average(list(res))
-    torque_ripple = -1 * (np.max(list(res)) - np.min(list(res))) / torque_avg
+            variables = model.VariableParameters(fold='avg_rip',
+                                                 out='avg_rip',
+                                                 counter=counter,
+                                                 JAp=JUp,
+                                                 JAn=JUn,
+                                                 JBp=JVp,
+                                                 JBn=JVn,
+                                                 JCp=JWp,
+                                                 JCn=JWn,
+                                                 ang_co=ang_co,
+                                                 deg_co=deg_co,
+                                                 bd=bd,
+                                                 bw=bw,
+                                                 bh=bh,
+                                                 bg=bgp + mh,
+                                                 ia=ia,
+                                                 ang_m=ang_m,
+                                                 mh=mh
+                                                 )
+            model.problem_definition(variables)
+
+        with Pool(8) as p:
+            res = p.map(execute_model, list(range(0, resol)))
+
+        torque_avg = -1 * np.average(list(res))
+        torque_ripple = -1 * (np.max(list(res)) - np.min(list(res))) / torque_avg
 
     return torque_avg, torque_ripple

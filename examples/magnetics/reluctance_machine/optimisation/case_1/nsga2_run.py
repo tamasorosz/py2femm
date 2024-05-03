@@ -42,7 +42,12 @@ if __name__ == '__main__':
             for i in range(len(x)):
                 g = (math.tan(math.radians(x[i][0] / 2)) * (22 - x[i][4]) + x[i][2] + x[i][3]) - 8
                 if g > 0:
-                    x[i][3] = 8 - (math.tan(math.radians(x[i][0] / 2)) * (22 - x[i][4])) - x[i][2]
+                    temp = 8 - (math.tan(math.radians(x[i][0] / 2)) * (22 - x[i][4])) - x[i][2]
+                    if temp < 1:
+                        x[i][3] = 1
+                        x[i][2] = x[i][2] - (1 - temp)
+                    else:
+                        x[i][3] = temp
                 else:
                     x[i][3] = x[i][3]
             return x
@@ -58,13 +63,7 @@ if __name__ == '__main__':
         repair=MyRepair()
     )
 
-    termination = DefaultMultiObjectiveTermination(xtol=1e-8,
-                                                   cvtol=1e-6,
-                                                   ftol=0.0025,
-                                                   period=30,
-                                                   n_max_gen=100,
-                                                   n_max_evals=5000
-                                                   )
+    termination = get_termination("n_gen", 100)
 
     res = minimize(problem,
                    algorithm,
@@ -81,7 +80,7 @@ if __name__ == '__main__':
                        'RIP': F[:, 1]})
     current_file_path = os.path.abspath(__file__)
     folder_path = os.path.dirname(current_file_path)
-    file_path = os.path.join(folder_path, f'results/nsga2_cost_p50o25g100.csv')
+    file_path = os.path.join(folder_path, f'results/nsga2_cont_p50o25g100.csv')
     df.to_csv(file_path, encoding='utf-8', index=False)
 
     plt.figure(figsize=(7, 5))
