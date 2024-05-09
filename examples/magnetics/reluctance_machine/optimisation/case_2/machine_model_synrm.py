@@ -83,11 +83,11 @@ def rotor_geometry(femm_problem: FemmProblem, var: VariableParameters):
     rotor_geo.add_sector(co_arcr)
     rotor_geo.add_sector(co_arcl)
 
-    rot_arc_l = CircleArc(co_e, n0, co_l)
-    rot_arc_r = CircleArc(co_r, n0, co_s)
-
-    rotor_geo.add_arc(rot_arc_l)
-    rotor_geo.add_arc(rot_arc_r)
+    # rot_arc_l = CircleArc(co_e, n0, co_l)
+    # rot_arc_r = CircleArc(co_r, n0, co_s)
+    #
+    # rotor_geo.add_arc(rot_arc_l)
+    # rotor_geo.add_arc(rot_arc_r)
 
     # define sliding band nodes, lines and arc
     sb_l = Node(0.00, 22.10)
@@ -288,6 +288,14 @@ def rotor_geometry(femm_problem: FemmProblem, var: VariableParameters):
 
     lab_mag_l = Line(lm_ll.selection_point(), lm_lr.selection_point()).selection_point()
 
+    rot_arc_ll = CircleArc(nm_llo, n0, co_l)
+    rot_arc_lr = CircleArc(co_e, n0, nm_rlo)
+    rot_arc_lc = CircleArc(nm_rlo, n0, nm_llo)
+
+    rotor_geo.add_arc(rot_arc_ll)
+    rotor_geo.add_arc(rot_arc_lr)
+    rotor_geo.add_arc(rot_arc_lc)
+
     # RIGHT ROTOR MAGNET------------------------------------------------------------------------------------------------
     nmbase_ro = Node(22, 0).rotate_about(n0, 22.5, True)
     nmbase_ru = Node(22 - var.mh, 0).rotate_about(n0, 22.5, True)
@@ -307,6 +315,14 @@ def rotor_geometry(femm_problem: FemmProblem, var: VariableParameters):
 
     rotor_geo.add_line(lm_rl)
     rotor_geo.add_line(lm_rr)
+
+    rot_arc_rl = CircleArc(co_r, n0, nm_rro)
+    rot_arc_rr = CircleArc(nm_lro, n0, co_s)
+    rot_arc_rc = CircleArc(nm_rro, n0, nm_lro)
+
+    rotor_geo.add_arc(rot_arc_rl)
+    rotor_geo.add_arc(rot_arc_rr)
+    rotor_geo.add_arc(rot_arc_rc)
 
     am_ru = CircleArc(nm_rru, n0, nm_lru)
 
@@ -445,16 +461,22 @@ def add_materials(femm_problem: FemmProblem, var: VariableParameters, rot: rotor
                                       38965.51724, 40344.82759, 41724.13793, 43103.44828, 44482.75862, 45862.06897,
                                       47241.37931, 48620.68966, 50000])
 
-    ferrite_left = MagneticMaterial(material_name="Y30", H_c=200106)
-    ferrite_right = MagneticMaterial(material_name="Y30", H_c=200106)
+    ferrite_left = MagneticMaterial(material_name="ml", H_c=200106)
+    ferrite_right = MagneticMaterial(material_name="mr", H_c=200106)
 
-    ferrite_left.remanence_angle = 67.5
-    ferrite_right.remanence_angle = 202.5
+    ferrite_left.remanence_angle = 247.5
+    ferrite_right.remanence_angle = 22.5
 
     femm_problem.add_material(ferrite_left)
     femm_problem.add_material(ferrite_right)
 
-    femm_problem.add_bh_curve(material_name="Y30",
+    femm_problem.add_bh_curve(material_name="ml",
+                              data_b=[0.000000, 0.066000, 0.131390, 0.144000, 0.153280, 0.162400, 0.171530,
+                                      0.211680, 0.273720, 0.386860],
+                              data_h=[0.000000, 1160.000000, 2323.660000, 3490.000000, 6000.000000, 11630.000000,
+                                      18613.200000, 51192.200000, 102376.000000, 200106.000000])
+
+    femm_problem.add_bh_curve(material_name="mr",
                               data_b=[0.000000, 0.066000, 0.131390, 0.144000, 0.153280, 0.162400, 0.171530,
                                       0.211680, 0.273720, 0.386860],
                               data_h=[0.000000, 1160.000000, 2323.660000, 3490.000000, 6000.000000, 11630.000000,

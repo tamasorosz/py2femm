@@ -28,8 +28,8 @@ def execute_model(counter):
 
         with open(os.path.join(folder_path, f'temp_ang/ang{counter}.csv'), 'r') as file:
             csvfile = [i for i in csv.reader(file)]
-            number = re.findall(r"[-+]?\d*\.\d+|\d+", csvfile[0][0])
-            torque = float(number[1]) * 4 * -1000
+            number = csvfile[0][0].replace('wTorque_0 = ', '')
+            torque = float(number) * 4 * -1000
 
         del_fem = pathlib.Path(os.path.join(folder_path, f'temp_ang/ang{counter}.lua'))
         del_ans = pathlib.Path(os.path.join(folder_path, f'temp_ang/ang{counter}.fem'))
@@ -73,10 +73,9 @@ def execute_model(counter):
 
 
 def max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, ang_m, mh):
-
-    resol = 51
-    a = 0
-    b = 50
+    resol = 8
+    a = 40
+    b = 47
     for counter, alpha in zip(range(0, resol), np.linspace(a, b, resol)):
         JUp = J0 * math.cos(math.radians(alpha))
         JUn = -JUp
@@ -106,31 +105,12 @@ def max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, ang_m, mh):
                                              )
         model.problem_definition(variables)
 
-    with Pool(10) as p:
+    with Pool(8) as p:
         res = p.map(execute_model, list(range(0, resol)))
 
     res = list(res)
 
-    for i in range(len(res)):
-        if res[i] > 3000 or res[i] < -3000:
-            res[i] = 0
-
-    corr = sum(i < 0 for i in res)
-
-    torque_ang = 0
-    j = 0
-
-    while torque_ang >= 50 or torque_ang <= 40:
-
-        ind = res.index((max(res)))
-        print(ind)
-        print(j)
-        torque_ang = corr + a + (ind) * ((b - a) / (resol - 1))
-        if torque_ang >= 50 or torque_ang <= 40:
-            res[ind] = 0
-            j = j + 1
-            if j > 10:
-                torque_ang = 0
-                break
+    ind = res.index((max(res)))
+    torque_ang = a + ind * ((b - a) / (resol - 1))
 
     return torque_ang

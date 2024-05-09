@@ -29,8 +29,8 @@ def execute_model(counter):
 
         with open(os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.csv'), 'r') as file:
             csvfile = [i for i in csv.reader(file)]
-            number = re.findall(r"[-+]?\d*\.\d+|\d+", csvfile[0][0])
-            torque = float(number[1]) * 4 * 1000
+            number = csvfile[0][0].replace('wTorque_0 = ', '')
+            torque = float(number) * 4 * -1000
 
         del_fem = pathlib.Path(os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.lua'))
         del_ans = pathlib.Path(os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.fem'))
@@ -73,49 +73,43 @@ def execute_model(counter):
 
 
 def torque_avg_rip(J0, ang_co, deg_co, bd, bw, bh, bgp, ang_m, mh):
-    initial = 90 + maxang.max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, ang_m, mh)
+    initial = maxang.max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, ang_m, mh)
 
-    if initial == 90:
+    resol = 16
+    e = 15
+    for counter, ia, alpha in zip(range(0, resol), np.linspace(0, e, resol), np.linspace(0, 4 * e, resol)):
+        JUp = J0 * math.cos(math.radians(initial + alpha))
+        JUn = -JUp
+        JVp = J0 * math.cos(math.radians(initial + alpha + 120))
+        JVn = -JVp
+        JWp = J0 * math.cos(math.radians(initial + alpha + 240))
+        JWn = -JWp
 
-        torque_avg = 0
-        torque_ripple = 0
+        variables = model.VariableParameters(fold='avg_rip',
+                                             out='avg_rip',
+                                             counter=counter,
+                                             JAp=JUp,
+                                             JAn=JUn,
+                                             JBp=JVp,
+                                             JBn=JVn,
+                                             JCp=JWp,
+                                             JCn=JWn,
+                                             ang_co=ang_co,
+                                             deg_co=deg_co,
+                                             bd=bd,
+                                             bw=bw,
+                                             bh=bh,
+                                             bg=bgp + mh,
+                                             ia=ia,
+                                             ang_m=ang_m,
+                                             mh=mh
+                                             )
+        model.problem_definition(variables)
 
-    else:
-        resol = 16
-        e = 15
-        for counter, ia, alpha in zip(range(0, resol), np.linspace(0, e, resol), np.linspace(0, 4 * e, resol)):
-            JUp = J0 * math.cos(math.radians(initial + alpha))
-            JUn = -JUp
-            JVp = J0 * math.cos(math.radians(initial + alpha + 120))
-            JVn = -JVp
-            JWp = J0 * math.cos(math.radians(initial + alpha + 240))
-            JWn = -JWp
+    with Pool(8) as p:
+        res = p.map(execute_model, list(range(0, resol)))
 
-            variables = model.VariableParameters(fold='avg_rip',
-                                                 out='avg_rip',
-                                                 counter=counter,
-                                                 JAp=JUp,
-                                                 JAn=JUn,
-                                                 JBp=JVp,
-                                                 JBn=JVn,
-                                                 JCp=JWp,
-                                                 JCn=JWn,
-                                                 ang_co=ang_co,
-                                                 deg_co=deg_co,
-                                                 bd=bd,
-                                                 bw=bw,
-                                                 bh=bh,
-                                                 bg=bgp + mh,
-                                                 ia=ia,
-                                                 ang_m=ang_m,
-                                                 mh=mh
-                                                 )
-            model.problem_definition(variables)
-
-        with Pool(8) as p:
-            res = p.map(execute_model, list(range(0, resol)))
-
-        torque_avg = -1 * np.average(list(res))
-        torque_ripple = -1 * (np.max(list(res)) - np.min(list(res))) / torque_avg
+    torque_avg = -1 * np.average(list(res))
+    torque_ripple = -1 * (np.max(list(res)) - np.min(list(res))) / torque_avg
 
     return torque_avg, torque_ripple
