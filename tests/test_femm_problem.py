@@ -729,7 +729,7 @@ class FemmTester(TestCase):
         self.assertEqual("hi_analyze(0)", writer.analyze(0))
 
         writer.field = FemmFields.CURRENT_FLOW
-        self.assertEqual("ci_analyze(1)", writer.analyze())
+        self.assertEqual("ci_analyze(0)", writer.analyze())
 
         writer.field = FemmFields.MAGNETIC
         self.assertEqual("mi_analyze(2)", writer.analyze(2))
@@ -783,7 +783,7 @@ class FemmTester(TestCase):
     def test_get_point_values(self):
         fmw = FemmProblem()
         fmw.field = FemmFields.MAGNETIC
-        self.assertIn("write(file_out, \"Node x:0.01, y:0, Ph = \", Ph", fmw.get_point_values(Node(0.01, 0)))
+        self.assertIn("write(file_out, \"Point x:0.01, y:0, Ph = \", Ph", fmw.get_point_values(Node(0.01, 0)))
 
     def test_create_geometry(self):
         """create basic objects: nodes, lines and a circle arc to test the basic functionality of the command."""
@@ -816,7 +816,7 @@ class FemmTester(TestCase):
         fmw = FemmProblem()
         fmw.field = FemmFields.MAGNETIC
         self.assertEqual(
-            'mo_numnodes',
-            fmw.nr_nodes(),
+            'node_nr = mo_numnodes',
+            fmw.get_nr_nodes(),
         )
 
