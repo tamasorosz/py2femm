@@ -104,10 +104,10 @@ class FemmProblem:
     def close(self):
 
         cmd_list = []
-        # cmd_list.append("closefile(file_out)")
-        # cmd_list.append(f"{self.field.output_to_string()}_close()")
-        # cmd_list.append(f"{self.field.input_to_string()}_close()")
-        # cmd_list.append("quit()")
+        cmd_list.append("closefile(file_out)")
+        cmd_list.append(f"{self.field.output_to_string()}_close()")
+        cmd_list.append(f"{self.field.input_to_string()}_close()")
+        cmd_list.append("quit()")
         self.lua_script.extend(cmd_list)
         return cmd_list
 
@@ -124,6 +124,27 @@ class FemmProblem:
         cmd = cmd.substitute(field=self.field.input_to_string(), flag=flag)
         self.lua_script.append(cmd)
         return cmd
+
+    def openFem(self, filename):
+        """
+        opens an existing fem file
+        """
+        filename = str(Path(filename).resolve().as_posix())
+        cmd = Template("open($filename)")
+        cmd = cmd.substitute(filename='"' + filename + '"')
+        self.lua_script.append(cmd)
+        return cmd
+
+    def load_specific_solution(self, filename=""):
+        """
+        Load an already existing solution for the specified .fem file
+        """
+        filename = str(Path(filename).resolve().as_posix())
+        cmd = Template("${field}_loadsolution($filename)")
+        cmd = cmd.substitute(field=self.field.input_to_string(), filename='"' + filename + '"')
+        self.lua_script.append(cmd)
+        return cmd
+
 
     def add_node(self, node: Node):
         """Adds a node to the given point (x,y)"""
