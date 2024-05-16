@@ -94,13 +94,13 @@ def solenoid(n, w, h, radius, gap):
 
     z0 = -(h + gap) * n / 2
 
-    problem.get_integral_values([Node(radius, z0)], save_image=True, variable_name=MagneticVolumeIntegral.ResistiveLoss)
+    problem.get_integral_values([Node(radius, z0)], save_image=True, variable_name=MagneticVolumeIntegral.A)
 
     problem.write("solenoid.lua")
 
 
 if __name__ == '__main__':
-    solenoid(10, 2, 2, 6, 1)
+    solenoid(2, 2, 2, 6, 1)
 
     femm = Executor()
     current_dir = os.getcwd()

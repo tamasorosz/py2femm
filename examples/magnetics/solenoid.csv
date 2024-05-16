@@ -1,0 +1,1804 @@
+
+ Nodal results 
+Node x:0.0, y:0.0, Vector potential = 0
+Node x:0.0, y:0.0, Bx = 0
+Node x:0.0, y:0.0, By = 0.001531495551884477
+Node x:0.0, y:0.0, Sigma = 0
+Node x:0.0, y:0.0, E = 0.9332362928886717
+Node x:0.0, y:0.0, Hx = 0
+Node x:0.0, y:0.0, Hy = 1218.725437028324
+Node x:0.0, y:0.0, Je = 0
+Node x:0.0, y:0.0, Js = 0
+Node x:0.0, y:0.0, Mux = 1
+Node x:0.0, y:0.0, Muy = 1
+Node x:0.0, y:0.0, Pe = 0
+Node x:0.0, y:0.0, Ph = 0
+
+ Nodal results 
+Node x:0.0, y:0.5, Vector potential = 0
+Node x:0.0, y:0.5, Bx = 0
+Node x:0.0, y:0.5, By = 0.001489584387240336
+Node x:0.0, y:0.5, Sigma = 0
+Node x:0.0, y:0.5, E = 0.8828569977773639
+Node x:0.0, y:0.5, Hx = 0
+Node x:0.0, y:0.5, Hy = 1185.373591909057
+Node x:0.0, y:0.5, Je = 0
+Node x:0.0, y:0.5, Js = 0
+Node x:0.0, y:0.5, Mux = 1
+Node x:0.0, y:0.5, Muy = 1
+Node x:0.0, y:0.5, Pe = 0
+Node x:0.0, y:0.5, Ph = 0
+
+ Nodal results 
+Node x:0.0, y:1.0, Vector potential = 0
+Node x:0.0, y:1.0, Bx = 0
+Node x:0.0, y:1.0, By = 0.001429728952650029
+Node x:0.0, y:1.0, Sigma = 0
+Node x:0.0, y:1.0, E = 0.8133314465952469
+Node x:0.0, y:1.0, Hx = 0
+Node x:0.0, y:1.0, Hy = 1137.742150479253
+Node x:0.0, y:1.0, Je = 0
+Node x:0.0, y:1.0, Js = 0
+Node x:0.0, y:1.0, Mux = 1
+Node x:0.0, y:1.0, Muy = 1
+Node x:0.0, y:1.0, Pe = 0
+Node x:0.0, y:1.0, Ph = 0
+
+ Nodal results 
+Node x:0.0, y:1.5, Vector potential = 0
+Node x:0.0, y:1.5, Bx = 0
+Node x:0.0, y:1.5, By = 0.001351797119824893
+Node x:0.0, y:1.5, Sigma = 0
+Node x:0.0, y:1.5, E = 0.7270816328935966
+Node x:0.0, y:1.5, Hx = 0
+Node x:0.0, y:1.5, Hy = 1075.725968387594
+Node x:0.0, y:1.5, Je = 0
+Node x:0.0, y:1.5, Js = 0
+Node x:0.0, y:1.5, Mux = 1
+Node x:0.0, y:1.5, Muy = 1
+Node x:0.0, y:1.5, Pe = 0
+Node x:0.0, y:1.5, Ph = 0
+
+ Nodal results 
+Node x:0.0, y:2.0, Vector potential = 0
+Node x:0.0, y:2.0, Bx = 0
+Node x:0.0, y:2.0, By = 0.001229143689006524
+Node x:0.0, y:2.0, Sigma = 0
+Node x:0.0, y:2.0, E = 0.6011259155838649
+Node x:0.0, y:2.0, Hx = 0
+Node x:0.0, y:2.0, Hy = 978.1214693779781
+Node x:0.0, y:2.0, Je = 0
+Node x:0.0, y:2.0, Js = 0
+Node x:0.0, y:2.0, Mux = 1
+Node x:0.0, y:2.0, Muy = 1
+Node x:0.0, y:2.0, Pe = 0
+Node x:0.0, y:2.0, Ph = 0
+
+ Nodal results 
+Node x:0.0, y:2.5, Vector potential = -6.617444900424221e-024
+Node x:0.0, y:2.5, Bx = 0
+Node x:0.0, y:2.5, By = 0.00109143687603874
+Node x:0.0, y:2.5, Sigma = 0
+Node x:0.0, y:2.5, E = 0.4739771294887719
+Node x:0.0, y:2.5, Hx = 0
+Node x:0.0, y:2.5, Hy = 868.5378694717082
+Node x:0.0, y:2.5, Je = 0
+Node x:0.0, y:2.5, Js = 0
+Node x:0.0, y:2.5, Mux = 1
+Node x:0.0, y:2.5, Muy = 1
+Node x:0.0, y:2.5, Pe = 0
+Node x:0.0, y:2.5, Ph = 0
+
+ Nodal results 
+Node x:0.0, y:3.0, Vector potential = 0
+Node x:0.0, y:3.0, Bx = 0
+Node x:0.0, y:3.0, By = 0.0009398569751685555
+Node x:0.0, y:3.0, Sigma = 0
+Node x:0.0, y:3.0, E = 0.3514662908173478
+Node x:0.0, y:3.0, Hx = 0
+Node x:0.0, y:3.0, Hy = 747.9144169873617
+Node x:0.0, y:3.0, Je = 0
+Node x:0.0, y:3.0, Js = 0
+Node x:0.0, y:3.0, Mux = 1
+Node x:0.0, y:3.0, Muy = 1
+Node x:0.0, y:3.0, Pe = 0
+Node x:0.0, y:3.0, Ph = 0
+
+ Nodal results 
+Node x:0.0, y:3.5, Vector potential = 0
+Node x:0.0, y:3.5, Bx = 0
+Node x:0.0, y:3.5, By = 0.0007890925490487454
+Node x:0.0, y:3.5, Sigma = 0
+Node x:0.0, y:3.5, E = 0.2477513476535325
+Node x:0.0, y:3.5, Hx = 0
+Node x:0.0, y:3.5, Hy = 627.9398986904586
+Node x:0.0, y:3.5, Je = 0
+Node x:0.0, y:3.5, Js = 0
+Node x:0.0, y:3.5, Mux = 1
+Node x:0.0, y:3.5, Muy = 1
+Node x:0.0, y:3.5, Pe = 0
+Node x:0.0, y:3.5, Ph = 0
+
+ Nodal results 
+Node x:0.0, y:4.0, Vector potential = 0
+Node x:0.0, y:4.0, Bx = 0
+Node x:0.0, y:4.0, By = 0.0006412007551950687
+Node x:0.0, y:4.0, Sigma = 0
+Node x:0.0, y:4.0, E = 0.1635867750044441
+Node x:0.0, y:4.0, Hx = 0
+Node x:0.0, y:4.0, Hy = 510.2513485177573
+Node x:0.0, y:4.0, Je = 0
+Node x:0.0, y:4.0, Js = 0
+Node x:0.0, y:4.0, Mux = 1
+Node x:0.0, y:4.0, Muy = 1
+Node x:0.0, y:4.0, Pe = 0
+Node x:0.0, y:4.0, Ph = 0
+
+ Nodal results 
+Node x:0.0, y:4.5, Vector potential = -1.147713099917326e-023
+Node x:0.0, y:4.5, Bx = 0
+Node x:0.0, y:4.5, By = 0.0004951975283899833
+Node x:0.0, y:4.5, Sigma = 0
+Node x:0.0, y:4.5, E = 0.09757017346096053
+Node x:0.0, y:4.5, Hx = 0
+Node x:0.0, y:4.5, Hy = 394.0656722507751
+Node x:0.0, y:4.5, Je = 0
+Node x:0.0, y:4.5, Js = 0
+Node x:0.0, y:4.5, Mux = 1
+Node x:0.0, y:4.5, Muy = 1
+Node x:0.0, y:4.5, Pe = 0
+Node x:0.0, y:4.5, Ph = 0
+
+ Nodal results 
+Node x:0.0, y:5.0, Vector potential = -6.617444900424221e-024
+Node x:0.0, y:5.0, Bx = 0
+Node x:0.0, y:5.0, By = 0.0003341946331623086
+Node x:0.0, y:5.0, Sigma = 0
+Node x:0.0, y:5.0, E = 0.04443846845757919
+Node x:0.0, y:5.0, Hx = 0
+Node x:0.0, y:5.0, Hy = 265.9436391128203
+Node x:0.0, y:5.0, Je = 0
+Node x:0.0, y:5.0, Js = 0
+Node x:0.0, y:5.0, Mux = 1
+Node x:0.0, y:5.0, Muy = 1
+Node x:0.0, y:5.0, Pe = 0
+Node x:0.0, y:5.0, Ph = 0
+
+ Nodal results 
+Node x:0.5, y:0.0, Vector potential = 1.216293730270581e-007
+Node x:0.5, y:0.0, Bx = 1.30496842888041e-005
+Node x:0.5, y:0.0, By = 0.001546876042784637
+Node x:0.5, y:0.0, Sigma = 0
+Node x:0.5, y:0.0, E = 0.9521427703503747
+Node x:0.5, y:0.0, Hx = 10.38460880175908
+Node x:0.5, y:0.0, Hy = 1230.964842798026
+Node x:0.5, y:0.0, Je = 0
+Node x:0.5, y:0.0, Js = 0
+Node x:0.5, y:0.0, Mux = 1
+Node x:0.5, y:0.0, Muy = 1
+Node x:0.5, y:0.0, Pe = 0
+Node x:0.5, y:0.0, Ph = 0
+
+ Nodal results 
+Node x:0.5, y:0.5, Vector potential = 1.172606626471644e-007
+Node x:0.5, y:0.5, Bx = 2.955718399919672e-005
+Node x:0.5, y:0.5, By = 0.001497742836107569
+Node x:0.5, y:0.5, Sigma = 0
+Node x:0.5, y:0.5, E = 0.8929018963014029
+Node x:0.5, y:0.5, Hx = 23.52085968674417
+Node x:0.5, y:0.5, Hy = 1191.86587923497
+Node x:0.5, y:0.5, Je = 0
+Node x:0.5, y:0.5, Js = 0
+Node x:0.5, y:0.5, Mux = 1
+Node x:0.5, y:0.5, Muy = 1
+Node x:0.5, y:0.5, Pe = 0
+Node x:0.5, y:0.5, Ph = 0
+
+ Nodal results 
+Node x:0.5, y:1.0, Vector potential = 1.130110809911902e-007
+Node x:0.5, y:1.0, Bx = 3.592363854640183e-005
+Node x:0.5, y:1.0, By = 0.001440510670581489
+Node x:0.5, y:1.0, Sigma = 0
+Node x:0.5, y:1.0, E = 0.8261579908732575
+Node x:0.5, y:1.0, Hx = 28.58712324253201
+Node x:0.5, y:1.0, Hy = 1146.321968998324
+Node x:0.5, y:1.0, Je = 0
+Node x:0.5, y:1.0, Js = 0
+Node x:0.5, y:1.0, Mux = 1
+Node x:0.5, y:1.0, Muy = 1
+Node x:0.5, y:1.0, Pe = 0
+Node x:0.5, y:1.0, Ph = 0
+
+ Nodal results 
+Node x:0.5, y:1.5, Vector potential = 1.058491747745729e-007
+Node x:0.5, y:1.5, Bx = 4.636470846722254e-005
+Node x:0.5, y:1.5, By = 0.00135122869593858
+Node x:0.5, y:1.5, Sigma = 0
+Node x:0.5, y:1.5, E = 0.7273256260763023
+Node x:0.5, y:1.5, Hx = 36.8958626878656
+Node x:0.5, y:1.5, Hy = 1075.273631031203
+Node x:0.5, y:1.5, Je = 0
+Node x:0.5, y:1.5, Js = 0
+Node x:0.5, y:1.5, Mux = 1
+Node x:0.5, y:1.5, Muy = 1
+Node x:0.5, y:1.5, Pe = 0
+Node x:0.5, y:1.5, Ph = 0
+
+ Nodal results 
+Node x:0.5, y:2.0, Vector potential = 1.00033957988732e-007
+Node x:0.5, y:2.0, Bx = 5.456562021829378e-005
+Node x:0.5, y:2.0, By = 0.001244269353471713
+Node x:0.5, y:2.0, Sigma = 0
+Node x:0.5, y:2.0, E = 0.6171963562519143
+Node x:0.5, y:2.0, Hx = 43.4219409030826
+Node x:0.5, y:2.0, Hy = 990.1580907138996
+Node x:0.5, y:2.0, Je = 0
+Node x:0.5, y:2.0, Js = 0
+Node x:0.5, y:2.0, Mux = 1
+Node x:0.5, y:2.0, Muy = 1
+Node x:0.5, y:2.0, Pe = 0
+Node x:0.5, y:2.0, Ph = 0
+
+ Nodal results 
+Node x:0.5, y:2.5, Vector potential = 8.454645724682516e-008
+Node x:0.5, y:2.5, Bx = 7.256884706913975e-005
+Node x:0.5, y:2.5, By = 0.001104751052118768
+Node x:0.5, y:2.5, Sigma = 0
+Node x:0.5, y:2.5, E = 0.4877068973765005
+Node x:0.5, y:2.5, Hx = 57.74845362766697
+Node x:0.5, y:2.5, Hy = 879.1329541533697
+Node x:0.5, y:2.5, Je = 0
+Node x:0.5, y:2.5, Js = 0
+Node x:0.5, y:2.5, Mux = 1
+Node x:0.5, y:2.5, Muy = 1
+Node x:0.5, y:2.5, Pe = 0
+Node x:0.5, y:2.5, Ph = 0
+
+ Nodal results 
+Node x:0.5, y:3.0, Vector potential = 7.33875565608522e-008
+Node x:0.5, y:3.0, Bx = 7.911430244653231e-005
+Node x:0.5, y:3.0, By = 0.0009502599847303101
+Node x:0.5, y:3.0, Sigma = 0
+Node x:0.5, y:3.0, E = 0.3617803180149236
+Node x:0.5, y:3.0, Hx = 62.95716151816423
+Node x:0.5, y:3.0, Hy = 756.1928689612892
+Node x:0.5, y:3.0, Je = 0
+Node x:0.5, y:3.0, Js = 0
+Node x:0.5, y:3.0, Mux = 1
+Node x:0.5, y:3.0, Muy = 1
+Node x:0.5, y:3.0, Pe = 0
+Node x:0.5, y:3.0, Ph = 0
+
+ Nodal results 
+Node x:0.5, y:3.5, Vector potential = 6.189173676935232e-008
+Node x:0.5, y:3.5, Bx = 8.035412823407611e-005
+Node x:0.5, y:3.5, By = 0.0007953804787958685
+Node x:0.5, y:3.5, Sigma = 0
+Node x:0.5, y:3.5, E = 0.2542845948071673
+Node x:0.5, y:3.5, Hx = 63.94378353146622
+Node x:0.5, y:3.5, Hy = 632.9436741958045
+Node x:0.5, y:3.5, Je = 0
+Node x:0.5, y:3.5, Js = 0
+Node x:0.5, y:3.5, Mux = 1
+Node x:0.5, y:3.5, Muy = 1
+Node x:0.5, y:3.5, Pe = 0
+Node x:0.5, y:3.5, Ph = 0
+
+ Nodal results 
+Node x:0.5, y:4.0, Vector potential = 4.867615221255328e-008
+Node x:0.5, y:4.0, Bx = 6.677039495158672e-005
+Node x:0.5, y:4.0, By = 0.0006434762866099819
+Node x:0.5, y:4.0, Sigma = 0
+Node x:0.5, y:4.0, E = 0.1665238237495294
+Node x:0.5, y:4.0, Hx = 53.1341920437158
+Node x:0.5, y:4.0, Hy = 512.062158881979
+Node x:0.5, y:4.0, Je = 0
+Node x:0.5, y:4.0, Js = 0
+Node x:0.5, y:4.0, Mux = 1
+Node x:0.5, y:4.0, Muy = 1
+Node x:0.5, y:4.0, Pe = 0
+Node x:0.5, y:4.0, Ph = 0
+
+ Nodal results 
+Node x:0.5, y:4.5, Vector potential = 4.438596170541305e-008
+Node x:0.5, y:4.5, Bx = 7.341817243482622e-005
+Node x:0.5, y:4.5, By = 0.0004882481341539791
+Node x:0.5, y:4.5, Sigma = 0
+Node x:0.5, y:4.5, E = 0.09699557494745405
+Node x:0.5, y:4.5, Hx = 58.42432527887863
+Node x:0.5, y:4.5, Hy = 388.5355200300031
+Node x:0.5, y:4.5, Je = 0
+Node x:0.5, y:4.5, Js = 0
+Node x:0.5, y:4.5, Mux = 1
+Node x:0.5, y:4.5, Muy = 1
+Node x:0.5, y:4.5, Pe = 0
+Node x:0.5, y:4.5, Ph = 0
+
+ Nodal results 
+Node x:0.5, y:5.0, Vector potential = 2.47535074986319e-008
+Node x:0.5, y:5.0, Bx = 8.808470599403718e-005
+Node x:0.5, y:5.0, By = 0.0003223086623381197
+Node x:0.5, y:5.0, Sigma = 0
+Node x:0.5, y:5.0, E = 0.04442085653620412
+Node x:0.5, y:5.0, Hx = 70.0955818487366
+Node x:0.5, y:5.0, Hy = 256.4850840622418
+Node x:0.5, y:5.0, Je = 0
+Node x:0.5, y:5.0, Js = 0
+Node x:0.5, y:5.0, Mux = 1
+Node x:0.5, y:5.0, Muy = 1
+Node x:0.5, y:5.0, Pe = 0
+Node x:0.5, y:5.0, Ph = 0
+
+ Nodal results 
+Node x:1.0, y:0.0, Vector potential = 4.87842913336531e-007
+Node x:1.0, y:0.0, Bx = 2.530560975111447e-005
+Node x:1.0, y:0.0, By = 0.001564824396305018
+Node x:1.0, y:0.0, Sigma = 0
+Node x:1.0, y:0.0, E = 0.9745517780438087
+Node x:1.0, y:0.0, Hx = 20.13756439922168
+Node x:1.0, y:0.0, Hy = 1245.247688713673
+Node x:1.0, y:0.0, Je = 0
+Node x:1.0, y:0.0, Js = 0
+Node x:1.0, y:0.0, Mux = 1
+Node x:1.0, y:0.0, Muy = 1
+Node x:1.0, y:0.0, Pe = 0
+Node x:1.0, y:0.0, Ph = 0
+
+ Nodal results 
+Node x:1.0, y:0.5, Vector potential = 4.735434738132945e-007
+Node x:1.0, y:0.5, Bx = 5.407674260808734e-005
+Node x:1.0, y:0.5, By = 0.001517668972371233
+Node x:1.0, y:0.5, Sigma = 0
+Node x:1.0, y:0.5, E = 0.9176250942154245
+Node x:1.0, y:0.5, Hx = 43.03290446192606
+Node x:1.0, y:0.5, Hy = 1207.722594650394
+Node x:1.0, y:0.5, Je = 0
+Node x:1.0, y:0.5, Js = 0
+Node x:1.0, y:0.5, Mux = 1
+Node x:1.0, y:0.5, Muy = 1
+Node x:1.0, y:0.5, Pe = 0
+Node x:1.0, y:0.5, Ph = 0
+
+ Nodal results 
+Node x:1.0, y:1.0, Vector potential = 4.5446347550123e-007
+Node x:1.0, y:1.0, Bx = 7.850490674173581e-005
+Node x:1.0, y:1.0, By = 0.001460245811694986
+Node x:1.0, y:1.0, Sigma = 0
+Node x:1.0, y:1.0, E = 0.8508744953422381
+Node x:1.0, y:1.0, Hx = 62.47221982457756
+Node x:1.0, y:1.0, Hy = 1162.02669530247
+Node x:1.0, y:1.0, Je = 0
+Node x:1.0, y:1.0, Js = 0
+Node x:1.0, y:1.0, Mux = 1
+Node x:1.0, y:1.0, Muy = 1
+Node x:1.0, y:1.0, Pe = 0
+Node x:1.0, y:1.0, Ph = 0
+
+ Nodal results 
+Node x:1.0, y:1.5, Vector potential = 4.286769660285915e-007
+Node x:1.0, y:1.5, Bx = 9.570944226021597e-005
+Node x:1.0, y:1.5, By = 0.001365718477453848
+Node x:1.0, y:1.5, Sigma = 0
+Node x:1.0, y:1.5, E = 0.7457790775543671
+Node x:1.0, y:1.5, Hx = 76.16315418140857
+Node x:1.0, y:1.5, Hy = 1086.804232793586
+Node x:1.0, y:1.5, Je = 0
+Node x:1.0, y:1.5, Js = 0
+Node x:1.0, y:1.5, Mux = 1
+Node x:1.0, y:1.5, Muy = 1
+Node x:1.0, y:1.5, Pe = 0
+Node x:1.0, y:1.5, Ph = 0
+
+ Nodal results 
+Node x:1.0, y:2.0, Vector potential = 3.887772578440871e-007
+Node x:1.0, y:2.0, Bx = 0.0001241212651044659
+Node x:1.0, y:2.0, By = 0.001258342311916783
+Node x:1.0, y:2.0, Sigma = 0
+Node x:1.0, y:2.0, E = 0.6361548260339688
+Node x:1.0, y:2.0, Hx = 98.77256442097662
+Node x:1.0, y:2.0, Hy = 1001.356995216198
+Node x:1.0, y:2.0, Je = 0
+Node x:1.0, y:2.0, Js = 0
+Node x:1.0, y:2.0, Mux = 1
+Node x:1.0, y:2.0, Muy = 1
+Node x:1.0, y:2.0, Pe = 0
+Node x:1.0, y:2.0, Ph = 0
+
+ Nodal results 
+Node x:1.0, y:2.5, Vector potential = 3.565573781926805e-007
+Node x:1.0, y:2.5, Bx = 0.0001433149274012328
+Node x:1.0, y:2.5, By = 0.001120030710558225
+Node x:1.0, y:2.5, Sigma = 0
+Node x:1.0, y:2.5, E = 0.5073095486904844
+Node x:1.0, y:2.5, Hx = 114.0463955738116
+Node x:1.0, y:2.5, Hy = 891.2921200003472
+Node x:1.0, y:2.5, Je = 0
+Node x:1.0, y:2.5, Js = 0
+Node x:1.0, y:2.5, Mux = 1
+Node x:1.0, y:2.5, Muy = 1
+Node x:1.0, y:2.5, Pe = 0
+Node x:1.0, y:2.5, Ph = 0
+
+ Nodal results 
+Node x:1.0, y:3.0, Vector potential = 3.004466946213601e-007
+Node x:1.0, y:3.0, Bx = 0.0001584431546866567
+Node x:1.0, y:3.0, By = 0.0009745556289472318
+Node x:1.0, y:3.0, Sigma = 0
+Node x:1.0, y:3.0, E = 0.3878856262864995
+Node x:1.0, y:3.0, Hx = 126.0850563372761
+Node x:1.0, y:3.0, Hy = 775.5267283249146
+Node x:1.0, y:3.0, Je = 0
+Node x:1.0, y:3.0, Js = 0
+Node x:1.0, y:3.0, Mux = 1
+Node x:1.0, y:3.0, Muy = 1
+Node x:1.0, y:3.0, Pe = 0
+Node x:1.0, y:3.0, Ph = 0
+
+ Nodal results 
+Node x:1.0, y:3.5, Vector potential = 2.451575329915336e-007
+Node x:1.0, y:3.5, Bx = 0.0001663940544115958
+Node x:1.0, y:3.5, By = 0.0008093170880864764
+Node x:1.0, y:3.5, Sigma = 0
+Node x:1.0, y:3.5, E = 0.271630191151702
+Node x:1.0, y:3.5, Hx = 132.4121813035363
+Node x:1.0, y:3.5, Hy = 644.0340754885081
+Node x:1.0, y:3.5, Je = 0
+Node x:1.0, y:3.5, Js = 0
+Node x:1.0, y:3.5, Mux = 1
+Node x:1.0, y:3.5, Muy = 1
+Node x:1.0, y:3.5, Pe = 0
+Node x:1.0, y:3.5, Ph = 0
+
+ Nodal results 
+Node x:1.0, y:4.0, Vector potential = 2.01806413244429e-007
+Node x:1.0, y:4.0, Bx = 0.0001380499851043779
+Node x:1.0, y:4.0, By = 0.0006482754418413323
+Node x:1.0, y:4.0, Sigma = 0
+Node x:1.0, y:4.0, E = 0.1747994151867122
+Node x:1.0, y:4.0, Hx = 109.8566876156213
+Node x:1.0, y:4.0, Hy = 515.8812052706528
+Node x:1.0, y:4.0, Je = 0
+Node x:1.0, y:4.0, Js = 0
+Node x:1.0, y:4.0, Mux = 1
+Node x:1.0, y:4.0, Muy = 1
+Node x:1.0, y:4.0, Pe = 0
+Node x:1.0, y:4.0, Ph = 0
+
+ Nodal results 
+Node x:1.0, y:4.5, Vector potential = 1.593227572600457e-007
+Node x:1.0, y:4.5, Bx = 0.000147536057656331
+Node x:1.0, y:4.5, By = 0.0004897062984366372
+Node x:1.0, y:4.5, Sigma = 0
+Node x:1.0, y:4.5, E = 0.1040790356518641
+Node x:1.0, y:4.5, Hx = 117.4054643014798
+Node x:1.0, y:4.5, Hy = 389.6958902971285
+Node x:1.0, y:4.5, Je = 0
+Node x:1.0, y:4.5, Js = 0
+Node x:1.0, y:4.5, Mux = 1
+Node x:1.0, y:4.5, Muy = 1
+Node x:1.0, y:4.5, Pe = 0
+Node x:1.0, y:4.5, Ph = 0
+
+ Nodal results 
+Node x:1.0, y:5.0, Vector potential = 1.070992710230841e-007
+Node x:1.0, y:5.0, Bx = 0.0001614256065902251
+Node x:1.0, y:5.0, By = 0.0003238920754669954
+Node x:1.0, y:5.0, Sigma = 0
+Node x:1.0, y:5.0, E = 0.05210904048289465
+Node x:1.0, y:5.0, Hx = 128.4584161522098
+Node x:1.0, y:5.0, Hy = 257.7451241943276
+Node x:1.0, y:5.0, Je = 0
+Node x:1.0, y:5.0, Js = 0
+Node x:1.0, y:5.0, Mux = 1
+Node x:1.0, y:5.0, Muy = 1
+Node x:1.0, y:5.0, Pe = 0
+Node x:1.0, y:5.0, Ph = 0
+
+ Nodal results 
+Node x:1.5, y:0.0, Vector potential = 1.114717740966649e-006
+Node x:1.5, y:0.0, Bx = 3.081359756447062e-005
+Node x:1.5, y:0.0, By = 0.001608478188532684
+Node x:1.5, y:0.0, Sigma = 0
+Node x:1.5, y:0.0, E = 1.029792785922952
+Node x:1.5, y:0.0, Hx = 24.52068183414943
+Node x:1.5, y:0.0, Hy = 1279.986272802371
+Node x:1.5, y:0.0, Je = 0
+Node x:1.5, y:0.0, Js = 0
+Node x:1.5, y:0.0, Mux = 1
+Node x:1.5, y:0.0, Muy = 1
+Node x:1.5, y:0.0, Pe = 0
+Node x:1.5, y:0.0, Ph = 0
+
+ Nodal results 
+Node x:1.5, y:0.5, Vector potential = 1.08326012242565e-006
+Node x:1.5, y:0.5, Bx = 8.62723487785829e-005
+Node x:1.5, y:0.5, By = 0.001565922177680193
+Node x:1.5, y:0.5, Sigma = 0
+Node x:1.5, y:0.5, E = 0.9786259136365116
+Node x:1.5, y:0.5, Hx = 68.65335380129754
+Node x:1.5, y:0.5, Hy = 1246.12127537514
+Node x:1.5, y:0.5, Je = 0
+Node x:1.5, y:0.5, Js = 0
+Node x:1.5, y:0.5, Mux = 1
+Node x:1.5, y:0.5, Muy = 1
+Node x:1.5, y:0.5, Pe = 0
+Node x:1.5, y:0.5, Ph = 0
+
+ Nodal results 
+Node x:1.5, y:1.0, Vector potential = 1.034869151729543e-006
+Node x:1.5, y:1.0, Bx = 0.0001258974183791714
+Node x:1.5, y:1.0, By = 0.001493167106512857
+Node x:1.5, y:1.0, Sigma = 0
+Node x:1.5, y:1.0, E = 0.8934155440874775
+Node x:1.5, y:1.0, Hx = 100.1859822877678
+Node x:1.5, y:1.0, Hy = 1188.224629318719
+Node x:1.5, y:1.0, Je = 0
+Node x:1.5, y:1.0, Js = 0
+Node x:1.5, y:1.0, Mux = 1
+Node x:1.5, y:1.0, Muy = 1
+Node x:1.5, y:1.0, Pe = 0
+Node x:1.5, y:1.0, Ph = 0
+
+ Nodal results 
+Node x:1.5, y:1.5, Vector potential = 9.688263994179871e-007
+Node x:1.5, y:1.5, Bx = 0.000153370880850741
+Node x:1.5, y:1.5, By = 0.001394299243463277
+Node x:1.5, y:1.5, Sigma = 0
+Node x:1.5, y:1.5, E = 0.7828803828079428
+Node x:1.5, y:1.5, Hx = 122.0486690687677
+Node x:1.5, y:1.5, Hy = 1109.548083732353
+Node x:1.5, y:1.5, Je = 0
+Node x:1.5, y:1.5, Js = 0
+Node x:1.5, y:1.5, Mux = 1
+Node x:1.5, y:1.5, Muy = 1
+Node x:1.5, y:1.5, Pe = 0
+Node x:1.5, y:1.5, Ph = 0
+
+ Nodal results 
+Node x:1.5, y:2.0, Vector potential = 8.839123448130259e-007
+Node x:1.5, y:2.0, Bx = 0.0001930368394802174
+Node x:1.5, y:2.0, By = 0.001273095689789384
+Node x:1.5, y:2.0, Sigma = 0
+Node x:1.5, y:2.0, E = 0.6597115060661338
+Node x:1.5, y:2.0, Hx = 153.6138360105667
+Node x:1.5, y:2.0, Hy = 1013.097360294834
+Node x:1.5, y:2.0, Je = 0
+Node x:1.5, y:2.0, Js = 0
+Node x:1.5, y:2.0, Mux = 1
+Node x:1.5, y:2.0, Muy = 1
+Node x:1.5, y:2.0, Pe = 0
+Node x:1.5, y:2.0, Ph = 0
+
+ Nodal results 
+Node x:1.5, y:2.5, Vector potential = 7.92876978752784e-007
+Node x:1.5, y:2.5, Bx = 0.0002187254709906215
+Node x:1.5, y:2.5, By = 0.001136558283031925
+Node x:1.5, y:2.5, Sigma = 0
+Node x:1.5, y:2.5, E = 0.5330121176188385
+Node x:1.5, y:2.5, Hx = 174.0561994413018
+Node x:1.5, y:2.5, Hy = 904.444344282841
+Node x:1.5, y:2.5, Je = 0
+Node x:1.5, y:2.5, Js = 0
+Node x:1.5, y:2.5, Mux = 1
+Node x:1.5, y:2.5, Muy = 1
+Node x:1.5, y:2.5, Pe = 0
+Node x:1.5, y:2.5, Ph = 0
+
+ Nodal results 
+Node x:1.5, y:3.0, Vector potential = 6.880170003624256e-007
+Node x:1.5, y:3.0, Bx = 0.0002396869174695781
+Node x:1.5, y:3.0, By = 0.0009859140247385351
+Node x:1.5, y:3.0, Sigma = 0
+Node x:1.5, y:3.0, E = 0.409615597922067
+Node x:1.5, y:3.0, Hx = 190.7367885487126
+Node x:1.5, y:3.0, Hy = 784.5654525038152
+Node x:1.5, y:3.0, Je = 0
+Node x:1.5, y:3.0, Js = 0
+Node x:1.5, y:3.0, Mux = 1
+Node x:1.5, y:3.0, Muy = 1
+Node x:1.5, y:3.0, Pe = 0
+Node x:1.5, y:3.0, Ph = 0
+
+ Nodal results 
+Node x:1.5, y:3.5, Vector potential = 5.767003938794478e-007
+Node x:1.5, y:3.5, Bx = 0.0002522082990761859
+Node x:1.5, y:3.5, By = 0.0008181379556150265
+Node x:1.5, y:3.5, Sigma = 0
+Node x:1.5, y:3.5, E = 0.2916350165987108
+Node x:1.5, y:3.5, Hx = 200.7009874338705
+Node x:1.5, y:3.5, Hy = 651.0534988361457
+Node x:1.5, y:3.5, Je = 0
+Node x:1.5, y:3.5, Js = 0
+Node x:1.5, y:3.5, Mux = 1
+Node x:1.5, y:3.5, Muy = 1
+Node x:1.5, y:3.5, Pe = 0
+Node x:1.5, y:3.5, Ph = 0
+
+ Nodal results 
+Node x:1.5, y:4.0, Vector potential = 4.505132242442155e-007
+Node x:1.5, y:4.0, Bx = 0.0002357508167599222
+Node x:1.5, y:4.0, By = 0.0006407322937547915
+Node x:1.5, y:4.0, Sigma = 0
+Node x:1.5, y:4.0, E = 0.1854617909050969
+Node x:1.5, y:4.0, Hx = 187.6045391264663
+Node x:1.5, y:4.0, Hy = 509.8785587484171
+Node x:1.5, y:4.0, Je = 0
+Node x:1.5, y:4.0, Js = 0
+Node x:1.5, y:4.0, Mux = 1
+Node x:1.5, y:4.0, Muy = 1
+Node x:1.5, y:4.0, Pe = 0
+Node x:1.5, y:4.0, Ph = 0
+
+ Nodal results 
+Node x:1.5, y:4.5, Vector potential = 3.457971536653347e-007
+Node x:1.5, y:4.5, Bx = 0.0002303465917993552
+Node x:1.5, y:4.5, By = 0.0004755581943980907
+Node x:1.5, y:4.5, Sigma = 0
+Node x:1.5, y:4.5, E = 0.1110961777196437
+Node x:1.5, y:4.5, Hx = 183.3039935461921
+Node x:1.5, y:4.5, Hy = 378.4371868315631
+Node x:1.5, y:4.5, Je = 0
+Node x:1.5, y:4.5, Js = 0
+Node x:1.5, y:4.5, Mux = 1
+Node x:1.5, y:4.5, Muy = 1
+Node x:1.5, y:4.5, Pe = 0
+Node x:1.5, y:4.5, Ph = 0
+
+ Nodal results 
+Node x:1.5, y:5.0, Vector potential = 2.431716156082227e-007
+Node x:1.5, y:5.0, Bx = 0.0002377961517678678
+Node x:1.5, y:5.0, By = 0.0003112802495418673
+Node x:1.5, y:5.0, Sigma = 0
+Node x:1.5, y:5.0, E = 0.06105279251239037
+Node x:1.5, y:5.0, Hx = 189.2321650104336
+Node x:1.5, y:5.0, Hy = 247.7089520073344
+Node x:1.5, y:5.0, Je = 0
+Node x:1.5, y:5.0, Js = 0
+Node x:1.5, y:5.0, Mux = 1
+Node x:1.5, y:5.0, Muy = 1
+Node x:1.5, y:5.0, Pe = 0
+Node x:1.5, y:5.0, Ph = 0
+
+ Nodal results 
+Node x:2.0, y:0.0, Vector potential = 2.00779843842539e-006
+Node x:2.0, y:0.0, Bx = 3.56109771085321e-005
+Node x:2.0, y:0.0, By = 0.001661378200290984
+Node x:2.0, y:0.0, Sigma = 0
+Node x:2.0, y:0.0, E = 1.098744319595875
+Node x:2.0, y:0.0, Hx = 28.33831517577607
+Node x:2.0, y:0.0, Hy = 1322.082764607136
+Node x:2.0, y:0.0, Je = 0
+Node x:2.0, y:0.0, Js = 0
+Node x:2.0, y:0.0, Mux = 1
+Node x:2.0, y:0.0, Muy = 1
+Node x:2.0, y:0.0, Pe = 0
+Node x:2.0, y:0.0, Ph = 0
+
+ Nodal results 
+Node x:2.0, y:0.5, Vector potential = 1.971646872636196e-006
+Node x:2.0, y:0.5, Bx = 0.0001061198621496557
+Node x:2.0, y:0.5, By = 0.001626749002345529
+Node x:2.0, y:0.5, Sigma = 0
+Node x:2.0, y:0.5, E = 1.057414994086724
+Node x:2.0, y:0.5, Hx = 84.44750310674112
+Node x:2.0, y:0.5, Hy = 1294.525724465501
+Node x:2.0, y:0.5, Je = 0
+Node x:2.0, y:0.5, Js = 0
+Node x:2.0, y:0.5, Mux = 1
+Node x:2.0, y:0.5, Muy = 1
+Node x:2.0, y:0.5, Pe = 0
+Node x:2.0, y:0.5, Ph = 0
+
+ Nodal results 
+Node x:2.0, y:1.0, Vector potential = 1.874630357130222e-006
+Node x:2.0, y:1.0, Bx = 0.0001803630130996996
+Node x:2.0, y:1.0, By = 0.001550973278791543
+Node x:2.0, y:1.0, Sigma = 0
+Node x:2.0, y:1.0, E = 0.9700688459856154
+Node x:2.0, y:1.0, Hx = 143.5283254288273
+Node x:2.0, y:1.0, Hy = 1234.225319615591
+Node x:2.0, y:1.0, Je = 0
+Node x:2.0, y:1.0, Js = 0
+Node x:2.0, y:1.0, Mux = 1
+Node x:2.0, y:1.0, Muy = 1
+Node x:2.0, y:1.0, Pe = 0
+Node x:2.0, y:1.0, Ph = 0
+
+ Nodal results 
+Node x:2.0, y:1.5, Vector potential = 1.750805676368941e-006
+Node x:2.0, y:1.5, Bx = 0.0002189012720535081
+Node x:2.0, y:1.5, By = 0.00143877023768048
+Node x:2.0, y:1.5, Sigma = 0
+Node x:2.0, y:1.5, E = 0.8427164965680888
+Node x:2.0, y:1.5, Hx = 174.1960974820979
+Node x:2.0, y:1.5, Hy = 1144.936976501748
+Node x:2.0, y:1.5, Je = 0
+Node x:2.0, y:1.5, Js = 0
+Node x:2.0, y:1.5, Mux = 1
+Node x:2.0, y:1.5, Muy = 1
+Node x:2.0, y:1.5, Pe = 0
+Node x:2.0, y:1.5, Ph = 0
+
+ Nodal results 
+Node x:2.0, y:2.0, Vector potential = 1.604547638150175e-006
+Node x:2.0, y:2.0, Bx = 0.0002636745843190325
+Node x:2.0, y:2.0, By = 0.001310466493656076
+Node x:2.0, y:2.0, Sigma = 0
+Node x:2.0, y:2.0, E = 0.7109637190587452
+Node x:2.0, y:2.0, Hx = 209.8255673103739
+Node x:2.0, y:2.0, Hy = 1042.836101108342
+Node x:2.0, y:2.0, Je = 0
+Node x:2.0, y:2.0, Js = 0
+Node x:2.0, y:2.0, Mux = 1
+Node x:2.0, y:2.0, Muy = 1
+Node x:2.0, y:2.0, Pe = 0
+Node x:2.0, y:2.0, Ph = 0
+
+ Nodal results 
+Node x:2.0, y:2.5, Vector potential = 1.408212462360823e-006
+Node x:2.0, y:2.5, Bx = 0.0003010390517736967
+Node x:2.0, y:2.5, By = 0.001150828225744267
+Node x:2.0, y:2.5, Sigma = 0
+Node x:2.0, y:2.5, E = 0.5630225939085373
+Node x:2.0, y:2.5, Hx = 239.5592657674041
+Node x:2.0, y:2.5, Hy = 915.8000038843785
+Node x:2.0, y:2.5, Je = 0
+Node x:2.0, y:2.5, Js = 0
+Node x:2.0, y:2.5, Mux = 1
+Node x:2.0, y:2.5, Muy = 1
+Node x:2.0, y:2.5, Pe = 0
+Node x:2.0, y:2.5, Ph = 0
+
+ Nodal results 
+Node x:2.0, y:3.0, Vector potential = 1.231866398498492e-006
+Node x:2.0, y:3.0, Bx = 0.0003213314628947309
+Node x:2.0, y:3.0, By = 0.0009810250970507944
+Node x:2.0, y:3.0, Sigma = 0
+Node x:2.0, y:3.0, E = 0.4240142929064537
+Node x:2.0, y:3.0, Hx = 255.7074534532319
+Node x:2.0, y:3.0, Hy = 780.6749674642015
+Node x:2.0, y:3.0, Je = 0
+Node x:2.0, y:3.0, Js = 0
+Node x:2.0, y:3.0, Mux = 1
+Node x:2.0, y:3.0, Muy = 1
+Node x:2.0, y:3.0, Pe = 0
+Node x:2.0, y:3.0, Ph = 0
+
+ Nodal results 
+Node x:2.0, y:3.5, Vector potential = 1.031782292238526e-006
+Node x:2.0, y:3.5, Bx = 0.0003365740004080072
+Node x:2.0, y:3.5, By = 0.0008122041236311409
+Node x:2.0, y:3.5, Sigma = 0
+Node x:2.0, y:3.5, E = 0.3075500555867921
+Node x:2.0, y:3.5, Hx = 267.8370794057397
+Node x:2.0, y:3.5, Hy = 646.3315053775848
+Node x:2.0, y:3.5, Je = 0
+Node x:2.0, y:3.5, Js = 0
+Node x:2.0, y:3.5, Mux = 1
+Node x:2.0, y:3.5, Muy = 1
+Node x:2.0, y:3.5, Pe = 0
+Node x:2.0, y:3.5, Ph = 0
+
+ Nodal results 
+Node x:2.0, y:4.0, Vector potential = 7.976942466646536e-007
+Node x:2.0, y:4.0, Bx = 0.0003312034473220195
+Node x:2.0, y:4.0, By = 0.000636992862555911
+Node x:2.0, y:4.0, Sigma = 0
+Node x:2.0, y:4.0, E = 0.2050932788327003
+Node x:2.0, y:4.0, Hx = 263.5633290518779
+Node x:2.0, y:4.0, Hy = 506.9028139501476
+Node x:2.0, y:4.0, Je = 0
+Node x:2.0, y:4.0, Js = 0
+Node x:2.0, y:4.0, Mux = 1
+Node x:2.0, y:4.0, Muy = 1
+Node x:2.0, y:4.0, Pe = 0
+Node x:2.0, y:4.0, Ph = 0
+
+ Nodal results 
+Node x:2.0, y:4.5, Vector potential = 6.091569008492824e-007
+Node x:2.0, y:4.5, Bx = 0.0003167425768249187
+Node x:2.0, y:4.5, By = 0.0004615120701417579
+Node x:2.0, y:4.5, Sigma = 0
+Node x:2.0, y:4.5, E = 0.1246657688506341
+Node x:2.0, y:4.5, Hx = 252.0557339467511
+Node x:2.0, y:4.5, Hy = 367.2596362981714
+Node x:2.0, y:4.5, Je = 0
+Node x:2.0, y:4.5, Js = 0
+Node x:2.0, y:4.5, Mux = 1
+Node x:2.0, y:4.5, Muy = 1
+Node x:2.0, y:4.5, Pe = 0
+Node x:2.0, y:4.5, Ph = 0
+
+ Nodal results 
+Node x:2.0, y:5.0, Vector potential = 4.140622586955932e-007
+Node x:2.0, y:5.0, Bx = 0.0003143414024043683
+Node x:2.0, y:5.0, By = 0.0003057339175079855
+Node x:2.0, y:5.0, Sigma = 0
+Node x:2.0, y:5.0, E = 0.07650727146333264
+Node x:2.0, y:5.0, Hx = 250.144940055469
+Node x:2.0, y:5.0, Hy = 243.2953212112283
+Node x:2.0, y:5.0, Je = 0
+Node x:2.0, y:5.0, Js = 0
+Node x:2.0, y:5.0, Mux = 1
+Node x:2.0, y:5.0, Muy = 1
+Node x:2.0, y:5.0, Pe = 0
+Node x:2.0, y:5.0, Ph = 0
+
+ Nodal results 
+Node x:2.5, y:0.0, Vector potential = 3.210673114543357e-006
+Node x:2.5, y:0.0, Bx = 6.208496146184396e-005
+Node x:2.5, y:0.0, By = 0.001748619166592812
+Node x:2.5, y:0.0, Sigma = 0
+Node x:2.5, y:0.0, E = 1.218141508860624
+Node x:2.5, y:0.0, Hx = 49.40564254161146
+Node x:2.5, y:0.0, Hy = 1391.506919742382
+Node x:2.5, y:0.0, Je = 0
+Node x:2.5, y:0.0, Js = 0
+Node x:2.5, y:0.0, Mux = 1
+Node x:2.5, y:0.0, Muy = 1
+Node x:2.5, y:0.0, Pe = 0
+Node x:2.5, y:0.0, Ph = 0
+
+ Nodal results 
+Node x:2.5, y:0.5, Vector potential = 3.126272380971115e-006
+Node x:2.5, y:0.5, Bx = 0.0001361843603791111
+Node x:2.5, y:0.5, By = 0.001694352188571874
+Node x:2.5, y:0.5, Sigma = 0
+Node x:2.5, y:0.5, E = 1.149645990716115
+Node x:2.5, y:0.5, Hx = 108.372070630718
+Node x:2.5, y:0.5, Hy = 1348.322630748924
+Node x:2.5, y:0.5, Je = 0
+Node x:2.5, y:0.5, Js = 0
+Node x:2.5, y:0.5, Mux = 1
+Node x:2.5, y:0.5, Muy = 1
+Node x:2.5, y:0.5, Pe = 0
+Node x:2.5, y:0.5, Ph = 0
+
+ Nodal results 
+Node x:2.5, y:1.0, Vector potential = 2.997726011057494e-006
+Node x:2.5, y:1.0, Bx = 0.0002187539603345
+Node x:2.5, y:1.0, By = 0.001612667762500719
+Node x:2.5, y:1.0, Sigma = 0
+Node x:2.5, y:1.0, E = 1.053824802980383
+Node x:2.5, y:1.0, Hx = 174.0788705408204
+Node x:2.5, y:1.0, Hy = 1283.320229834681
+Node x:2.5, y:1.0, Je = 0
+Node x:2.5, y:1.0, Js = 0
+Node x:2.5, y:1.0, Mux = 1
+Node x:2.5, y:1.0, Muy = 1
+Node x:2.5, y:1.0, Pe = 0
+Node x:2.5, y:1.0, Ph = 0
+
+ Nodal results 
+Node x:2.5, y:1.5, Vector potential = 2.787026414767326e-006
+Node x:2.5, y:1.5, Bx = 0.0002914321723354299
+Node x:2.5, y:1.5, By = 0.001493473256739139
+Node x:2.5, y:1.5, Sigma = 0
+Node x:2.5, y:1.5, E = 0.9212664303492031
+Node x:2.5, y:1.5, Hx = 231.9143540159639
+Node x:2.5, y:1.5, Hy = 1188.468255927927
+Node x:2.5, y:1.5, Je = 0
+Node x:2.5, y:1.5, Js = 0
+Node x:2.5, y:1.5, Mux = 1
+Node x:2.5, y:1.5, Muy = 1
+Node x:2.5, y:1.5, Pe = 0
+Node x:2.5, y:1.5, Ph = 0
+
+ Nodal results 
+Node x:2.5, y:2.0, Vector potential = 2.537453707098516e-006
+Node x:2.5, y:2.0, Bx = 0.0003435827003540456
+Node x:2.5, y:2.0, By = 0.001348404811393273
+Node x:2.5, y:2.0, Sigma = 0
+Node x:2.5, y:2.0, E = 0.7704072507453437
+Node x:2.5, y:2.0, Hx = 273.4144256110393
+Node x:2.5, y:2.0, Hy = 1073.026455110671
+Node x:2.5, y:2.0, Je = 0
+Node x:2.5, y:2.0, Js = 0
+Node x:2.5, y:2.0, Mux = 1
+Node x:2.5, y:2.0, Muy = 1
+Node x:2.5, y:2.0, Pe = 0
+Node x:2.5, y:2.0, Ph = 0
+
+ Nodal results 
+Node x:2.5, y:2.5, Vector potential = 2.274161275665585e-006
+Node x:2.5, y:2.5, Bx = 0.0003882071779036996
+Node x:2.5, y:2.5, By = 0.001182843260784665
+Node x:2.5, y:2.5, Sigma = 0
+Node x:2.5, y:2.5, E = 0.616654975458356
+Node x:2.5, y:2.5, Hx = 308.925456535643
+Node x:2.5, y:2.5, Hy = 941.276759284076
+Node x:2.5, y:2.5, Je = 0
+Node x:2.5, y:2.5, Js = 0
+Node x:2.5, y:2.5, Mux = 1
+Node x:2.5, y:2.5, Muy = 1
+Node x:2.5, y:2.5, Pe = 0
+Node x:2.5, y:2.5, Ph = 0
+
+ Nodal results 
+Node x:2.5, y:3.0, Vector potential = 1.895044966085624e-006
+Node x:2.5, y:3.0, Bx = 0.0003984340424513353
+Node x:2.5, y:3.0, By = 0.0009854699499559953
+Node x:2.5, y:3.0, Sigma = 0
+Node x:2.5, y:3.0, E = 0.4495732073822828
+Node x:2.5, y:3.0, Hx = 317.0637367610804
+Node x:2.5, y:3.0, Hy = 784.2120690200968
+Node x:2.5, y:3.0, Je = 0
+Node x:2.5, y:3.0, Js = 0
+Node x:2.5, y:3.0, Mux = 1
+Node x:2.5, y:3.0, Muy = 1
+Node x:2.5, y:3.0, Pe = 0
+Node x:2.5, y:3.0, Ph = 0
+
+ Nodal results 
+Node x:2.5, y:3.5, Vector potential = 1.597189384065555e-006
+Node x:2.5, y:3.5, Bx = 0.0004194139259911837
+Node x:2.5, y:3.5, By = 0.0008101671086400302
+Node x:2.5, y:3.5, Sigma = 0
+Node x:2.5, y:3.5, E = 0.3311532067526591
+Node x:2.5, y:3.5, Hx = 333.7589976153762
+Node x:2.5, y:3.5, Hy = 644.7105003526469
+Node x:2.5, y:3.5, Je = 0
+Node x:2.5, y:3.5, Js = 0
+Node x:2.5, y:3.5, Mux = 1
+Node x:2.5, y:3.5, Muy = 1
+Node x:2.5, y:3.5, Pe = 0
+Node x:2.5, y:3.5, Ph = 0
+
+ Nodal results 
+Node x:2.5, y:4.0, Vector potential = 1.28428342744327e-006
+Node x:2.5, y:4.0, Bx = 0.0004226863157379476
+Node x:2.5, y:4.0, By = 0.0006335122963031717
+Node x:2.5, y:4.0, Sigma = 0
+Node x:2.5, y:4.0, E = 0.2307752846381473
+Node x:2.5, y:4.0, Hx = 336.3630826349798
+Node x:2.5, y:4.0, Hy = 504.1330673307361
+Node x:2.5, y:4.0, Je = 0
+Node x:2.5, y:4.0, Js = 0
+Node x:2.5, y:4.0, Mux = 1
+Node x:2.5, y:4.0, Muy = 1
+Node x:2.5, y:4.0, Pe = 0
+Node x:2.5, y:4.0, Ph = 0
+
+ Nodal results 
+Node x:2.5, y:4.5, Vector potential = 9.249577192543036e-007
+Node x:2.5, y:4.5, Bx = 0.0004033675925738279
+Node x:2.5, y:4.5, By = 0.0004589848973734095
+Node x:2.5, y:4.5, Sigma = 0
+Node x:2.5, y:4.5, E = 0.1485602176689921
+Node x:2.5, y:4.5, Hx = 320.989731206012
+Node x:2.5, y:4.5, Hy = 365.248576107522
+Node x:2.5, y:4.5, Je = 0
+Node x:2.5, y:4.5, Js = 0
+Node x:2.5, y:4.5, Mux = 1
+Node x:2.5, y:4.5, Muy = 1
+Node x:2.5, y:4.5, Pe = 0
+Node x:2.5, y:4.5, Ph = 0
+
+ Nodal results 
+Node x:2.5, y:5.0, Vector potential = 5.998989901124554e-007
+Node x:2.5, y:5.0, Bx = 0.0003923784153397548
+Node x:2.5, y:5.0, By = 0.0002993690083397147
+Node x:2.5, y:5.0, Sigma = 0
+Node x:2.5, y:5.0, E = 0.09691844664381755
+Node x:2.5, y:5.0, Hx = 312.2448218194337
+Node x:2.5, y:5.0, Hy = 238.2302874289221
+Node x:2.5, y:5.0, Je = 0
+Node x:2.5, y:5.0, Js = 0
+Node x:2.5, y:5.0, Mux = 1
+Node x:2.5, y:5.0, Muy = 1
+Node x:2.5, y:5.0, Pe = 0
+Node x:2.5, y:5.0, Ph = 0
+
+ Nodal results 
+Node x:3.0, y:0.0, Vector potential = 4.773724734130296e-006
+Node x:3.0, y:0.0, Bx = 7.421177705740147e-005
+Node x:3.0, y:0.0, By = 0.001836513233775006
+Node x:3.0, y:0.0, Sigma = 0
+Node x:3.0, y:0.0, E = 1.344178183724937
+Node x:3.0, y:0.0, Hx = 59.05585577159577
+Node x:3.0, y:0.0, Hy = 1461.450796044869
+Node x:3.0, y:0.0, Je = 0
+Node x:3.0, y:0.0, Js = 0
+Node x:3.0, y:0.0, Mux = 1
+Node x:3.0, y:0.0, Muy = 1
+Node x:3.0, y:0.0, Pe = 0
+Node x:3.0, y:0.0, Ph = 0
+
+ Nodal results 
+Node x:3.0, y:0.5, Vector potential = 4.629931352003522e-006
+Node x:3.0, y:0.5, Bx = 0.0001827665077689748
+Node x:3.0, y:0.5, By = 0.001782081541722722
+Node x:3.0, y:0.5, Sigma = 0
+Node x:3.0, y:0.5, E = 1.27690735702313
+Node x:3.0, y:0.5, Hx = 145.4409657153781
+Node x:3.0, y:0.5, Hy = 1418.135431789985
+Node x:3.0, y:0.5, Je = 0
+Node x:3.0, y:0.5, Js = 0
+Node x:3.0, y:0.5, Mux = 1
+Node x:3.0, y:0.5, Muy = 1
+Node x:3.0, y:0.5, Pe = 0
+Node x:3.0, y:0.5, Ph = 0
+
+ Nodal results 
+Node x:3.0, y:1.0, Vector potential = 4.412231372294208e-006
+Node x:3.0, y:1.0, Bx = 0.0002731051663499593
+Node x:3.0, y:1.0, By = 0.001686547704209648
+Node x:3.0, y:1.0, Sigma = 0
+Node x:3.0, y:1.0, E = 1.161444970883794
+Node x:3.0, y:1.0, Hx = 217.3301860426519
+Node x:3.0, y:1.0, Hy = 1342.112019426266
+Node x:3.0, y:1.0, Je = 0
+Node x:3.0, y:1.0, Js = 0
+Node x:3.0, y:1.0, Mux = 1
+Node x:3.0, y:1.0, Muy = 1
+Node x:3.0, y:1.0, Pe = 0
+Node x:3.0, y:1.0, Ph = 0
+
+ Nodal results 
+Node x:3.0, y:1.5, Vector potential = 4.110486402308513e-006
+Node x:3.0, y:1.5, Bx = 0.0003668781164995749
+Node x:3.0, y:1.5, By = 0.001575165994799207
+Node x:3.0, y:1.5, Sigma = 0
+Node x:3.0, y:1.5, E = 1.04077284675542
+Node x:3.0, y:1.5, Hx = 291.952328765758
+Node x:3.0, y:1.5, Hy = 1253.477271312783
+Node x:3.0, y:1.5, Je = 0
+Node x:3.0, y:1.5, Js = 0
+Node x:3.0, y:1.5, Mux = 1
+Node x:3.0, y:1.5, Muy = 1
+Node x:3.0, y:1.5, Pe = 0
+Node x:3.0, y:1.5, Ph = 0
+
+ Nodal results 
+Node x:3.0, y:2.0, Vector potential = 3.748137532329425e-006
+Node x:3.0, y:2.0, Bx = 0.000433787938494369
+Node x:3.0, y:2.0, By = 0.001411887694407246
+Node x:3.0, y:2.0, Sigma = 0
+Node x:3.0, y:2.0, E = 0.8680305969604947
+Node x:3.0, y:2.0, Hx = 345.1974733251095
+Node x:3.0, y:2.0, Hy = 1123.544528277663
+Node x:3.0, y:2.0, Je = 0
+Node x:3.0, y:2.0, Js = 0
+Node x:3.0, y:2.0, Mux = 1
+Node x:3.0, y:2.0, Muy = 1
+Node x:3.0, y:2.0, Pe = 0
+Node x:3.0, y:2.0, Ph = 0
+
+ Nodal results 
+Node x:3.0, y:2.5, Vector potential = 3.246767361948015e-006
+Node x:3.0, y:2.5, Bx = 0.0004895524083728005
+Node x:3.0, y:2.5, By = 0.001214082595427544
+Node x:3.0, y:2.5, Sigma = 0
+Node x:3.0, y:2.5, E = 0.6818428970674918
+Node x:3.0, y:2.5, Hx = 389.5734284753668
+Node x:3.0, y:2.5, Hy = 966.1362319206569
+Node x:3.0, y:2.5, Je = 0
+Node x:3.0, y:2.5, Js = 0
+Node x:3.0, y:2.5, Mux = 1
+Node x:3.0, y:2.5, Muy = 1
+Node x:3.0, y:2.5, Pe = 0
+Node x:3.0, y:2.5, Ph = 0
+
+ Nodal results 
+Node x:3.0, y:3.0, Vector potential = 2.761114282119974e-006
+Node x:3.0, y:3.0, Bx = 0.0005103292029439126
+Node x:3.0, y:3.0, By = 0.001019446922806091
+Node x:3.0, y:3.0, Sigma = 0
+Node x:3.0, y:3.0, E = 0.5171373516196649
+Node x:3.0, y:3.0, Hx = 406.1070762633535
+Node x:3.0, y:3.0, Hy = 811.2500849220561
+Node x:3.0, y:3.0, Je = 0
+Node x:3.0, y:3.0, Js = 0
+Node x:3.0, y:3.0, Mux = 1
+Node x:3.0, y:3.0, Muy = 1
+Node x:3.0, y:3.0, Pe = 0
+Node x:3.0, y:3.0, Ph = 0
+
+ Nodal results 
+Node x:3.0, y:3.5, Vector potential = 2.335045073884066e-006
+Node x:3.0, y:3.5, Bx = 0.0005261686565114876
+Node x:3.0, y:3.5, By = 0.0008296374398149441
+Node x:3.0, y:3.5, Sigma = 0
+Node x:3.0, y:3.5, E = 0.384021674299082
+Node x:3.0, y:3.5, Hx = 418.7117129191241
+Node x:3.0, y:3.5, Hy = 660.2044976032659
+Node x:3.0, y:3.5, Je = 0
+Node x:3.0, y:3.5, Js = 0
+Node x:3.0, y:3.5, Mux = 1
+Node x:3.0, y:3.5, Muy = 1
+Node x:3.0, y:3.5, Pe = 0
+Node x:3.0, y:3.5, Ph = 0
+
+ Nodal results 
+Node x:3.0, y:4.0, Vector potential = 1.790159840699876e-006
+Node x:3.0, y:4.0, Bx = 0.0005105972640979064
+Node x:3.0, y:4.0, By = 0.0006281987390198861
+Node x:3.0, y:4.0, Sigma = 0
+Node x:3.0, y:4.0, E = 0.2607527829322507
+Node x:3.0, y:4.0, Hx = 406.3203925518988
+Node x:3.0, y:4.0, Hy = 499.904672795552
+Node x:3.0, y:4.0, Je = 0
+Node x:3.0, y:4.0, Js = 0
+Node x:3.0, y:4.0, Mux = 1
+Node x:3.0, y:4.0, Muy = 1
+Node x:3.0, y:4.0, Pe = 0
+Node x:3.0, y:4.0, Ph = 0
+
+ Nodal results 
+Node x:3.0, y:4.5, Vector potential = 1.330819794812923e-006
+Node x:3.0, y:4.5, Bx = 0.0004888337551559424
+Node x:3.0, y:4.5, By = 0.0004546499801426888
+Node x:3.0, y:4.5, Sigma = 0
+Node x:3.0, y:4.5, E = 0.177324487037793
+Node x:3.0, y:4.5, Hx = 389.0015424162075
+Node x:3.0, y:4.5, Hy = 361.7989585817049
+Node x:3.0, y:4.5, Je = 0
+Node x:3.0, y:4.5, Js = 0
+Node x:3.0, y:4.5, Mux = 1
+Node x:3.0, y:4.5, Muy = 1
+Node x:3.0, y:4.5, Pe = 0
+Node x:3.0, y:4.5, Ph = 0
+
+ Nodal results 
+Node x:3.0, y:5.0, Vector potential = 8.852577850849501e-007
+Node x:3.0, y:5.0, Bx = 0.0004776617043634693
+Node x:3.0, y:5.0, By = 0.0003069241953268541
+Node x:3.0, y:5.0, Sigma = 0
+Node x:3.0, y:5.0, E = 0.1282642281471858
+Node x:3.0, y:5.0, Hx = 380.1111068757285
+Node x:3.0, y:5.0, Hy = 244.2425142038561
+Node x:3.0, y:5.0, Je = 0
+Node x:3.0, y:5.0, Js = 0
+Node x:3.0, y:5.0, Mux = 1
+Node x:3.0, y:5.0, Muy = 1
+Node x:3.0, y:5.0, Pe = 0
+Node x:3.0, y:5.0, Ph = 0
+
+ Nodal results 
+Node x:3.5, y:0.0, Vector potential = 6.694674013149016e-006
+Node x:3.5, y:0.0, Bx = 8.225115630473577e-005
+Node x:3.5, y:0.0, By = 0.001939821236103165
+Node x:3.5, y:0.0, Sigma = 0
+Node x:3.5, y:0.0, E = 1.49990470456235
+Node x:3.5, y:0.0, Hx = 65.45339050461405
+Node x:3.5, y:0.0, Hy = 1543.660692202247
+Node x:3.5, y:0.0, Je = 0
+Node x:3.5, y:0.0, Js = 0
+Node x:3.5, y:0.0, Mux = 1
+Node x:3.5, y:0.0, Muy = 1
+Node x:3.5, y:0.0, Pe = 0
+Node x:3.5, y:0.0, Ph = 0
+
+ Nodal results 
+Node x:3.5, y:0.5, Vector potential = 6.534517177936297e-006
+Node x:3.5, y:0.5, Bx = 0.0002061740937989531
+Node x:3.5, y:0.5, By = 0.001900300570856866
+Node x:3.5, y:0.5, Sigma = 0
+Node x:3.5, y:0.5, E = 1.453741151155389
+Node x:3.5, y:0.5, Hx = 164.0681308279774
+Node x:3.5, y:0.5, Hy = 1512.211146061104
+Node x:3.5, y:0.5, Je = 0
+Node x:3.5, y:0.5, Js = 0
+Node x:3.5, y:0.5, Mux = 1
+Node x:3.5, y:0.5, Muy = 1
+Node x:3.5, y:0.5, Pe = 0
+Node x:3.5, y:0.5, Ph = 0
+
+ Nodal results 
+Node x:3.5, y:1.0, Vector potential = 6.228600388971031e-006
+Node x:3.5, y:1.0, Bx = 0.0003401865144186598
+Node x:3.5, y:1.0, By = 0.00182506324736999
+Node x:3.5, y:1.0, Sigma = 0
+Node x:3.5, y:1.0, E = 1.371351692251824
+Node x:3.5, y:1.0, Hx = 270.7118267146602
+Node x:3.5, y:1.0, Hy = 1452.339186371402
+Node x:3.5, y:1.0, Je = 0
+Node x:3.5, y:1.0, Js = 0
+Node x:3.5, y:1.0, Mux = 1
+Node x:3.5, y:1.0, Muy = 1
+Node x:3.5, y:1.0, Pe = 0
+Node x:3.5, y:1.0, Ph = 0
+
+ Nodal results 
+Node x:3.5, y:1.5, Vector potential = 5.820027434333676e-006
+Node x:3.5, y:1.5, Bx = 0.0004823583312953978
+Node x:3.5, y:1.5, By = 0.00169784752516775
+Node x:3.5, y:1.5, Sigma = 0
+Node x:3.5, y:1.5, E = 1.239560679090796
+Node x:3.5, y:1.5, Hx = 383.8485638361032
+Node x:3.5, y:1.5, Hy = 1351.104131233943
+Node x:3.5, y:1.5, Je = 0
+Node x:3.5, y:1.5, Js = 0
+Node x:3.5, y:1.5, Mux = 1
+Node x:3.5, y:1.5, Muy = 1
+Node x:3.5, y:1.5, Pe = 0
+Node x:3.5, y:1.5, Ph = 0
+
+ Nodal results 
+Node x:3.5, y:2.0, Vector potential = 5.169167646826609e-006
+Node x:3.5, y:2.0, Bx = 0.0005771329646809458
+Node x:3.5, y:2.0, By = 0.001479020016695576
+Node x:3.5, y:2.0, Sigma = 0
+Node x:3.5, y:2.0, E = 1.002907977991439
+Node x:3.5, y:2.0, Hx = 459.2678207512638
+Node x:3.5, y:2.0, Hy = 1176.966732944792
+Node x:3.5, y:2.0, Je = 0
+Node x:3.5, y:2.0, Js = 0
+Node x:3.5, y:2.0, Mux = 1
+Node x:3.5, y:2.0, Muy = 1
+Node x:3.5, y:2.0, Pe = 0
+Node x:3.5, y:2.0, Ph = 0
+
+ Nodal results 
+Node x:3.5, y:2.5, Vector potential = 4.572306282706161e-006
+Node x:3.5, y:2.5, Bx = 0.0006241219380256839
+Node x:3.5, y:2.5, By = 0.001275094926823977
+Node x:3.5, y:2.5, Sigma = 0
+Node x:3.5, y:2.5, E = 0.8019002971447673
+Node x:3.5, y:2.5, Hx = 496.6604576444057
+Node x:3.5, y:2.5, Hy = 1014.688302577173
+Node x:3.5, y:2.5, Je = 0
+Node x:3.5, y:2.5, Js = 0
+Node x:3.5, y:2.5, Mux = 1
+Node x:3.5, y:2.5, Muy = 1
+Node x:3.5, y:2.5, Pe = 0
+Node x:3.5, y:2.5, Ph = 0
+
+ Nodal results 
+Node x:3.5, y:3.0, Vector potential = 3.893631016772704e-006
+Node x:3.5, y:3.0, Bx = 0.0006567366273321258
+Node x:3.5, y:3.0, By = 0.001053311745110574
+Node x:3.5, y:3.0, Sigma = 0
+Node x:3.5, y:3.0, E = 0.6130523590904097
+Node x:3.5, y:3.0, Hx = 522.6144027470388
+Node x:3.5, y:3.0, Hy = 838.1988542554919
+Node x:3.5, y:3.0, Je = 0
+Node x:3.5, y:3.0, Js = 0
+Node x:3.5, y:3.0, Mux = 1
+Node x:3.5, y:3.0, Muy = 1
+Node x:3.5, y:3.0, Pe = 0
+Node x:3.5, y:3.0, Ph = 0
+
+ Nodal results 
+Node x:3.5, y:3.5, Vector potential = 3.094912270615881e-006
+Node x:3.5, y:3.5, Bx = 0.0006254398000460758
+Node x:3.5, y:3.5, By = 0.0008246811492274447
+Node x:3.5, y:3.5, Sigma = 0
+Node x:3.5, y:3.5, E = 0.4262463579375358
+Node x:3.5, y:3.5, Hx = 497.709178918698
+Node x:3.5, y:3.5, Hy = 656.2604068712641
+Node x:3.5, y:3.5, Je = 0
+Node x:3.5, y:3.5, Js = 0
+Node x:3.5, y:3.5, Mux = 1
+Node x:3.5, y:3.5, Muy = 1
+Node x:3.5, y:3.5, Pe = 0
+Node x:3.5, y:3.5, Ph = 0
+
+ Nodal results 
+Node x:3.5, y:4.0, Vector potential = 2.452543457360914e-006
+Node x:3.5, y:4.0, Bx = 0.0006050520846414206
+Node x:3.5, y:4.0, By = 0.0006163005312492268
+Node x:3.5, y:4.0, Sigma = 0
+Node x:3.5, y:4.0, E = 0.2967898977508575
+Node x:3.5, y:4.0, Hx = 481.4851504936897
+Node x:3.5, y:4.0, Hy = 490.4363798923777
+Node x:3.5, y:4.0, Je = 0
+Node x:3.5, y:4.0, Js = 0
+Node x:3.5, y:4.0, Mux = 1
+Node x:3.5, y:4.0, Muy = 1
+Node x:3.5, y:4.0, Pe = 0
+Node x:3.5, y:4.0, Ph = 0
+
+ Nodal results 
+Node x:3.5, y:4.5, Vector potential = 1.838076252591672e-006
+Node x:3.5, y:4.5, Bx = 0.0005800970302370618
+Node x:3.5, y:4.5, By = 0.0004522953771176181
+Node x:3.5, y:4.5, Sigma = 0
+Node x:3.5, y:4.5, E = 0.2152903528221381
+Node x:3.5, y:4.5, Hx = 461.6265491757853
+Node x:3.5, y:4.5, Hy = 359.9252250294092
+Node x:3.5, y:4.5, Je = 0
+Node x:3.5, y:4.5, Js = 0
+Node x:3.5, y:4.5, Mux = 1
+Node x:3.5, y:4.5, Muy = 1
+Node x:3.5, y:4.5, Pe = 0
+Node x:3.5, y:4.5, Ph = 0
+
+ Nodal results 
+Node x:3.5, y:5.0, Vector potential = 1.195469490472299e-006
+Node x:3.5, y:5.0, Bx = 0.0005574154549604614
+Node x:3.5, y:5.0, By = 0.0002920628323026075
+Node x:3.5, y:5.0, Sigma = 0
+Node x:3.5, y:5.0, E = 0.157568441833511
+Node x:3.5, y:5.0, Hx = 443.5771250638759
+Node x:3.5, y:5.0, Hy = 232.4162172718963
+Node x:3.5, y:5.0, Je = 0
+Node x:3.5, y:5.0, Js = 0
+Node x:3.5, y:5.0, Mux = 1
+Node x:3.5, y:5.0, Muy = 1
+Node x:3.5, y:5.0, Pe = 0
+Node x:3.5, y:5.0, Ph = 0
+
+ Nodal results 
+Node x:4.0, y:0.0, Vector potential = 9.017900435433581e-006
+Node x:4.0, y:0.0, Bx = 6.521715894269274e-005
+Node x:4.0, y:0.0, By = 0.002037454583866607
+Node x:4.0, y:0.0, Sigma = 0
+Node x:4.0, y:0.0, E = 1.653410752660471
+Node x:4.0, y:0.0, Hx = 51.89816610069678
+Node x:4.0, y:0.0, Hy = 1621.354841738056
+Node x:4.0, y:0.0, Je = 0
+Node x:4.0, y:0.0, Js = 0
+Node x:4.0, y:0.0, Mux = 1
+Node x:4.0, y:0.0, Muy = 1
+Node x:4.0, y:0.0, Pe = 0
+Node x:4.0, y:0.0, Ph = 0
+
+ Nodal results 
+Node x:4.0, y:0.5, Vector potential = 8.825428176282136e-006
+Node x:4.0, y:0.5, Bx = 0.0002299198052511533
+Node x:4.0, y:0.5, By = 0.002054695495939927
+Node x:4.0, y:0.5, Sigma = 0
+Node x:4.0, y:0.5, E = 1.700823900975062
+Node x:4.0, y:0.5, Hx = 182.9643676022348
+Node x:4.0, y:0.5, Hy = 1635.074723637464
+Node x:4.0, y:0.5, Je = 0
+Node x:4.0, y:0.5, Js = 0
+Node x:4.0, y:0.5, Mux = 1
+Node x:4.0, y:0.5, Muy = 1
+Node x:4.0, y:0.5, Pe = 0
+Node x:4.0, y:0.5, Ph = 0
+
+ Nodal results 
+Node x:4.0, y:1.0, Vector potential = 8.51767383179986e-006
+Node x:4.0, y:1.0, Bx = 0.0003898980209881722
+Node x:4.0, y:1.0, By = 0.002010392434899144
+Node x:4.0, y:1.0, Sigma = 0
+Node x:4.0, y:1.0, E = 1.668619499522878
+Node x:4.0, y:1.0, Hx = 310.2709867100758
+Node x:4.0, y:1.0, Hy = 1599.819467843751
+Node x:4.0, y:1.0, Je = 0
+Node x:4.0, y:1.0, Js = 0
+Node x:4.0, y:1.0, Mux = 1
+Node x:4.0, y:1.0, Muy = 1
+Node x:4.0, y:1.0, Pe = 0
+Node x:4.0, y:1.0, Ph = 0
+
+ Nodal results 
+Node x:4.0, y:1.5, Vector potential = 7.81971610391277e-006
+Node x:4.0, y:1.5, Bx = 0.0006273468222341581
+Node x:4.0, y:1.5, By = 0.001824920054680622
+Node x:4.0, y:1.5, Sigma = 0
+Node x:4.0, y:1.5, E = 1.481691633814956
+Node x:4.0, y:1.5, Hx = 499.2267389577941
+Node x:4.0, y:1.5, Hy = 1452.225237249764
+Node x:4.0, y:1.5, Je = 0
+Node x:4.0, y:1.5, Js = 0
+Node x:4.0, y:1.5, Mux = 1
+Node x:4.0, y:1.5, Muy = 1
+Node x:4.0, y:1.5, Pe = 0
+Node x:4.0, y:1.5, Ph = 0
+
+ Nodal results 
+Node x:4.0, y:2.0, Vector potential = 7.001395744412029e-006
+Node x:4.0, y:2.0, Bx = 0.0007646928515408463
+Node x:4.0, y:2.0, By = 0.001569463513707107
+Node x:4.0, y:2.0, Sigma = 0
+Node x:4.0, y:2.0, E = 1.212749079106704
+Node x:4.0, y:2.0, Hx = 608.5232363488128
+Node x:4.0, y:2.0, Hy = 1248.939381044303
+Node x:4.0, y:2.0, Je = 0
+Node x:4.0, y:2.0, Js = 0
+Node x:4.0, y:2.0, Mux = 1
+Node x:4.0, y:2.0, Muy = 1
+Node x:4.0, y:2.0, Pe = 0
+Node x:4.0, y:2.0, Ph = 0
+
+ Nodal results 
+Node x:4.0, y:2.5, Vector potential = 6.029431738585689e-006
+Node x:4.0, y:2.5, Bx = 0.0008236857612937691
+Node x:4.0, y:2.5, By = 0.001260166698060966
+Node x:4.0, y:2.5, Sigma = 0
+Node x:4.0, y:2.5, E = 0.9018030781577235
+Node x:4.0, y:2.5, Hx = 655.4683023215715
+Node x:4.0, y:2.5, Hy = 1002.808795580973
+Node x:4.0, y:2.5, Je = 0
+Node x:4.0, y:2.5, Js = 0
+Node x:4.0, y:2.5, Mux = 1
+Node x:4.0, y:2.5, Muy = 1
+Node x:4.0, y:2.5, Pe = 0
+Node x:4.0, y:2.5, Ph = 0
+
+ Nodal results 
+Node x:4.0, y:3.0, Vector potential = 5.093318269163508e-006
+Node x:4.0, y:3.0, Bx = 0.0008112506938025568
+Node x:4.0, y:3.0, By = 0.001003560961447731
+Node x:4.0, y:3.0, Sigma = 0
+Node x:4.0, y:3.0, E = 0.6625868131066359
+Node x:4.0, y:3.0, Hx = 645.5727900270326
+Node x:4.0, y:3.0, Hy = 798.6084385423072
+Node x:4.0, y:3.0, Je = 0
+Node x:4.0, y:3.0, Js = 0
+Node x:4.0, y:3.0, Mux = 1
+Node x:4.0, y:3.0, Muy = 1
+Node x:4.0, y:3.0, Pe = 0
+Node x:4.0, y:3.0, Ph = 0
+
+ Nodal results 
+Node x:4.0, y:3.5, Vector potential = 4.127485040330808e-006
+Node x:4.0, y:3.5, Bx = 0.0007621189680845411
+Node x:4.0, y:3.5, By = 0.000768013470252879
+Node x:4.0, y:3.5, Sigma = 0
+Node x:4.0, y:3.5, E = 0.4657947978497586
+Node x:4.0, y:3.5, Hx = 606.4750049737457
+Node x:4.0, y:3.5, Hy = 611.1657007595301
+Node x:4.0, y:3.5, Je = 0
+Node x:4.0, y:3.5, Js = 0
+Node x:4.0, y:3.5, Mux = 1
+Node x:4.0, y:3.5, Muy = 1
+Node x:4.0, y:3.5, Pe = 0
+Node x:4.0, y:3.5, Ph = 0
+
+ Nodal results 
+Node x:4.0, y:4.0, Vector potential = 3.160519362215979e-006
+Node x:4.0, y:4.0, Bx = 0.0006936715990422144
+Node x:4.0, y:4.0, By = 0.0005733799330794462
+Node x:4.0, y:4.0, Sigma = 0
+Node x:4.0, y:4.0, E = 0.3222668102954388
+Node x:4.0, y:4.0, Hx = 552.0063193501384
+Node x:4.0, y:4.0, Hy = 456.2812530964701
+Node x:4.0, y:4.0, Je = 0
+Node x:4.0, y:4.0, Js = 0
+Node x:4.0, y:4.0, Mux = 1
+Node x:4.0, y:4.0, Muy = 1
+Node x:4.0, y:4.0, Pe = 0
+Node x:4.0, y:4.0, Ph = 0
+
+ Nodal results 
+Node x:4.0, y:4.5, Vector potential = 2.341170494499959e-006
+Node x:4.0, y:4.5, Bx = 0.0006576441207851793
+Node x:4.0, y:4.5, By = 0.0004046756575318627
+Node x:4.0, y:4.5, Sigma = 0
+Node x:4.0, y:4.5, E = 0.2372435907312938
+Node x:4.0, y:4.5, Hx = 523.3365630914237
+Node x:4.0, y:4.5, Hy = 322.0306562257947
+Node x:4.0, y:4.5, Je = 0
+Node x:4.0, y:4.5, Js = 0
+Node x:4.0, y:4.5, Mux = 1
+Node x:4.0, y:4.5, Muy = 1
+Node x:4.0, y:4.5, Pe = 0
+Node x:4.0, y:4.5, Ph = 0
+
+ Nodal results 
+Node x:4.0, y:5.0, Vector potential = 1.522899544121881e-006
+Node x:4.0, y:5.0, Bx = 0.0006260712964067492
+Node x:4.0, y:5.0, By = 0.0002663954177988317
+Node x:4.0, y:5.0, Sigma = 0
+Node x:4.0, y:5.0, E = 0.184194705462397
+Node x:4.0, y:5.0, Hx = 498.2117077554265
+Node x:4.0, y:5.0, Hy = 211.9907377985737
+Node x:4.0, y:5.0, Je = 0
+Node x:4.0, y:5.0, Js = 0
+Node x:4.0, y:5.0, Mux = 1
+Node x:4.0, y:5.0, Muy = 1
+Node x:4.0, y:5.0, Pe = 0
+Node x:4.0, y:5.0, Ph = 0
+
+ Nodal results 
+Node x:4.5, y:0.0, Vector potential = 1.183473175024914e-005
+Node x:4.5, y:0.0, Bx = -2.280751355906464e-005
+Node x:4.5, y:0.0, By = 0.002158433001668679
+Node x:4.5, y:0.0, Sigma = 0
+Node x:4.5, y:0.0, E = 1.853897735613147
+Node x:4.5, y:0.0, Hx = -18.14964261280282
+Node x:4.5, y:0.0, Hy = 1717.626407741237
+Node x:4.5, y:0.0, Je = 0
+Node x:4.5, y:0.0, Js = 0
+Node x:4.5, y:0.0, Mux = 1
+Node x:4.5, y:0.0, Muy = 1
+Node x:4.5, y:0.0, Pe = 0
+Node x:4.5, y:0.0, Ph = 0
+
+ Nodal results 
+Node x:4.5, y:0.5, Vector potential = 1.175335733797022e-005
+Node x:4.5, y:0.5, Bx = 0.0001734517134844286
+Node x:4.5, y:0.5, By = 0.00229777068711811
+Node x:4.5, y:0.5, Sigma = 0
+Node x:4.5, y:0.5, E = 2.11271646780119
+Node x:4.5, y:0.5, Hx = 138.0284879440298
+Node x:4.5, y:0.5, Hy = 1828.50781473254
+Node x:4.5, y:0.5, Je = 0
+Node x:4.5, y:0.5, Js = 0
+Node x:4.5, y:0.5, Mux = 1
+Node x:4.5, y:0.5, Muy = 1
+Node x:4.5, y:0.5, Pe = 0
+Node x:4.5, y:0.5, Ph = 0
+
+ Nodal results 
+Node x:4.5, y:1.0, Vector potential = 1.125196531711178e-005
+Node x:4.5, y:1.0, Bx = 0.0004580813367467428
+Node x:4.5, y:1.0, By = 0.002243387866383396
+Node x:4.5, y:1.0, Sigma = 0
+Node x:4.5, y:1.0, E = 2.085975255306155
+Node x:4.5, y:1.0, Hx = 364.529545406936
+Node x:4.5, y:1.0, Hy = 1785.231341036489
+Node x:4.5, y:1.0, Je = 0
+Node x:4.5, y:1.0, Js = 0
+Node x:4.5, y:1.0, Mux = 1
+Node x:4.5, y:1.0, Muy = 1
+Node x:4.5, y:1.0, Pe = 0
+Node x:4.5, y:1.0, Ph = 0
+
+ Nodal results 
+Node x:4.5, y:1.5, Vector potential = 1.04380738551254e-005
+Node x:4.5, y:1.5, Bx = 0.0007945221474180424
+Node x:4.5, y:1.5, By = 0.002065092774945455
+Node x:4.5, y:1.5, Sigma = 0
+Node x:4.5, y:1.5, E = 1.948006215205584
+Node x:4.5, y:1.5, Hx = 632.2606357878451
+Node x:4.5, y:1.5, Hy = 1643.34861537964
+Node x:4.5, y:1.5, Je = 0
+Node x:4.5, y:1.5, Js = 0
+Node x:4.5, y:1.5, Mux = 1
+Node x:4.5, y:1.5, Muy = 1
+Node x:4.5, y:1.5, Pe = 0
+Node x:4.5, y:1.5, Ph = 0
+
+ Nodal results 
+Node x:4.5, y:2.0, Vector potential = 9.15649605038006e-006
+Node x:4.5, y:2.0, Bx = 0.001028606075588917
+Node x:4.5, y:2.0, By = 0.001672720533886658
+Node x:4.5, y:2.0, Sigma = 0
+Node x:4.5, y:2.0, E = 1.534263377055882
+Node x:4.5, y:2.0, Hx = 818.5387071216595
+Node x:4.5, y:2.0, Hy = 1331.108706896879
+Node x:4.5, y:2.0, Je = 0
+Node x:4.5, y:2.0, Js = 0
+Node x:4.5, y:2.0, Mux = 1
+Node x:4.5, y:2.0, Muy = 1
+Node x:4.5, y:2.0, Pe = 0
+Node x:4.5, y:2.0, Ph = 0
+
+ Nodal results 
+Node x:4.5, y:2.5, Vector potential = 7.675575707365383e-006
+Node x:4.5, y:2.5, Bx = 0.00105092162198157
+Node x:4.5, y:2.5, By = 0.001250191652685685
+Node x:4.5, y:2.5, Sigma = 0
+Node x:4.5, y:2.5, E = 1.061330875020259
+Node x:4.5, y:2.5, Hx = 836.2968547025957
+Node x:4.5, y:2.5, Hy = 994.8709066857637
+Node x:4.5, y:2.5, Je = 0
+Node x:4.5, y:2.5, Js = 0
+Node x:4.5, y:2.5, Mux = 1
+Node x:4.5, y:2.5, Muy = 1
+Node x:4.5, y:2.5, Pe = 0
+Node x:4.5, y:2.5, Ph = 0
+
+ Nodal results 
+Node x:4.5, y:3.0, Vector potential = 6.3769101959639e-006
+Node x:4.5, y:3.0, Bx = 0.0009692848297788264
+Node x:4.5, y:3.0, By = 0.0009314585526985162
+Node x:4.5, y:3.0, Sigma = 0
+Node x:4.5, y:3.0, E = 0.7190334314068527
+Node x:4.5, y:3.0, Hx = 771.3323596164329
+Node x:4.5, y:3.0, Hy = 741.2311647359577
+Node x:4.5, y:3.0, Je = 0
+Node x:4.5, y:3.0, Js = 0
+Node x:4.5, y:3.0, Mux = 1
+Node x:4.5, y:3.0, Muy = 1
+Node x:4.5, y:3.0, Pe = 0
+Node x:4.5, y:3.0, Ph = 0
+
+ Nodal results 
+Node x:4.5, y:3.5, Vector potential = 5.05147274882834e-006
+Node x:4.5, y:3.5, Bx = 0.0008558301551283313
+Node x:4.5, y:3.5, By = 0.0006823669958499448
+Node x:4.5, y:3.5, Sigma = 0
+Node x:4.5, y:3.5, E = 0.4766968953164836
+Node x:4.5, y:3.5, Hx = 681.0479981788876
+Node x:4.5, y:3.5, Hy = 543.0104019614278
+Node x:4.5, y:3.5, Je = 0
+Node x:4.5, y:3.5, Js = 0
+Node x:4.5, y:3.5, Mux = 1
+Node x:4.5, y:3.5, Muy = 1
+Node x:4.5, y:3.5, Pe = 0
+Node x:4.5, y:3.5, Ph = 0
+
+ Nodal results 
+Node x:4.5, y:4.0, Vector potential = 3.904003656251756e-006
+Node x:4.5, y:4.0, Bx = 0.0007719558035371276
+Node x:4.5, y:4.0, By = 0.0005041703908499096
+Node x:4.5, y:4.0, Sigma = 0
+Node x:4.5, y:4.0, E = 0.3382454535651758
+Node x:4.5, y:4.0, Hx = 614.3029099070494
+Node x:4.5, y:4.0, Hy = 401.2060493216799
+Node x:4.5, y:4.0, Je = 0
+Node x:4.5, y:4.0, Js = 0
+Node x:4.5, y:4.0, Mux = 1
+Node x:4.5, y:4.0, Muy = 1
+Node x:4.5, y:4.0, Pe = 0
+Node x:4.5, y:4.0, Ph = 0
+
+ Nodal results 
+Node x:4.5, y:4.5, Vector potential = 2.844724614188186e-006
+Node x:4.5, y:4.5, Bx = 0.0007122048865183163
+Node x:4.5, y:4.5, By = 0.0003569650460790058
+Node x:4.5, y:4.5, Sigma = 0
+Node x:4.5, y:4.5, E = 0.2525231285863676
+Node x:4.5, y:4.5, Hx = 566.754640917962
+Node x:4.5, y:4.5, Hy = 284.0637579724998
+Node x:4.5, y:4.5, Je = 0
+Node x:4.5, y:4.5, Js = 0
+Node x:4.5, y:4.5, Mux = 1
+Node x:4.5, y:4.5, Muy = 1
+Node x:4.5, y:4.5, Pe = 0
+Node x:4.5, y:4.5, Ph = 0
+
+ Nodal results 
+Node x:4.5, y:5.0, Vector potential = 1.865752700054162e-006
+Node x:4.5, y:5.0, Bx = 0.0006739583793750139
+Node x:4.5, y:5.0, By = 0.0002403066164971893
+Node x:4.5, y:5.0, Sigma = 0
+Node x:4.5, y:5.0, E = 0.2037052633467275
+Node x:4.5, y:5.0, Hx = 536.3190375786818
+Node x:4.5, y:5.0, Hy = 191.2299293660804
+Node x:4.5, y:5.0, Je = 0
+Node x:4.5, y:5.0, Js = 0
+Node x:4.5, y:5.0, Mux = 1
+Node x:4.5, y:5.0, Muy = 1
+Node x:4.5, y:5.0, Pe = 0
+Node x:4.5, y:5.0, Ph = 0
+
+ Nodal results 
+Node x:5.0, y:0.0, Vector potential = 1.510384545634219e-005
+Node x:5.0, y:0.0, Bx = -0.000359299919087355
+Node x:5.0, y:0.0, By = 0.00219668945782523
+Node x:5.0, y:0.0, Sigma = 58
+Node x:5.0, y:0.0, E = 1.971349229631703
+Node x:5.0, y:0.0, Hx = -285.9217908763529
+Node x:5.0, y:0.0, Hy = 1748.069928253705
+Node x:5.0, y:0.0, Je = 0
+Node x:5.0, y:0.0, Js = 0.25
+Node x:5.0, y:0.0, Mux = 1
+Node x:5.0, y:0.0, Muy = 1
+Node x:5.0, y:0.0, Pe = 0
+Node x:5.0, y:0.0, Ph = 0
+
+ Nodal results 
+Node x:5.0, y:0.5, Vector potential = 1.542627322729089e-005
+Node x:5.0, y:0.5, Bx = 1.579479481869984e-005
+Node x:5.0, y:0.5, By = 0.002350357959414534
+Node x:5.0, y:0.5, Sigma = 58
+Node x:5.0, y:0.5, E = 2.198101656580951
+Node x:5.0, y:0.5, Hx = 12.56909835259168
+Node x:5.0, y:0.5, Hy = 1870.355436381017
+Node x:5.0, y:0.5, Je = 0
+Node x:5.0, y:0.5, Js = 0.25
+Node x:5.0, y:0.5, Mux = 1
+Node x:5.0, y:0.5, Muy = 1
+Node x:5.0, y:0.5, Pe = 0
+Node x:5.0, y:0.5, Ph = 0
+
+ Nodal results 
+Node x:5.0, y:1.0, Vector potential = 1.493937259890304e-005
+Node x:5.0, y:1.0, Bx = 0.0005075016829175162
+Node x:5.0, y:1.0, By = 0.00233120042993507
+Node x:5.0, y:1.0, Sigma = 58
+Node x:5.0, y:1.0, E = 2.26479608845431
+Node x:5.0, y:1.0, Hx = 403.857007318892
+Node x:5.0, y:1.0, Hy = 1855.11035881059
+Node x:5.0, y:1.0, Je = 0
+Node x:5.0, y:1.0, Js = 0.25
+Node x:5.0, y:1.0, Mux = 1
+Node x:5.0, y:1.0, Muy = 1
+Node x:5.0, y:1.0, Pe = 0
+Node x:5.0, y:1.0, Ph = 0
+
+ Nodal results 
+Node x:5.0, y:1.5, Vector potential = 1.377049943673097e-005
+Node x:5.0, y:1.5, Bx = 0.001071703907500012
+Node x:5.0, y:1.5, By = 0.00215913316346957
+Node x:5.0, y:1.5, Sigma = 58
+Node x:5.0, y:1.5, E = 2.311886805369861
+Node x:5.0, y:1.5, Hx = 852.8348720476311
+Node x:5.0, y:1.5, Hy = 1718.183578799117
+Node x:5.0, y:1.5, Je = 0
+Node x:5.0, y:1.5, Js = 0.25
+Node x:5.0, y:1.5, Mux = 1
+Node x:5.0, y:1.5, Muy = 1
+Node x:5.0, y:1.5, Pe = 0
+Node x:5.0, y:1.5, Ph = 0
+
+ Nodal results 
+Node x:5.0, y:2.0, Vector potential = 1.169788543028269e-005
+Node x:5.0, y:2.0, Bx = 0.001512845458070165
+Node x:5.0, y:2.0, By = 0.001760040647822115
+Node x:5.0, y:2.0, Sigma = 0
+Node x:5.0, y:2.0, E = 2.143198154539031
+Node x:5.0, y:2.0, Hx = 1203.884163929947
+Node x:5.0, y:2.0, Hy = 1400.595845717757
+Node x:5.0, y:2.0, Je = 0
+Node x:5.0, y:2.0, Js = 0
+Node x:5.0, y:2.0, Mux = 1
+Node x:5.0, y:2.0, Muy = 1
+Node x:5.0, y:2.0, Pe = 0
+Node x:5.0, y:2.0, Ph = 0
+
+ Nodal results 
+Node x:5.0, y:2.5, Vector potential = 9.46282782926963e-006
+Node x:5.0, y:2.5, Bx = 0.001301683740545136
+Node x:5.0, y:2.5, By = 0.001142416045552443
+Node x:5.0, y:2.5, Sigma = 0
+Node x:5.0, y:2.5, E = 1.193461132726675
+Node x:5.0, y:2.5, Hx = 1035.847008250533
+Node x:5.0, y:2.5, Hy = 909.105803585836
+Node x:5.0, y:2.5, Je = 0
+Node x:5.0, y:2.5, Js = 0
+Node x:5.0, y:2.5, Mux = 1
+Node x:5.0, y:2.5, Muy = 1
+Node x:5.0, y:2.5, Pe = 0
+Node x:5.0, y:2.5, Ph = 0
+
+ Nodal results 
+Node x:5.0, y:3.0, Vector potential = 7.580799985442741e-006
+Node x:5.0, y:3.0, Bx = 0.001095451467616215
+Node x:5.0, y:3.0, By = 0.0008264234049270064
+Node x:5.0, y:3.0, Sigma = 0
+Node x:5.0, y:3.0, E = 0.7492177415020835
+Node x:5.0, y:3.0, Hx = 871.7325799419596
+Node x:5.0, y:3.0, Hy = 657.6468499048403
+Node x:5.0, y:3.0, Je = 0
+Node x:5.0, y:3.0, Js = 0
+Node x:5.0, y:3.0, Mux = 1
+Node x:5.0, y:3.0, Muy = 1
+Node x:5.0, y:3.0, Pe = 0
+Node x:5.0, y:3.0, Ph = 0
+
+ Nodal results 
+Node x:5.0, y:3.5, Vector potential = 6.013598675526947e-006
+Node x:5.0, y:3.5, Bx = 0.0009457136229801987
+Node x:5.0, y:3.5, By = 0.0005886910874148997
+Node x:5.0, y:3.5, Sigma = 0
+Node x:5.0, y:3.5, E = 0.4937509369945287
+Node x:5.0, y:3.5, Hx = 752.5749892332185
+Node x:5.0, y:3.5, Hy = 468.4654825811217
+Node x:5.0, y:3.5, Je = 0
+Node x:5.0, y:3.5, Js = 0
+Node x:5.0, y:3.5, Mux = 1
+Node x:5.0, y:3.5, Muy = 1
+Node x:5.0, y:3.5, Pe = 0
+Node x:5.0, y:3.5, Ph = 0
+
+ Nodal results 
+Node x:5.0, y:4.0, Vector potential = 4.623221160038139e-006
+Node x:5.0, y:4.0, Bx = 0.0008549590648654786
+Node x:5.0, y:4.0, By = 0.0004505391395873014
+Node x:5.0, y:4.0, Sigma = 0
+Node x:5.0, y:4.0, E = 0.3716031253401586
+Node x:5.0, y:4.0, Hx = 680.3548065728265
+Node x:5.0, y:4.0, Hy = 358.5276556084422
+Node x:5.0, y:4.0, Je = 0
+Node x:5.0, y:4.0, Js = 0
+Node x:5.0, y:4.0, Mux = 1
+Node x:5.0, y:4.0, Muy = 1
+Node x:5.0, y:4.0, Pe = 0
+Node x:5.0, y:4.0, Ph = 0
+
+ Nodal results 
+Node x:5.0, y:4.5, Vector potential = 3.348915498381759e-006
+Node x:5.0, y:4.5, Bx = 0.000776854500666933
+Node x:5.0, y:4.5, By = 0.0003085245743814377
+Node x:5.0, y:4.5, Sigma = 0
+Node x:5.0, y:4.5, E = 0.2780000485603006
+Node x:5.0, y:4.5, Hx = 618.2011692216424
+Node x:5.0, y:4.5, Hy = 245.5160553906447
+Node x:5.0, y:4.5, Je = 0
+Node x:5.0, y:4.5, Js = 0
+Node x:5.0, y:4.5, Mux = 1
+Node x:5.0, y:4.5, Muy = 1
+Node x:5.0, y:4.5, Pe = 0
+Node x:5.0, y:4.5, Ph = 0
+
+ Nodal results 
+Node x:5.0, y:5.0, Vector potential = 2.166998521012893e-006
+N
