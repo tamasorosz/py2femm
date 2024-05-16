@@ -811,3 +811,12 @@ class FemmTester(TestCase):
         self.assertIn("mi_addarc(1.0, 0.0, 0.0, 1.0, 90.0, 1)", cmds)
 
         print(cmds)
+
+    def test_nr_nodes(self):
+        fmw = FemmProblem()
+        fmw.field = FemmFields.MAGNETIC
+        self.assertEqual(
+            'mo_numnodes',
+            fmw.nr_nodes(),
+        )
+

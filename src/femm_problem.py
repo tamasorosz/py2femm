@@ -144,7 +144,6 @@ class FemmProblem:
         self.lua_script.append(cmd)
         return cmd
 
-
     def add_node(self, node: Node):
         """Adds a node to the given point (x,y)"""
         cmd = Template("${field}_addnode($x_coord, $y_coord)")
@@ -939,3 +938,12 @@ class FemmProblem:
         self.save_as(filename)
         self.analyze()
         self.load_solution()
+
+    def nr_nodes(self):
+        cmd = "numnodes"
+        if self.field == FemmFields.MAGNETIC:
+            cmd = "mo_" + cmd
+        if self.field == FemmFields.ELECTROSTATIC:
+            cmd = "eo_" + cmd
+        self.lua_script.append(cmd)
+        return cmd

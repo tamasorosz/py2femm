@@ -98,6 +98,7 @@ def solenoid(n, w, h, radius, gap):
 
     problem.write("solenoid.lua")
 
+    return problem
 
 if __name__ == '__main__':
     solenoid(2, 2, 2, 6, 1)

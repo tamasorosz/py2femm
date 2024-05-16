@@ -1,5 +1,4 @@
 import os
-from meshTopology import getNodeInfo
 import pandas as pd
 import time
 import math
@@ -12,12 +11,48 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
+from solenoid import solenoid
+
+def getNodeInfo(file_path):
+
+    struct_data = {}
+
+    node_id = 0  # Initialize the runner variable for node identification
+    current_node = None  # To hold the current node identifier during parsing
+
+    with open(file_path,'r') as file:
+        for line in file:
+            line = line.strip()  # Clean up whitespace
+
+            if 'Nodal results' in line:
+                node_id += 1  # Increment node identifier on new section
+                current_node = f"Node{node_id-1}"  # Format the current node ID as "Node0", "Node1", etc.
+                continue
+
+            # Split the line into components
+            parts = line.split()
+            if len(parts) < 5:
+                continue  # Skip lines that do not have enough parts
+
+            if current_node:
+                x = float(parts[1].split(':')[1].replace(',',''))
+                y = float(parts[2].split(':')[1].replace(',',''))
+                if current_node not in struct_data:
+                    struct_data[current_node] = {'x':x,'y':y}  # Initialize with coordinates
+
+                # Join the parts for the physical variable name
+                physical_var_name = ' '.join(parts[3:-2]).replace('=','').strip()
+                physical_var_value = float(parts[-1])
+
+                # Store the physical variable
+                struct_data[current_node][physical_var_name] = physical_var_value
+    return struct_data
 
 def process_mesh_data(file_path):
     # Initialize the variables
     typeflag = 0
-    noRow = None
-    noNod = None
+    nr_rows = None
+    nr_nodes = None
     node_data = []
     block_data = []
     lines = []  # Use a list to collect lines first
@@ -26,6 +61,7 @@ def process_mesh_data(file_path):
     with open(file_path,'r') as file:
         content = file.readlines()
 
+        # tudjuk az előzményekből
         # Finding the row containing [ProblemType] and setting typeflag
         for index,line in enumerate(content):
             if '[ProblemType]' in line:
@@ -36,14 +72,15 @@ def process_mesh_data(file_path):
         # Find the row with [Solution] in it
         for index,line in enumerate(content):
             if '[Solution]' in line:
-                noRow = index
-                noNod = int(content[noRow + 1].strip())  # The line after noRow contains the number of nodes
+                nr_rows = index
+                nr_nodes = int(content[nr_rows + 1].strip())  # The line after noRow contains the number of nodes
                 break
 
+        # Le lehet kérni femm-ből
         # Parse node information if typeflag is 1
-        if typeflag == 1 and noRow is not None:
-            for i in range(noNod):
-                node_index = noRow + 2 + i
+        if typeflag == 1 and nr_rows is not None:
+            for i in range(nr_nodes):
+                node_index = nr_rows + 2 + i
                 parts = content[node_index].split()
                 # N = i
                 R = float(parts[0])
@@ -53,8 +90,8 @@ def process_mesh_data(file_path):
                 node_data.append((R,Z)) #node_data.append((N,R,Z,complex(Re_A,Im_A)))
 
         # Find noBlock and parse block data
-        if noRow is not None and noNod is not None:
-            noBlock_line_index = noRow + 2 + noNod
+        if nr_rows is not None and nr_nodes is not None:
+            noBlock_line_index = nr_rows + 2 + nr_nodes
             noBlock = int(content[noBlock_line_index].strip())
 
             for i in range(noBlock):
@@ -129,15 +166,23 @@ def export_nodal_values():
 
 
 if __name__ == '__main__':
+
+    problem = solenoid(2, 2, 2, 6, 1)
+
+    femm = Executor()
+    current_dir = os.getcwd()
+    lua_file = current_dir + "/solenoid.lua"
+    femm.run(lua_file)
+
     # This script will starts with solenoid.ans to extract the nodal values
-    file_path = 'solenoid.ans'
+    file_path = current_dir + '/solenoid.ans'
     nodes, blocks, unique_lines = process_mesh_data(file_path)
     current_dir = os.getcwd()
     # k = math.ceil(len(nodes)/100)
     nodeInfo = {}
 
     # read values
-    problem = FemmProblem(out_file="meshextract.csv")
+    problem = FemmProblem(out_file="../meshextract.csv")
     problem.magnetic_problem(0, LengthUnit.CENTIMETERS, "axi")
     problem.openFem(current_dir + "\solenoid.fem")
     problem.load_specific_solution(current_dir + "/solenoid.ans")
