@@ -738,7 +738,7 @@ class FemmProblem:
         self.lua_script.append(cmd)
         return cmd
 
-    def get_point_values(self, node: Node):
+    def get_point_values(self, point: Node):
         """
         Get the values associated with the point at x,y Return in order
     
@@ -761,42 +761,42 @@ class FemmProblem:
 
         cmd = None
         if self.field == FemmFields.MAGNETIC:
-            cmd = f"A, B1, B2, Sig, E, H1, H2, Je, Js, Mu1, Mu2, Pe, Ph = mo_getpointvalues({node.x}, {node.y})"
+            cmd = f"A, B1, B2, Sig, E, H1, H2, Je, Js, Mu1, Mu2, Pe, Ph = mo_getpointvalues({point.x}, {point.y})"
             self.lua_script.append(cmd)
 
-            cmd = "write(file_out, \"\\n Nodal results \\n\")"
+            cmd = "write(file_out, \"\\n Point values \\n\")"
             self.lua_script.append(cmd)
-            cmd = "write(file_out, \"Node x:{0}, y:{1}, Vector potential = \", A ,\"\\n\")".format(node.x, node.y)
-            self.lua_script.append(cmd)
-
-            cmd = "write(file_out, \"Node x:{0}, y:{1}, Bx = \", B1 ,\"\\n\")".format(node.x, node.y)
-            self.lua_script.append(cmd)
-            cmd = "write(file_out, \"Node x:{0}, y:{1}, By = \", B2 ,\"\\n\")".format(node.x, node.y)
+            cmd = "write(file_out, \"Node x:{0}, y:{1}, Vector potential = \", A ,\"\\n\")".format(point.x, point.y)
             self.lua_script.append(cmd)
 
-            cmd = "write(file_out, \"Node x:{0}, y:{1}, Sigma = \", Sig ,\"\\n\")".format(node.x, node.y)
+            cmd = "write(file_out, \"Node x:{0}, y:{1}, Bx = \", B1 ,\"\\n\")".format(point.x, point.y)
             self.lua_script.append(cmd)
-            cmd = "write(file_out, \"Node x:{0}, y:{1}, E = \", E ,\"\\n\")".format(node.x, node.y)
-            self.lua_script.append(cmd)
-
-            cmd = "write(file_out, \"Node x:{0}, y:{1}, Hx = \", H1 ,\"\\n\")".format(node.x, node.y)
-            self.lua_script.append(cmd)
-            cmd = "write(file_out, \"Node x:{0}, y:{1}, Hy = \", H2 ,\"\\n\")".format(node.x, node.y)
+            cmd = "write(file_out, \"Point x:{0}, y:{1}, By = \", B2 ,\"\\n\")".format(point.x, point.y)
             self.lua_script.append(cmd)
 
-            cmd = "write(file_out, \"Node x:{0}, y:{1}, Je = \", Je ,\"\\n\")".format(node.x, node.y)
+            cmd = "write(file_out, \"Point x:{0}, y:{1}, Sigma = \", Sig ,\"\\n\")".format(point.x, point.y)
             self.lua_script.append(cmd)
-            cmd = "write(file_out, \"Node x:{0}, y:{1}, Js = \", Js ,\"\\n\")".format(node.x, node.y)
-            self.lua_script.append(cmd)
-
-            cmd = "write(file_out, \"Node x:{0}, y:{1}, Mux = \", Mu1 ,\"\\n\")".format(node.x, node.y)
-            self.lua_script.append(cmd)
-            cmd = "write(file_out, \"Node x:{0}, y:{1}, Muy = \", Mu2 ,\"\\n\")".format(node.x, node.y)
+            cmd = "write(file_out, \"Point x:{0}, y:{1}, E = \", E ,\"\\n\")".format(point.x, point.y)
             self.lua_script.append(cmd)
 
-            cmd = "write(file_out, \"Node x:{0}, y:{1}, Pe = \", Pe ,\"\\n\")".format(node.x, node.y)
+            cmd = "write(file_out, \"Point x:{0}, y:{1}, Hx = \", H1 ,\"\\n\")".format(point.x, point.y)
             self.lua_script.append(cmd)
-            cmd = "write(file_out, \"Node x:{0}, y:{1}, Ph = \", Ph ,\"\\n\")".format(node.x, node.y)
+            cmd = "write(file_out, \"Point x:{0}, y:{1}, Hy = \", H2 ,\"\\n\")".format(point.x, point.y)
+            self.lua_script.append(cmd)
+
+            cmd = "write(file_out, \"Point x:{0}, y:{1}, Je = \", Je ,\"\\n\")".format(point.x, point.y)
+            self.lua_script.append(cmd)
+            cmd = "write(file_out, \"Point x:{0}, y:{1}, Js = \", Js ,\"\\n\")".format(point.x, point.y)
+            self.lua_script.append(cmd)
+
+            cmd = "write(file_out, \"Point x:{0}, y:{1}, Mux = \", Mu1 ,\"\\n\")".format(point.x, point.y)
+            self.lua_script.append(cmd)
+            cmd = "write(file_out, \"Point x:{0}, y:{1}, Muy = \", Mu2 ,\"\\n\")".format(point.x, point.y)
+            self.lua_script.append(cmd)
+
+            cmd = "write(file_out, \"Point x:{0}, y:{1}, Pe = \", Pe ,\"\\n\")".format(point.x, point.y)
+            self.lua_script.append(cmd)
+            cmd = "write(file_out, \"Point x:{0}, y:{1}, Ph = \", Ph ,\"\\n\")".format(point.x, point.y)
             self.lua_script.append(cmd)
 
         # Symbol Definition
@@ -811,25 +811,25 @@ class FemmProblem:
         # nrg electric field energy density
         #
         if self.field == FemmFields.ELECTROSTATIC:
-            cmd = f"V, Dx, Dy, Ex, Ey, ex, ey, nrg = eo_getpointvalues({node.x}, {node.y})"
+            cmd = f"V, Dx, Dy, Ex, Ey, ex, ey, nrg = eo_getpointvalues({point.x}, {point.y})"
             self.lua_script.append(cmd)
             cmd = "write(file_out, \"\\n Nodal results \\n\")"
             self.lua_script.append(cmd)
-            cmd = "write(file_out, \"Node x:{0}, y:{1}, Voltage = \", V ,\"\\n\")".format(node.x, node.y)
+            cmd = "write(file_out, \"Node x:{0}, y:{1}, Voltage = \", V ,\"\\n\")".format(point.x, point.y)
             self.lua_script.append(cmd)
-            cmd = "write(file_out, \"Node x:{0}, y:{1}, Dx = \", Dx ,\"\\n\")".format(node.x, node.y)
+            cmd = "write(file_out, \"Node x:{0}, y:{1}, Dx = \", Dx ,\"\\n\")".format(point.x, point.y)
             self.lua_script.append(cmd)
-            cmd = "write(file_out, \"Node x:{0}, y:{1}, Dy = \", Dy ,\"\\n\")".format(node.x, node.y)
+            cmd = "write(file_out, \"Node x:{0}, y:{1}, Dy = \", Dy ,\"\\n\")".format(point.x, point.y)
             self.lua_script.append(cmd)
-            cmd = "write(file_out, \"Node x:{0}, y:{1}, Ex = \", Ex ,\"\\n\")".format(node.x, node.y)
+            cmd = "write(file_out, \"Node x:{0}, y:{1}, Ex = \", Ex ,\"\\n\")".format(point.x, point.y)
             self.lua_script.append(cmd)
-            cmd = "write(file_out, \"Node x:{0}, y:{1}, Ey = \", Ey ,\"\\n\")".format(node.x, node.y)
+            cmd = "write(file_out, \"Node x:{0}, y:{1}, Ey = \", Ey ,\"\\n\")".format(point.x, point.y)
             self.lua_script.append(cmd)
-            cmd = "write(file_out, \"Node x:{0}, y:{1}, ex = \", ex ,\"\\n\")".format(node.x, node.y)
+            cmd = "write(file_out, \"Node x:{0}, y:{1}, ex = \", ex ,\"\\n\")".format(point.x, point.y)
             self.lua_script.append(cmd)
-            cmd = "write(file_out, \"Node x:{0}, y:{1}, ey = \", ey ,\"\\n\")".format(node.x, node.y)
+            cmd = "write(file_out, \"Node x:{0}, y:{1}, ey = \", ey ,\"\\n\")".format(point.x, point.y)
             self.lua_script.append(cmd)
-            cmd = "write(file_out, \"Node x:{0}, y:{1}, nrg = \", nrg ,\"\\n\")".format(node.x, node.y)
+            cmd = "write(file_out, \"Node x:{0}, y:{1}, nrg = \", nrg ,\"\\n\")".format(point.x, point.y)
             self.lua_script.append(cmd)
         return cmd
 
@@ -928,11 +928,60 @@ class FemmProblem:
         self.analyze()
         self.load_solution()
 
-    def nr_nodes(self):
-        cmd = "numnodes"
+    def get_nr_nodes(self):
+
+        cmd = "numnodes()"
         if self.field == FemmFields.MAGNETIC:
             cmd = "mo_" + cmd
         if self.field == FemmFields.ELECTROSTATIC:
             cmd = "eo_" + cmd
+
+        cmd = "node_nr = " + cmd
         self.lua_script.append(cmd)
+        write_cmd = "write(file_out, \"node_nr = \", node_nr ,\"\\n\")"
+        self.lua_script.append(write_cmd)
+
+        return cmd
+
+    def get_nr_elements(self):
+
+        cmd = "numelements()"
+        if self.field == FemmFields.MAGNETIC:
+            cmd = "mo_" + cmd
+        if self.field == FemmFields.ELECTROSTATIC:
+            cmd = "eo_" + cmd
+
+        cmd = "element_nr = " + cmd
+        self.lua_script.append(cmd)
+        write_cmd = "write(file_out, \"element_nr = \", element_nr ,\"\\n\")"
+        self.lua_script.append(write_cmd)
+
+        return cmd
+
+    def get_nodal_coordinate(self, node_nr: int):
+
+        cmd = "x, y = mo_getnode({0})".format(node_nr)
+        self.lua_script.append(cmd)
+        write_cmd = "write(file_out, \"x,y = \", x, \", \", y ,\"\\n\")"
+        self.lua_script.append(write_cmd)
+        return cmd
+
+    def get_element(self, element_nr: int):
+        """
+        Writes out the data of the given element.
+
+        :param element_nr:
+        :return:
+            1. Index of first element node
+            2. Index of second element node
+            3. Index of third element node
+            4. x (or r) coordinate of the element centroid
+            5. y (or z) coordinate of the element centroid
+            6. element area using the length unit defined for the problem
+            7. group number associated with the element
+        """
+        cmd = "n_1, n_2, n_3, x_c, y_c, area, group_nr = mo_getelement({0})".format(element_nr)
+        self.lua_script.append(cmd)
+        write_cmd = "write(file_out, \"n_1, n_2, n_3, x_c, y_c, area, group_nr = \", n_1, \", \", n_2 ,\",\", n_3,\",\", x_c,\",\", y_c,\",\", area,\",\", group_nr,\"\\n\")"
+        self.lua_script.append(write_cmd)
         return cmd
