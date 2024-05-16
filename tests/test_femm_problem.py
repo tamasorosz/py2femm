@@ -783,7 +783,7 @@ class FemmTester(TestCase):
     def test_get_point_values(self):
         fmw = FemmProblem()
         fmw.field = FemmFields.MAGNETIC
-        self.assertEqual("mo_getpointvalues(0.01, 0)", fmw.get_point_values(Node(0.01, 0)))
+        self.assertIn("write(file_out, \"Node x:0.01, y:0, Ph = \", Ph", fmw.get_point_values(Node(0.01, 0)))
 
     def test_create_geometry(self):
         """create basic objects: nodes, lines and a circle arc to test the basic functionality of the command."""

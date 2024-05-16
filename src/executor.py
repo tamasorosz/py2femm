@@ -28,8 +28,6 @@ class Executor:
             command.append(f"-lua-script={script_file}")
             command.append("-windowhide")
 
-        if debug:
-            return " ".join(command)
         proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         process_timer = Timer(timeout, proc.kill)
         try:

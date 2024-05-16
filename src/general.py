@@ -14,12 +14,16 @@ class Material(ABC):
     material_name: str
     auto_mesh: AutoMeshOption = AutoMeshOption.AUTOMESH
     mesh_size: float = 0.0
+    b = None
+    h = None
+    material_positions: list = None
 
 
 @dataclass
 class Boundary(ABC):
     name: str
     type: int
+    boundary_edges: list = None
 
 
 class FemmFields(Enum):
@@ -51,7 +55,6 @@ class FemmFields(Enum):
             return "ho"
         else:
             raise ValueError("Invalid FemmFields value")
-
 
 
 class LengthUnit(Enum):
