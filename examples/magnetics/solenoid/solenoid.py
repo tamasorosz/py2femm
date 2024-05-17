@@ -119,3 +119,4 @@ if __name__ == '__main__':
     lua_file = current_dir + "/solenoid.lua"
     femm.run(lua_file)
 
+    problem.post_process_mesh_data()

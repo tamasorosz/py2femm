@@ -33,6 +33,10 @@ class FemmProblem:
         self.node_nr = "node_nr"
         self.element_nr = "element_nr"
 
+        ### Post processing
+        self.nodal_coords = []
+        self.element_coords = []
+
     def write(self, file_name, close_after=True):
         """Generate a runnable lua-script for a FEMM calculation.
 
@@ -1027,3 +1031,23 @@ class FemmProblem:
             "write(mesh_file, i, \", \", n_1, \", \", n_2 ,\",\", n_3,\",\", x_c,\",\", y_c,\",\", area,\",\", group_nr,\",\", Sig,\",\", Mu1,\",\", Mu2,\"\\n\")")
         cmd_line.append("end \n")
         self.lua_script.extend(cmd_line)
+
+    def post_process_mesh_data(self):
+        """
+        Imports the previously calculated nodal and element results into an internal dictionary.
+        :return:
+        """
+
+        # Nodal data
+        with open(self.node_file, newline='') as csvfile:
+            for row in csv.DictReader(csvfile, delimiter=',', skipinitialspace=True):
+                k, x, y = row.items()
+                self.nodal_coords.append({k[1]: Node(x[1], y[1])})
+
+        # Mesh data
+        with open(self.mesh_file, newline='') as csvfile:
+            for row in csv.DictReader(csvfile, delimiter=',', skipinitialspace=True):
+                self.element_coords.append(row)
+                #index, x, y = row.items()
+                #self.nodal_coords.append({k[1]: Node(x[1], y[1])})
+
