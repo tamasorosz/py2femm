@@ -8,6 +8,7 @@ generation in different subfields
 
 """
 import csv
+from copy import copy
 from enum import Enum
 from math import asin, degrees
 from pathlib import Path
@@ -1053,12 +1054,21 @@ class FemmProblem:
         with open(self.node_file, newline='') as csvfile:
             for row in csv.DictReader(csvfile, delimiter=',', skipinitialspace=True):
                 k, x, y = row.items()
-                self.nodal_coords.append({k[1]: Node(x[1], y[1])})
+                self.nodal_coords.append({k[1]: Node(x[1], y[1], id=k[1])})
+
+        print(self.nodal_coords[0])
 
         # Mesh data
         with open(self.mesh_file, newline='') as csvfile:
             for row in csv.DictReader(csvfile, delimiter=',', skipinitialspace=True):
-                self.element_coords.append(row)
-                #index, x, y = row.items()
-                #self.nodal_coords.append({k[1]: Node(x[1], y[1])})
+                row['n_1'] = self.nodal_coords[int(row['n_1'])-1]
+                row['n_2'] = self.nodal_coords[int(row['n_2'])-1]
+                row['n_3'] = self.nodal_coords[int(row['n_3'])-1]
 
+                self.element_coords.append(row)
+
+
+    def calc_stiffness_matrix(self):
+
+        # Kij_matrix(nodes, nodeInfo, blocks, 0.01)
+        return
