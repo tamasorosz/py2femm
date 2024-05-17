@@ -27,7 +27,7 @@ class FemmProblem:
         self.lua_script = []
         self.out_file = out_file
         self.integral_counter = 0
-        self.mesh_file = "mesh.dat"
+        self.mesh_file = "elements.csv"
         self.node_file = "node.csv"
         self.node_nr = "node_nr"
         self.element_nr = "element_nr"
@@ -1015,7 +1015,7 @@ class FemmProblem:
         return cmd
 
     def get_back_fem_results(self):
-
+        ## should be generalized for all fields
         self.get_nr_nodes()
         self.get_nr_elements()
 
@@ -1029,9 +1029,12 @@ class FemmProblem:
         self.lua_script.extend(cmd_line)
 
         cmd_line = []
-        cmd_line.append("write(mesh_file,\"element_nr, n_1, n_2, n_3, x_c, y_c, area, group_nr \\n \")")
+        cmd_line.append("write(mesh_file,\"element_nr, n_1, n_2, n_3, x_c, y_c, area, group_nr, Sig, Mu1, Mu2 \\n \")")
         cmd_line.append("for i = 1, element_nr do")
         cmd_line.append("n_1, n_2, n_3, x_c, y_c, area, group_nr = mo_getelement(i)")
-        cmd_line.append("write(mesh_file, i, \", \", n_1, \", \", n_2 ,\",\", n_3,\",\", x_c,\",\", y_c,\",\", area,\",\", group_nr,\"\\n\")")
+        # get the solution values at the center point of the element and adds the mu_1, mu_2 and sigma values to calculate the stiffness matrix
+        cmd_line.append(f"A, B1, B2, Sig, E, H1, H2, Je, Js, Mu1, Mu2, Pe, Ph = mo_getpointvalues(x_c, y_c)")
+        cmd_line.append(
+            "write(mesh_file, i, \", \", n_1, \", \", n_2 ,\",\", n_3,\",\", x_c,\",\", y_c,\",\", area,\",\", group_nr,\",\", Sig,\",\", Mu1,\",\", Mu2,\"\\n\")")
         cmd_line.append("end \n")
         self.lua_script.extend(cmd_line)
