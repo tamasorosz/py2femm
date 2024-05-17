@@ -120,3 +120,4 @@ if __name__ == '__main__':
     femm.run(lua_file)
 
     problem.post_process_mesh_data()
+    problem.calc_stiffness_matrix()
