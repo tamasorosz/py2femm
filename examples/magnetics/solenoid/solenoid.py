@@ -103,7 +103,8 @@ def solenoid(n, w, h, radius, gap):
     #problem.get_nodal_coordinate(2)
     #problem.get_element(3)
 
-
+    # post-processing operations
+    problem.get_back_fem_results()
 
     problem.write("solenoid.lua")
 
@@ -118,5 +119,3 @@ if __name__ == '__main__':
     lua_file = current_dir + "/solenoid.lua"
     femm.run(lua_file)
 
-    # post-processing operations
-    problem.get_back_fem_results()

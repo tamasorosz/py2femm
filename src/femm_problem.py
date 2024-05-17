@@ -28,8 +28,10 @@ class FemmProblem:
         self.lua_script = []
         self.out_file = out_file
         self.integral_counter = 0
-        self.parameters = "parameters.dat"
         self.mesh_file = "mesh.dat"
+        self.node_file = "node.csv"
+        self.node_nr = "node_nr"
+        self.element_nr = "element_nr"
 
     def write(self, file_name, close_after=True):
         """Generate a runnable lua-script for a FEMM calculation.
@@ -101,24 +103,22 @@ class FemmProblem:
         cmd = cmd.substitute(outfile=out_file)
         cmd_list.append(cmd)
 
-        # temporary parameters
-        cmd_list.append(f'parameters = openfile("{self.parameters}", "w")')
-
         # mesh output
         cmd_list.append(f'mesh_file = openfile("{self.mesh_file}", "w")')
+        self.lua_script.extend(cmd_list)
+
+        # node output
+        cmd_list.append(f'node_file = openfile("{self.node_file}", "w")')
         self.lua_script.extend(cmd_list)
 
         return cmd_list
 
     def close(self):
 
-        self.give_back_parameters()
-
         cmd_list = []
 
         cmd_list.append("closefile(file_out)")
         cmd_list.append("closefile(mesh_file)")
-        cmd_list.append("closefile(parameters)")
 
         cmd_list.append(f"{self.field.output_to_string()}_close()")
         cmd_list.append(f"{self.field.input_to_string()}_close()")
@@ -953,10 +953,10 @@ class FemmProblem:
         if self.field == FemmFields.ELECTROSTATIC:
             cmd = "eo_" + cmd
 
-        cmd = "node_nr = " + cmd
+        cmd = f"{self.node_nr} = " + cmd
         self.lua_script.append(cmd)
-        write_cmd = "write(parameters, \"node_nr = \", node_nr ,\"\\n\")"
-        self.lua_script.append(write_cmd)
+        # write_cmd = "write(parameters, \"node_nr = \", node_nr ,\"\\n\")"
+        # self.lua_script.append(write_cmd)
 
         return cmd
 
@@ -968,10 +968,10 @@ class FemmProblem:
         if self.field == FemmFields.ELECTROSTATIC:
             cmd = "eo_" + cmd
 
-        cmd = "element_nr = " + cmd
+        cmd = f"{self.element_nr} = " + cmd
         self.lua_script.append(cmd)
-        write_cmd = "write(parameters, \"element_nr = \", element_nr ,\"\\n\")"
-        self.lua_script.append(write_cmd)
+        # write_cmd = "write(parameters, \"element_nr = \", element_nr ,\"\\n\")"
+        # self.lua_script.append(write_cmd)
 
         return cmd
 
@@ -1003,23 +1003,24 @@ class FemmProblem:
         self.lua_script.append(write_cmd)
         return cmd
 
-    def give_back_parameters(self):
+    def get_back_fem_results(self):
+
         self.get_nr_nodes()
         self.get_nr_elements()
 
-    def get_back_fem_results(self):
+        # write out the nodal data into a simple csv
+        cmd_line = []
+        cmd_line.append("write(node_file,\"node_nr, x, y \\n \")")
+        cmd_line.append("for i = 1, node_nr do")
+        cmd_line.append("xx, yy = mo_getnode(i)")
+        cmd_line.append("write(node_file, i, \",\", xx, \", \", yy ,\"\\n\")")
+        cmd_line.append("end \n")
+        self.lua_script.extend(cmd_line)
 
-        # get back the number of nodes and the number of elements to get the information all of the nodes and the
-        myvars = {}
-        with open(self.parameters, 'r') as f:
-            for line in f:
-                name, var = line.partition("=")[::2]
-                myvars[name.strip()] = var
-
-        print(myvars)
-        # # write out all of the nodal and element data to the mesh file
-        # for i in range(1,int(myvars['node_nr'])):
-        #     self.get_nodal_coordinate(i)
-        #
-        # for i in range(int(myvars['element_nr'])):
-        #     self.get_element(i)
+        cmd_line = []
+        cmd_line.append("write(mesh_file,\"element_nr, n_1, n_2, n_3, x_c, y_c, area, group_nr \\n \")")
+        cmd_line.append("for i = 1, element_nr do")
+        cmd_line.append("n_1, n_2, n_3, x_c, y_c, area, group_nr = mo_getelement(i)")
+        cmd_line.append("write(mesh_file, i, \", \", n_1, \", \", n_2 ,\",\", n_3,\",\", x_c,\",\", y_c,\",\", area,\",\", group_nr,\"\\n\")")
+        cmd_line.append("end \n")
+        self.lua_script.extend(cmd_line)
