@@ -7,6 +7,7 @@ The original FEMM code has separate scripting commands for the geometry
 generation in different subfields
 
 """
+import csv
 from enum import Enum
 from math import asin, degrees
 from pathlib import Path
@@ -26,6 +27,8 @@ class FemmProblem:
         self.lua_script = []
         self.out_file = out_file
         self.integral_counter = 0
+        self.parameters = "parameters.dat"
+        self.mesh_file = "mesh.dat"
 
     def write(self, file_name, close_after=True):
         """Generate a runnable lua-script for a FEMM calculation.
@@ -79,7 +82,7 @@ class FemmProblem:
         This commands initialize a femm console and flush the variables
         :param out_file: defines the default output file
         """
-        out_file = str(Path(out_file).resolve().as_posix())
+        self.out_file = str(Path(out_file).resolve().as_posix())
         cmd_list = []
         cmd_list.append(f'remove("{out_file}")')  # get rid of the old data file, if it exists
 
@@ -92,21 +95,35 @@ class FemmProblem:
         if self.field == FemmFields.CURRENT_FLOW:
             cmd_list.append("newdocument(3)")  # the 3 specifies current flow problem
 
+        # user specified outpu
         cmd = Template('file_out = openfile("$outfile", "w")')
         cmd = cmd.substitute(outfile=out_file)
         cmd_list.append(cmd)
 
+        # temporary parameters
+        cmd_list.append(f'parameters = openfile("{self.parameters}", "w")')
+
+        # mesh output
+        cmd_list.append(f'mesh_file = openfile("{self.mesh_file}", "w")')
         self.lua_script.extend(cmd_list)
 
         return cmd_list
 
     def close(self):
 
+        self.give_back_parameters()
+
         cmd_list = []
+
         cmd_list.append("closefile(file_out)")
+        cmd_list.append("closefile(mesh_file)")
+        cmd_list.append("closefile(parameters)")
+
         cmd_list.append(f"{self.field.output_to_string()}_close()")
         cmd_list.append(f"{self.field.input_to_string()}_close()")
+
         cmd_list.append("quit()")
+
         self.lua_script.extend(cmd_list)
         return cmd_list
 
@@ -949,7 +966,7 @@ class FemmProblem:
 
         cmd = "node_nr = " + cmd
         self.lua_script.append(cmd)
-        write_cmd = "write(file_out, \"node_nr = \", node_nr ,\"\\n\")"
+        write_cmd = "write(parameters, \"node_nr = \", node_nr ,\"\\n\")"
         self.lua_script.append(write_cmd)
 
         return cmd
@@ -964,7 +981,7 @@ class FemmProblem:
 
         cmd = "element_nr = " + cmd
         self.lua_script.append(cmd)
-        write_cmd = "write(file_out, \"element_nr = \", element_nr ,\"\\n\")"
+        write_cmd = "write(parameters, \"element_nr = \", element_nr ,\"\\n\")"
         self.lua_script.append(write_cmd)
 
         return cmd
@@ -973,7 +990,7 @@ class FemmProblem:
 
         cmd = "x, y = mo_getnode({0})".format(node_nr)
         self.lua_script.append(cmd)
-        write_cmd = "write(file_out, \"x,y = \", x, \", \", y ,\"\\n\")"
+        write_cmd = "write(mesh_file, \"x,y = \", x, \", \", y ,\"\\n\")"
         self.lua_script.append(write_cmd)
         return cmd
 
@@ -993,6 +1010,27 @@ class FemmProblem:
         """
         cmd = "n_1, n_2, n_3, x_c, y_c, area, group_nr = mo_getelement({0})".format(element_nr)
         self.lua_script.append(cmd)
-        write_cmd = "write(file_out, \"n_1, n_2, n_3, x_c, y_c, area, group_nr = \", n_1, \", \", n_2 ,\",\", n_3,\",\", x_c,\",\", y_c,\",\", area,\",\", group_nr,\"\\n\")"
+        write_cmd = "write(mesh_file, \"n_1, n_2, n_3, x_c, y_c, area, group_nr = \", n_1, \", \", n_2 ,\",\", n_3,\",\", x_c,\",\", y_c,\",\", area,\",\", group_nr,\"\\n\")"
         self.lua_script.append(write_cmd)
         return cmd
+
+    def give_back_parameters(self):
+        self.get_nr_nodes()
+        self.get_nr_elements()
+
+    def get_back_fem_results(self):
+
+        # get back the number of nodes and the number of elements to get the information all of the nodes and the
+        myvars = {}
+        with open(self.parameters, 'r') as f:
+            for line in f:
+                name, var = line.partition("=")[::2]
+                myvars[name.strip()] = var
+
+        print(myvars)
+        # # write out all of the nodal and element data to the mesh file
+        # for i in range(1,int(myvars['node_nr'])):
+        #     self.get_nodal_coordinate(i)
+        #
+        # for i in range(int(myvars['element_nr'])):
+        #     self.get_element(i)

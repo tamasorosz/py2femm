@@ -13,7 +13,7 @@ class Executor:
     femm_path_linux = str(Path.home()) + "/.wine/drive_c/femm42/bin/femm.exe"
     femm_path_windows = r"D:\femm42\bin\femm.exe"
 
-    def run(self, script_file, timeout=10, debug=False):
+    def run(self, script_file, timeout=1000, debug=False):
         command = []
         script_file = Path(script_file).resolve()
         assert script_file.exists(), f"{script_file} does not exists."
@@ -33,5 +33,6 @@ class Executor:
         try:
             process_timer.start()
             proc.communicate()
+            proc.wait(timeout=timeout)
         finally:
             process_timer.cancel()
