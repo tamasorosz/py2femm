@@ -1056,6 +1056,34 @@ class FemmProblem:
 
                 self.element_coords.append(row)
 
+    @staticmethod
+    def check_node_order(n_1: Node, n_2: Node, n_3: Node):
+        """
+        Ensure that the triangle vertices are ordered in a counterclockwise direction.
+        If not, swap the second and third vertices to make them counterclockwise.
+
+        Returns:
+            tuple: The potentially reordered coordinates and a boolean flag indicating if a swap occurred.
+        """
+        # Calculate the cross product to determine the order of the points
+        cross_product = (n_2.x - n_1.x) * (n_3.y - n_2.y) - (n_2.y - n_1.y) * (n_3.x - n_1.x)
+
+        ##cross_product = (x2 - x1) * (y3 - y1) - (y2 - y1) * (x3 - x1)
+
+        if cross_product < 0:
+            return False
+
+        return True
+        # if cross_product < 0:
+        #     # Points are in clockwise order, so swap the second and third vertices
+        #     x2, x3 = x3, x2
+        #     y2, y3 = y3, y2
+        #     swap_occurred = True
+        # else:
+        #     swap_occurred = False
+        #
+        # return (x1, x2, x3, y1, y2, y3), swap_occurred
+
     def calc_stiffness_matrix(self):
 
         # Kij_matrix(nodes, nodeInfo, blocks, 0.01)
@@ -1068,6 +1096,8 @@ class FemmProblem:
         # xik = x1 - x3
 
         current = self.element_coords[0]
+
+        print(self.check_node_order(current['n_1'], current['n_2'], current['n_3']))
 
         print(current)
 
