@@ -132,7 +132,8 @@ if __name__ == '__main__':
     x, y = np.meshgrid(x, y)
     z = k_nn[x, y]
 
-    ax.plot_surface(x, y, z, cmap='viridis')
+    surface = ax.plot_surface(x, y, z, cmap='viridis')
+    fig.colorbar(surface, ax=ax, shrink=0.5, aspect=5)
     ax.set_title('Surface Plot of Global Stiffness Matrix K_glb')
     ax.set_xlabel('Node Index')
     ax.set_ylabel('Node Index')
