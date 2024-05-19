@@ -1,6 +1,8 @@
 import os
 from unittest import TestCase
 
+import numpy as np
+
 from src.current_flow import CurrentFlowMaterial, CurrentFlowFixedVoltage, CurrentFlowMixed, CurrentFlowSurfaceCurrent, \
     CurrentFlowPeriodic, CurrentFlowAntiPeriodic
 from src.electrostatics import ElectrostaticMaterial, ElectrostaticFixedVoltage, ElectrostaticMixed, \
@@ -820,3 +822,27 @@ class FemmTester(TestCase):
             fmw.get_nr_nodes(),
         )
 
+    def test_stiffness_matrix(self):
+        fmw = FemmProblem()
+        fmw.nodal_coords = [Node(0.0, 0.0, id='1', label=None), Node(1.0, 0.0, id='2', label=None),
+                            Node(0.0, 1.0, id='3', label=None), Node(1.0, 1.0, id='4', label=None)]
+        fmw.element_coords = [{'element_nr': '1', 'n_1': Node(0.0, 0.0, id='1', label=None),
+                               'n_2': Node(1.0, 0.0, id='2', label=None),
+                               'n_3': Node(0.0, 1.0, id='3', label=None), 'x_c': '0.333',
+                               'y_c': '0.333', 'area': '0.5', 'group_nr': '0', 'Sig': '0', 'Mu1': '1',
+                               'Mu2': '1'},
+                              {'element_nr': '2', 'n_1': Node(1.0, 0.0, id='2', label=None),
+                               'n_2': Node(1.0, 1.0, id='4', label=None),
+                               'n_3': Node(0.0, 1.0, id='3', label=None), 'x_c': '0.667',
+                               'y_c': '0.667', 'area': '0.5', 'group_nr': '0', 'Sig': '0', 'Mu1': '1',
+                               'Mu2': '1'}]
+
+        stiff = fmw.calc_stiffness_matrix()
+        print(stiff)
+
+        solution_matrix = np.array([[1., -0.5, -0.5, 0.],
+                                    [-0.5, 1., 0., -0.5],
+                                    [-0.5, 0., 1., -0.5],
+                                    [0., -0.5, -0.5, 1.]])
+
+        np.testing.assert_allclose(stiff, solution_matrix)

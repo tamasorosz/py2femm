@@ -1085,39 +1085,26 @@ class FemmProblem:
             n2 = element['n_2']
             n3 = element['n_3']
 
-            yjk = n1.y - n3.y
-            yij = n1.y - n2.y
-            yki = n3.y - n1.y
+            b = np.array([
+                n2.y - n3.y,
+                n3.y - n1.y,
+                n1.y - n2.y
+            ])/(float(element['Mu2'])**0.5)
+            c = np.array([
+                n3.x - n2.x,
+                n1.x - n3.x,
+                n2.x - n1.x
+            ])/(float(element['Mu1'])**0.5)
 
-            xji = n2.x - n1.x
-            xkj = n3.x - n2.x
-            xik = n1.x - n3.x
+            # Element stiffness matrix
+            B = np.array([b, c])
+            k_e = (B.T @ B) / (4 * float(element['area']))
+            node_ids = [int(n1.id)-1, int(n2.id)-1, int(n3.id)-1]
 
-            # transform local indexes to local indexes 0 -> i, 1 -> j, 2 -> k
-            # femm indexing starts with 1, it should be decreased by 1
-            i = int(n1.id) - 1
-            j = int(n2.id) - 1
-            k = int(n3.id) - 1
+            for i in range(3):
+                for j in range(3):
+                    k_nn[node_ids[i], node_ids[j]] += k_e[i, j]
 
-            k_nn[i][i] += (yjk * yjk / float(element['Mu2']) + xkj * xkj / float(element['Mu1'])) / (
-                    4 * float(element['area']))
-            k_nn[i][j] += (yjk * yki / float(element['Mu2']) + xkj * xji / float(element['Mu1'])) / (
-                    4 * float(element['area']))
-            k_nn[i][k] += (yjk * yki / float(element['Mu2']) + xkj * xji / float(element['Mu1'])) / (
-                    4 * float(element['area']))
-
-            k_nn[j][j] += (yki * yki / float(element['Mu2']) + xik * xik / float(element['Mu1'])) / (
-                    4 * float(element['area']))
-
-            k_nn[j][k] += (yki * yij / float(element['Mu2']) + xik * xji / float(element['Mu1'])) / (
-                    4 * float(element['area']))
-
-            k_nn[k][k] += (yij * yij / float(element['Mu2']) + xji * xji / float(element['Mu1'])) / (
-                    4 * float(element['area']))
-
-        k_nn[j][i] = k_nn[i][j]
-        k_nn[k][i] = k_nn[i][k]
-        k_nn[k][j] = k_nn[j][k]
         return k_nn
 
     def calc_n_matrix(self):
