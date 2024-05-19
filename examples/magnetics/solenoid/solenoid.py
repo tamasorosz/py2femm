@@ -121,4 +121,21 @@ if __name__ == '__main__':
 
     problem.post_process_mesh_data()
     k_nn = problem.calc_stiffness_matrix()
-    print(k_nn)
+
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    x = np.arange(k_nn.shape[0])
+    y = np.arange(k_nn.shape[1])
+    x, y = np.meshgrid(x, y)
+    z = k_nn[x, y]
+
+    ax.plot_surface(x, y, z, cmap='viridis')
+    ax.set_title('Surface Plot of Global Stiffness Matrix K_glb')
+    ax.set_xlabel('Node Index')
+    ax.set_ylabel('Node Index')
+    ax.set_zlabel('Value')
+
+    plt.show()
