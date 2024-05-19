@@ -1099,14 +1099,6 @@ class FemmProblem:
     def calc_stiffness_matrix(self):
         """Calculates the local stiffness values for an element of the matrix """
 
-        # yjk = y2 - y3
-        # yij = y1 - y2
-        # yki = y3 - y1
-        #
-        # xji = x2 - x1
-        # xkj = x3 - x2
-        # xik = x1 - x3
-        # stiffness matrix
         nr_nodes = len(self.nodal_coords)
         k_nn = np.zeros((nr_nodes, nr_nodes))
 
