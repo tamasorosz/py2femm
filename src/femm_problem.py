@@ -973,8 +973,8 @@ class FemmProblem:
 
         cmd = f"{self.node_nr} = " + cmd
         self.lua_script.append(cmd)
-        #write_cmd = "write(parameters, \"node_nr = \", node_nr ,\"\\n\")"
-        #self.lua_script.append(write_cmd)
+        # write_cmd = "write(parameters, \"node_nr = \", node_nr ,\"\\n\")"
+        # self.lua_script.append(write_cmd)
 
         return cmd
 
@@ -1056,7 +1056,6 @@ class FemmProblem:
                 k, x, y = row.items()
                 self.nodal_coords.append(Node(float(x[1]), float(y[1]), id=k[1]))
 
-
         # Mesh data
         with open(self.mesh_file, newline='') as csvfile:
             for row in csv.DictReader(csvfile, delimiter=',', skipinitialspace=True):
@@ -1082,6 +1081,7 @@ class FemmProblem:
             return False
 
         return True
+
     def calc_stiffness_matrix(self):
         """Calculates the local stiffness values for an element of the matrix """
 
@@ -1089,7 +1089,6 @@ class FemmProblem:
         k_nn = np.zeros((nr_nodes, nr_nodes))
 
         for element in self.element_coords:
-
             n1 = element['n_1']
             n2 = element['n_2']
             n3 = element['n_3']
@@ -1108,25 +1107,23 @@ class FemmProblem:
             snd_id = int(n2.id) - 1
             trd_id = int(n3.id) - 1
 
-            k_nn[fst_id][fst_id] = (yjk * yjk / float(element['Mu2']) + xkj * xkj / float(element['Mu1'])) / (
+            k_nn[fst_id][fst_id] += (yjk * yjk / float(element['Mu2']) + xkj * xkj / float(element['Mu1'])) / (
                     4 * float(element['area']))
-            k_nn[fst_id][snd_id] = (yjk * yki / float(element['Mu2']) + xkj * xji / float(element['Mu1'])) / (
+            k_nn[fst_id][snd_id] += (yjk * yki / float(element['Mu2']) + xkj * xji / float(element['Mu1'])) / (
                     4 * float(element['area']))
-            k_nn[fst_id][trd_id] = (yjk * yki / float(element['Mu2']) + xkj * xji / float(element['Mu1'])) / (
-                    4 * float(element['area']))
-
-            k_nn[snd_id][fst_id] = k_nn[fst_id][snd_id]
-
-            k_nn[snd_id][snd_id] = (yki * yki / float(element['Mu2']) + xik * xik / float(element['Mu1'])) / (
+            k_nn[fst_id][trd_id] += (yjk * yki / float(element['Mu2']) + xkj * xji / float(element['Mu1'])) / (
                     4 * float(element['area']))
 
-            k_nn[snd_id][trd_id] = (yki * yij / float(element['Mu2']) + xik * xji / float(element['Mu1'])) / (
+            k_nn[snd_id][snd_id] += (yki * yki / float(element['Mu2']) + xik * xik / float(element['Mu1'])) / (
                     4 * float(element['area']))
 
-            k_nn[trd_id][fst_id] = k_nn[fst_id][trd_id]
-            k_nn[trd_id][snd_id] = k_nn[snd_id][trd_id]
+            k_nn[snd_id][trd_id] += (yki * yij / float(element['Mu2']) + xik * xji / float(element['Mu1'])) / (
+                    4 * float(element['area']))
 
             k_nn[2][2] = (yij * yij / float(element['Mu2']) + xji * xji / float(element['Mu1'])) / (
                     4 * float(element['area']))
 
+        k_nn[snd_id][fst_id] = k_nn[fst_id][snd_id]
+        k_nn[trd_id][fst_id] = k_nn[fst_id][trd_id]
+        k_nn[trd_id][snd_id] = k_nn[snd_id][trd_id]
         return k_nn
