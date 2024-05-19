@@ -15,6 +15,8 @@ from pathlib import Path
 from string import Template
 from typing import Union
 
+import numpy as np
+
 from src.magnetics import MagneticMaterial, BHCurve
 from src.geometry import Geometry, Node
 from src.general import Material, AutoMeshOption, Boundary, FemmFields, LengthUnit
@@ -971,8 +973,8 @@ class FemmProblem:
 
         cmd = f"{self.node_nr} = " + cmd
         self.lua_script.append(cmd)
-        # write_cmd = "write(parameters, \"node_nr = \", node_nr ,\"\\n\")"
-        # self.lua_script.append(write_cmd)
+        #write_cmd = "write(parameters, \"node_nr = \", node_nr ,\"\\n\")"
+        #self.lua_script.append(write_cmd)
 
         return cmd
 
@@ -1034,7 +1036,7 @@ class FemmProblem:
         self.lua_script.extend(cmd_line)
 
         cmd_line = []
-        cmd_line.append("write(mesh_file,\"element_nr, n_1, n_2, n_3, x_c, y_c, area, group_nr, Sig, Mu1, Mu2 \\n \")")
+        cmd_line.append("write(mesh_file,\"element_nr, n_1, n_2, n_3, x_c, y_c, area, group_nr, Sig, Mu1, Mu2\\n \")")
         cmd_line.append("for i = 1, element_nr do")
         cmd_line.append("n_1, n_2, n_3, x_c, y_c, area, group_nr = mo_getelement(i)")
         # get the solution values at the center point of the element and adds the mu_1, mu_2 and sigma values to calculate the stiffness matrix
@@ -1056,7 +1058,6 @@ class FemmProblem:
                 k, x, y = row.items()
                 self.nodal_coords.append(Node(float(x[1]), float(y[1]), id=k[1]))
 
-        print(self.nodal_coords[0])
 
         # Mesh data
         with open(self.mesh_file, newline='') as csvfile:
@@ -1096,8 +1097,8 @@ class FemmProblem:
         # return (x1, x2, x3, y1, y2, y3), swap_occurred
 
     def calc_stiffness_matrix(self):
+        """Calculates the local stiffness values for an element of the matrix """
 
-        # Kij_matrix(nodes, nodeInfo, blocks, 0.01)
         # yjk = y2 - y3
         # yij = y1 - y2
         # yki = y3 - y1
@@ -1105,21 +1106,49 @@ class FemmProblem:
         # xji = x2 - x1
         # xkj = x3 - x2
         # xik = x1 - x3
+        # stiffness matrix
+        nr_nodes = len(self.nodal_coords)
+        k_nn = np.zeros((nr_nodes, nr_nodes))
 
-        current = self.element_coords[0]
+        for element in self.element_coords:
 
-        print(self.check_node_order(current['n_1'], current['n_2'], current['n_3']))
+            n1 = element['n_1']
+            n2 = element['n_2']
+            n3 = element['n_3']
 
-        print(current)
+            yjk = n1.y - n3.y
+            yij = n1.y - n2.y
+            yki = n3.y - n1.y
 
-        yjk = current['n_2'].y - current['n_3'].y
-        yij = current['n_1'].y - current['n_2'].y
-        yki = current['n_3'].y - current['n_1'].y
+            xji = n2.x - n1.x
+            xkj = n3.x - n2.x
+            xik = n1.x - n3.x
 
-        xji = current['n_2'].x - current['n_1'].x
-        xkj = current['n_3'].x - current['n_2'].x
-        xik = current['n_1'].x - current['n_3'].x
+            # transform local indexes to local indexes 0 -> fst_id, 1 -> snd_id, 2 -> trd_id
+            # femm indexing starts with 1, it should be decreased by 1
+            fst_id = int(n1.id) - 1
+            snd_id = int(n2.id) - 1
+            trd_id = int(n3.id) - 1
 
-        print(yjk, yij, yki, xji, xkj, xik)
+            k_nn[fst_id][fst_id] = (yjk * yjk / float(element['Mu2']) + xkj * xkj / float(element['Mu1'])) / (
+                    4 * float(element['area']))
+            k_nn[fst_id][snd_id] = (yjk * yki / float(element['Mu2']) + xkj * xji / float(element['Mu1'])) / (
+                    4 * float(element['area']))
+            k_nn[fst_id][trd_id] = (yjk * yki / float(element['Mu2']) + xkj * xji / float(element['Mu1'])) / (
+                    4 * float(element['area']))
 
-        return
+            k_nn[snd_id][fst_id] = k_nn[fst_id][snd_id]
+
+            k_nn[snd_id][snd_id] = (yki * yki / float(element['Mu2']) + xik * xik / float(element['Mu1'])) / (
+                    4 * float(element['area']))
+
+            k_nn[snd_id][trd_id] = (yki * yij / float(element['Mu2']) + xik * xji / float(element['Mu1'])) / (
+                    4 * float(element['area']))
+
+            k_nn[trd_id][fst_id] = k_nn[fst_id][trd_id]
+            k_nn[trd_id][snd_id] = k_nn[snd_id][trd_id]
+
+            k_nn[2][2] = (yij * yij / float(element['Mu2']) + xji * xji / float(element['Mu1'])) / (
+                    4 * float(element['area']))
+
+        return k_nn
