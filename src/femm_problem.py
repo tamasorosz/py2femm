@@ -1101,29 +1101,29 @@ class FemmProblem:
             xkj = n3.x - n2.x
             xik = n1.x - n3.x
 
-            # transform local indexes to local indexes 0 -> fst_id, 1 -> snd_id, 2 -> trd_id
+            # transform local indexes to local indexes 0 -> i, 1 -> j, 2 -> k
             # femm indexing starts with 1, it should be decreased by 1
-            fst_id = int(n1.id) - 1
-            snd_id = int(n2.id) - 1
-            trd_id = int(n3.id) - 1
+            i = int(n1.id) - 1
+            j = int(n2.id) - 1
+            k = int(n3.id) - 1
 
-            k_nn[fst_id][fst_id] += (yjk * yjk / float(element['Mu2']) + xkj * xkj / float(element['Mu1'])) / (
+            k_nn[i][i] += (yjk * yjk / float(element['Mu2']) + xkj * xkj / float(element['Mu1'])) / (
                     4 * float(element['area']))
-            k_nn[fst_id][snd_id] += (yjk * yki / float(element['Mu2']) + xkj * xji / float(element['Mu1'])) / (
+            k_nn[i][j] += (yjk * yki / float(element['Mu2']) + xkj * xji / float(element['Mu1'])) / (
                     4 * float(element['area']))
-            k_nn[fst_id][trd_id] += (yjk * yki / float(element['Mu2']) + xkj * xji / float(element['Mu1'])) / (
-                    4 * float(element['area']))
-
-            k_nn[snd_id][snd_id] += (yki * yki / float(element['Mu2']) + xik * xik / float(element['Mu1'])) / (
+            k_nn[i][k] += (yjk * yki / float(element['Mu2']) + xkj * xji / float(element['Mu1'])) / (
                     4 * float(element['area']))
 
-            k_nn[snd_id][trd_id] += (yki * yij / float(element['Mu2']) + xik * xji / float(element['Mu1'])) / (
+            k_nn[j][j] += (yki * yki / float(element['Mu2']) + xik * xik / float(element['Mu1'])) / (
+                    4 * float(element['area']))
+
+            k_nn[j][k] += (yki * yij / float(element['Mu2']) + xik * xji / float(element['Mu1'])) / (
                     4 * float(element['area']))
 
             k_nn[2][2] = (yij * yij / float(element['Mu2']) + xji * xji / float(element['Mu1'])) / (
                     4 * float(element['area']))
 
-        k_nn[snd_id][fst_id] = k_nn[fst_id][snd_id]
-        k_nn[trd_id][fst_id] = k_nn[fst_id][trd_id]
-        k_nn[trd_id][snd_id] = k_nn[snd_id][trd_id]
+        k_nn[j][i] = k_nn[i][j]
+        k_nn[k][i] = k_nn[i][k]
+        k_nn[k][j] = k_nn[j][k]
         return k_nn
