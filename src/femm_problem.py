@@ -1070,7 +1070,6 @@ class FemmProblem:
             return False
 
         return True
-
     def calc_stiffness_matrix(self):
         """
         Calculates the local stiffness values for an element of the matrix
@@ -1084,8 +1083,9 @@ class FemmProblem:
             n1 = element['n_1']
             n2 = element['n_2']
             n3 = element['n_3']
-
-            yjk = n1.y - n3.y
+            # print("Node order positive: ",self.check_node_order(n1,n2,n3))
+            # if self.check_node_order(n1,n2,n3):
+            yjk = n2.y - n3.y
             yij = n1.y - n2.y
             yki = n3.y - n1.y
 
@@ -1101,9 +1101,9 @@ class FemmProblem:
 
             k_nn[i][i] += (yjk * yjk / float(element['Mu2']) + xkj * xkj / float(element['Mu1'])) / (
                     4 * float(element['area']))
-            k_nn[i][j] += (yjk * yki / float(element['Mu2']) + xkj * xji / float(element['Mu1'])) / (
+            k_nn[i][j] += (yjk * yki / float(element['Mu2']) + xkj * xik / float(element['Mu1'])) / (
                     4 * float(element['area']))
-            k_nn[i][k] += (yjk * yki / float(element['Mu2']) + xkj * xji / float(element['Mu1'])) / (
+            k_nn[i][k] += (yjk * yij / float(element['Mu2']) + xkj * xji / float(element['Mu1'])) / (
                     4 * float(element['area']))
 
             k_nn[j][j] += (yki * yki / float(element['Mu2']) + xik * xik / float(element['Mu1'])) / (
@@ -1115,9 +1115,9 @@ class FemmProblem:
             k_nn[k][k] += (yij * yij / float(element['Mu2']) + xji * xji / float(element['Mu1'])) / (
                     4 * float(element['area']))
 
-        k_nn[j][i] = k_nn[i][j]
-        k_nn[k][i] = k_nn[i][k]
-        k_nn[k][j] = k_nn[j][k]
+            k_nn[j][i] = k_nn[i][j]
+            k_nn[k][i] = k_nn[i][k]
+            k_nn[k][j] = k_nn[j][k]
         return k_nn
 
     def calc_n_matrix(self):
@@ -1145,8 +1145,8 @@ class FemmProblem:
             n_nn[j, k] += sigma * area / 12.0
             n_nn[k, k] += sigma * area / 6.0
 
-        n_nn[j][i] = n_nn[i][j]
-        n_nn[k][i] = n_nn[i][k]
-        n_nn[k][j] = n_nn[j][k]
+            n_nn[j][i] = n_nn[i][j]
+            n_nn[k][i] = n_nn[i][k]
+            n_nn[k][j] = n_nn[j][k]
 
         return n_nn
