@@ -96,13 +96,6 @@ def solenoid(n, w, h, radius, gap):
 
     problem.get_integral_values([Node(radius, z0)], save_image=True, variable_name=MagneticVolumeIntegral.A)
 
-    # nem működik amíg nincs eredmény
-    #problem.get_nr_nodes()
-    #problem.get_nr_elements()
-    #problem.get_nodal_coordinate(1)
-    #problem.get_nodal_coordinate(2)
-    #problem.get_element(3)
-
     # post-processing operations
     problem.get_back_fem_results()
 

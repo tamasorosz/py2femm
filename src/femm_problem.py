@@ -988,8 +988,6 @@ class FemmProblem:
 
         cmd = f"{self.element_nr} = " + cmd
         self.lua_script.append(cmd)
-        # write_cmd = "write(parameters, \"element_nr = \", element_nr ,\"\\n\")"
-        # self.lua_script.append(write_cmd)
 
         return cmd
 
@@ -1080,22 +1078,10 @@ class FemmProblem:
         # Calculate the cross product to determine the order of the points
         cross_product = (n_2.x - n_1.x) * (n_3.y - n_2.y) - (n_2.y - n_1.y) * (n_3.x - n_1.x)
 
-        ##cross_product = (x2 - x1) * (y3 - y1) - (y2 - y1) * (x3 - x1)
-
         if cross_product < 0:
             return False
 
         return True
-        # if cross_product < 0:
-        #     # Points are in clockwise order, so swap the second and third vertices
-        #     x2, x3 = x3, x2
-        #     y2, y3 = y3, y2
-        #     swap_occurred = True
-        # else:
-        #     swap_occurred = False
-        #
-        # return (x1, x2, x3, y1, y2, y3), swap_occurred
-
     def calc_stiffness_matrix(self):
         """Calculates the local stiffness values for an element of the matrix """
 
