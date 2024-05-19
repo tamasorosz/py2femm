@@ -1109,7 +1109,7 @@ class FemmProblem:
             k_nn[j][k] += (yki * yij / float(element['Mu2']) + xik * xji / float(element['Mu1'])) / (
                     4 * float(element['area']))
 
-            k_nn[k][k] = (yij * yij / float(element['Mu2']) + xji * xji / float(element['Mu1'])) / (
+            k_nn[k][k] += (yij * yij / float(element['Mu2']) + xji * xji / float(element['Mu1'])) / (
                     4 * float(element['area']))
 
         k_nn[j][i] = k_nn[i][j]
