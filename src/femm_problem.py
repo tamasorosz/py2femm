@@ -1083,7 +1083,10 @@ class FemmProblem:
         return True
 
     def calc_stiffness_matrix(self):
-        """Calculates the local stiffness values for an element of the matrix """
+        """
+        Calculates the local stiffness values for an element of the matrix
+        This solution still works for the magnetic case only.
+        """
 
         nr_nodes = len(self.nodal_coords)
         k_nn = np.zeros((nr_nodes, nr_nodes))
@@ -1127,3 +1130,34 @@ class FemmProblem:
         k_nn[k][i] = k_nn[i][k]
         k_nn[k][j] = k_nn[j][k]
         return k_nn
+
+    def calc_n_matrix(self):
+        nr_nodes = len(self.nodal_coords)
+        n_nn = np.zeros((nr_nodes, nr_nodes))
+
+        for element in self.element_coords:
+            n1 = element['n_1']
+            n2 = element['n_2']
+            n3 = element['n_3']
+
+            # transform local indexes to local indexes 0 -> i, 1 -> j, 2 -> k
+            # femm indexing starts with 1, it should be decreased by 1
+            i = int(n1.id) - 1
+            j = int(n2.id) - 1
+            k = int(n3.id) - 1
+
+            sigma = float(element['Sig'])
+            area = float(element['area'])
+
+            n_nn[i, i] += sigma * area / 6.0
+            n_nn[i, j] += sigma * area / 12.0
+            n_nn[i, k] += sigma * area / 12.0
+            n_nn[j, j] += sigma * area / 6.0
+            n_nn[j, k] += sigma * area / 12.0
+            n_nn[k, k] += sigma * area / 6.0
+
+        n_nn[j][i] = n_nn[i][j]
+        n_nn[k][i] = n_nn[i][k]
+        n_nn[k][j] = n_nn[j][k]
+
+        return n_nn

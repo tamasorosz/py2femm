@@ -114,10 +114,13 @@ if __name__ == '__main__':
 
     problem.post_process_mesh_data()
     k_nn = problem.calc_stiffness_matrix()
+    n_nn = problem.calc_n_matrix()
 
+    # Temporary
     import matplotlib.pyplot as plt
     import numpy as np
 
+    # k_nn matrix
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
     x = np.arange(k_nn.shape[0])
@@ -128,6 +131,22 @@ if __name__ == '__main__':
     surface = ax.plot_surface(x, y, z, cmap='viridis')
     fig.colorbar(surface, ax=ax, shrink=0.5, aspect=5)
     ax.set_title('Surface Plot of Global Stiffness Matrix K_glb')
+    ax.set_xlabel('Node Index')
+    ax.set_ylabel('Node Index')
+    ax.set_zlabel('Value')
+
+    plt.show()
+
+    # n_nn matrix
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    x = np.arange(n_nn.shape[0])
+    y = np.arange(n_nn.shape[1])
+    x, y = np.meshgrid(x, y)
+    z = n_nn[x, y]
+
+    ax.plot_surface(x, y, z, cmap='viridis')
+    ax.set_title('Surface Plot of Global Matrix N_glb')
     ax.set_xlabel('Node Index')
     ax.set_ylabel('Node Index')
     ax.set_zlabel('Value')
