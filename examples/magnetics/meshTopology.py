@@ -9,7 +9,7 @@ def getNodeInfo(file_path):
         for line in file:
             line = line.strip()  # Clean up whitespace
 
-            if 'Nodal results' in line:
+            if 'Point values' in line:
                 node_id += 1  # Increment node identifier on new section
                 current_node = f"Node{node_id-1}"  # Format the current node ID as "Node0", "Node1", etc.
                 continue

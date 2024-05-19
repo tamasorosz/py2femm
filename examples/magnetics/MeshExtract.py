@@ -11,6 +11,7 @@ from src.executor import Executor
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+from scipy.linalg import cholesky
 
 
 
@@ -262,7 +263,7 @@ if __name__ == '__main__':
     nodeInfo = {}
     problem = FemmProblem(out_file="meshextract.csv")
     problem.magnetic_problem(0,LengthUnit.CENTIMETERS,"axi")
-    problem.openFem(current_dir + "/solenoid.fem")
+    problem.openFem(current_dir + "/solenoid/solenoid.fem")
     problem.load_specific_solution(current_dir + "/solenoid.ans")
     for node in nodes:
         problem.get_point_values(Node(node[0],node[1]))
@@ -271,7 +272,7 @@ if __name__ == '__main__':
     femm = Executor()
     lua_file = current_dir + "/MeshExtract.lua"
     femm.run(lua_file)
-    file_path = "D:/PythonProjects/py2femm/examples/magnetics/meshextract.csv"
+    file_path = current_dir +"/meshextract.csv"
     nodeInfo.update(getNodeInfo(file_path))
  # Determine properties
     element_Sigma = determine_properties_by_majority_rule(blocks,[sub_dict['Sigma'] for sub_dict in nodeInfo.values()])
@@ -295,78 +296,70 @@ if __name__ == '__main__':
     plt.show()
     # Assertions
     main_diagonal = np.diag(K_glb)
-    off_diagonal = K_glb - np.diag(np.diag(K_glb))
-
     assert np.all(main_diagonal > 0),"Not all diagonal elements are positive."
 
-
-    def find_positive_indices_off_diagonal(matrix):
-        positive_indices = []
-        for i in range(matrix.shape[0]):
-            for j in range(matrix.shape[1]):
-                if i != j and matrix[i,j] > 0:
-                    positive_indices.append((i,j))
-        return positive_indices
+    import numpy as np
+    from scipy.linalg import cholesky
 
 
-    def check_main_diagonal_sum(matrix):
-        for i in range(matrix.shape[0]):
-            row_sum = np.sum(np.abs(matrix[i,:])) - np.abs(matrix[i,i])
-            if not np.isclose(matrix[i,i],row_sum):
-                print(f"Row {i}: diagonal element {matrix[i,i]} does not match the sum of the row {row_sum}")
+    def is_positive_definite(matrix):
+        """Check if the matrix is positive definite using Cholesky decomposition."""
+        try:
+            _ = cholesky(matrix)
+            return True
+        except np.linalg.LinAlgError:
+            return False
 
 
-    def delete_positive_off_diagonal(matrix):
-        matrixa = matrix
-        for i in range(matrix.shape[0]):
-            for j in range(matrix.shape[1]):
-                if i != j and matrix[i,j] > 0:
-                    matrixa[i,j] = 0
-                    print("Deleted index",i,j)
-        return matrixa
+    def is_diagonally_dominant(matrix, tolerance=0.0001):
+        """Check if the matrix is diagonally dominant with a given tolerance."""
+        D = np.abs(matrix.diagonal())
+        S = np.sum(np.abs(matrix), axis=1) - D
+        # Apply the tolerance
+        return D, S, np.all(D >= (1 - tolerance) * S)
 
 
-    def turn_positive_off_diagonal_negative(matrix):
-        matrixa = matrix
-        for i in range(matrix.shape[0]):
-            for j in range(matrix.shape[1]):
-                if i != j and matrix[i,j] > 0:
-                    matrixa[i,j] = -matrix[i,j]
-                    print("Changed index",i,j)
-        return matrixa
+    def check_stiffness_matrix(matrix, tolerance=0.0001):
+        """Check if the matrix is positive definite and diagonally dominant."""
+        pos_def = is_positive_definite(matrix)
+        D, S, diag_dom = is_diagonally_dominant(matrix, tolerance)
+
+        if not diag_dom:
+            print("Warning: The stiffness matrix is not diagonally dominant at the following nodes (with tolerance):")
+            for i in range(len(D)):
+                if D[i] < (1 - tolerance) * S[i]:
+                    difference = S[i] - D[i]
+                    percentage_difference = (difference / S[i]) * 100
+                    print(
+                        f"Node {i + 1}: D = {D[i]}, Sum off-diag = {S[i]}, Diff= {difference} ({percentage_difference:.2f}%)")
+        if not pos_def and not diag_dom:
+            print("Warning: The stiffness matrix is neither positive definite nor diagonally dominant.")
+        elif not pos_def:
+            print("Warning: The stiffness matrix is not positive definite.")
+        elif diag_dom:
+            print("The stiffness matrix is diagonally dominant (with tolerance).")
+
+        return pos_def, diag_dom
 
 
-    K_glbb = turn_positive_off_diagonal_negative(K_glb.copy())
-    K_glba = delete_positive_off_diagonal(K_glb.copy())
+print("Checking matrix:")
+pos_def, diag_dom = check_stiffness_matrix(K_glb)
+print(f"Positive Definite: {pos_def}")
+print(f"Diagonally Dominant: {diag_dom}")
+print(f"Symmetric: {np.allclose(K_glb, K_glb.T, atol=1e-6)}\n")
+N_glb =Nij_matrix(nodes,nodeInfo,blocks,0.01)
+fig = plt.figure()
+ax = fig.add_subplot(111,projection='3d')
+x = np.arange(N_glb.shape[0])
+y = np.arange(N_glb.shape[1])
+x,y = np.meshgrid(x,y)
+z = N_glb[x,y]
+ax.plot_surface(x,y,z,cmap='viridis')
+ax.set_title('Surface Plot of Global Matrix N_glb')
+ax.set_xlabel('Node Index')
+ax.set_ylabel('Node Index')
+ax.set_zlabel('Value')
 
-    positive_indices = find_positive_indices_off_diagonal(K_glb)
-    print("Original Positive indices outside the main diagonal:",positive_indices)
-    positive_indices = find_positive_indices_off_diagonal(K_glba)
-    print("deleted - Positive indices outside the main diagonal:",positive_indices)
-
-    positive_indices = find_positive_indices_off_diagonal(K_glbb)
-    print("turned - Positive indices outside the main diagonal:",positive_indices)
-    print('checking original')
-    check_main_diagonal_sum(K_glb)
-    print('checking deleted')
-    check_main_diagonal_sum(K_glba)
-    print('checking turned')
-    check_main_diagonal_sum(K_glbb)
-
-    N_glb =Nij_matrix(nodes,nodeInfo,blocks,0.01)
-    fig = plt.figure()
-    ax = fig.add_subplot(111,projection='3d')
-    x = np.arange(N_glb.shape[0])
-    y = np.arange(N_glb.shape[1])
-    x,y = np.meshgrid(x,y)
-    z = N_glb[x,y]
-
-    ax.plot_surface(x,y,z,cmap='viridis')
-    ax.set_title('Surface Plot of Global Matrix N_glb')
-    ax.set_xlabel('Node Index')
-    ax.set_ylabel('Node Index')
-    ax.set_zlabel('Value')
-
-    plt.show()
+plt.show()
     # assert np.all(off_diagonal <= 0),"Not all off-diagonal elements are non-positive."
 a = 0
