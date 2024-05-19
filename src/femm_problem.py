@@ -1089,22 +1089,21 @@ class FemmProblem:
                 n2.y - n3.y,
                 n3.y - n1.y,
                 n1.y - n2.y
-            ])/(float(element['Mu2'])**0.5)
+            ]) / (float(element['Mu2']) ** 0.5)
             c = np.array([
                 n3.x - n2.x,
                 n1.x - n3.x,
                 n2.x - n1.x
-            ])/(float(element['Mu1'])**0.5)
+            ]) / (float(element['Mu1']) ** 0.5)
 
             # Element stiffness matrix
             B = np.array([b, c])
             k_e = (B.T @ B) / (4 * float(element['area']))
-            node_ids = [int(n1.id)-1, int(n2.id)-1, int(n3.id)-1]
+            node_ids = [int(n1.id) - 1, int(n2.id) - 1, int(n3.id) - 1]
 
             for i in range(3):
                 for j in range(3):
                     k_nn[node_ids[i], node_ids[j]] += k_e[i, j]
-
         return k_nn
 
     def calc_n_matrix(self):
