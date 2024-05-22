@@ -1136,3 +1136,30 @@ class FemmProblem:
         n_nn[k][j] = n_nn[j][k]
 
         return n_nn
+
+    def calc_element_grad(self, element: dict):
+
+        n1 = element['n_1']
+        n2 = element['n_2']
+        n3 = element['n_3']
+
+        # transform local indexes to local indexes 0 -> i, 1 -> j, 2 -> k
+        # femm indexing starts with 1, it should be decreased by 1
+        i = int(n1.id) - 1
+        j = int(n2.id) - 1
+        k = int(n3.id) - 1
+
+        b = np.array([
+            n2.y - n3.y,
+            n3.y - n1.y,
+            n1.y - n2.y
+        ])
+        c = np.array([
+            n3.x - n2.x,
+            n1.x - n3.x,
+            n2.x - n1.x
+        ])
+
+        B = np.array([b, c])
+
+        return B

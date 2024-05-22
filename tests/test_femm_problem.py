@@ -846,3 +846,26 @@ class FemmTester(TestCase):
                                     [0., -0.5, -0.5, 1.]])
 
         np.testing.assert_allclose(stiff, solution_matrix)
+
+    def test_calc_element_gradient(self):
+        fmw = FemmProblem()
+        fmw.nodal_coords = [Node(0.0, 0.0, id='1', label=None), Node(1.0, 0.0, id='2', label=None),
+                            Node(0.0, 1.0, id='3', label=None), Node(1.0, 1.0, id='4', label=None)]
+        fmw.element_coords = [{'element_nr': '1', 'n_1': Node(0.0, 0.0, id='1', label=None),
+                               'n_2': Node(1.0, 0.0, id='2', label=None),
+                               'n_3': Node(0.0, 1.0, id='3', label=None), 'x_c': '0.333',
+                               'y_c': '0.333', 'area': '0.5', 'group_nr': '0', 'Sig': '0', 'Mu1': '1',
+                               'Mu2': '1'},
+                              {'element_nr': '2', 'n_1': Node(1.0, 0.0, id='2', label=None),
+                               'n_2': Node(1.0, 1.0, id='4', label=None),
+                               'n_3': Node(0.0, 1.0, id='3', label=None), 'x_c': '0.667',
+                               'y_c': '0.667', 'area': '0.5', 'group_nr': '0', 'Sig': '0', 'Mu1': '1',
+                               'Mu2': '1'}]
+
+        grad = fmw.calc_element_grad(fmw.element_coords[0])
+
+        solution_vector = np.array([[-1.0, 1.0, 0.0], [-1.0, 0.0, 1.0]])
+
+        print(solution_vector)
+        print(grad)
+        np.testing.assert_allclose(grad, solution_vector)
