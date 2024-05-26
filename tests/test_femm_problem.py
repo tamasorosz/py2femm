@@ -866,6 +866,4 @@ class FemmTester(TestCase):
 
         solution_vector = np.array([[-1.0, 1.0, 0.0], [-1.0, 0.0, 1.0]])
 
-        print(solution_vector)
-        print(grad)
         np.testing.assert_allclose(grad, solution_vector)

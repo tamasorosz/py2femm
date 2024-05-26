@@ -1160,6 +1160,10 @@ class FemmProblem:
             n2.x - n1.x
         ])
 
-        B = np.array([b, c])
+        B = np.array([b, c]) / (2 * float(element['area']))
 
         return B
+
+    def calc_curl(self, element: dict):
+
+        return 0
