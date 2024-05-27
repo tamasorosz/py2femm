@@ -29,7 +29,8 @@ variables = machine_model_synrm.VariableParameters(fold='ang',
 
 if __name__ == "__main__":
 
-    x = calc_max_torque_angle.max_torque_angle(30, 24.3, 91.5, 1.0, 0.5, 2.4, 1.5)
+    x = calc_max_torque_angle.max_torque_angle(30, 22.1, 146.5, 1.0, 0.5, 2.4, 1.5)
+    22.1, 146.5, 1.0, 3.0, 0.5, 14.9, 1.5
 
     df = pd.DataFrame(x[1])
     current_file_path = os.path.abspath(__file__)
