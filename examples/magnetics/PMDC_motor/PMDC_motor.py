@@ -51,7 +51,7 @@ JW = J0 * cos(gamma + 2 * pi / 3)
 
 
 def stator():
-    stator_geo = Geometry(Ro, Ri, w1, w2, w3, w4, h1, h2, h3, h4, s3, ag_s, ag_r, ns, np, nsr)
+    stator_geo = Geometry()
 
     ORIGIN = Node(0, 0, 'ORIGIN')
 
@@ -366,24 +366,25 @@ def boundary_definitions(femm_problem: FemmProblem):
     femm_problem.set_boundary_definition_segment(
         Node(r1 * sin(-slot_rad / 2 + nsr / 3 * pole_rad), r1 * cos(-slot_rad / 2 + nsr / 3 * pole_rad)), apb4)
 
-    femm_problem.set_boundary_definition_arc(Node(0, r2 + ag_r, apb))
-    femm_problem.set_boundary_definition_arc(Node(0, Ri - ag_s, apb))
-    femm_problem.set_boundary_definition_arc(Node(0, r1, a0))
-    femm_problem.set_boundary_definition_arc(Node(0, Ro, a0))
+    femm_problem.set_boundary_definition_arc(Node(0, r2 + ag_r), apb)
+    femm_problem.set_boundary_definition_arc(Node(0, Ri - ag_s), apb)
+    femm_problem.set_boundary_definition_arc(Node(0, r1), a0)
+    femm_problem.set_boundary_definition_arc(Node(0, Ro), a0)
 
 
 if __name__ == '__main__':
     problem = FemmProblem(out_file="PMDC.csv")
     problem.magnetic_problem(0, LengthUnit.CENTIMETERS, 'axi')
-    s = stator(17, 10, 0.5, 1, 2.5, 2, 0.2, 0.3, 4, 0.2, 1.8, 0.2, 0.2, 24, 8, 6)
+    s = stator()
     r = rotor()
     s.merge_geometry(r)
     problem.create_geometry(s)
     material_definitions(problem)
     boundary_definitions(problem)
+    problem.make_analysis()
     problem.write('PMDC.lua')
+
     femm = Executor()
     current_dir = os.getcwd()
     lua_file = current_dir + "/PMDC.lua"
     femm.run(lua_file)
-    material_definitions()
