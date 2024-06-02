@@ -20,12 +20,12 @@ import calc_torque_avg_rip
 #     plt.bar([str(i) for i in range(len(x[3]))], x[3])
 #     plt.show()
 
-# if __name__ == "__main__":
-#     x = calc_max_torque_angle.max_torque_angle(30, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, 7.5, 0, 7.5, 0)
-#
-#     print(x[0])
-#     plt.plot(x[1])
-#     plt.show()
+if __name__ == "__main__":
+    x = calc_max_torque_angle.max_torque_angle(30, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, 10, 10, 10, 10)
+
+    print(x[0])
+    plt.plot(x[1])
+    plt.show()
 #
 # if __name__ == "__main__":
 #     x = calc_torque_avg_rip.torque_avg_rip(30, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, 7.5, 0, 7.5, 7.5)
@@ -182,46 +182,46 @@ import numpy as np
 #             writer.writerow([item])
 #
 #     print(thd(refined_y))
-def thd(abs_data):
-    sq_sum = 0.0
-    for r in range(len(abs_data)):
-        sq_sum = sq_sum + (abs_data[r]) ** 2
-
-    sq_harmonics = sq_sum - ((abs_data[1])) ** 2.0
-    thd = 100 * sq_harmonics ** 0.5 / abs_data[1]
-
-    return thd
-y = [0, 0.1, 0, 0, 0, 0, 0, 0, 0]
-try:
-    fund = next((i for i, v in enumerate(y) if v > 1), None)
-    if fund is None:
-        raise StopIteration
-    refined_y = [i for i, j in zip(y, range(len(y))) if j % fund == 0]
-    res_thd = thd(refined_y)
-except StopIteration:
-    try:
-        fund = next((i for i, v in enumerate(y) if v > 0.5), None)
-        if fund is None:
-            raise StopIteration
-        refined_y = [i for i, j in zip(y, range(len(y))) if j % fund == 0]
-        res_thd = thd(refined_y)
-        print('First safety case')
-    except StopIteration:
-        try:
-            fund = next((i for i, v in enumerate(y) if v > 0.25), None)
-            if fund is None:
-                raise StopIteration
-            refined_y = [i for i, j in zip(y, range(len(y))) if j % fund == 0]
-            res_thd = thd(refined_y)
-            print('Second safety case')
-        except StopIteration:
-            try:
-                fund = next((i for i, v in enumerate(y) if v > 0.1), None)
-                if fund is None:
-                    raise StopIteration
-                refined_y = [i for i, j in zip(y, range(len(y))) if j % fund == 0]
-                res_thd = thd(refined_y)
-                print('Third safety case')
-            except StopIteration:
-                res_thd = 100
-                print('Fourth safety case')
+# def thd(abs_data):
+#     sq_sum = 0.0
+#     for r in range(len(abs_data)):
+#         sq_sum = sq_sum + (abs_data[r]) ** 2
+#
+#     sq_harmonics = sq_sum - ((abs_data[1])) ** 2.0
+#     thd = 100 * sq_harmonics ** 0.5 / abs_data[1]
+#
+#     return thd
+# y = [0, 0.1, 0, 0, 0, 0, 0, 0, 0]
+# try:
+#     fund = next((i for i, v in enumerate(y) if v > 1), None)
+#     if fund is None:
+#         raise StopIteration
+#     refined_y = [i for i, j in zip(y, range(len(y))) if j % fund == 0]
+#     res_thd = thd(refined_y)
+# except StopIteration:
+#     try:
+#         fund = next((i for i, v in enumerate(y) if v > 0.5), None)
+#         if fund is None:
+#             raise StopIteration
+#         refined_y = [i for i, j in zip(y, range(len(y))) if j % fund == 0]
+#         res_thd = thd(refined_y)
+#         print('First safety case')
+#     except StopIteration:
+#         try:
+#             fund = next((i for i, v in enumerate(y) if v > 0.25), None)
+#             if fund is None:
+#                 raise StopIteration
+#             refined_y = [i for i, j in zip(y, range(len(y))) if j % fund == 0]
+#             res_thd = thd(refined_y)
+#             print('Second safety case')
+#         except StopIteration:
+#             try:
+#                 fund = next((i for i, v in enumerate(y) if v > 0.1), None)
+#                 if fund is None:
+#                     raise StopIteration
+#                 refined_y = [i for i, j in zip(y, range(len(y))) if j % fund == 0]
+#                 res_thd = thd(refined_y)
+#                 print('Third safety case')
+#             except StopIteration:
+#                 res_thd = 100
+#                 print('Fourth safety case')

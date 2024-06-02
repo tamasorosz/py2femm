@@ -21,16 +21,18 @@ import calc_cogging
 if __name__ == '__main__':
     class MyProblem(ElementwiseProblem):
         def __init__(self):
-            super().__init__(n_var=4,
+            super().__init__(n_var=8,
                              n_obj=4,
                              n_ieq_constr=0,
                              n_eq_constr=0,
-                             xl=np.array([1, 1, 1, 1]),
-                             xu=np.array([10, 10, 10, 10]))
+                             xl=np.array([1, 1, 1, 1, 1, 1, 1, 1]),
+                             xu=np.array([10, 10, 10, 10, 10, 10, 10, 10]))
 
         def _evaluate(self, x, out, *args, **kwargs):
-            f1 = calc_torque_avg_rip.torque_avg_rip(30, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, x[0], x[1], x[2], x[3])
-            f2 = calc_cogging.cogging(0, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, x[0], x[1], x[2], x[3])
+            f1 = calc_torque_avg_rip.torque_avg_rip(30, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, x[0], x[1], x[2], x[3],
+                                                    x[4], x[5], x[6], x[7])
+            f2 = calc_cogging.cogging(0, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, x[0], x[1], x[2], x[3], x[4], x[5], x[6],
+                                      x[7])
 
             out['F'] = [f1[0], f1[1], f2[0], f2[1]]
 
@@ -50,6 +52,10 @@ if __name__ == '__main__':
                     x[i][0] = x[i][2]
                 if x[i][1] > x[i][3]:
                     x[i][1] = x[i][3]
+                if x[i][4] > x[i][6]:
+                    x[i][4] = x[i][6]
+                if x[i][5] > x[i][7]:
+                    x[i][6] = x[i][7]
 
             return x
 
@@ -68,8 +74,8 @@ if __name__ == '__main__':
         xtol=1e-8,
         cvtol=1e-6,
         ftol=0.0025,
-        period=10,
-        n_max_gen=100,
+        period=5,
+        n_max_gen=200,
         n_max_evals=3000
     )
 
@@ -84,9 +90,9 @@ if __name__ == '__main__':
     X = res.X
     print('Execution time: ' + str(res.exec_time / 60 / 60) + ' hours')
 
-    df = pd.DataFrame({'X1': X[:, 0], 'X2': X[:, 1], 'X3': X[:, 2], 'X4': X[:, 3], 'AVG': F[:, 0], 'RIP': F[:, 1],
-                       'P2P': F[:, 2], 'THD': F[:, 3]})
+    df = pd.DataFrame({'X1': X[:, 0], 'X2': X[:, 1], 'X3': X[:, 2], 'X4': X[:, 3], 'X5': X[:, 4], 'X6': X[:, 5],
+                       'X73': X[:, 6], 'X8': X[:, 7], 'AVG': F[:, 0], 'RIP': F[:, 1], 'P2P': F[:, 2], 'THD': F[:, 3]})
     current_file_path = os.path.abspath(__file__)
     folder_path = os.path.dirname(current_file_path)
-    file_path = os.path.join(folder_path, f'results/nsga2_case4_p50o25g100.csv')
+    file_path = os.path.join(folder_path, f'results/nsga2_case5_p50o25g200.csv')
     df.to_csv(file_path, encoding='utf-8', index=False)

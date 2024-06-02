@@ -75,8 +75,8 @@ def execute_model(counter):
 def torque_avg_rip(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_ml, ang_mr, ang_mpl, ang_mpr):
     initial = maxang.max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_ml, ang_mr, ang_mpl, ang_mpr)
 
-    resol = 16
-    e = 15
+    resol = 31
+    e = 30
     for counter, ia, alpha in zip(range(0, resol), np.linspace(0, e, resol), np.linspace(0, 4 * e, resol)):
         JUp = J0 * math.cos(math.radians(initial + alpha))
         JUn = -JUp
@@ -115,4 +115,4 @@ def torque_avg_rip(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_ml, ang_mr, ang_
     torque_avg = -1 * np.average(list(res))
     torque_ripple = -1 * (np.max(list(res)) - np.min(list(res))) / torque_avg
 
-    return torque_avg, torque_ripple, res
+    return torque_avg, torque_ripple

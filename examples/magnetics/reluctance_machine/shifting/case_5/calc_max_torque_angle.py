@@ -72,7 +72,8 @@ def execute_model(counter):
     return torque
 
 
-def max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_ml, ang_mr, ang_mpl, ang_mpr):
+def max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_ml1, ang_mr1, ang_mpl1, ang_mpr1, ang_ml2, ang_mr2,
+                     ang_mpl2, ang_mpr2):
     resol = 21
     a = 30
     b = 50
@@ -101,10 +102,14 @@ def max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_ml, ang_mr, an
                                              bg=mh + bgp,
                                              ia=0,
                                              mh=mh,
-                                             ang_ml=ang_ml,
-                                             ang_mr=ang_mr,
-                                             ang_mpl=ang_mpl,
-                                             ang_mpr=ang_mpr
+                                             ang_ml1=ang_ml1,
+                                             ang_mr1=ang_mr1,
+                                             ang_mpl1=ang_mpl1,
+                                             ang_mpr1=ang_mpr1,
+                                             ang_ml2=ang_ml2,
+                                             ang_mr2=ang_mr2,
+                                             ang_mpl2=ang_mpl2,
+                                             ang_mpr2=ang_mpr2
                                              )
         model.problem_definition(variables)
 

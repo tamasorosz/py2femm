@@ -109,7 +109,7 @@ def thd(abs_data):
 def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_ml, ang_mr, ang_mpl, ang_mpr):
 
     resol = 31
-    e = 15
+    e = 30
     for counter, ia in zip(range(0, resol), np.linspace(0, e, resol)):
         JUp = J0
         JUn = -JUp
@@ -169,7 +169,6 @@ def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_ml, ang_mr, ang_mpl, an
                     raise StopIteration
                 refined_y = [i for i, j in zip(y, range(len(y))) if j % fund == 0]
                 res_thd = thd(refined_y)
-                print('Second safety case')
             except StopIteration:
                 try:
                     fund = next((i for i, v in enumerate(y) if v > 0.1), None)
@@ -177,9 +176,8 @@ def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_ml, ang_mr, ang_mpl, an
                         raise StopIteration
                     refined_y = [i for i, j in zip(y, range(len(y))) if j % fund == 0]
                     res_thd = thd(refined_y)
-                    print('Third safety case')
                 except StopIteration:
                     res_thd = 100
-                    print('Fourth safety case')
+                    print('Safety case')
 
     return cogging_pp, res_thd

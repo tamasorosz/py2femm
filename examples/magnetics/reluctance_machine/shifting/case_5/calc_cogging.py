@@ -106,7 +106,8 @@ def thd(abs_data):
     return thd
 
 
-def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_ml, ang_mr, ang_mpl, ang_mpr):
+def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_ml1, ang_mr1, ang_mpl1, ang_mpr1, ang_ml2, ang_mr2, ang_mpl2,
+            ang_mpr2):
 
     resol = 31
     e = 15
@@ -135,10 +136,14 @@ def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_ml, ang_mr, ang_mpl, an
                                              bg=bgp + mh,
                                              ia=ia,
                                              mh=mh,
-                                             ang_ml=ang_ml,
-                                             ang_mr=ang_mr,
-                                             ang_mpl=ang_mpl,
-                                             ang_mpr=ang_mpr
+                                             ang_ml1=ang_ml1,
+                                             ang_mr1=ang_mr1,
+                                             ang_mpl1=ang_mpl1,
+                                             ang_mpr1=ang_mpr1,
+                                             ang_ml2=ang_ml2,
+                                             ang_mr2=ang_mr2,
+                                             ang_mpl2=ang_mpl2,
+                                             ang_mpr2=ang_mpr2
                                              )
         model.problem_definition(variables)
 
@@ -169,7 +174,6 @@ def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_ml, ang_mr, ang_mpl, an
                     raise StopIteration
                 refined_y = [i for i, j in zip(y, range(len(y))) if j % fund == 0]
                 res_thd = thd(refined_y)
-                print('Second safety case')
             except StopIteration:
                 try:
                     fund = next((i for i, v in enumerate(y) if v > 0.1), None)
@@ -177,7 +181,6 @@ def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_ml, ang_mr, ang_mpl, an
                         raise StopIteration
                     refined_y = [i for i, j in zip(y, range(len(y))) if j % fund == 0]
                     res_thd = thd(refined_y)
-                    print('Third safety case')
                 except StopIteration:
                     res_thd = 100
                     print('Fourth safety case')
