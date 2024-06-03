@@ -106,7 +106,7 @@ def thd(abs_data):
     return thd
 
 
-def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_ml, ang_mr, ang_mpl, ang_mpr):
+def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_mp):
 
     resol = 31
     e = 15
@@ -135,10 +135,10 @@ def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_ml, ang_mr, ang_mpl, an
                                              bg=bgp + mh,
                                              ia=ia,
                                              mh=mh,
-                                             ang_ml=ang_ml,
-                                             ang_mr=ang_mr,
-                                             ang_mpl=ang_mpl,
-                                             ang_mpr=ang_mpr
+                                             ang_m=ang_m,
+                                             ang_mp=ang_mp,
+                                             deg_m=deg_m,
+                                             deg_mp=deg_mp
                                              )
         model.problem_definition(variables)
 
@@ -149,36 +149,6 @@ def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_ml, ang_mr, ang_mpl, an
 
     y = np.round(np.abs(fftPlot(np.array(res), 1 / (3 * 120))[0]), 3)
     y[0] = 0
-    try:
-        fund = next((i for i, v in enumerate(y) if v > 1), None)
-        if fund is None:
-            raise StopIteration
-        refined_y = [i for i, j in zip(y, range(len(y))) if j % fund == 0]
-        res_thd = thd(refined_y)
-    except StopIteration:
-        try:
-            fund = next((i for i, v in enumerate(y) if v > 0.5), None)
-            if fund is None:
-                raise StopIteration
-            refined_y = [i for i, j in zip(y, range(len(y))) if j % fund == 0]
-            res_thd = thd(refined_y)
-        except StopIteration:
-            try:
-                fund = next((i for i, v in enumerate(y) if v > 0.25), None)
-                if fund is None:
-                    raise StopIteration
-                refined_y = [i for i, j in zip(y, range(len(y))) if j % fund == 0]
-                res_thd = thd(refined_y)
-            except StopIteration:
-                try:
-                    fund = next((i for i, v in enumerate(y) if v > 0.1), None)
-                    if fund is None:
-                        raise StopIteration
-                    refined_y = [i for i, j in zip(y, range(len(y))) if j % fund == 0]
-                    res_thd = thd(refined_y)
-                    print('Third safety case')
-                except StopIteration:
-                    res_thd = 100
-                    print('Fourth safety case')
+    res_thd = thd(y)
 
     return cogging_pp, res_thd

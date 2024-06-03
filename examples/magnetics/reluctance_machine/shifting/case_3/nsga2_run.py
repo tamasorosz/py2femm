@@ -25,8 +25,8 @@ if __name__ == '__main__':
                              n_obj=4,
                              n_ieq_constr=0,
                              n_eq_constr=0,
-                             xl=np.array([1, 1, 1, 1]),
-                             xu=np.array([10, 10, 10, 10]))
+                             xl=np.array([10, 10, -8, -8]),
+                             xu=np.array([15, 18, 8, 8]))
 
         def _evaluate(self, x, out, *args, **kwargs):
             f1 = calc_torque_avg_rip.torque_avg_rip(30, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, x[0], x[1], x[2], x[3])
@@ -43,19 +43,29 @@ if __name__ == '__main__':
 
         def _do(self, problem, x, **kwargs):
             for i in range(len(x)):  # ROUNDING FOR 0.1 SEGMENTS
-                x[i] = [round(j, 1) for j in x[i]]
+                x[i] = [round(j, 0) for j in x[i]]
 
-            for i in range(len(x)):  # SAFE SWITCH FOR BIGGER MAGNET THAN POCKET
-                if x[i][0] > x[i][2]:
-                    x[i][0] = x[i][2]
-                if x[i][1] > x[i][3]:
-                    x[i][1] = x[i][3]
+                x[i][2] = x[i][2] * 2
+                x[i][3] = x[i][3] * 2
+
+            for i in range(len(x)):
+                if x[i][1] + abs(x[i][3]) > 26:
+                    x[i][1] = 18 - abs(x[i][3]) / 2
+
+                if x[i][0] > x[i][1]:
+                    x[i][0] = x[i][1]
+                    x[i][2] = x[i][3]
+                else:
+                    if x[i][2] > (x[i][1] - x[i][0]) * 2 + x[i][3]:
+                        x[i][2] = (x[i][1] - x[i][0]) * 2 + x[i][3]
+                    if x[i][2] < -(x[i][1] - x[i][0]) * 2 + x[i][3]:
+                        x[i][2] = -(x[i][1] - x[i][0]) * 2 + x[i][3]
 
             return x
 
 
     algorithm = NSGA2(
-        pop_size=50,
+        pop_size=25,
         n_offsprings=25,
         sampling=FloatRandomSampling(),
         crossover=SBX(prob=0.9, eta=15),
@@ -69,7 +79,7 @@ if __name__ == '__main__':
         cvtol=1e-6,
         ftol=0.0025,
         period=10,
-        n_max_gen=100,
+        n_max_gen=1,
         n_max_evals=3000
     )
 
@@ -88,5 +98,5 @@ if __name__ == '__main__':
                        'P2P': F[:, 2], 'THD': F[:, 3]})
     current_file_path = os.path.abspath(__file__)
     folder_path = os.path.dirname(current_file_path)
-    file_path = os.path.join(folder_path, f'results/nsga2_case3_p50o25g100.csv')
+    file_path = os.path.join(folder_path, f'results/nsga2_case3_p50o25g1.csv')
     df.to_csv(file_path, encoding='utf-8', index=False)

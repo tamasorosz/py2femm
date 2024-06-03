@@ -18,7 +18,7 @@ n0 = Node(0, 0)
 class VariableParameters:
 
     def __init__(self, fold, out, counter, JAp, JAn, JBp, JBn, JCp, JCn, ang_co, deg_co, bd, bw, bh, bg, ia, mh,
-                 ang_ml, ang_mr, ang_mpl, ang_mpr):
+                 ang_m, ang_mp, deg_m, deg_mp):
         self.fold = fold
         self.out = out
         self.counter = counter
@@ -40,10 +40,11 @@ class VariableParameters:
 
         self.ia = ia
 
-        self.ang_ml = ang_ml
-        self.ang_mr = ang_mr
-        self.ang_mpl = ang_mpl
-        self.ang_mpr = ang_mpr
+        self.ang_m = ang_m
+        self.ang_mp = ang_mp
+        self.deg_m = deg_m/2
+        self.deg_mp = deg_mp/2
+
         self.mh = mh
 
 
@@ -267,13 +268,13 @@ def rotor_geometry(femm_problem: FemmProblem, var: VariableParameters):
     # rotor_geo.add_node(rot_bound_arc2)
 
     # LEFT ROTOR MAGNET POCKET-----------------------------------------------------------------------------------------
-    nmpbase_lo = Node(22, 0).rotate_about(n0, 67.5, True)
-    nmpbase_lu = Node(22 - var.mh, 0).rotate_about(n0, 67.5, True)
+    nmpbase_lo = Node(22, 0).rotate_about(n0, 67.5+var.deg_mp, True)
+    nmpbase_lu = Node(22 - var.mh, 0).rotate_about(n0, 67.5+var.deg_mp, True)
 
-    nmp_llo = nmpbase_lo.rotate_about(n0, var.ang_mpl, True)
-    nmp_rlo = nmpbase_lo.rotate_about(n0, -var.ang_mpr, True)
-    nmp_llu = nmpbase_lu.rotate_about(n0, var.ang_mpl, True)
-    nmp_rlu = nmpbase_lu.rotate_about(n0, -var.ang_mpr, True)
+    nmp_llo = nmpbase_lo.rotate_about(n0, var.ang_mp/2, True)
+    nmp_rlo = nmpbase_lo.rotate_about(n0, -var.ang_mp/2, True)
+    nmp_llu = nmpbase_lu.rotate_about(n0, var.ang_mp/2, True)
+    nmp_rlu = nmpbase_lu.rotate_about(n0, -var.ang_mp/2, True)
 
     rotor_geo.add_node(nmp_llo)
     rotor_geo.add_node(nmp_rlo)
@@ -296,13 +297,13 @@ def rotor_geometry(femm_problem: FemmProblem, var: VariableParameters):
     rotor_geo.add_arc(rot_arc_lr)
 
     # LEFT ROTOR MAGNET------------------------------------------------------------------------------------------------
-    nmbase_lo = Node(22, 0).rotate_about(n0, 67.5, True)
-    nmbase_lu = Node(22 - var.mh, 0).rotate_about(n0, 67.5, True)
+    nmbase_lo = Node(22, 0).rotate_about(n0, 67.5+var.deg_m, True)
+    nmbase_lu = Node(22 - var.mh, 0).rotate_about(n0, 67.5+var.deg_m, True)
 
-    nm_llo = nmbase_lo.rotate_about(n0, var.ang_ml, True)
-    nm_rlo = nmbase_lo.rotate_about(n0, -var.ang_mr, True)
-    nm_llu = nmbase_lu.rotate_about(n0, var.ang_ml, True)
-    nm_rlu = nmbase_lu.rotate_about(n0, -var.ang_mr, True)
+    nm_llo = nmbase_lo.rotate_about(n0, var.ang_m/2, True)
+    nm_rlo = nmbase_lo.rotate_about(n0, -var.ang_m/2, True)
+    nm_llu = nmbase_lu.rotate_about(n0, var.ang_m/2, True)
+    nm_rlu = nmbase_lu.rotate_about(n0, -var.ang_m/2, True)
 
     rotor_geo.add_node(nm_llo)
     rotor_geo.add_node(nm_rlo)
@@ -326,13 +327,13 @@ def rotor_geometry(femm_problem: FemmProblem, var: VariableParameters):
     rotor_geo.add_arc(rot_arc_lc)
 
     # RIGHT ROTOR MAGNET POCKET-----------------------------------------------------------------------------------------
-    nmpbase_ro = Node(22, 0).rotate_about(n0, 22.5, True)
-    nmpbase_ru = Node(22 - var.mh, 0).rotate_about(n0, 22.5, True)
+    nmpbase_ro = Node(22, 0).rotate_about(n0, 22.5+var.deg_mp, True)
+    nmpbase_ru = Node(22 - var.mh, 0).rotate_about(n0, 22.5+var.deg_mp, True)
 
-    nmp_lro = nmpbase_ro.rotate_about(n0, var.ang_mpl, True)
-    nmp_rro = nmpbase_ro.rotate_about(n0, -var.ang_mpr, True)
-    nmp_lru = nmpbase_ru.rotate_about(n0, var.ang_mpl, True)
-    nmp_rru = nmpbase_ru.rotate_about(n0, -var.ang_mpr, True)
+    nmp_lro = nmpbase_ro.rotate_about(n0, var.ang_mp/2, True)
+    nmp_rro = nmpbase_ro.rotate_about(n0, -var.ang_mp/2, True)
+    nmp_lru = nmpbase_ru.rotate_about(n0, var.ang_mp/2, True)
+    nmp_rru = nmpbase_ru.rotate_about(n0, -var.ang_mp/2, True)
 
     rotor_geo.add_node(nmp_lro)
     rotor_geo.add_node(nmp_rro)
@@ -355,13 +356,13 @@ def rotor_geometry(femm_problem: FemmProblem, var: VariableParameters):
     rotor_geo.add_arc(rot_arc_rr)
 
     # RIGHT ROTOR MAGNET------------------------------------------------------------------------------------------------
-    nmbase_ro = Node(22, 0).rotate_about(n0, 22.5, True)
-    nmbase_ru = Node(22 - var.mh, 0).rotate_about(n0, 22.5, True)
+    nmbase_ro = Node(22, 0).rotate_about(n0, 22.5+var.deg_m, True)
+    nmbase_ru = Node(22 - var.mh, 0).rotate_about(n0, 22.5+var.deg_m, True)
 
-    nm_lro = nmbase_ro.rotate_about(n0, var.ang_ml, True)
-    nm_rro = nmbase_ro.rotate_about(n0, -var.ang_mr, True)
-    nm_lru = nmbase_ru.rotate_about(n0, var.ang_ml, True)
-    nm_rru = nmbase_ru.rotate_about(n0, -var.ang_mr, True)
+    nm_lro = nmbase_ro.rotate_about(n0, var.ang_m/2, True)
+    nm_rro = nmbase_ro.rotate_about(n0, -var.ang_m/2, True)
+    nm_lru = nmbase_ru.rotate_about(n0, var.ang_m/2, True)
+    nm_rru = nmbase_ru.rotate_about(n0, -var.ang_m/2, True)
 
     rotor_geo.add_node(nm_lro)
     rotor_geo.add_node(nm_rro)
@@ -518,8 +519,8 @@ def add_materials(femm_problem: FemmProblem, var: VariableParameters, rot: rotor
     ferrite_left = MagneticMaterial(material_name="ml", H_c=200106)
     ferrite_right = MagneticMaterial(material_name="mr", H_c=200106)
 
-    ferrite_left.remanence_angle = 247.5 + (var.ang_ml - var.ang_mr)
-    ferrite_right.remanence_angle = 22.5 + (var.ang_ml - var.ang_mr)
+    ferrite_left.remanence_angle = 247.5 + var.deg_m
+    ferrite_right.remanence_angle = 22.5 + var.deg_m
 
     femm_problem.add_material(ferrite_left)
     femm_problem.add_material(ferrite_right)
@@ -564,8 +565,8 @@ def add_materials(femm_problem: FemmProblem, var: VariableParameters, rot: rotor
 def problem_definition(var: VariableParameters):
     problem = FemmProblem(out_file=os.path.join(folder_path, f'temp_{var.fold}/{var.out}{var.counter}.csv'))
     variables = VariableParameters(var.fold, var.out, var.counter, var.JAp, var.JAn, var.JBp, var.JBn, var.JCp, var.JCn,
-                                   var.ang_co, var.deg_co, var.bd, var.bw, var.bh, var.bg, var.ia, var.mh, var.ang_ml,
-                                   var.ang_mr, var.ang_mpl, var.ang_mpr)
+                                   var.ang_co, var.deg_co, var.bd, var.bw, var.bh, var.bg, var.ia, var.mh, var.ang_m,
+                                   var.ang_mp, var.deg_m, var.deg_mp)
 
     problem.magnetic_problem(0, LengthUnit.MILLIMETERS, "planar", depth=40)
 
