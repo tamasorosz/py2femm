@@ -7,13 +7,17 @@ from threading import Timer
 import subprocess
 from pathlib import Path
 
+import asyncio
+from patio import Registry, ProcessPoolExecutor, NullExecutor
+from patio_rabbitmq import RabbitMQBroker
+
 
 class Executor:
     # using wine under linux environment
     femm_path_linux = str(Path.home()) + "/.wine/drive_c/femm42/bin/femm.exe"
     femm_path_windows = r"D:\femm42\bin\femm.exe"
 
-    def run(self, script_file, timeout=1000, debug=False):
+    def run(self, script_file, timeout=1000):
         command = []
         script_file = Path(script_file).resolve()
         assert script_file.exists(), f"{script_file} does not exists."
@@ -37,3 +41,29 @@ class Executor:
         finally:
             process_timer.cancel()
 
+
+class RabbitExecutor:
+
+    def __init__(self, name="py2femm-rabbitmq", script_files=[]):
+        self.rpc = Registry(project=name, auto_naming=False)
+        self.scripts = script_files
+        self.executor = Executor()
+        self.rpc['runner'] = self.executor.run
+
+    async def worker(self):
+        async with ProcessPoolExecutor(self.rpc, max_workers=4) as executor:
+            async with RabbitMQBroker(
+                    executor, amqp_url="amqp://guest:guest@localhost/",
+            ) as broker:
+                await broker.join()
+
+    async def broker(self):
+        async with NullExecutor(Registry(project="py2femm-rabbitmq")) as executor:
+            async with RabbitMQBroker(executor, amqp_url="amqp://guest:guest@localhost/", ) as broker:
+                print(
+                    await asyncio.gather(
+                        *[
+                            broker.call("runner", file, timeout=1) for file in self.scripts
+                        ]
+                    ),
+                )

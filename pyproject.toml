@@ -6,6 +6,7 @@ authors = ["Tamás Orosz <tamas.orosz@yahoo.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
+aio-pika = "*"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
