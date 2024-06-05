@@ -22,7 +22,7 @@ y_thd = list(df_thd.iloc[5])
 
 data = [y_avg, y_rip, y_cog, y_thd]
 
-labels = ['AVG', 'RIP', 'COG', 'THD']
+labels = ['\u0394Tavg: 53.39 mNm (3.03 %)', '\u0394Trip: 0.09 % (0.24 %)', '\u0394Tcog: 2.69 mNm (19.31 %)', '\u0394Tthd: 3.2 % (2.7 %)']
 n_sets = len(data)
 x = np.arange(len(data[0]))
 width = 0.20
@@ -41,7 +41,12 @@ ax.set_xticklabels(['X1', 'X2', 'X3', 'X4'])
 ax.tick_params(axis='both', which='major', labelsize=fs)
 ax.grid(True, which='both', linestyle='--', linewidth=0.5)
 ax.legend(fontsize=fs)
+plt.savefig('figures/sensitivity', bbox_inches='tight')
 plt.show()
 
-
-
+df_res = pd.read_csv(current_dir + '/results/' + 'taguchi_res.csv')
+avg = max(df_res.iloc[:, 4]) - min(df_res.iloc[:, 4])
+rip = max(df_res.iloc[:, 6]) - min(df_res.iloc[:, 6])
+cog = max(df_res.iloc[:, 8]) - min(df_res.iloc[:, 8])
+thd = max(df_res.iloc[:, 10]) - min(df_res.iloc[:, 10])
+print(avg, rip, cog, thd)

@@ -15,7 +15,7 @@ from src.executor import Executor
 
 def execute_model(counter):
     try:
-        time.sleep(1)
+        time.sleep(0.1)
 
         femm = Executor()
         current_file_path = os.path.abspath(__file__)
@@ -24,7 +24,7 @@ def execute_model(counter):
         lua_file = os.path.join(folder_path, f'temp_ang/ang{counter}.lua')
         femm.run(lua_file)
 
-        time.sleep(1)
+        time.sleep(0.1)
 
         with open(os.path.join(folder_path, f'temp_ang/ang{counter}.csv'), 'r') as file:
             csvfile = [i for i in csv.reader(file)]
@@ -37,7 +37,7 @@ def execute_model(counter):
         pass
 
     try:
-        time.sleep(1)
+        time.sleep(0.1)
 
         current_file_path = os.path.abspath(__file__)
         folder_path = os.path.dirname(current_file_path)
@@ -60,9 +60,9 @@ def execute_model(counter):
 
 
 def max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_mp):
-    resol = 16
-    a = 30
-    b = 45
+    resol = 181
+    a = -90
+    b = 90
     for counter, alpha in zip(range(0, resol), np.linspace(a, b, resol)):
         JUp = J0 * math.cos(math.radians(alpha))
         JUn = -JUp
@@ -103,4 +103,4 @@ def max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg
     ind = res.index((max(res)))
     torque_ang = a + ind * ((b - a) / (resol - 1))
 
-    return torque_ang
+    return torque_ang, res

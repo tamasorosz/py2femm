@@ -17,7 +17,7 @@ from src.executor import Executor
 def execute_model(counter):
 
     try:
-        time.sleep(1)
+        time.sleep(0.1)
 
         femm = Executor()
         current_file_path = os.path.abspath(__file__)
@@ -26,7 +26,7 @@ def execute_model(counter):
         lua_file = os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.lua')
         femm.run(lua_file)
 
-        time.sleep(1)
+        time.sleep(0.1)
 
         with open(os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.csv'), 'r') as file:
             csvfile = [i for i in csv.reader(file)]
@@ -38,7 +38,7 @@ def execute_model(counter):
         torque = 0.0
 
     try:
-        time.sleep(1)
+        time.sleep(0.1)
 
         current_file_path = os.path.abspath(__file__)
         folder_path = os.path.dirname(current_file_path)
@@ -63,8 +63,8 @@ def execute_model(counter):
 def torque_avg_rip(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_mp):
     initial = maxang.max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_mp)
 
-    resol = 16
-    e = 15
+    resol = 121
+    e = 30
     for counter, ia, alpha in zip(range(0, resol), np.linspace(0, e, resol), np.linspace(0, 4 * e, resol)):
         JUp = J0 * math.cos(math.radians(initial + alpha))
         JUn = -JUp
@@ -103,4 +103,4 @@ def torque_avg_rip(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m
     torque_avg = -1 * np.average(list(res))
     torque_ripple = -1 * (np.max(list(res)) - np.min(list(res))) / torque_avg
 
-    return torque_avg, torque_ripple
+    return torque_avg, torque_ripple, res

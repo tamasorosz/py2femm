@@ -17,7 +17,7 @@ column_key_map = {i: 'X' + str(i) for i in range(1, 5)}
 L25 = df.rename(columns=column_key_map)
 
 current_dir = os.getcwd()
-tag = pd.read_csv(current_dir + '/results/' + f'taguchi.csv')
+tag = pd.read_csv(current_dir + '/results/' + f'taguchi_res.csv')
 
 SNavg_results = []
 

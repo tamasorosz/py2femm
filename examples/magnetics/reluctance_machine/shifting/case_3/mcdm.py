@@ -57,14 +57,15 @@ from pymcdm import visuals
 # plt.savefig('figures/flow_ranking', bbox_inches='tight')
 # plt.show()
 
-15,18,14,8
+15,18,8,8
 
 categories = ['AVG', 'RIP', 'COG', 'THD']
 
-data1 = [1759.97,35.9,13.94,118.45]
-data2 = [1376.92,40.2,20.12,33.72]
-data3 = [1371.99,11.4,19.95,41.11]
-
+data1 = [1758.37, 37.1, 14.41, 118.45]
+data2 = [1376.92, 40.2, 20.12, 33.72]
+data3 = [1371.99, 11.4, 19.95, 41.11]
+data4 = [1483.55, 31.6, 19.39, 114.27]
+data5 = [1473.94, 25.2, 21.14, 97.27]
 
 # Custom colors
 colors = ["#B90276", '#50237F', '#005691', "#008ECF", '#00A8B0', '#78BE20', "#006249", '#525F6B', '#000']
@@ -76,13 +77,17 @@ bar_width = 0.2
 r1 = np.arange(len(categories))
 r2 = [x + bar_width for x in r1]
 r3 = [x + bar_width for x in r2]
+r4 = [x + bar_width for x in r3]
+r5 = [x + bar_width for x in r4]
 
 fig, ax1 = plt.subplots(figsize=(8, 6))
 
 # Bars for the 'AVG' category on the primary y-axis
-ax1.bar(r1[0], data1[0], color=colors[0], width=bar_width, edgecolor='grey', label='Equal priority')
-ax1.bar(r2[0], data2[0], color=colors[1], width=bar_width, edgecolor='grey', label='THD priority')
-ax1.bar(r3[0], data3[0], color=colors[2], width=bar_width, edgecolor='grey', label='Ripple priority')
+ax1.bar(r1[0], data1[0], color=colors[6], width=bar_width, edgecolor='grey', label='False design')
+# ax1.bar(r2[0], data2[0], color=colors[1], width=bar_width, edgecolor='grey', label='THD priority')
+# ax1.bar(r3[0], data3[0], color=colors[2], width=bar_width, edgecolor='grey', label='Ripple priority')
+ax1.bar(r2[0], data4[0], color=colors[4], width=bar_width, edgecolor='grey', label='Shifted design')
+ax1.bar(r3[0], data5[0], color=colors[1], width=bar_width, edgecolor='grey', label='Base design')
 
 # Labels and title for the primary y-axis
 ax1.set_xlabel('Categories', fontsize=16)
@@ -94,9 +99,11 @@ ax1.set_xticklabels(categories, fontsize=16)
 ax2 = ax1.twinx()
 
 # Bars for the 'RIP', 'COG', 'THD' categories on the secondary y-axis
-ax2.bar(r1[1:], data1[1:], color=colors[0], width=bar_width, edgecolor='grey')
-ax2.bar(r2[1:], data2[1:], color=colors[1], width=bar_width, edgecolor='grey')
-ax2.bar(r3[1:], data3[1:], color=colors[2], width=bar_width, edgecolor='grey')
+ax2.bar(r1[1:], data1[1:], color=colors[6], width=bar_width, edgecolor='grey')
+# ax2.bar(r2[1:], data2[1:], color=colors[1], width=bar_width, edgecolor='grey')
+# ax2.bar(r3[1:], data3[1:], color=colors[2], width=bar_width, edgecolor='grey')
+ax2.bar(r2[1:], data4[1:], color=colors[4], width=bar_width, edgecolor='grey')
+ax2.bar(r3[1:], data5[1:], color=colors[1], width=bar_width, edgecolor='grey')
 
 # Labels and title for the secondary y-axis
 ax2.set_ylabel('RIP [%] / COG [mNm] / THD [%]', fontsize=16)
