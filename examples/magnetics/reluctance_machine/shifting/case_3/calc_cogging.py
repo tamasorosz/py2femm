@@ -15,9 +15,10 @@ from src.executor import Executor
 
 
 def execute_model(counter):
-    time.sleep(0.1)
 
     try:
+        time.sleep(0.1)
+
         femm = Executor()
         current_file_path = os.path.abspath(__file__)
         folder_path = os.path.dirname(current_file_path)
@@ -32,22 +33,12 @@ def execute_model(counter):
             number = csvfile[0][0].replace('wTorque_0 = ', '')
             torque = float(number) * 4 * -1000
 
-        del_fem = pathlib.Path(os.path.join(folder_path, f'temp_cog/cog{counter}.lua'))
-        del_ans = pathlib.Path(os.path.join(folder_path, f'temp_cog/cog{counter}.fem'))
-        del_lua = pathlib.Path(os.path.join(folder_path, f'temp_cog/cog{counter}.ans'))
-        del_csv = pathlib.Path(os.path.join(folder_path, f'temp_cog/cog{counter}.csv'))
-        try:
-            time.sleep(0.1)
-            del_lua.unlink()
-            del_fem.unlink()
-            del_ans.unlink()
-            del_csv.unlink()
-
-        except PermissionError:
-            pass
-
     except IndexError:
+        print(f'Error1 at cog{counter}!')
         torque = 0.0
+
+    try:
+        time.sleep(0.1)
 
         current_file_path = os.path.abspath(__file__)
         folder_path = os.path.dirname(current_file_path)
@@ -57,22 +48,20 @@ def execute_model(counter):
         del_lua = pathlib.Path(os.path.join(folder_path, f'temp_cog/cog{counter}.ans'))
         del_csv = pathlib.Path(os.path.join(folder_path, f'temp_cog/cog{counter}.csv'))
 
-        try:
-            time.sleep(0.1)
-            del_lua.unlink()
-            del_fem.unlink()
-            del_ans.unlink()
-            del_csv.unlink()
+        time.sleep(0.1)
 
-        except PermissionError:
-            pass
+        del_lua.unlink()
+        del_fem.unlink()
+        del_ans.unlink()
+        del_csv.unlink()
 
-        print(f'Error at cog{counter}!')
+    except PermissionError or FileNotFoundError:
+        pass
 
     return torque
 
-def fftPlot(sig, dt=None):
 
+def fftPlot(sig, dt=None):
     if dt is None:
         dt = 1
         t = np.arange(0, sig.shape[-1])
@@ -95,6 +84,7 @@ def fftPlot(sig, dt=None):
 
     return sigFFTPos, freqAxisPos
 
+
 def thd(abs_data):
     sq_sum = 0.0
     for r in range(len(abs_data)):
@@ -107,7 +97,6 @@ def thd(abs_data):
 
 
 def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_mp):
-
     resol = 31
     e = 15
     for counter, ia in zip(range(0, resol), np.linspace(0, e, resol)):

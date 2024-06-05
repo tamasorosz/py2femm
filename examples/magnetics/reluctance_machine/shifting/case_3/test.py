@@ -12,7 +12,7 @@ import calc_cogging
 import calc_torque_avg_rip
 
 # if __name__ == "__main__":
-#     x = calc_cogging.cogging(0, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, 10, 10, 16, 16)
+#     x = calc_cogging.cogging(0, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, 10, 10, 0, -16)
 #
 #     print(x[0], x[1])
 #     plt.plot(x[2])
@@ -32,12 +32,12 @@ import calc_torque_avg_rip
 #     plt.legend()
 #     plt.show()
 #
-if __name__ == "__main__":
-    x = calc_torque_avg_rip.torque_avg_rip(30, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, 10, 10, 16, 16)
-
-    print(x[0], x[1])
-    plt.plot(x[2])
-    plt.show()
+# if __name__ == "__main__":
+#     x = calc_torque_avg_rip.torque_avg_rip(30, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, 10, 10, 16, 16)
+#
+#     print(x[0], x[1])
+#     plt.plot(x[2])
+#     plt.show()
 
 
 
@@ -230,3 +230,108 @@ import numpy as np
 #             except StopIteration:
 #                 res_thd = 100
 #                 print('Fourth safety case')
+
+# def generate_combinations(a_range, b_range, c_range, d_range):
+#     combinations = []
+#     for a in a_range:
+#         for b in b_range:
+#             for c in c_range:
+#                 for d in d_range:
+#                     combinations.append([a, b, c, d])
+#     return combinations
+#
+# # Define the ranges for a, b, c, and d
+# a_range = range(10, 16)
+# b_range = range(10, 19)
+# c_range = range(-8, 9)
+# d_range = range(-8, 9)
+#
+#
+# x = np.array(generate_combinations(a_range, b_range, c_range, d_range))
+# print(x)
+#
+# for i in range(len(x)):
+#     x[i] = [round(j, 0) for j in x[i]]
+#
+#     x[i][2] = x[i][2] * 2
+#     x[i][3] = x[i][3] * 2
+#
+# for i in range(len(x)):
+#     if x[i][1] + abs(x[i][3]) > 26:
+#         x[i][1] = 18 - abs(x[i][3]) / 2
+#
+#     if x[i][0] > x[i][1]:
+#         x[i][0] = x[i][1]
+#         x[i][2] = x[i][3]
+#     else:
+#         if x[i][2] > (x[i][1] - x[i][0]) * 2 + x[i][3]:
+#             x[i][2] = (x[i][1] - x[i][0]) * 2 + x[i][3]
+#         if x[i][2] < -(x[i][1] - x[i][0]) * 2 + x[i][3]:
+#             x[i][2] = -(x[i][1] - x[i][0]) * 2 + x[i][3]
+#
+# x = np.array(x, dtype=int)
+#
+# for i in range(len(x)):
+#     if x[i][0] == 0:
+#         print(x[i])
+
+import numpy as np
+
+# Define the ranges for a, b, c, and d
+a_range = np.arange(10, 16)
+b_range = np.arange(10, 19)
+c_range = np.arange(-8, 9)
+d_range = np.arange(-8, 9)
+
+# Create the meshgrid for all combinations
+a, b, c, d = np.meshgrid(a_range, b_range, c_range, d_range, indexing='ij')
+
+# Stack the grids to form the final array of shape (6, 9, 17, 17, 4)
+combinations = np.stack((a, b, c, d), axis=-1)
+
+
+# Reshape the ndarray into a 2D array where each row is a combination
+x = combinations.reshape(-1, 4)
+
+for i in range(len(x)):
+    x[i] = [round(j, 0) for j in x[i]]
+
+    x[i][2] = x[i][2] * 2
+    x[i][3] = x[i][3] * 2
+
+for i in range(len(x)):
+    if x[i][1] + abs(x[i][3]) > 26:
+        x[i][1] = 18 - abs(x[i][3]) / 2
+
+    if x[i][0] > x[i][1]:
+        x[i][0] = x[i][1]
+        x[i][2] = x[i][3]
+    else:
+        if x[i][2] > (x[i][1] - x[i][0]) * 2 + x[i][3]:
+            x[i][2] = (x[i][1] - x[i][0]) * 2 + x[i][3]
+        if x[i][2] < -(x[i][1] - x[i][0]) * 2 + x[i][3]:
+            x[i][2] = -(x[i][1] - x[i][0]) * 2 + x[i][3]
+
+combinations_reshaped = np.array(x, dtype=int)
+
+print(combinations_reshaped)
+
+unique_combinations, counts = np.unique(combinations_reshaped, axis=0, return_counts=True)
+
+# Check for duplicates
+duplicates = unique_combinations[counts > 1]
+
+print("Number of duplicates:", len(duplicates))
+print("Number of combinations:", len(combinations_reshaped))
+if len(duplicates) > 0:
+    print("Duplicates:", duplicates)
+else:
+    print("No duplicates found.")
+
+for i in range(len(combinations_reshaped)):
+    if x[i][0] == 0:
+        print('!!')
+
+
+
+

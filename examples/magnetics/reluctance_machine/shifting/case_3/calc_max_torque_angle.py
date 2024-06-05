@@ -14,9 +14,9 @@ from src.executor import Executor
 
 
 def execute_model(counter):
-    time.sleep(0.1)
-
     try:
+        time.sleep(0.1)
+
         femm = Executor()
         current_file_path = os.path.abspath(__file__)
         folder_path = os.path.dirname(current_file_path)
@@ -31,23 +31,12 @@ def execute_model(counter):
             number = csvfile[0][0].replace('wTorque_0 = ', '')
             torque = float(number) * 4 * -1000
 
-        del_fem = pathlib.Path(os.path.join(folder_path, f'temp_ang/ang{counter}.lua'))
-        del_ans = pathlib.Path(os.path.join(folder_path, f'temp_ang/ang{counter}.fem'))
-        del_lua = pathlib.Path(os.path.join(folder_path, f'temp_ang/ang{counter}.ans'))
-        del_csv = pathlib.Path(os.path.join(folder_path, f'temp_ang/ang{counter}.csv'))
-
-        try:
-            time.sleep(0.1)
-            del_lua.unlink()
-            del_fem.unlink()
-            del_ans.unlink()
-            del_csv.unlink()
-
-        except PermissionError:
-            pass
-
     except IndexError:
+        print(f'Error1 at ang{counter}!')
         torque = 0.0
+
+    try:
+        time.sleep(0.1)
 
         current_file_path = os.path.abspath(__file__)
         folder_path = os.path.dirname(current_file_path)
@@ -57,17 +46,15 @@ def execute_model(counter):
         del_lua = pathlib.Path(os.path.join(folder_path, f'temp_ang/ang{counter}.ans'))
         del_csv = pathlib.Path(os.path.join(folder_path, f'temp_ang/ang{counter}.csv'))
 
-        try:
-            time.sleep(0.1)
-            del_lua.unlink()
-            del_fem.unlink()
-            del_ans.unlink()
-            del_csv.unlink()
+        time.sleep(0.1)
 
-        except PermissionError:
-            pass
+        del_lua.unlink()
+        del_fem.unlink()
+        del_ans.unlink()
+        del_csv.unlink()
 
-        print(f'Error at ang{counter}!')
+    except PermissionError or FileNotFoundError:
+        pass
 
     return torque
 
