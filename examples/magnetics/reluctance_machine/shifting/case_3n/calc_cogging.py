@@ -96,8 +96,8 @@ def thd(abs_data):
 
 def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_mp):
 
-    resol = 121
-    e = 30
+    resol = 31
+    e = 16
     for counter, ia in zip(range(0, resol), np.linspace(0, e, resol)):
         JUp = J0
         JUn = -JUp
