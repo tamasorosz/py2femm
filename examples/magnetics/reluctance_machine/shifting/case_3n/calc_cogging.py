@@ -139,4 +139,4 @@ def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_m
     y[0] = 0
     res_thd = thd(y)
 
-    return cogging_pp, res_thd, res, y
+    return cogging_pp, res_thd

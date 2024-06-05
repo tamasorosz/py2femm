@@ -22,7 +22,7 @@ y_thd = list(df_thd.iloc[5])
 
 data = [y_avg, y_rip, y_cog, y_thd]
 
-labels = ['\u0394Tavg: 53.39 mNm (3.03 %)', '\u0394Trip: 0.09 % (0.24 %)', '\u0394Tcog: 2.69 mNm (19.31 %)', '\u0394Tthd: 3.2 % (2.7 %)']
+labels = ['\u0394Tavg: 47.4 mNm (3.2 %)', '\u0394Trip: 5.1 % (15.8 %)', '\u0394Tcog: 1.8 mNm (12.2 %)', '\u0394Tthd: 5.8 % (5.1 %)']
 n_sets = len(data)
 x = np.arange(len(data[0]))
 width = 0.20

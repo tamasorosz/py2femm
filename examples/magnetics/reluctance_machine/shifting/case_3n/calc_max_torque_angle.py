@@ -60,9 +60,9 @@ def execute_model(counter):
 
 
 def max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_mp):
-    resol = 181
-    a = -90
-    b = 90
+    resol = 16
+    a = 30
+    b = 45
     for counter, alpha in zip(range(0, resol), np.linspace(a, b, resol)):
         JUp = J0 * math.cos(math.radians(alpha))
         JUn = -JUp
@@ -103,4 +103,4 @@ def max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg
     ind = res.index((max(res)))
     torque_ang = a + ind * ((b - a) / (resol - 1))
 
-    return torque_ang, res
+    return torque_ang
