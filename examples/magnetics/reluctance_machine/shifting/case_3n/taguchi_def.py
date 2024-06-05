@@ -46,19 +46,19 @@ class FactorL25(ABC):
 
 # See /supplementary/parameters.xlsx/1.case
 ang_m = 15
-ang_mp = 18
-deg_m = 14/2
-deg_mp = 8/2
+ang_mp = 16
+deg_m = -2
+deg_mp = 0
 
 delta1 = 0.1
 delta2 = 0.1
 delta3 = 0.1
 delta4 = 0.1
 
-X1 = FactorL25("X1", [ang_m-2*delta1, ang_m-delta1, ang_m, ang_m+delta1, ang_m+2*delta1])  # ang_m
-X2 = FactorL25("X2", [ang_mp-2*delta2, ang_mp-delta2, ang_mp, ang_mp+delta2, ang_mp+2*delta2])  # ang_mp
-X3 = FactorL25("X3", [deg_m-2*delta3, deg_m-delta3, deg_m, deg_m+delta3, deg_m+2*delta3])  # deg_m
-X4 = FactorL25("X4", [deg_mp-2*delta4, deg_mp-delta4, deg_mp, deg_mp+delta4, deg_mp+2*delta4])  # deg_mp
+X1 = FactorL25("X1", [ang_m, ang_m-delta1, ang_m-2*delta1, ang_m-3*delta1, ang_m-4*delta1])  # ang_m
+X2 = FactorL25("X2", [ang_mp, ang_mp+delta2, ang_mp+2*delta2, ang_mp+3*delta2, ang_mp+4*delta2])  # ang_mp
+X3 = FactorL25("X3", [deg_m, deg_m+delta3, deg_m+2*delta3, deg_m+3*delta3, deg_m+4*delta3])  # deg_m
+X4 = FactorL25("X4", [deg_mp, deg_mp-delta4, deg_mp-2*delta4, deg_mp-3*delta4, deg_mp-4*delta4])  # deg_mp
 
 df = pd.DataFrame([[float(0.00)] * 4] * 25, columns=["X1", "X2", "X3", "X4"])
 
