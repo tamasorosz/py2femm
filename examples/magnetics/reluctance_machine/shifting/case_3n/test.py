@@ -12,7 +12,7 @@ import calc_cogging
 import calc_torque_avg_rip
 
 # if __name__ == "__main__":
-#     x = calc_cogging.cogging(0, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, 14.9, 14.9, 0, 0)
+#     x = calc_cogging.cogging(0, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, 15, 18, 7, 4)
 #
 #     print(x[0], x[1])
 #     plt.plot(x[2])
@@ -20,22 +20,22 @@ import calc_torque_avg_rip
 #     plt.bar([str(i) for i in range(len(x[3]))], x[3])
 #     plt.show()
 
-# if __name__ == "__main__":
-#     f = calc_max_torque_angle.max_torque_angle(30, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, 15, 16, -2, 0)
-#     # g = calc_max_torque_angle.max_torque_angle(30, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, 15, 15, 0, 0)
-#
-#     plt.plot(f[1], label='f')
-#     # plt.plot(g[1], label='g')
-#     print(f[0])
-#     plt.legend()
-#     plt.show()
-#
 if __name__ == "__main__":
-    x = calc_torque_avg_rip.torque_avg_rip(30, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, 15, 16, -2, 0)
+    g = calc_max_torque_angle.max_torque_angle(30, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, 15, 15, 0, 0)
+    f = calc_max_torque_angle.max_torque_angle(30, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, 15, 18, 7, 4)
 
-    print(x[0], x[1])
-    plt.plot(x[2])
+
+    plt.plot(f[1], label='f')
+    plt.plot(g[1], label='g')
+    plt.legend()
     plt.show()
+#
+# if __name__ == "__main__":
+#     x = calc_torque_avg_rip.torque_avg_rip(30, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, 10, 10, 16, 16)
+#
+#     print(x[0], x[1])
+#     plt.plot(x[2])
+#     plt.show()
 
 
 

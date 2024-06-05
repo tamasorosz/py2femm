@@ -95,7 +95,7 @@ def max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg
                                              )
         model.problem_definition(variables)
 
-    with Pool(8) as p:
+    with Pool(3) as p:
         res = p.map(execute_model, list(range(0, resol)))
 
     res = list(res)

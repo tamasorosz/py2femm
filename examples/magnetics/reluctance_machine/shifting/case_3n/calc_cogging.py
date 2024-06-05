@@ -130,7 +130,7 @@ def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_m
                                              )
         model.problem_definition(variables)
 
-    with Pool(8) as p:
+    with Pool(4) as p:
         res = p.map(execute_model, list(range(0, resol)))
 
     cogging_pp = (np.max(list(res)) - np.min(list(res)))
@@ -139,4 +139,4 @@ def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_m
     y[0] = 0
     res_thd = thd(y)
 
-    return cogging_pp, res_thd
+    return cogging_pp, res_thd, res, y
