@@ -12,30 +12,46 @@ import calc_cogging
 import calc_torque_avg_rip
 
 # if __name__ == "__main__":
-#     x = calc_cogging.cogging(0, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, 15, 18, 7, 4)
+#     x = calc_cogging.cogging(0, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, 15, 18, 8, 8)
 #
 #     print(x[0], x[1])
 #     plt.plot(x[2])
 #     plt.show()
 #     plt.bar([str(i) for i in range(len(x[3]))], x[3])
 #     plt.show()
+# #
+# if __name__ == "__main__":
+#     # g = calc_max_torque_angle.max_torque_angle(30, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, 15, 15, 0, 0)
+#     f = calc_max_torque_angle.max_torque_angle(30, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, 18, 18, 0, 0)
+#     # df = pd.DataFrame({'res': f[1]})
+#     # current_file_path = os.path.abspath(__file__)
+#     # folder_path = os.path.dirname(current_file_path)
+#     # file_path = os.path.join(folder_path, f'results/overshift_pm0.csv')
+#     # df.to_csv(file_path, encoding='utf-8', index=False)
+#
+#
+#     plt.plot(f[1], label='f')
+#     # plt.plot(g[1], label='g')
+#     plt.legend()
+#     plt.show()
+# #
+
+# x = pd.read_csv('results\overshift_pm0.csv')
+# y = pd.read_csv('results\overshift_pm1.csv')
+# z = pd.read_csv('results\overshift_pm2.csv')
+#
+# plt.plot(x, label='AIR')
+# plt.plot(y, label='PM')
+# plt.plot(z, label='FESI')
+# plt.legend()
+# plt.show()
+
+
+
 
 if __name__ == "__main__":
-    g = calc_max_torque_angle.max_torque_angle(30, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, 15, 15, 0, 0)
-    f = calc_max_torque_angle.max_torque_angle(30, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, 15, 18, 7, 4)
+    x = calc_torque_avg_rip.torque_avg_rip(30, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, 15, 15, 0, 0)
 
-
-    plt.plot(f[1], label='f')
-    plt.plot(g[1], label='g')
-    plt.legend()
-    plt.show()
-#
-# if __name__ == "__main__":
-#     x = calc_torque_avg_rip.torque_avg_rip(30, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, 10, 10, 16, 16)
-#
-#     print(x[0], x[1])
-#     plt.plot(x[2])
-#     plt.show()
 
 
 
@@ -81,7 +97,7 @@ if __name__ == "__main__":
 #     plt.plot(x[2])
 #     plt.show()
 
-import numpy as np
+# import numpy as np
 
 
 # import matplotlib.pyplot as plt

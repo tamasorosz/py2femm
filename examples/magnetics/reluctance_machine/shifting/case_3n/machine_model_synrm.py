@@ -316,9 +316,9 @@ def rotor_geometry(femm_problem: FemmProblem, var: VariableParameters):
     rotor_geo.add_line(lm_ll)
     rotor_geo.add_line(lm_lr)
 
-    am_lu = CircleArc(nm_rlu, n0, nm_llu)
+    # am_lu = CircleArc(nm_rlu, n0, nm_llu)
 
-    rotor_geo.add_arc(am_lu)
+    # rotor_geo.add_arc(am_lu)
 
     lab_mag_l = Line(lm_ll.selection_point(), lm_lr.selection_point()).selection_point()
 
@@ -379,9 +379,9 @@ def rotor_geometry(femm_problem: FemmProblem, var: VariableParameters):
 
     rotor_geo.add_arc(rot_arc_rc)
 
-    am_ru = CircleArc(nm_rru, n0, nm_lru)
-
-    rotor_geo.add_arc(am_ru)
+    # am_ru = CircleArc(nm_rru, n0, nm_lru)
+    #
+    # rotor_geo.add_arc(am_ru)
 
     lab_mag_r = Line(lm_rl.selection_point(), lm_rr.selection_point()).selection_point()
 

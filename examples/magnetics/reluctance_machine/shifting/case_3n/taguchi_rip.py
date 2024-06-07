@@ -17,7 +17,7 @@ column_key_map = {i: 'X' + str(i) for i in range(1, 5)}
 L25 = df.rename(columns=column_key_map)
 
 current_dir = os.getcwd()
-tag = pd.read_csv(current_dir + '/results/' + f'taguchi_res.csv')
+tag = pd.read_csv(current_dir + '/results/' + f'taguchi_res_os.csv')
 
 SNavg_results = []
 
@@ -42,5 +42,5 @@ df = df.rename(index={0: 'L1', 1: 'L2', 2: 'L3', 3: 'L4', 4: 'L5', 5: 'R'})
 print(df)
 
 current_dir = os.getcwd()
-file_path = current_dir + '/results/' + f'taguchi_rip.csv'
+file_path = current_dir + '/results/' + f'taguchi_rip_os.csv'
 df.to_csv(file_path, encoding='utf-8', index=False)

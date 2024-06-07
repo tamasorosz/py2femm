@@ -10,10 +10,10 @@ current_dir = os.getcwd()
 #  Plot average torque and torque ripple parameter sensitivity for
 #  an average on current of [5, 10, 15, 20, 25, 30, 50, 100]
 
-df_avg = pd.read_csv(current_dir + '/results/' + 'taguchi_avg.csv')
-df_rip = pd.read_csv(current_dir + '/results/' + 'taguchi_rip.csv')
-df_cog = pd.read_csv(current_dir + '/results/' + 'taguchi_cog.csv')
-df_thd = pd.read_csv(current_dir + '/results/' + 'taguchi_thd.csv')
+df_avg = pd.read_csv(current_dir + '/results/' + 'taguchi_avg_os.csv')
+df_rip = pd.read_csv(current_dir + '/results/' + 'taguchi_rip_os.csv')
+df_cog = pd.read_csv(current_dir + '/results/' + 'taguchi_cog_os.csv')
+df_thd = pd.read_csv(current_dir + '/results/' + 'taguchi_thd_os.csv')
 
 y_avg = list(df_avg.iloc[5])
 y_rip = list(df_rip.iloc[5])
@@ -22,11 +22,11 @@ y_thd = list(df_thd.iloc[5])
 
 data = [y_avg, y_rip, y_cog, y_thd]
 
-labels = ['\u0394Tavg: 47.4 mNm (3.2 %)', '\u0394Trip: 5.1 % (15.8 %)', '\u0394Tcog: 1.8 mNm (12.2 %)', '\u0394Tthd: 5.8 % (5.1 %)']
+labels = ['\u0394Tavg: 45.3 mNm (2.5 %)', '\u0394Trip: 2.1 % (5.7 %)', '\u0394Tcog: 1.5 mNm (10.6 %)', '\u0394Tthd: 2.6 % (2.2 %)']
 n_sets = len(data)
 x = np.arange(len(data[0]))
 width = 0.20
-colors = ["#B90276", '#50237F', '#005691', "#008ECF", '#00A8B0', '#78BE20', "#006249", '#525F6B', '#000']
+colors = ["#B90276", '#50237F', '#00A8B0', "#006249", '#525F6B', '#000']
 
 fig, ax = plt.subplots(figsize=(10, 8))
 for i in range(n_sets):
@@ -44,7 +44,7 @@ ax.legend(fontsize=fs)
 plt.savefig('figures/sensitivity', bbox_inches='tight')
 plt.show()
 
-df_res = pd.read_csv(current_dir + '/results/' + 'taguchi_res.csv')
+df_res = pd.read_csv(current_dir + '/results/' + 'taguchi_res_os.csv')
 avg = max(df_res.iloc[:, 4]) - min(df_res.iloc[:, 4])
 rip = max(df_res.iloc[:, 6]) - min(df_res.iloc[:, 6])
 cog = max(df_res.iloc[:, 8]) - min(df_res.iloc[:, 8])

@@ -43,15 +43,15 @@ def execute_model(counter):
         current_file_path = os.path.abspath(__file__)
         folder_path = os.path.dirname(current_file_path)
 
-        del_fem = pathlib.Path(os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.lua'))
-        del_ans = pathlib.Path(os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.fem'))
-        del_lua = pathlib.Path(os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.ans'))
+        del_fem = pathlib.Path(os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.fem'))
+        del_ans = pathlib.Path(os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.ans'))
+        del_lua = pathlib.Path(os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.lua'))
         del_csv = pathlib.Path(os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.csv'))
 
-        del_lua.unlink()
-        del_fem.unlink()
-        del_ans.unlink()
-        del_csv.unlink()
+        # del_lua.unlink()
+        # del_fem.unlink()
+        # del_ans.unlink()
+        # del_csv.unlink()
 
     except PermissionError or FileNotFoundError:
         print(f'Error1 at avg_rip{counter}!')
@@ -63,8 +63,8 @@ def execute_model(counter):
 def torque_avg_rip(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_mp):
     initial = maxang.max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_mp)
 
-    resol = 121
-    e = 30
+    resol = 16
+    e = 15
     for counter, ia, alpha in zip(range(0, resol), np.linspace(0, e, resol), np.linspace(0, 4 * e, resol)):
         JUp = J0 * math.cos(math.radians(initial + alpha))
         JUn = -JUp
@@ -97,10 +97,10 @@ def torque_avg_rip(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m
                                              )
         model.problem_definition(variables)
 
-    with Pool(3) as p:
+    with Pool(8) as p:
         res = p.map(execute_model, list(range(0, resol)))
 
     torque_avg = -1 * np.average(list(res))
     torque_ripple = -1 * (np.max(list(res)) - np.min(list(res))) / torque_avg
 
-    return torque_avg, torque_ripple, res
+    return torque_avg, torque_ripple

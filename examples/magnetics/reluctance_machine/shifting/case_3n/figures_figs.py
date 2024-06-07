@@ -21,18 +21,19 @@ from examples.magnetics.reluctance_machine.shifting.case_3n import calc_cogging,
 #
 #     # cogging ---------------------------------------------------------------------------------------------------------
 #     fig, ax = plt.subplots(figsize=(10, 8))
-#     ax.plot(f.iloc[0, 2], label='Base design (B)', color=colors[0], linewidth=5, linestyle='-', marker='',
+#     ax.plot(f.iloc[0, 2], label='Base (B)', color=colors[0], linewidth=5, linestyle='-', marker='',
 #             markersize=8)
-#     ax.plot(g.iloc[0, 2], label='Shifted design (S)', color=colors[1], linewidth=5, linestyle='-', marker='',
-#             markersize=8)
-#     ax.plot(h.iloc[0, 2], label='False design (F)', color=colors[6], linewidth=5, linestyle='-', marker='',
+#     # ax.plot(g.iloc[0, 2], label='Shifted (S)', color=colors[1], linewidth=5, linestyle='-', marker='',
+#     #         markersize=8)
+#     ax.plot(h.iloc[0, 2], label='Shifted (S)', color=colors[6], linewidth=5, linestyle='-', marker='',
 #             markersize=8)
 #     ax.grid(True, which='both', linestyle='--', linewidth=0.5)
 #     ax.set_xlabel('Rotor position [deg]', fontsize=20)
 #     ax.set_ylabel('Torque [mNm]', fontsize=20)
 #     ax.tick_params(axis='both', which='major', labelsize=20)
-#     ax.set_yticks(np.linspace(-12, 12, 13), np.linspace(-12, 12, 13), minor=False)
-#     ax.legend(fontsize=16)
+#     ax.set_yticks(np.linspace(-12, 12, 13), np.linspace(-12, 12, 13, dtype=int), minor=False)
+#     ax.set_xticks(np.linspace(0, 121, 16), np.linspace(0, 30, 16, dtype=int), minor=False)
+#     ax.legend(fontsize=20, loc='upper right')
 #     # ax.annotate(f'{round(max(f.iloc[0, 2]), 1)}', (f.iloc[0, 2].index(max(f.iloc[0, 2])), max(f.iloc[0, 2]) + 0.5), fontsize=18,
 #     #             ha='center', annotation_clip=False)
 #     # ax.annotate(f'{round(min(f.iloc[0, 2]), 1)}', (f.iloc[0, 2].index(min(f.iloc[0, 2])), min(f.iloc[0, 2]) - 1), fontsize=18,
@@ -41,11 +42,11 @@ from examples.magnetics.reluctance_machine.shifting.case_3n import calc_cogging,
 #     #             ha='center', annotation_clip=False)
 #     # ax.annotate(f'{round(min(g.iloc[0, 2]), 1)}', (g.iloc[0, 2].index(min(g.iloc[0, 2])), min(g.iloc[0, 2]) - 1), fontsize=18,
 #     #             ha='center', annotation_clip=False)
-#     textstr = 'peak-to-peak:' + '\n' + 'B: ' + f'{round(max(f.iloc[0, 2]) - min(f.iloc[0, 2]), 1)}' + ' mNm' + '\n' + 'S: ' + f'{round(max(g.iloc[0, 2]) - min(g.iloc[0, 2]), 1)}' + ' mNm' \
-#     + '\n' + 'F: ' + f'{round(max(h.iloc[0, 2]) - min(h.iloc[0, 2]), 1)}' + ' mNm'
+#     textstr = 'peak-to-peak:' + '\n' + 'B: ' + f'{round(max(f.iloc[0, 2]) - min(f.iloc[0, 2]), 1)}' + ' mNm' + '\n' + 'S: ' + f'{round(max(h.iloc[0, 2]) - min(h.iloc[0, 2]), 1)}' + ' mNm' \
+#     # + '\n' + 'O: ' + f'{round(max(h.iloc[0, 2]) - min(h.iloc[0, 2]), 1)}' + ' mNm'
 #     props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
-#     ax.text(0.05, 0.25, textstr, transform=ax.transAxes, fontsize=20, verticalalignment='top', bbox=props)
-#     plt.savefig('figures/comp_cog_t', bbox_inches='tight')
+#     ax.text(0.05, 0.2, textstr, transform=ax.transAxes, fontsize=20, verticalalignment='top', bbox=props)
+#     plt.savefig('figures/comp_cog_g_res', bbox_inches='tight')
 #     plt.show()
 
     # # thd -------------------------------------------------------------------------------------------------------------
@@ -70,7 +71,7 @@ from examples.magnetics.reluctance_machine.shifting.case_3n import calc_cogging,
     # ax.legend(fontsize=20)
     # plt.show()
 
-# ang ----------------------------------------------------------------------------------------------------------------
+# # ang ----------------------------------------------------------------------------------------------------------------
 # if __name__ == "__main__":
 #     def tri(lst):
 #         for i in range(len(lst) - 1):
@@ -96,22 +97,21 @@ from examples.magnetics.reluctance_machine.shifting.case_3n import calc_cogging,
 #             markersize=8)
 #     ax.plot(np.linspace(6, 186, 181), h.iloc[0, 1], label='Shifted design (S)', color=colors[4], linewidth=5, linestyle='-', marker='',
 #             markersize=8)
-#     ax.plot(np.linspace(35, 215, 181), j.iloc[0, 1], label='False design (F)', color=colors[6], linewidth=5,
-#             linestyle='-', marker='',
-#             markersize=8)
+#     # ax.plot(np.linspace(35, 215, 181), j.iloc[0, 1], label='False design (F)', color=colors[6], linewidth=5,
+#     #         linestyle='-', marker='', markersize=8)
 #     ax.grid(True, which='both', linestyle='--', linewidth=0.5)
 #     ax.set_xlabel('Rotor position [deg]', fontsize=18)
 #     ax.set_ylabel('Torque [mNm]', fontsize=18)
 #     ax.tick_params(axis='both', which='major', labelsize=18)
-#     ax.set_xticks(np.linspace(0, 220, 11), np.linspace(-90, 130, 11, dtype=int), minor=False)
+#     ax.set_xticks(np.linspace(0, 180, 9), np.linspace(-90, 90, 9, dtype=int), minor=False)
 #     ax.axvline(x=f.iloc[0, 1].index(max(f.iloc[0, 1])), color=colors[0], linestyle='--', linewidth=2,
 #                label='max(I): ' + f'{round(f.iloc[0, 0], 0)}' + ' deg')
 #     ax.axvline(x=g.iloc[0, 1].index(max(g.iloc[0, 1]))+4, color=colors[1], linestyle='--', linewidth=2,
 #                label='max(B): ' + f'{round(g.iloc[0, 0]+4, 0)}' + ' deg')
 #     ax.axvline(x=h.iloc[0, 1].index(max(h.iloc[0, 1]))+6, color=colors[4], linestyle='--', linewidth=2,
 #                label='max(S): ' + f'{round(h.iloc[0, 0]+6, 0)}' + ' deg')
-#     ax.axvline(x=j.iloc[0, 1].index(max(j.iloc[0, 1])) + 35, color=colors[6], linestyle='--', linewidth=2,
-#                label='max(F): ' + f'{round(j.iloc[0, 0] + 35, 0)}' + ' deg')
+#     # ax.axvline(x=j.iloc[0, 1].index(max(j.iloc[0, 1])) + 35, color=colors[6], linestyle='--', linewidth=2,
+#     #            label='max(F): ' + f'{round(j.iloc[0, 0] + 35, 0)}' + ' deg')
 #     # ax.axvline(x=tri(f.iloc[0,1]), color=colors[0], linestyle='--', linewidth=2,  # helps to find the shift
 #     #            label=f'{tri(f.iloc[0,1])}' + ' deg')
 #     # ax.axvline(x=tri(g.iloc[0, 1]), color=colors[0], linestyle='--', linewidth=2, # helps to find the shift
@@ -121,7 +121,7 @@ from examples.magnetics.reluctance_machine.shifting.case_3n import calc_cogging,
 #     ax.axvline(x=90, color=colors[3], linestyle='--', linewidth=2, # helps to find the shift
 #                label=f'0' + ' deg')
 #     ax.legend(fontsize=16)
-#     plt.savefig('figures/comp_ang_g', bbox_inches='tight')
+#     plt.savefig('figures/comp_ang_res', bbox_inches='tight')
 #     plt.show()
 
 if __name__ == "__main__":
@@ -142,28 +142,28 @@ if __name__ == "__main__":
             linewidth=5, linestyle='-', marker='', markersize=8)
     ax.plot(g.iloc[0, 2], label='Base design (B)', color=colors[1], linewidth=5, linestyle='-', marker='',
             markersize=8)
-    ax.plot(h.iloc[0, 2], label='Shifted design (S)', color=colors[4], linewidth=5, linestyle='-', marker='',
-            markersize=8)
-    ax.plot(j.iloc[0, 2], label='False design (F)', color=colors[6], linewidth=5, linestyle='-', marker='',
+    # ax.plot(h.iloc[0, 2], label='Shifted design (S)', color=colors[4], linewidth=5, linestyle='-', marker='',
+    #         markersize=8)
+    ax.plot(j.iloc[0, 2], label='Shifted design (S)', color=colors[6], linewidth=5, linestyle='-', marker='',
             markersize=8)
     ax.grid(True, which='both', linestyle='--', linewidth=0.5)
-    ax.set_xlabel('Rotor position [deg]', fontsize=18)
-    ax.set_ylabel('Torque [mNm]', fontsize=18)
-    ax.tick_params(axis='both', which='major', labelsize=18)
+    ax.set_xlabel('Rotor position [deg]', fontsize=20)
+    ax.set_ylabel('Torque [mNm]', fontsize=20)
+    ax.tick_params(axis='both', which='major', labelsize=20)
     ax.axhline(y=np.mean(f.iloc[0, 2]), color=colors[0], linestyle='--', linewidth=2,
                label='avg(I): ' + f'{int(np.mean(f.iloc[0, 2]))}' + ' mNm')
     ax.axhline(y=np.mean(g.iloc[0, 2]), color=colors[1], linestyle='--', linewidth=2,
                label='avg(B): ' + f'{int(np.mean(g.iloc[0, 2]))}' + ' mNm')
-    ax.axhline(y=np.mean(h.iloc[0, 2]), color=colors[4], linestyle='--', linewidth=2,
-               label='avg(S): ' + f'{int(np.mean(h.iloc[0, 2]))}' + ' mNm')
+    # ax.axhline(y=np.mean(h.iloc[0, 2]), color=colors[4], linestyle='--', linewidth=2,
+    #            label='avg(S): ' + f'{int(np.mean(h.iloc[0, 2]))}' + ' mNm')
     ax.axhline(y=np.mean(j.iloc[0, 2]), color=colors[6], linestyle='--', linewidth=2,
-               label='avg(F): ' + f'{int(np.mean(j.iloc[0, 2]))}' + ' mNm')
+               label='avg(S): ' + f'{int(np.mean(j.iloc[0, 2]))}' + ' mNm')
     ax.plot([], color=colors[0], linestyle='None', label='rip(I): ' + f'{f.iloc[0, 1] * 100}' + ' %')
     ax.plot([], color=colors[1], linestyle='None', label='rip(B): ' + f'{g.iloc[0, 1] * 100}' + ' %')
-    ax.plot([], color=colors[2], linestyle='None', label='rip(S): ' + f'{h.iloc[0, 1] * 100}' + ' %')
-    ax.plot([], color=colors[2], linestyle='None', label='rip(F): ' + f'{j.iloc[0, 1] * 100}' + ' %')
-    ax.legend(fontsize=14,loc='upper center', ncol=3, bbox_to_anchor=(0.5, -0.125))
+    # ax.plot([], color=colors[2], linestyle='None', label='rip(S): ' + f'{h.iloc[0, 1] * 100}' + ' %')
+    ax.plot([], color=colors[2], linestyle='None', label='rip(S): ' + f'{j.iloc[0, 1] * 100}' + ' %')
+    ax.legend(fontsize=16,loc='upper center', ncol=3, bbox_to_anchor=(0.47, -0.125))
     plt.subplots_adjust(bottom=0.25)
-    ax.set_yticks(np.linspace(1000, 2200, 7), np.linspace(1000, 2200, 7))
-    plt.savefig('figures/comp_torq_g', bbox_inches='tight')
+    ax.set_yticks(np.linspace(1000, 2100, 12), np.linspace(1000, 2100, 12, dtype=int))
+    plt.savefig('figures/comp_torq_res', bbox_inches='tight')
     plt.show()

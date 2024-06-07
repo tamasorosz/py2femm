@@ -43,9 +43,9 @@ def execute_model(counter):
         current_file_path = os.path.abspath(__file__)
         folder_path = os.path.dirname(current_file_path)
 
-        del_fem = pathlib.Path(os.path.join(folder_path, f'temp_cog/cog{counter}.lua'))
-        del_ans = pathlib.Path(os.path.join(folder_path, f'temp_cog/cog{counter}.fem'))
-        del_lua = pathlib.Path(os.path.join(folder_path, f'temp_cog/cog{counter}.ans'))
+        del_fem = pathlib.Path(os.path.join(folder_path, f'temp_cog/cog{counter}.fem'))
+        del_ans = pathlib.Path(os.path.join(folder_path, f'temp_cog/cog{counter}.ans'))
+        del_lua = pathlib.Path(os.path.join(folder_path, f'temp_cog/cog{counter}.lua'))
         del_csv = pathlib.Path(os.path.join(folder_path, f'temp_cog/cog{counter}.csv'))
 
         del_lua.unlink()
@@ -130,7 +130,7 @@ def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_m
                                              )
         model.problem_definition(variables)
 
-    with Pool(4) as p:
+    with Pool(8) as p:
         res = p.map(execute_model, list(range(0, resol)))
 
     cogging_pp = (np.max(list(res)) - np.min(list(res)))
@@ -139,4 +139,4 @@ def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_m
     y[0] = 0
     res_thd = thd(y)
 
-    return cogging_pp, res_thd, res, y
+    return cogging_pp, res_thd

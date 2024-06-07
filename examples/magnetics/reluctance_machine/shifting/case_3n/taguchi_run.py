@@ -51,5 +51,5 @@ if __name__ == '__main__':
 
     current_file_path = os.path.abspath(__file__)
     folder_path = os.path.dirname(current_file_path)
-    file_path = os.path.join(folder_path, f'results/taguchi_res.csv')
+    file_path = os.path.join(folder_path, f'results/taguchi_res_os.csv')
     df.to_csv(file_path, encoding='utf-8', index=False)

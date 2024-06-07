@@ -42,15 +42,15 @@ def execute_model(counter):
         current_file_path = os.path.abspath(__file__)
         folder_path = os.path.dirname(current_file_path)
 
-        del_fem = pathlib.Path(os.path.join(folder_path, f'temp_ang/ang{counter}.lua'))
-        del_ans = pathlib.Path(os.path.join(folder_path, f'temp_ang/ang{counter}.fem'))
-        del_lua = pathlib.Path(os.path.join(folder_path, f'temp_ang/ang{counter}.ans'))
+        del_fem = pathlib.Path(os.path.join(folder_path, f'temp_ang/ang{counter}.fem'))
+        del_ans = pathlib.Path(os.path.join(folder_path, f'temp_ang/ang{counter}.ans'))
+        del_lua = pathlib.Path(os.path.join(folder_path, f'temp_ang/ang{counter}.lua'))
         del_csv = pathlib.Path(os.path.join(folder_path, f'temp_ang/ang{counter}.csv'))
 
-        del_lua.unlink()
-        del_fem.unlink()
-        del_ans.unlink()
-        del_csv.unlink()
+        # del_lua.unlink()
+        # del_fem.unlink()
+        # del_ans.unlink()
+        # del_csv.unlink()
 
     except PermissionError or FileNotFoundError:
         print(f'Error2 at ang{counter}!')
@@ -95,7 +95,7 @@ def max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg
                                              )
         model.problem_definition(variables)
 
-    with Pool(3) as p:
+    with Pool(8) as p:
         res = p.map(execute_model, list(range(0, resol)))
 
     res = list(res)
