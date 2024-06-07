@@ -31,7 +31,7 @@ def solenoid(n, w, h, radius, gap):
     """
 
     problem = FemmProblem(out_file="../solenoid.csv")
-    problem.magnetic_problem(0, LengthUnit.CENTIMETERS, "axi")
+    problem.magnetic_problem(0, LengthUnit.CENTIMETERS, "planar",depth=100)
 
     geo = Geometry()
 
@@ -47,8 +47,8 @@ def solenoid(n, w, h, radius, gap):
     # set boundary
     z = (h + gap) * n
     a = Node(0, -z)
-    b = Node(10 * radius, -z)
-    c = Node(10 * radius, z)
+    b = Node(2 * radius, -z)
+    c = Node(2 * radius, z)
     d = Node(0, z)
 
     l1 = Line(a, b)
@@ -70,8 +70,8 @@ def solenoid(n, w, h, radius, gap):
     problem.set_boundary_definition_segment(l4.selection_point(), a0)
 
     # Materials
-    copper = MagneticMaterial(material_name="copper", J=1 / (w * h), Sigma=58.0)
-    air = MagneticMaterial(material_name="air")
+    copper = MagneticMaterial(material_name="copper", J=1 / 200 / (w * h), Sigma=58.0, mu_x=1,mu_y=1)
+    air = MagneticMaterial(material_name="air", Sigma=1e-8, mu_x=1,mu_y=1)
 
     problem.add_material(copper)
     problem.add_material(air)
@@ -116,22 +116,52 @@ if __name__ == '__main__':
     k_nn = problem.calc_stiffness_matrix()
     n_nn = problem.calc_n_matrix()
 
+
+
     # Temporary
     import matplotlib.pyplot as plt
     import numpy as np
+    import matplotlib.tri as tri
+
+
+    x = np.array([node.x for node in problem.nodal_coords])
+    y = np.array([node.y for node in problem.nodal_coords])
+    z = np.array(problem.nodal_unknowns)
+
+    # Create a triangulation object
+    triang = tri.Triangulation(x, y)
+
+    # Plot the heat map
+    plt.figure(figsize=(10, 8))
+    plt.tricontourf(triang, z, cmap='viridis',levels=20)
+    plt.colorbar(label='Result Values')
+    plt.xlabel('X Coordinate')
+    plt.ylabel('Y Coordinate')
+    plt.title('Heat Map of FEM Results')
+    plt.show()
 
     # k_nn matrix
+    row_sums = np.sum(k_nn,axis=1)
+    print('row_sums:',row_sums)
+    num_large_sum_rows = np.sum(row_sums > 1e-5)
+    print('number of large sums',num_large_sum_rows)
+    # small differences are considered numerical error. Remove them
+    if num_large_sum_rows < 1 :
+        for i in range(k_nn.shape[0]):
+            off_diagonal_sum = np.sum(k_nn[i,:]) - k_nn[i,i]
+            k_nn[i,i] = -2*off_diagonal_sum
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
     x = np.arange(k_nn.shape[0])
     y = np.arange(k_nn.shape[1])
     x, y = np.meshgrid(x, y)
     z = k_nn[x, y]
+    # data =  {
+    # 'k_nn': k_nn,
+    # 'n_nn': n_nn}
+    # # savemat('data.mat',data)
 
-    row_sums = np.sum(k_nn, axis=1)
-    print('row_sums:', row_sums)
-    num_large_sum_rows = np.sum(row_sums > 1e-5)
-    print('number of large sums', num_large_sum_rows)
+
     surface = ax.plot_surface(x, y, z, cmap='viridis')
     fig.colorbar(surface, ax=ax, shrink=0.5, aspect=5)
     ax.set_title('Surface Plot of Global Stiffness Matrix K_glb')
@@ -155,4 +185,34 @@ if __name__ == '__main__':
     ax.set_ylabel('Node Index')
     ax.set_zlabel('Value')
 
-    #plt.show()
+    plt.show()
+    # N and K matrices must be positive definite
+    # condition=np.linalg.cond(k_nn)
+    # L1=np.linalg.cholesky(k_nn)
+    # L=np.linalg.cholesky(n_nn)
+
+    # CLN-Algorithm
+    CLN_steps = 3
+
+    a = np.full((len(problem.nodal_unknowns), CLN_steps), np.nan)
+    e = np.full((len(problem.nodal_unknowns), CLN_steps), np.nan)
+    L = np.full((1, CLN_steps), np.nan)
+    R = np.full((1, CLN_steps), np.nan)
+    R[0, 0] = 0.01; # Ohm
+    e[:, 0] = 0;
+    a[:, 0] = np.array(problem.nodal_unknowns)
+    L[0, 0] = a[:, 0].T @ k_nn @ a[:, 0]
+    print(L[0,0])
+    e[:, 1] = - 1/(L[0, 0])*a[:, 0] + e[:, 0]
+    R[0, 1] = 1/(e[:, 1].T @ n_nn @ e[:, 1])
+    jj = R[0, 1] * n_nn @ e[:, 1]
+    k_nn_inv = np.linalg.inv(k_nn)
+    a[:, 1] = np.linalg.solve(k_nn,jj) + a[:,0]
+    L[0, 1] = a[:, 1].T @ k_nn @ a[:, 1]
+    e[:,2] = - 1 / (L[0,1]) * a[:,1] + e[:,1]
+    R[0,2] = 1 / (e[:,2].T @ n_nn @ e[:,2])
+    a[:,2] = np.linalg.solve(k_nn,jj) + a[:,1]
+    jj = R[0,2] * n_nn @ e[:,2]
+    k_nn_inv = np.linalg.inv(k_nn)
+    a[:,2] = np.linalg.solve(k_nn,jj) + a[:,1]
+    L[0,2] = a[:,2].T @ k_nn @ a[:,2]

@@ -39,6 +39,7 @@ class FemmProblem:
         ### Post processing
         self.nodal_coords = []
         self.element_coords = []
+        self.nodal_unknowns = []
 
     def write(self, file_name, close_after=True):
         """Generate a runnable lua-script for a FEMM calculation.
@@ -594,7 +595,7 @@ class FemmProblem:
 
         self.field = FemmFields.MAGNETIC
         self.init_problem(out_file=self.out_file)
-        cmd = Template("mi_probdef($frequency,$units,$type,$precision, $depth, $minangle, $acsolver)")
+        cmd = Template("mi_probdef($frequency,$units,$type,$precision, $depth, $minangle, $acsolver)\nmi_setcomment('dump')")
         cmd = cmd.substitute(
             frequency=freq,
             units=r"'" + unit.value + r"'",
@@ -1018,7 +1019,8 @@ class FemmProblem:
         cmd_line.append("write(node_file,\"node_nr, x, y \\n \")")
         cmd_line.append("for i = 1, node_nr do")
         cmd_line.append("xx, yy = mo_getnode(i)")
-        cmd_line.append("write(node_file, i, \",\", xx, \", \", yy ,\"\\n\")")
+        cmd_line.append(f"A, B1, B2, Sig, E, H1, H2, Je, Js, Mu1, Mu2, Pe, Ph = mo_getpointvalues(xx, yy)") #ez
+        cmd_line.append("write(node_file, i, \",\", xx, \", \", yy , \",\", A,\"\\n\")") #itt
         cmd_line.append("end \n")
         self.lua_script.extend(cmd_line)
 
@@ -1042,8 +1044,9 @@ class FemmProblem:
         # Nodal data
         with open(self.node_file, newline='') as csvfile:
             for row in csv.DictReader(csvfile, delimiter=',', skipinitialspace=True):
-                k, x, y = row.items()
+                k, x, y, a_z = row.items() #vektorpot hozzáadva
                 self.nodal_coords.append(Node(float(x[1]), float(y[1]), id=k[1]))
+                self.nodal_unknowns.append(float(a_z[1][0]))
 
         # Mesh data
         with open(self.mesh_file, newline='') as csvfile:
