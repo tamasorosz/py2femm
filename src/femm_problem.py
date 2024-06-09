@@ -790,40 +790,8 @@ class FemmProblem:
         if self.field == FemmFields.MAGNETIC:
             cmd = f"A, B1, B2, Sig, E, H1, H2, Je, Js, Mu1, Mu2, Pe, Ph = mo_getpointvalues({point.x}, {point.y})"
             self.lua_script.append(cmd)
-
-            cmd = "write(file_out, \"\\n Point values \\n\")"
-            self.lua_script.append(cmd)
-            cmd = "write(file_out, \"Node x:{0}, y:{1}, Vector potential = \", A ,\"\\n\")".format(point.x, point.y)
-            self.lua_script.append(cmd)
-
-            cmd = "write(file_out, \"Node x:{0}, y:{1}, Bx = \", B1 ,\"\\n\")".format(point.x, point.y)
-            self.lua_script.append(cmd)
-            cmd = "write(file_out, \"Point x:{0}, y:{1}, By = \", B2 ,\"\\n\")".format(point.x, point.y)
-            self.lua_script.append(cmd)
-
-            cmd = "write(file_out, \"Point x:{0}, y:{1}, Sigma = \", Sig ,\"\\n\")".format(point.x, point.y)
-            self.lua_script.append(cmd)
-            cmd = "write(file_out, \"Point x:{0}, y:{1}, E = \", E ,\"\\n\")".format(point.x, point.y)
-            self.lua_script.append(cmd)
-
-            cmd = "write(file_out, \"Point x:{0}, y:{1}, Hx = \", H1 ,\"\\n\")".format(point.x, point.y)
-            self.lua_script.append(cmd)
-            cmd = "write(file_out, \"Point x:{0}, y:{1}, Hy = \", H2 ,\"\\n\")".format(point.x, point.y)
-            self.lua_script.append(cmd)
-
-            cmd = "write(file_out, \"Point x:{0}, y:{1}, Je = \", Je ,\"\\n\")".format(point.x, point.y)
-            self.lua_script.append(cmd)
-            cmd = "write(file_out, \"Point x:{0}, y:{1}, Js = \", Js ,\"\\n\")".format(point.x, point.y)
-            self.lua_script.append(cmd)
-
-            cmd = "write(file_out, \"Point x:{0}, y:{1}, Mux = \", Mu1 ,\"\\n\")".format(point.x, point.y)
-            self.lua_script.append(cmd)
-            cmd = "write(file_out, \"Point x:{0}, y:{1}, Muy = \", Mu2 ,\"\\n\")".format(point.x, point.y)
-            self.lua_script.append(cmd)
-
-            cmd = "write(file_out, \"Point x:{0}, y:{1}, Pe = \", Pe ,\"\\n\")".format(point.x, point.y)
-            self.lua_script.append(cmd)
-            cmd = "write(file_out, \"Point x:{0}, y:{1}, Ph = \", Ph ,\"\\n\")".format(point.x, point.y)
+            # x, y, A, B1, B2, Sig, E, H1, H2, Je, Js, Mu1, Mu2, Pe, Ph
+            cmd = f"write(file_out, \" {point.x}, {point.y},\", A ,\",\", B1,\",\", B2,\",\", Sig,\",\", E,\",\", H1,\",\", H2,\",\", Je,\",\", Js,\",\", Mu1,\",\", Mu2,\",\", Pe,\",\", Ph,\"\\n\")"
             self.lua_script.append(cmd)
 
         # Symbol Definition
