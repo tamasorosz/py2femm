@@ -67,3 +67,11 @@ class RabbitExecutor:
                         ]
                     ),
                 )
+
+
+if __name__ == '__main__':
+
+    rmq = RabbitExecutor(script_files=[])
+    print("Run RabbitMq workers...")
+    # start workers
+    asyncio.run(rmq.worker())

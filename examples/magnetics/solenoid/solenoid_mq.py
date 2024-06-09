@@ -14,3 +14,4 @@ if __name__ == '__main__':
 
     # create a producer which sends the tasks to the workers
     asyncio.run(rmq.broker())
+

@@ -39,6 +39,7 @@ class FemmProblem:
         ### Post processing
         self.nodal_coords = []
         self.element_coords = []
+        self.post_processing_activated = False
 
     def write(self, file_name, close_after=True):
         """Generate a runnable lua-script for a FEMM calculation.
@@ -105,7 +106,7 @@ class FemmProblem:
         if self.field == FemmFields.CURRENT_FLOW:
             cmd_list.append("newdocument(3)")  # the 3 specifies current flow problem
 
-        # user specified outpu
+        # user specified output
         cmd = Template('file_out = openfile("$outfile", "w")')
         cmd = cmd.substitute(outfile=out_file)
         cmd_list.append(cmd)
@@ -125,7 +126,9 @@ class FemmProblem:
         cmd_list = []
 
         cmd_list.append("closefile(file_out)")
-        cmd_list.append("closefile(mesh_file)")
+
+        if self.post_processing_activated:
+            cmd_list.append("closefile(mesh_file)")
 
         cmd_list.append(f"{self.field.output_to_string()}_close()")
         cmd_list.append(f"{self.field.input_to_string()}_close()")
