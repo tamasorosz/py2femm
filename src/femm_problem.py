@@ -35,6 +35,7 @@ class FemmProblem:
         self.node_file = "node.csv"
         self.node_nr = "node_nr"
         self.element_nr = "element_nr"
+        self.point_values = "point_values.csv"
 
         ### Post processing
         self.nodal_coords = []
@@ -118,6 +119,13 @@ class FemmProblem:
         # node output
         cmd_list.append(f'node_file = openfile("{self.node_file}", "w")')
         self.lua_script.extend(cmd_list)
+
+        # point values
+        cmd = Template(f'point_values = openfile("{self.point_values}", "w")')
+
+        self.lua_script.extend(cmd_list)
+        cmd = cmd.substitute(outfile=out_file)
+        cmd_list.append(cmd)
 
         return cmd_list
 
@@ -791,7 +799,7 @@ class FemmProblem:
             cmd = f"A, B1, B2, Sig, E, H1, H2, Je, Js, Mu1, Mu2, Pe, Ph = mo_getpointvalues({point.x}, {point.y})"
             self.lua_script.append(cmd)
             # x, y, A, B1, B2, Sig, E, H1, H2, Je, Js, Mu1, Mu2, Pe, Ph
-            cmd = f"write(file_out, \" {point.x}, {point.y},\", A ,\",\", B1,\",\", B2,\",\", Sig,\",\", E,\",\", H1,\",\", H2,\",\", Je,\",\", Js,\",\", Mu1,\",\", Mu2,\",\", Pe,\",\", Ph,\"\\n\")"
+            cmd = f"write(point_values, \" {point.x}, {point.y},\", A ,\",\", B1,\",\", B2,\",\", Sig,\",\", E,\",\", H1,\",\", H2,\",\", Je,\",\", Js,\",\", Mu1,\",\", Mu2,\",\", Pe,\",\", Ph,\"\\n\")"
             self.lua_script.append(cmd)
 
         # Symbol Definition
