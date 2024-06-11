@@ -260,7 +260,7 @@ class FemmProblem:
     def delete_selected(self):
         """Delete all selected objects"""
 
-        cmd = f"{self.field.input_to_string()}_deleteselected"
+        cmd = f"{self.field.input_to_string()}_deleteselected()"
         self.lua_script.append(cmd)
         return cmd
 
@@ -269,21 +269,21 @@ class FemmProblem:
         Delete all selected nodes. The object should be selected using the node
         selection command.
         """
-        cmd = f"{self.field.input_to_string()}_deleteselectednodes"
+        cmd = f"{self.field.input_to_string()}_deleteselectednodes()"
         self.lua_script.append(cmd)
         return cmd
 
     def delete_selected_labels(self):
         """Delete all selected labels."""
 
-        cmd = f"{self.field.input_to_string()}_deleteselectedlabels"
+        cmd = f"{self.field.input_to_string()}_deleteselectedlabels()"
         self.lua_script.append(cmd)
 
         return cmd
 
     def delete_selected_segments(self):
         """Delete all selected segments."""
-        cmd = f"{self.field.input_to_string()}_deleteselectedsegments"
+        cmd = f"{self.field.input_to_string()}_deleteselectedsegments()"
         self.lua_script.append(cmd)
 
         return cmd
@@ -291,7 +291,7 @@ class FemmProblem:
     def delete_selected_arc_segments(self):
         """Delete all selected arc segments."""
 
-        cmd = f"{self.field.input_to_string()}_deleteselectedarcsegments"
+        cmd = f"{self.field.input_to_string()}_deleteselectedarcsegments()"
         self.lua_script.append(cmd)
 
         return cmd
