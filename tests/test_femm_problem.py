@@ -1,6 +1,8 @@
 import os
 from unittest import TestCase
 
+import numpy as np
+
 from src.current_flow import CurrentFlowMaterial, CurrentFlowFixedVoltage, CurrentFlowMixed, CurrentFlowSurfaceCurrent, \
     CurrentFlowPeriodic, CurrentFlowAntiPeriodic
 from src.electrostatics import ElectrostaticMaterial, ElectrostaticFixedVoltage, ElectrostaticMixed, \
@@ -729,7 +731,7 @@ class FemmTester(TestCase):
         self.assertEqual("hi_analyze(0)", writer.analyze(0))
 
         writer.field = FemmFields.CURRENT_FLOW
-        self.assertEqual("ci_analyze(1)", writer.analyze())
+        self.assertEqual("ci_analyze(0)", writer.analyze())
 
         writer.field = FemmFields.MAGNETIC
         self.assertEqual("mi_analyze(2)", writer.analyze(2))
@@ -783,7 +785,7 @@ class FemmTester(TestCase):
     def test_get_point_values(self):
         fmw = FemmProblem()
         fmw.field = FemmFields.MAGNETIC
-        self.assertIn("write(file_out, \"Node x:0.01, y:0, Ph = \", Ph", fmw.get_point_values(Node(0.01, 0)))
+        self.assertIn("write(file_out, \"Point x:0.01, y:0, Ph = \", Ph", fmw.get_point_values(Node(0.01, 0)))
 
     def test_create_geometry(self):
         """create basic objects: nodes, lines and a circle arc to test the basic functionality of the command."""
@@ -811,3 +813,57 @@ class FemmTester(TestCase):
         self.assertIn("mi_addarc(1.0, 0.0, 0.0, 1.0, 90.0, 1)", cmds)
 
         print(cmds)
+
+    def test_nr_nodes(self):
+        fmw = FemmProblem()
+        fmw.field = FemmFields.MAGNETIC
+        self.assertEqual(
+            'node_nr = mo_numnodes',
+            fmw.get_nr_nodes(),
+        )
+
+    def test_stiffness_matrix(self):
+        fmw = FemmProblem()
+        fmw.nodal_coords = [Node(0.0, 0.0, id='1', label=None), Node(1.0, 0.0, id='2', label=None),
+                            Node(0.0, 1.0, id='3', label=None), Node(1.0, 1.0, id='4', label=None)]
+        fmw.element_coords = [{'element_nr': '1', 'n_1': Node(0.0, 0.0, id='1', label=None),
+                               'n_2': Node(1.0, 0.0, id='2', label=None),
+                               'n_3': Node(0.0, 1.0, id='3', label=None), 'x_c': '0.333',
+                               'y_c': '0.333', 'area': '0.5', 'group_nr': '0', 'Sig': '0', 'Mu1': '1',
+                               'Mu2': '1'},
+                              {'element_nr': '2', 'n_1': Node(1.0, 0.0, id='2', label=None),
+                               'n_2': Node(1.0, 1.0, id='4', label=None),
+                               'n_3': Node(0.0, 1.0, id='3', label=None), 'x_c': '0.667',
+                               'y_c': '0.667', 'area': '0.5', 'group_nr': '0', 'Sig': '0', 'Mu1': '1',
+                               'Mu2': '1'}]
+
+        stiff = fmw.calc_stiffness_matrix()
+        print(stiff)
+
+        solution_matrix = np.array([[1., -0.5, -0.5, 0.],
+                                    [-0.5, 1., 0., -0.5],
+                                    [-0.5, 0., 1., -0.5],
+                                    [0., -0.5, -0.5, 1.]])
+
+        np.testing.assert_allclose(stiff, solution_matrix)
+
+    def test_calc_element_gradient(self):
+        fmw = FemmProblem()
+        fmw.nodal_coords = [Node(0.0, 0.0, id='1', label=None), Node(1.0, 0.0, id='2', label=None),
+                            Node(0.0, 1.0, id='3', label=None), Node(1.0, 1.0, id='4', label=None)]
+        fmw.element_coords = [{'element_nr': '1', 'n_1': Node(0.0, 0.0, id='1', label=None),
+                               'n_2': Node(1.0, 0.0, id='2', label=None),
+                               'n_3': Node(0.0, 1.0, id='3', label=None), 'x_c': '0.333',
+                               'y_c': '0.333', 'area': '0.5', 'group_nr': '0', 'Sig': '0', 'Mu1': '1',
+                               'Mu2': '1'},
+                              {'element_nr': '2', 'n_1': Node(1.0, 0.0, id='2', label=None),
+                               'n_2': Node(1.0, 1.0, id='4', label=None),
+                               'n_3': Node(0.0, 1.0, id='3', label=None), 'x_c': '0.667',
+                               'y_c': '0.667', 'area': '0.5', 'group_nr': '0', 'Sig': '0', 'Mu1': '1',
+                               'Mu2': '1'}]
+
+        grad = fmw.calc_element_grad(fmw.element_coords[0])
+
+        solution_vector = np.array([[-1.0, 1.0, 0.0], [-1.0, 0.0, 1.0]])
+
+        np.testing.assert_allclose(grad, solution_vector)
