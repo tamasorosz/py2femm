@@ -2,7 +2,6 @@ import os
 import dataclasses
 import math
 from math import sin, cos, asin, acos, pi
-from copy import copy
 
 from src.magnetics import MagneticDirichlet, MagneticMaterial, MagneticAnti, MagneticAntiPeriodicAirgap, LamType
 from src.femm_problem import FemmProblem
