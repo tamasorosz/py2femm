@@ -12,7 +12,7 @@ from src.executor import Executor
 
 ORIGIN = Node(0.0, 0.0)
 
-# Geometry parameters for stator
+'''# Geometry parameters for stator
 Ro = 17
 Ri = 10
 w1 = 0.5
@@ -38,7 +38,7 @@ r1 = 2
 r2 = 8
 r3 = 9
 pole_deg = 360 / np
-pole_rad = 2 * pi / np
+pole_rad = 2 * pi / np'''
 
 gamma = 0  # current offset
 Imax = 250
@@ -50,9 +50,9 @@ JV = J0 * cos(gamma + 2 * pi / 3)
 JW = J0 * cos(gamma + 2 * pi / 3)
 
 
-def stator():
-    stator_geo = Geometry(Ro, Ri, w1, w2, w3, w4, h1, h2, h3, h4, s3, ag_s, ag_r, ns, np, nsr)
-
+def stator(Ro, Ri, w1, w2, w3, w4, h1, h2, h3, h4, s3, ag_s, ns, nsr):
+    stator_geo = Geometry()
+    slot_rad = 2 * pi / ns
     ORIGIN = Node(0, 0, 'ORIGIN')
 
     p1 = Node((-w1 / 2), (Ri * cos(asin(w1 / 2 / Ri))), 'p1')
@@ -198,8 +198,10 @@ def stator():
     return stator_geo
 
 
-def rotor():
+def rotor(r1, r2, r3, mw, ns, np, nsr, ag_r):
     rotor_geo = Geometry()
+    pole_rad = 2 * pi / np
+    slot_rad = 2 * pi / ns
 
     rotang1 = asin(mw / (2 * r2))
     rotang2 = asin(mw / (2 * r3))
@@ -272,7 +274,9 @@ def rotor():
     return rotor_geo
 
 
-def material_definitions(femm_problem: FemmProblem):
+def material_definitions(femm_problem: FemmProblem, Ro, Ri, r2, r3, mw, ns, np, nsr, ag_s):
+    slot_rad = 2 * pi / ns
+    pole_rad = 2 * pi / np
     air = MagneticMaterial(material_name='air')
     air.mesh_size = 1
     air.material_positions = [Node(0, Ri + (Ro - Ri) / 2)]
@@ -291,7 +295,7 @@ def material_definitions(femm_problem: FemmProblem):
     femm_problem.add_material(air_gap)
 
     air_rotor = MagneticMaterial(material_name='air_gap')
-    air_rotor.material_positions = [Node(r3 * 0.95 * sin(-slot_rad / 2 + pole_rad / 2 + rotang2 / 2),
+    air_rotor.material_positions = [Node(r3 * 0.95 * sin(-slot_rad / 2 + pole_rad / 2 + rotang2 / 1.5),
                                          r3 * 0.95 * cos(-slot_rad / 2 + pole_rad / 2 + rotang2 / 2))]
     air_rotor.mesh_size = 1
     femm_problem.add_material(air_rotor)
@@ -316,8 +320,23 @@ def material_definitions(femm_problem: FemmProblem):
     femm_problem.add_material(steel)
 
     # magnet
+    mlr = r2 + (r3 - r2) / 2 # magnet label radius
     magnet = MagneticMaterial(material_name='N36Z_50', mu_x=1.03, mu_y=1.03, H_c=782000, Sigma=0.667e6)
     magnet.mesh_size = 1
+    magnet.material_positions = []
+    for i in range(int(nsr/3)):
+        magnet.material_positions = [Node(mlr * sin(-slot_rad / 2 + (1 + i * 2) * pole_rad / 2),
+                                          mlr * cos(-slot_rad / 2 + (1 + i * 2) * pole_rad / 2))]
+        magnet.remanence_angle = 90-(-slot_rad / 2 + (1 + i * 2) * pole_rad / 2)*180/pi
+        femm_problem.add_material(magnet)
+    '''magnet.material_positions = [Node(mlr * sin(-slot_rad / 2 + pole_rad / 2),
+                                         mlr * cos(-slot_rad / 2 + pole_rad / 2) ),
+                                 Node(mlr * sin(-slot_rad / 2 + 3 * pole_rad / 2),
+                                         mlr * cos(-slot_rad / 2 + 3 * pole_rad / 2))]'''
+
+
+
+
 
     '''# Coils
     # Phase U
@@ -328,8 +347,10 @@ def material_definitions(femm_problem: FemmProblem):
     phase_U_pos.material_positions = [Node(0, )]'''  # Todo: a tekercseléséről semmit sem tudok
 
 
-def boundary_definitions(femm_problem: FemmProblem):
+def boundary_definitions(femm_problem: FemmProblem, Ro, Ri, r1, r2, r3, ns, np, nsr, ag_r, ag_s):
     # conditions
+    slot_rad = 2 * pi / ns
+    pole_rad = 2 * pi / np
     a0 = MagneticDirichlet(name='a0', a_0=0, a_1=0, a_2=0, phi=0)
     femm_problem.add_boundary(a0)
 
@@ -337,13 +358,13 @@ def boundary_definitions(femm_problem: FemmProblem):
     apb2 = MagneticAnti("APB2")
     apb3 = MagneticAnti("APB3")
     apb4 = MagneticAnti("APB4")
-    apb = MagneticAntiPeriodicAirgap('APAirgap')
+    apag = MagneticAntiPeriodicAirgap('APAirgap')
 
     femm_problem.add_boundary(apb1)
     femm_problem.add_boundary(apb2)
     femm_problem.add_boundary(apb3)
     femm_problem.add_boundary(apb4)
-    femm_problem.add_boundary(apb)
+    femm_problem.add_boundary(apag)
 
     # Add boundary conditions to stator segments
     femm_problem.set_boundary_definition_segment(Node(Ro * 0.99 * sin(-slot_rad / 2), Ro * 0.99 * cos(slot_rad / 2)),
@@ -352,9 +373,9 @@ def boundary_definitions(femm_problem: FemmProblem):
         Node(Ro * 0.99 * sin(-slot_rad / 2), Ro * 0.99 * cos(slot_rad / 2)).rotate_about(ORIGIN, -nsr * slot_rad), apb1)
 
     femm_problem.set_boundary_definition_segment(
-        Node((r3 + ag_r) * sin(-slot_rad / 2), (r3 + ag_r) * cos(slot_rad / 2)), apb2)
+        Node((Ri * 0.99) * sin(-slot_rad / 2), (Ri * 0.99) * cos(slot_rad / 2)), apb2)
     femm_problem.set_boundary_definition_segment(
-        Node((r3 + ag_r) * sin(-slot_rad / 2), (r3 + ag_r) * cos(slot_rad / 2)).rotate_about(ORIGIN, -nsr * slot_rad),
+        Node((Ri * 0.99) * sin(-slot_rad / 2), (Ri * 0.99) * cos(slot_rad / 2)).rotate_about(ORIGIN, -nsr * slot_rad),
         apb2)
 
     femm_problem.set_boundary_definition_segment(
@@ -366,24 +387,28 @@ def boundary_definitions(femm_problem: FemmProblem):
     femm_problem.set_boundary_definition_segment(
         Node(r1 * sin(-slot_rad / 2 + nsr / 3 * pole_rad), r1 * cos(-slot_rad / 2 + nsr / 3 * pole_rad)), apb4)
 
-    femm_problem.set_boundary_definition_arc(Node(0, r2 + ag_r, apb))
-    femm_problem.set_boundary_definition_arc(Node(0, Ri - ag_s, apb))
-    femm_problem.set_boundary_definition_arc(Node(0, r1, a0))
-    femm_problem.set_boundary_definition_arc(Node(0, Ro, a0))
+    femm_problem.set_boundary_definition_arc(Node(0, r3 + ag_r), apag)
+    femm_problem.set_boundary_definition_arc(Node(0, Ri - ag_s), apag)
+    femm_problem.set_boundary_definition_arc(Node(0, r1), a0)
+    femm_problem.set_boundary_definition_arc(Node(0, Ro), a0)
+
 
 
 if __name__ == '__main__':
     problem = FemmProblem(out_file="PMDC.csv")
-    problem.magnetic_problem(0, LengthUnit.CENTIMETERS, 'axi')
-    s = stator(17, 10, 0.5, 1, 2.5, 2, 0.2, 0.3, 4, 0.2, 1.8, 0.2, 0.2, 24, 8, 6)
-    r = rotor()
+    problem.magnetic_problem(0, LengthUnit.CENTIMETERS, 'planar')
+    s = stator(17, 10, 0.5, 1, 2.5, 2, 0.2, 0.3, 4, 0.2, 1.8, 0.2, 24, 6)
+    r = rotor(2, 8, 9, 6,24, 8, 6, 0.2)
     s.merge_geometry(r)
     problem.create_geometry(s)
-    material_definitions(problem)
-    boundary_definitions(problem)
+    material_definitions(problem, 17, 10, 8, 9, 6, 24, 8, 6, 0.2)
+    boundary_definitions(problem, 17, 10, 2, 8, 9, 24, 8, 6, 0.2, 0.2)
+    problem.select_node(ORIGIN)
+    problem.delete_selected()
+
     problem.write('PMDC.lua')
+
     femm = Executor()
     current_dir = os.getcwd()
     lua_file = current_dir + "/PMDC.lua"
     femm.run(lua_file)
-    material_definitions()
