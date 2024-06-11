@@ -404,7 +404,7 @@ if __name__ == '__main__':
     boundary_definitions(problem, 17, 10, 2, 8, 9, 24, 8, 6, 0.2, 0.2)
     problem.select_node(ORIGIN)
     problem.delete_selected()
-
+    problem.make_analysis()
     problem.write('PMDC.lua')
 
     femm = Executor()
