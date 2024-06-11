@@ -49,6 +49,14 @@ JV = J0 * cos(gamma + 2 * pi / 3)
 JW = J0 * cos(gamma + 2 * pi / 3)
 
 
+@dataclasses.dataclass
+class StatorParams:
+    Ro: float = 17.0
+    Ri: float = 10.0
+    w1: float = 0.5
+    w2: float = 0.5
+    ...
+
 def stator(Ro, Ri, w1, w2, w3, w4, h1, h2, h3, h4, s3, ag_s, ns, nsr):
     stator_geo = Geometry()
     slot_rad = 2 * pi / ns
@@ -319,23 +327,19 @@ def material_definitions(femm_problem: FemmProblem, Ro, Ri, r2, r3, mw, ns, np, 
     femm_problem.add_material(steel)
 
     # magnet
-    mlr = r2 + (r3 - r2) / 2 # magnet label radius
+    mlr = r2 + (r3 - r2) / 2  # magnet label radius
     magnet = MagneticMaterial(material_name='N36Z_50', mu_x=1.03, mu_y=1.03, H_c=782000, Sigma=0.667e6)
     magnet.mesh_size = 1
     magnet.material_positions = []
-    for i in range(int(nsr/3)):
+    for i in range(int(nsr / 3)):
         magnet.material_positions = [Node(mlr * sin(-slot_rad / 2 + (1 + i * 2) * pole_rad / 2),
                                           mlr * cos(-slot_rad / 2 + (1 + i * 2) * pole_rad / 2))]
-        magnet.remanence_angle = 90-(-slot_rad / 2 + (1 + i * 2) * pole_rad / 2)*180/pi
+        magnet.remanence_angle = 90 - (-slot_rad / 2 + (1 + i * 2) * pole_rad / 2) * 180 / pi
         femm_problem.add_material(magnet)
     '''magnet.material_positions = [Node(mlr * sin(-slot_rad / 2 + pole_rad / 2),
                                          mlr * cos(-slot_rad / 2 + pole_rad / 2) ),
                                  Node(mlr * sin(-slot_rad / 2 + 3 * pole_rad / 2),
                                          mlr * cos(-slot_rad / 2 + 3 * pole_rad / 2))]'''
-
-
-
-
 
     '''# Coils
     # Phase U
@@ -392,12 +396,11 @@ def boundary_definitions(femm_problem: FemmProblem, Ro, Ri, r1, r2, r3, ns, np, 
     femm_problem.set_boundary_definition_arc(Node(0, Ro), a0)
 
 
-
 if __name__ == '__main__':
     problem = FemmProblem(out_file="PMDC.csv")
     problem.magnetic_problem(0, LengthUnit.CENTIMETERS, 'planar')
     s = stator(17, 10, 0.5, 1, 2.5, 2, 0.2, 0.3, 4, 0.2, 1.8, 0.2, 24, 6)
-    r = rotor(2, 8, 9, 6,24, 8, 6, 0.2)
+    r = rotor(2, 8, 9, 6, 24, 8, 6, 0.2)
     s.merge_geometry(r)
     problem.create_geometry(s)
     material_definitions(problem, 17, 10, 8, 9, 6, 24, 8, 6, 0.2)
