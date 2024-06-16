@@ -121,11 +121,12 @@ class FemmProblem:
         self.lua_script.extend(cmd_list)
 
         # point values
-        cmd = Template(f'point_values = openfile("{self.point_values}", "w")')
-
+        cmd_list.append(f'point_values = openfile("{self.point_values}", "w")')
         self.lua_script.extend(cmd_list)
-        cmd = cmd.substitute(outfile=out_file)
+        cmd = f"write(point_values, \"x, y, A, B1, B2, Sig, E, H1, H2, Je, Js, Mu1, Mu2, Pe, Ph, \\n\")"
         cmd_list.append(cmd)
+        self.lua_script.extend(cmd_list)
+
 
         return cmd_list
 
@@ -135,8 +136,9 @@ class FemmProblem:
 
         cmd_list.append("closefile(file_out)")
 
-        if self.post_processing_activated:
-            cmd_list.append("closefile(mesh_file)")
+        #if self.post_processing_activated:
+        cmd_list.append("closefile(mesh_file)")
+        cmd_list.append("closefile(point_values)")
 
         cmd_list.append(f"{self.field.output_to_string()}_close()")
         cmd_list.append(f"{self.field.input_to_string()}_close()")
@@ -799,7 +801,7 @@ class FemmProblem:
             cmd = f"A, B1, B2, Sig, E, H1, H2, Je, Js, Mu1, Mu2, Pe, Ph = mo_getpointvalues({point.x}, {point.y})"
             self.lua_script.append(cmd)
             # x, y, A, B1, B2, Sig, E, H1, H2, Je, Js, Mu1, Mu2, Pe, Ph
-            cmd = f"write(point_values, \"x:{point.x}, y:{point.y},\", A ,\",\", B1,\",\", B2,\",\", Sig,\",\", E,\",\", H1,\",\", H2,\",\", Je,\",\", Js,\",\", Mu1,\",\", Mu2,\",\", Pe,\",\", Ph,\"\\n\")"
+            cmd = f"write(point_values, \"{point.x}, {point.y},\", A, \",\", B1, \",\",B2,\",\", Sig, \",\", E, \",\", H1, \",\",H2,\",\", Je, \",\", Js, \",\", Mu1, \",\",Mu2,\",\", Pe, \",\", Ph,\"\\n\")"
             self.lua_script.append(cmd)
 
         # Symbol Definition
