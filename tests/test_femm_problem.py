@@ -129,80 +129,80 @@ class FemmTester(TestCase):
     def test_delete_selected(self):
         fmw = FemmProblem()
         fmw.field = FemmFields.MAGNETIC
-        self.assertEqual("mi_deleteselected", fmw.delete_selected())
+        self.assertEqual("mi_deleteselected()", fmw.delete_selected())
 
         fmw = FemmProblem()
         fmw.field = FemmFields.CURRENT_FLOW
-        self.assertEqual("ci_deleteselected", fmw.delete_selected())
+        self.assertEqual("ci_deleteselected()", fmw.delete_selected())
 
         fmw.field = FemmFields.HEAT_FLOW
-        self.assertEqual("hi_deleteselected", fmw.delete_selected())
+        self.assertEqual("hi_deleteselected()", fmw.delete_selected())
 
         fmw.field = FemmFields.ELECTROSTATIC
-        self.assertEqual("ei_deleteselected", fmw.delete_selected())
+        self.assertEqual("ei_deleteselected()", fmw.delete_selected())
 
     def test_delete_selected_nodes(self):
         fmw = FemmProblem()
         fmw.field = FemmFields.MAGNETIC
-        self.assertEqual("mi_deleteselectednodes", fmw.delete_selected_nodes())
+        self.assertEqual("mi_deleteselectednodes()", fmw.delete_selected_nodes())
 
         fmw = FemmProblem()
         fmw.field = FemmFields.CURRENT_FLOW
-        self.assertEqual("ci_deleteselectednodes", fmw.delete_selected_nodes())
+        self.assertEqual("ci_deleteselectednodes()", fmw.delete_selected_nodes())
 
         fmw.field = FemmFields.HEAT_FLOW
-        self.assertEqual("hi_deleteselectednodes", fmw.delete_selected_nodes())
+        self.assertEqual("hi_deleteselectednodes()", fmw.delete_selected_nodes())
 
         fmw.field = FemmFields.ELECTROSTATIC
-        self.assertEqual("ei_deleteselectednodes", fmw.delete_selected_nodes())
+        self.assertEqual("ei_deleteselectednodes()", fmw.delete_selected_nodes())
 
     def test_delete_selected_labels(self):
         fmw = FemmProblem()
         fmw.field = FemmFields.MAGNETIC
-        self.assertEqual("mi_deleteselectedlabels", fmw.delete_selected_labels())
+        self.assertEqual("mi_deleteselectedlabels()", fmw.delete_selected_labels())
 
         fmw = FemmProblem()
         fmw.field = FemmFields.CURRENT_FLOW
-        self.assertEqual("ci_deleteselectedlabels", fmw.delete_selected_labels())
+        self.assertEqual("ci_deleteselectedlabels()", fmw.delete_selected_labels())
 
         fmw.field = FemmFields.HEAT_FLOW
-        self.assertEqual("hi_deleteselectedlabels", fmw.delete_selected_labels())
+        self.assertEqual("hi_deleteselectedlabels()", fmw.delete_selected_labels())
 
         fmw.field = FemmFields.ELECTROSTATIC
-        self.assertEqual("ei_deleteselectedlabels", fmw.delete_selected_labels())
+        self.assertEqual("ei_deleteselectedlabels()", fmw.delete_selected_labels())
 
     def test_delete_selected_segments(self):
         fmw = FemmProblem()
         fmw.field = FemmFields.MAGNETIC
-        self.assertEqual("mi_deleteselectedsegments", fmw.delete_selected_segments())
+        self.assertEqual("mi_deleteselectedsegments()", fmw.delete_selected_segments())
 
         fmw = FemmProblem()
         fmw.field = FemmFields.CURRENT_FLOW
-        self.assertEqual("ci_deleteselectedsegments", fmw.delete_selected_segments())
+        self.assertEqual("ci_deleteselectedsegments()", fmw.delete_selected_segments())
 
         fmw.field = FemmFields.HEAT_FLOW
-        self.assertEqual("hi_deleteselectedsegments", fmw.delete_selected_segments())
+        self.assertEqual("hi_deleteselectedsegments()", fmw.delete_selected_segments())
 
         fmw.field = FemmFields.ELECTROSTATIC
-        self.assertEqual("ei_deleteselectedsegments", fmw.delete_selected_segments())
+        self.assertEqual("ei_deleteselectedsegments()", fmw.delete_selected_segments())
 
     def test_delete_selected_arc_segments(self):
         fmw = FemmProblem()
         fmw.field = FemmFields.MAGNETIC
         self.assertEqual(
-            "mi_deleteselectedarcsegments",
+            "mi_deleteselectedarcsegments()",
             fmw.delete_selected_arc_segments(),
         )
 
         fmw = FemmProblem()
         fmw.field = FemmFields.CURRENT_FLOW
-        self.assertEqual("ci_deleteselectedarcsegments", fmw.delete_selected_arc_segments())
+        self.assertEqual("ci_deleteselectedarcsegments()", fmw.delete_selected_arc_segments())
 
         fmw.field = FemmFields.HEAT_FLOW
-        self.assertEqual("hi_deleteselectedarcsegments", fmw.delete_selected_arc_segments())
+        self.assertEqual("hi_deleteselectedarcsegments()", fmw.delete_selected_arc_segments())
 
         fmw.field = FemmFields.ELECTROSTATIC
-        self.assertEqual("ei_deleteselectedarcsegments", fmw.delete_selected_arc_segments())
+        self.assertEqual("ei_deleteselectedarcsegments()", fmw.delete_selected_arc_segments())
 
     def test_clear_seelcted(self):
         fmw = FemmProblem()
@@ -785,7 +785,7 @@ class FemmTester(TestCase):
     def test_get_point_values(self):
         fmw = FemmProblem()
         fmw.field = FemmFields.MAGNETIC
-        self.assertIn("write(file_out, \"Point x:0.01, y:0, Ph = \", Ph", fmw.get_point_values(Node(0.01, 0)))
+        self.assertIn("write(point_values, \"x:0.01, y:0,\"", fmw.get_point_values(Node(0.01, 0)))
 
     def test_create_geometry(self):
         """create basic objects: nodes, lines and a circle arc to test the basic functionality of the command."""
@@ -818,7 +818,7 @@ class FemmTester(TestCase):
         fmw = FemmProblem()
         fmw.field = FemmFields.MAGNETIC
         self.assertEqual(
-            'node_nr = mo_numnodes',
+            'node_nr = mo_numnodes()',
             fmw.get_nr_nodes(),
         )
 

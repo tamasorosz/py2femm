@@ -799,7 +799,7 @@ class FemmProblem:
             cmd = f"A, B1, B2, Sig, E, H1, H2, Je, Js, Mu1, Mu2, Pe, Ph = mo_getpointvalues({point.x}, {point.y})"
             self.lua_script.append(cmd)
             # x, y, A, B1, B2, Sig, E, H1, H2, Je, Js, Mu1, Mu2, Pe, Ph
-            cmd = f"write(point_values, \" {point.x}, {point.y},\", A ,\",\", B1,\",\", B2,\",\", Sig,\",\", E,\",\", H1,\",\", H2,\",\", Je,\",\", Js,\",\", Mu1,\",\", Mu2,\",\", Pe,\",\", Ph,\"\\n\")"
+            cmd = f"write(point_values, \"x:{point.x}, y:{point.y},\", A ,\",\", B1,\",\", B2,\",\", Sig,\",\", E,\",\", H1,\",\", H2,\",\", Je,\",\", Js,\",\", Mu1,\",\", Mu2,\",\", Pe,\",\", Ph,\"\\n\")"
             self.lua_script.append(cmd)
 
         # Symbol Definition
