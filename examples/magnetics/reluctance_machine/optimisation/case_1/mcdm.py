@@ -16,7 +16,11 @@ df_alts.iloc[:, 0] *= -1
 
 alts = df_alts.to_numpy()
 
-weights = w.entropy_weights(alts)
+weights = w.variance_weights(alts)
+# weights = w.entropy_weights(alts)
+
+print(weights)
+
 types = np.array([1, -1])
 
 cvalues = COMET.make_cvalues(alts)
@@ -28,11 +32,9 @@ bounds = SPOTIS.make_bounds(alts)
 methods = [
     TOPSIS(),
     MABAC(),
-    COMET(cvalues, expert_function),
-    SPOTIS(bounds)
 ]
 
-method_names = ['TOPSIS', 'MABAC', 'COMET', 'SPOTIS']
+method_names = ['TOPSIS', 'SPOTIS']
 
 prefs = []
 ranks = []
@@ -44,11 +46,19 @@ for method in methods:
     prefs.append(pref)
     ranks.append(rank)
 
-a = [f'$A_{{{i+1}}}$' for i in range(len(prefs[0]))]
+a = [f'$A_{{{i + 1}}}$' for i in range(len(prefs[0]))]
 df = pd.DataFrame(zip(*ranks), columns=method_names, index=a).round(3)
+colors = ["#B90276", '#50237F', '#005691', "#008ECF", '#00A8B0', '#78BE20', "#006249", '#525F6B', '#000']
 
-fig, ax = plt.subplots(dpi=150, tight_layout=True)
-# visuals.ranking_flows(ranks, labels=method_names, ax=ax)
-visuals.ranking_flows(ranks, labels=method_names, ax=ax, alt_indices=[47, 23, 20, 49, 45, 11, 2, 39, 22, 30])
-# plt.savefig('images/ranking_flows.pdf', bbox_inches='tight')
+fig, ax = plt.subplots(figsize=(10, 8))
+visuals.ranking_flows(ranks, alt_indices=[5, 16, 32, 23, 10, 30, 15, 16, 34, 8], colors=colors, labels=method_names,
+                      ax=ax, better_grid=True)
+plt.ylabel('Position in the ranking [u.]', fontsize=20)
+ax.set_xticklabels(method_names, rotation=0, fontsize=20)
+ax.set_yticklabels(np.linspace(1, 10, 10, dtype=int), rotation=0, fontsize=20)
+
+plt.savefig('figures/cogmob_ranking_variance.png', bbox_inches='tight')
 plt.show()
+
+# Variance: 24.8,139.0, 1.0, 1.8, 1.5, 1701.3,55.0
+# Entropy: 24.4, 119.8, 1.1, 2.1, 1.5, 1565.1, 47.2
