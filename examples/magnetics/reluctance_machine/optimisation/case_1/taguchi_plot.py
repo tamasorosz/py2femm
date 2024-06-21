@@ -31,7 +31,7 @@ for i in range(n_sets):
 fs = 20
 
 ax.set_xlabel('Parameters', fontsize=fs)
-ax.set_ylabel('\u0394S/N [db]', fontsize=fs)
+ax.set_ylabel('\u0394SN [db]', fontsize=fs)
 ax.set_xticks(x + width * (n_sets - 1) / 2)
 ax.set_xticklabels(['X1', 'X2', 'X3', 'X4', 'X5'])
 ax.tick_params(axis='both', which='major', labelsize=fs)
