@@ -11,27 +11,21 @@ import calc_max_torque_angle
 import calc_cogging
 import calc_torque_avg_rip
 
-# if __name__ == "__main__":
-#     x = calc_cogging.cogging(0, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, 15, 18, 8, 8)
-#
-#     print(x[0], x[1])
-#     plt.plot(x[2])
-#     plt.show()
-#     plt.bar([str(i) for i in range(len(x[3]))], x[3])
-#     plt.show()
+if __name__ == "__main__":
+    x = calc_cogging.cogging(0, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, 10,18,16,8)
+
+    print(x[0], x[1])
+    plt.plot(x[2])
+    plt.show()
+    plt.bar([str(i) for i in range(len(x[3]))], x[3])
+    plt.show()
 # #
 # if __name__ == "__main__":
-#     # g = calc_max_torque_angle.max_torque_angle(30, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, 15, 15, 0, 0)
-#     f = calc_max_torque_angle.max_torque_angle(30, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, 18, 18, 0, 0)
-#     # df = pd.DataFrame({'res': f[1]})
-#     # current_file_path = os.path.abspath(__file__)
-#     # folder_path = os.path.dirname(current_file_path)
-#     # file_path = os.path.join(folder_path, f'results/overshift_pm0.csv')
-#     # df.to_csv(file_path, encoding='utf-8', index=False)
+#     g = calc_max_torque_angle.max_torque_angle(30, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, 10, 18, 16, 8)
+#     f = calc_max_torque_angle.max_torque_angle(30, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, 14, 18, -12, -8)
 #
-#
-#     plt.plot(f[1], label='f')
-#     # plt.plot(g[1], label='g')
+#     plt.plot(f[1], label=f'{f[0]}')
+#     plt.plot(g[1], label=f'{g[0]}')
 #     plt.legend()
 #     plt.show()
 # #
@@ -46,36 +40,6 @@ import calc_torque_avg_rip
 # plt.legend()
 # plt.show()
 
-
-
-
-if __name__ == "__main__":
-    x = calc_torque_avg_rip.torque_avg_rip(30, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, 15, 15, 0, 0)
-
-
-
-
-# variables = machine_model_synrm.VariableParameters(fold='ang',
-#                                                    out='ang',
-#                                                    counter=0,
-#                                                    JAp=10,
-#                                                    JAn=-10,
-#                                                    JBp=-5,
-#                                                    JBn=5,
-#                                                    JCp=-5,
-#                                                    JCn=5,
-#
-#                                                    ang_co=24.3,
-#                                                    deg_co=91.5,
-#                                                    bd=1.0,
-#                                                    bw=0.5,
-#                                                    bh=2.4,
-#                                                    bg=1.5,
-#
-#                                                    ia=0,
-#                                                    ang_m=20,
-#                                                    mh=1.5
-#                                                    )
 #
 # from examples.magnetics.reluctance_machine.optimisation.case_2 import calc_torque_avg_rip
 # #

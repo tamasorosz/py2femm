@@ -36,6 +36,7 @@ def execute_model(counter):
     except IndexError:
         print(f'Error1 at cog{counter}!')
         torque = 0.0
+        pass
 
     try:
         time.sleep(0.1)
@@ -97,7 +98,7 @@ def thd(abs_data):
 def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_mp):
 
     resol = 31
-    e = 16
+    e = 15
     for counter, ia in zip(range(0, resol), np.linspace(0, e, resol)):
         JUp = J0
         JUn = -JUp
@@ -133,10 +134,10 @@ def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_m
     with Pool(8) as p:
         res = p.map(execute_model, list(range(0, resol)))
 
-    cogging_pp = (np.max(list(res)) - np.min(list(res)))
+    cogging_pp = np.round(np.max(list(res)) - np.min(list(res)), 2)
 
     y = np.round(np.abs(fftPlot(np.array(res), 1 / (3 * 120))[0]), 3)
     y[0] = 0
-    res_thd = thd(y)
+    res_thd = np.round(thd(y), 2)
 
     return cogging_pp, res_thd

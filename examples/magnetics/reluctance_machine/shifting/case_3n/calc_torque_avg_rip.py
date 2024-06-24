@@ -36,6 +36,7 @@ def execute_model(counter):
     except IndexError:
         print(f'Error1 at avg_rip{counter}!')
         torque = 0.0
+        pass
 
     try:
         time.sleep(0.1)
@@ -48,13 +49,13 @@ def execute_model(counter):
         del_lua = pathlib.Path(os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.lua'))
         del_csv = pathlib.Path(os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.csv'))
 
-        # del_lua.unlink()
-        # del_fem.unlink()
-        # del_ans.unlink()
-        # del_csv.unlink()
+        del_lua.unlink()
+        del_fem.unlink()
+        del_ans.unlink()
+        del_csv.unlink()
 
     except PermissionError or FileNotFoundError:
-        print(f'Error1 at avg_rip{counter}!')
+        print(f'Error2 at avg_rip{counter}!')
         pass
 
     return torque
@@ -100,7 +101,7 @@ def torque_avg_rip(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m
     with Pool(8) as p:
         res = p.map(execute_model, list(range(0, resol)))
 
-    torque_avg = -1 * np.average(list(res))
-    torque_ripple = -1 * (np.max(list(res)) - np.min(list(res))) / torque_avg
+    torque_avg = np.round(-1 * np.average(list(res)), 2)
+    torque_ripple = np.round(-100 * (np.max(list(res)) - np.min(list(res))) / torque_avg, 2)
 
     return torque_avg, torque_ripple

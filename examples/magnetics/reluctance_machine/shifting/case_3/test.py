@@ -20,17 +20,17 @@ import calc_torque_avg_rip
     # plt.bar([str(i) for i in range(len(x[3]))], x[3])
     # plt.show()
 
-# if __name__ == "__main__":
-    # g = calc_max_torque_angle.max_torque_angle(30, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, 10, 15, 16, 6)
-    # f = calc_max_torque_angle.max_torque_angle(30, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, 15, 18, 6, 0)
+if __name__ == "__main__":
+    g = calc_max_torque_angle.max_torque_angle(30, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, 10, 15, 16, 6)
+    f = calc_max_torque_angle.max_torque_angle(30, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, 15, 18, 6, 0)
     # f = calc_max_torque_angle.max_torque_angle(30, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, 15, 15, 0, 0)
 
 
-    # plt.plot(f[1], label='f')
-#     plt.plot(g[1], label='g')
-#     print(g[0])
-#     plt.legend()
-#     plt.show()
+    plt.plot(f[1], label='f')
+    plt.plot(g[1], label='g')
+    print(g[0])
+    plt.legend()
+    plt.show()
 #
 # if __name__ == "__main__":
 #     x = calc_torque_avg_rip.torque_avg_rip(30, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, 10, 10, 16, 16)

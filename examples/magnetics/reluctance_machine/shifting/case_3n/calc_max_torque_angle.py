@@ -47,10 +47,10 @@ def execute_model(counter):
         del_lua = pathlib.Path(os.path.join(folder_path, f'temp_ang/ang{counter}.lua'))
         del_csv = pathlib.Path(os.path.join(folder_path, f'temp_ang/ang{counter}.csv'))
 
-        # del_lua.unlink()
-        # del_fem.unlink()
-        # del_ans.unlink()
-        # del_csv.unlink()
+        del_lua.unlink()
+        del_fem.unlink()
+        del_ans.unlink()
+        del_csv.unlink()
 
     except PermissionError or FileNotFoundError:
         print(f'Error2 at ang{counter}!')
