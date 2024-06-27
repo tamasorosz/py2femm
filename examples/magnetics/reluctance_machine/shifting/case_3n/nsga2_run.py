@@ -79,7 +79,7 @@ if __name__ == '__main__':
         cvtol=1e-6,
         ftol=0.0025,
         period=10,
-        n_max_gen=125,
+        n_max_gen=100,
         n_max_evals=5000
     )
 
@@ -99,5 +99,5 @@ if __name__ == '__main__':
                        'P2P': F[:, 2], 'THD': F[:, 3]})
     current_file_path = os.path.abspath(__file__)
     folder_path = os.path.dirname(current_file_path)
-    file_path = os.path.join(folder_path, f'results/nsga2_case3_p50o50g125_obj4.csv')
+    file_path = os.path.join(folder_path, f'results/nsga2_case3_p50o50g100_obj4.csv')
     df.to_csv(file_path, encoding='utf-8', index=False)
