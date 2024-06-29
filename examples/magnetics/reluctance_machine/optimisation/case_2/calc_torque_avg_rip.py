@@ -15,9 +15,10 @@ from src.executor import Executor
 
 
 def execute_model(counter):
-    time.sleep(0.1)
 
     try:
+        time.sleep(0.1)
+
         femm = Executor()
         current_file_path = os.path.abspath(__file__)
         folder_path = os.path.dirname(current_file_path)
@@ -32,42 +33,30 @@ def execute_model(counter):
             number = csvfile[0][0].replace('wTorque_0 = ', '')
             torque = float(number) * 4 * -1000
 
-        del_fem = pathlib.Path(os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.lua'))
-        del_ans = pathlib.Path(os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.fem'))
-        del_lua = pathlib.Path(os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.ans'))
-        del_csv = pathlib.Path(os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.csv'))
-        try:
-            time.sleep(0.1)
-            del_lua.unlink()
-            del_fem.unlink()
-            del_ans.unlink()
-            del_csv.unlink()
-
-        except PermissionError:
-            pass
-
     except IndexError:
+        print(f'Error1 at avg_rip{counter}!')
         torque = 0.0
+        pass
+
+    try:
+        time.sleep(0.1)
 
         current_file_path = os.path.abspath(__file__)
         folder_path = os.path.dirname(current_file_path)
 
-        del_fem = pathlib.Path(os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.lua'))
-        del_ans = pathlib.Path(os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.fem'))
-        del_lua = pathlib.Path(os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.ans'))
+        del_fem = pathlib.Path(os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.fem'))
+        del_ans = pathlib.Path(os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.ans'))
+        del_lua = pathlib.Path(os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.lua'))
         del_csv = pathlib.Path(os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.csv'))
 
-        try:
-            time.sleep(0.1)
-            del_lua.unlink()
-            del_fem.unlink()
-            del_ans.unlink()
-            del_csv.unlink()
+        del_lua.unlink()
+        del_fem.unlink()
+        del_ans.unlink()
+        del_csv.unlink()
 
-        except PermissionError:
-            pass
-
-        print(f'Error at avg_rip{counter}!')
+    except PermissionError or FileNotFoundError:
+        print(f'Error2 at avg_rip{counter}!')
+        pass
 
     return torque
 
@@ -75,8 +64,8 @@ def execute_model(counter):
 def torque_avg_rip(J0, ang_co, deg_co, bd, bw, bh, bgp, ang_m, mh):
     initial = maxang.max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, ang_m, mh)
 
-    resol = 121
-    e = 30
+    resol = 16
+    e = 15
     for counter, ia, alpha in zip(range(0, resol), np.linspace(0, e, resol), np.linspace(0, 4 * e, resol)):
         JUp = J0 * math.cos(math.radians(initial + alpha))
         JUn = -JUp
@@ -99,7 +88,7 @@ def torque_avg_rip(J0, ang_co, deg_co, bd, bw, bh, bgp, ang_m, mh):
                                              bd=bd,
                                              bw=bw,
                                              bh=bh,
-                                             bg=bgp + mh,
+                                             bg=bgp/10 + mh,
                                              ia=ia,
                                              ang_m=ang_m,
                                              mh=mh
@@ -109,7 +98,7 @@ def torque_avg_rip(J0, ang_co, deg_co, bd, bw, bh, bgp, ang_m, mh):
     with Pool(8) as p:
         res = p.map(execute_model, list(range(0, resol)))
 
-    torque_avg = -1 * np.average(list(res))
-    torque_ripple = -1 * (np.max(list(res)) - np.min(list(res))) / torque_avg
+    torque_avg = np.round(-1 * np.average(list(res)), 2)
+    torque_ripple = np.round(-100 * (np.max(list(res)) - np.min(list(res))) / torque_avg, 2)
 
-    return torque_avg, torque_ripple, res
+    return torque_avg, torque_ripple
