@@ -17,7 +17,8 @@ n0 = Node(0, 0)
 
 class VariableParameters:
 
-    def __init__(self, fold, out, counter, JAp, JAn, JBp, JBn, JCp, JCn, ang_co, deg_co, bd, bw, bh, bg, ia, ang_m, mh):
+    def __init__(self, fold, out, counter, JAp, JAn, JBp, JBn, JCp, JCn, ang_co, deg_co, bd, bw, bh, bg, ia, ang_m,
+                 mh):
         self.fold = fold
         self.out = out
         self.counter = counter
@@ -440,7 +441,8 @@ def add_materials(femm_problem: FemmProblem, var: VariableParameters, rot: rotor
                                       44620.68966, 45965.51724, 47310.34483, 48655.17241, 50000])
 
     femm_problem.add_bh_curve(material_name="FeSi65",
-                              data_b=[0, 0.358294627, 0.478028092, 0.563148872, 0.629244556, 0.683285138, 0.728997037,
+                              data_b=[0, 0.358294627, 0.478028092, 0.563148872, 0.629244556, 0.683285138,
+                                      0.728997037,
                                       0.768607936, 0.803556282, 0.834825031, 0.863115728, 0.888946635, 0.912711487,
                                       0.934716448, 0.955204299, 1.030452669, 1.086202243, 1.130688402, 1.167706237,
                                       1.199406524, 1.227126836, 1.251755988, 1.273914738, 1.294053804, 1.3125108,
@@ -450,7 +452,8 @@ def add_materials(femm_problem: FemmProblem, var: VariableParameters, rot: rotor
                                       1.554920311, 1.560338538, 1.565476384, 1.570361444, 1.575017432, 1.579464871,
                                       1.583721646, 1.587803435, 1.591724059, 1.595495761, 1.599129443, 1.60263485,
                                       1.606020731, 1.609294969, 1.612464692],
-                              data_h=[0, 235.7142857, 371.4285714, 507.1428571, 642.8571429, 778.5714286, 914.2857143,
+                              data_h=[0, 235.7142857, 371.4285714, 507.1428571, 642.8571429, 778.5714286,
+                                      914.2857143,
                                       1050, 1185.714286, 1321.428571, 1457.142857, 1592.857143, 1728.571429,
                                       1864.285714, 2000, 2571.428571, 3142.857143, 3714.285714, 4285.714286,
                                       4857.142857, 5428.571429, 6000, 6571.428571, 7142.857143, 7714.285714,
@@ -506,32 +509,40 @@ def add_materials(femm_problem: FemmProblem, var: VariableParameters, rot: rotor
     femm_problem.define_block_label(rot[10], ferrite_left)
     femm_problem.define_block_label(rot[11], ferrite_right)
 
-
 def problem_definition(var: VariableParameters):
     problem = FemmProblem(out_file=os.path.join(folder_path, f'temp_{var.fold}/{var.out}{var.counter}.csv'))
-    variables = VariableParameters(var.fold, var.out, var.counter, var.JAp, var.JAn, var.JBp, var.JBn, var.JCp, var.JCn,
-                                   var.ang_co, var.deg_co, var.bd, var.bw, var.bh, var.bg, var.ia, var.ang_m, var.mh)
+    variables = VariableParameters(var.fold, var.out, var.counter, var.JAp, var.JAn, var.JBp, var.JBn, var.JCp,
+                                   var.JCn, var.ang_co, var.deg_co, var.bd, var.bw, var.bh, var.bg, var.ia,
+                                   var.ang_m, var.mh)
 
     problem.magnetic_problem(0, LengthUnit.MILLIMETERS, "planar", depth=40)
 
-    stator_geometry(problem)
-    rot = rotor_geometry(problem, variables)
-    add_boundaries(problem, variables, rot)
-    add_materials(problem, variables, rot)
+    feasibility = 1
+    try:
+        stator_geometry(problem)
+        rot = rotor_geometry(problem, variables)
+        add_boundaries(problem, variables, rot)
+        add_materials(problem, variables, rot)
 
-    problem.make_analysis(os.path.join(folder_path, f'temp_{var.fold}/{var.out}{var.counter}'))
+        problem.make_analysis(os.path.join(folder_path, f'temp_{var.fold}/{var.out}{var.counter}'))
 
-    problem.get_integral_values(label_list=[list(rot)[0], list(rot)[1], list(rot)[2], list(rot)[3], list(rot)[10],
-                                            list(rot)[11], Node(5, 5)],
-                                save_image=False,
-                                variable_name=MagneticVolumeIntegral.wTorque)
+        problem.get_integral_values(label_list=[list(rot)[0], list(rot)[1], list(rot)[2], list(rot)[3], list(rot)[10],
+                                                list(rot)[11], Node(5, 5)],
+                                    save_image=False,
+                                    variable_name=MagneticVolumeIntegral.wTorque)
 
-    problem.write(os.path.join(folder_path, f'temp_{var.fold}/{var.out}{var.counter}.lua'))
+        problem.write(os.path.join(folder_path, f'temp_{var.fold}/{var.out}{var.counter}.lua'))
+
+    except ValueError:
+        feasibility = 0
+
+    return feasibility
+
+# def run_model(var: VariableParameters):
+#     problem_definition(var)
+#
+#     femm = Executor()
+#     lua_file = os.path.join(folder_path, f'temp_{var.fold}/{var.out}{var.counter}.lua')
+#     femm.run(lua_file)
 
 
-def run_model(var: VariableParameters):
-    problem_definition(var)
-
-    femm = Executor()
-    lua_file = os.path.join(folder_path, f'temp_{var.fold}/{var.out}{var.counter}.lua')
-    femm.run(lua_file)

@@ -418,23 +418,29 @@ def problem_definition(var: VariableParameters):
 
     problem.magnetic_problem(0, LengthUnit.MILLIMETERS, "planar", depth=40)
 
-    stator_geometry(problem)
-    rot = rotor_geometry(problem, variables)
-    add_boundaries(problem, variables, rot)
-    add_materials(problem, variables, rot)
+    feasibility = 1
+    try:
+        stator_geometry(problem)
+        rot = rotor_geometry(problem, variables)
+        add_boundaries(problem, variables, rot)
+        add_materials(problem, variables, rot)
 
-    problem.make_analysis(os.path.join(folder_path, f'temp_{var.fold}/{var.out}{var.counter}'))
+        problem.make_analysis(os.path.join(folder_path, f'temp_{var.fold}/{var.out}{var.counter}'))
 
-    problem.get_integral_values(label_list= [list(rot)[0], list(rot)[1], list(rot)[2], list(rot)[3], Node(5, 5)],
-                                save_image=False,
-                                variable_name=MagneticVolumeIntegral.wTorque)
+        problem.get_integral_values(label_list= [list(rot)[0], list(rot)[1], list(rot)[2], list(rot)[3], Node(5, 5)],
+                                    save_image=False,
+                                    variable_name=MagneticVolumeIntegral.wTorque)
 
-    problem.write(os.path.join(folder_path, f'temp_{var.fold}/{var.out}{var.counter}.lua'))
+        problem.write(os.path.join(folder_path, f'temp_{var.fold}/{var.out}{var.counter}.lua'))
 
+    except ValueError:
+        feasibility = 0
 
-def run_model(var: VariableParameters):
-    problem_definition(var)
+    return feasibility
 
-    femm = Executor()
-    lua_file = os.path.join(folder_path, f'temp_{var.fold}/{var.out}{var.counter}.lua')
-    femm.run(lua_file)
+# def run_model(var: VariableParameters):
+#     problem_definition(var)
+#
+#     femm = Executor()
+#     lua_file = os.path.join(folder_path, f'temp_{var.fold}/{var.out}{var.counter}.lua')
+#     femm.run(lua_file)

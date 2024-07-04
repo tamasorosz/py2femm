@@ -3,6 +3,7 @@ import math
 import os
 import re
 
+import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
 
@@ -34,19 +35,33 @@ import calc_max_torque_angle
 from examples.magnetics.reluctance_machine.optimisation.case_2 import calc_torque_avg_rip
 #
 if __name__ == "__main__":
-    # x = calc_max_torque_angle.max_torque_angle(30, 25.0, 147.1, 1.1, 1.0, 2.5, 0.5, 5.1, 1.5)
-    # x = calc_torque_avg_rip.torque_avg_rip(0, 25.0, 147.1, 1.1, 1.0, 2.5, 0.5, 5.1, 1.5)
+    # xl = np.array([15, 9, 1, 1, 1, 10]),
+    # xu = np.array([25, 14, 4, 4, 2, 15]),
 
-    x = calc_max_torque_angle.max_torque_angle(30, 20, 90, 1.0, 1.0, 3.0, 1.0, 10, 1.5)
-    # x = calc_torque_avg_rip.torque_avg_rip(0, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 14.9, 1.5)
+    x = [23, 11, 3, 2, 2, 15]
+    g = (math.tan(math.radians(x[0] / 2)) * (22 - (x[4] * 0.5 + 1.5)) + x[2] + x[3]) - 8
+    if g > 0:
+        temp_x3 = np.round(8 - (math.tan(math.radians(x[0] / 2)) * (22 - (x[4] * 0.5 + 1.5))) - x[2], 1)
+        if temp_x3 < 1:
+            x[3] = 1
+            x[2] = np.round(x[2] - (1 - temp_x3), 1)
+            if x[2] < 1:
+                x[2] = 1
+        else:
+            x[3] = temp_x3
+    print(x)
+    y = calc_max_torque_angle.max_torque_angle(30, x[0], x[1], x[2], 0.5, x[3], x[4], x[5], 1.5)
 
-
-    # df = pd.DataFrame({'Torque': x[2], 'MaxAngle': list(range(0, 121))})
-    # current_file_path = os.path.abspath(__file__)
-    # folder_path = os.path.dirname(current_file_path)
-    # file_path = os.path.join(folder_path, f'results/pmasynrm_span15_cogging.csv')
-    # df.to_csv(file_path, encoding='utf-8', index=False)
-    print(x[0])
-    plt.plot(x[1])
-    plt.show()
-
+    # x = [25, 15, 4, 4, 1, 15]
+    # g = (math.tan(math.radians(x[0] / 2)) * (22 - (x[4] * 0.5 + 1.5)) + x[2] + x[3]) - 8
+    # if g > 0:
+    #     temp_x3 = int(8 - (math.tan(math.radians(x[0] / 2)) * (22 - (x[4] * 0.5 + 1.5))) - x[2])
+    #     if temp_x3 < 1:
+    #         x[3] = 1
+    #         x[2] = x[2] - (1 - temp_x3)
+    #         if x[2] < 1:
+    #             x[2] = 1
+    #     else:
+    #         x[3] = temp_x3
+    # print(x)
+    # y = calc_max_torque_angle.max_torque_angle(30, x[0], x[1], x[2], 0.5, x[3], x[4], x[5], 1.5)

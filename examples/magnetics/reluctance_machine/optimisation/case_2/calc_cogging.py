@@ -1,13 +1,10 @@
 import csv
-import math
+import logging
 import os
-import pathlib
-import re
 import time
 
 import numpy as np
 import machine_model_synrm as model
-import calc_max_torque_angle as maxang
 
 from multiprocessing import Pool
 
@@ -16,59 +13,51 @@ from src.executor import Executor
 
 def execute_model(counter):
 
+    time.sleep(0.1)
+
+    femm = Executor()
+    current_file_path = os.path.abspath(__file__)
+    folder_path = os.path.dirname(current_file_path)
+
+    lua_file = os.path.join(folder_path, f'temp_cog/cog{counter}.lua')
+    femm.run(lua_file)
+
+    logging.basicConfig(level=logging.ERROR, format='%(asctime)s - %(levelname)s - %(message)s')
+
     try:
         time.sleep(0.1)
 
-        femm = Executor()
         current_file_path = os.path.abspath(__file__)
         folder_path = os.path.dirname(current_file_path)
-
-        lua_file = os.path.join(folder_path, f'temp_cog/cog{counter}.lua')
-        femm.run(lua_file)
-
-        time.sleep(0.1)
 
         with open(os.path.join(folder_path, f'temp_cog/cog{counter}.csv'), 'r') as file:
             csvfile = [i for i in csv.reader(file)]
             number = csvfile[0][0].replace('wTorque_0 = ', '')
             torque = float(number) * 4 * -1000
 
-    except IndexError:
-        print(f'Error1 at cog{counter}!')
+    except (csv.Error, IndexError) as e:
+        logging.error(f'Error at cog{counter}: {e}')
         torque = 0.0
-        pass
 
-    try:
-        time.sleep(0.1)
-
-        current_file_path = os.path.abspath(__file__)
-        folder_path = os.path.dirname(current_file_path)
-
-        del_fem = pathlib.Path(os.path.join(folder_path, f'temp_cog/cog{counter}.fem'))
-        del_ans = pathlib.Path(os.path.join(folder_path, f'temp_cog/cog{counter}.ans'))
-        del_lua = pathlib.Path(os.path.join(folder_path, f'temp_cog/cog{counter}.lua'))
-        del_csv = pathlib.Path(os.path.join(folder_path, f'temp_cog/cog{counter}.csv'))
-
-        del_lua.unlink()
-        del_fem.unlink()
-        del_ans.unlink()
-        del_csv.unlink()
-
-    except PermissionError or FileNotFoundError:
-        print(f'Error2 at cog{counter}!')
-        pass
+    # time.sleep(0.1)
+    #
+    # for filename in os.listdir(os.path.join(folder_path, f'temp_cog')):
+    #     file_path = os.path.join(folder_path, f'temp_cog', filename)
+    #     try:
+    #         if os.path.isfile(file_path) or os.path.islink(file_path):
+    #             os.unlink(file_path)
+    #     except Exception as e:
+    #         print(f"Failed to delete {file_path}. Reason: {e}")
 
     return torque
 
-def fftPlot(sig, dt=None):
 
+def fftPlot(sig, dt=None):
     if dt is None:
         dt = 1
         t = np.arange(0, sig.shape[-1])
-        xLabel = 'samples'
     else:
         t = np.arange(0, sig.shape[-1]) * dt
-        xLabel = 'freq [Hz]'
 
     if sig.shape[0] % 2 != 0:
         t = t[0:-1]
@@ -84,6 +73,7 @@ def fftPlot(sig, dt=None):
 
     return sigFFTPos, freqAxisPos
 
+
 def thd(abs_data):
     sq_sum = 0.0
     for r in range(len(abs_data)):
@@ -96,9 +86,9 @@ def thd(abs_data):
 
 
 def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, ang_m, mh):
-
     resol = 31
     e = 15
+    feasibility = 1
     for counter, ia in zip(range(0, resol), np.linspace(0, e, resol)):
         JUp = J0
         JUn = -JUp
@@ -117,24 +107,30 @@ def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, ang_m, mh):
                                              JCp=JWp,
                                              JCn=JWn,
                                              ang_co=ang_co,
-                                             deg_co=deg_co,
+                                             deg_co=deg_co * 10,
                                              bd=bd,
                                              bw=bw,
                                              bh=bh,
-                                             bg=bgp/10 + mh,
+                                             bg=bgp * 0.5 + mh,
                                              ia=ia,
                                              ang_m=ang_m,
                                              mh=mh
                                              )
-        model.problem_definition(variables)
+        feasibility = model.problem_definition(variables)
+        if feasibility == 0:
+            break
 
-    with Pool(8) as p:
-        res = p.map(execute_model, list(range(0, resol)))
+    if feasibility == 1:
+        with Pool(8) as p:
+            res = p.map(execute_model, list(range(0, resol)))
 
-    cogging_pp = np.round(np.max(list(res)) - np.min(list(res)), 2)
+        cogging_pp = np.round(np.max(list(res)) - np.min(list(res)), 2)
 
-    y = np.round(np.abs(fftPlot(np.array(res), 1 / (3 * 120))[0]), 3)
-    y[0] = 0
-    res_thd = np.round(thd(y), 2)
+        y = np.round(np.abs(fftPlot(np.array(res), 1 / (3 * 120))[0]), 3)
+        y[0] = 0
+        res_thd = np.round(thd(y), 2)
+    else:
+        cogging_pp = 0
+        res_thd = 0
 
     return cogging_pp, res_thd
