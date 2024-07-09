@@ -19,15 +19,15 @@ import calc_torque_avg_rip
 #     plt.show()
 #     plt.bar([str(i) for i in range(len(x[3]))], x[3])
 #     plt.show()
-# #
+#
 if __name__ == "__main__":
-    g = calc_max_torque_angle.max_torque_angle(30, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, 14,18,2,-2)
-    f = calc_max_torque_angle.max_torque_angle(30, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, 14,18,2,2)
-
-    plt.plot(f[1], label='f' + f'{f[0]}')
-    plt.plot(g[1], label='g' + f'{g[0]}')
-    plt.legend()
-    plt.show()
+    g = calc_max_torque_angle.max_torque_angle(30, 15, 150, 2, 0.5, 1, 0.5, 1.5, 10, 18, 0, 16)
+    # f = calc_max_torque_angle.max_torque_angle(30, 22.1, 146.5, 1.0, 1.0, 3.0, 0.5, 1.5, 14,18,2,2)
+    #
+    # plt.plot(f[1], label='f' + f'{f[0]}')
+    # plt.plot(g[1], label='g' + f'{g[0]}')
+    # plt.legend()
+    # plt.show()
 # #
 
 # x = pd.read_csv('results\overshift_pm0.csv')

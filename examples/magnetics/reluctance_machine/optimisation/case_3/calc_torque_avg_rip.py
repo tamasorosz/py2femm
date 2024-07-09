@@ -39,13 +39,13 @@ def execute_model(counter):
 
     except (csv.Error, IndexError) as e:
         logging.error(f'Error at avg_rip{counter}: {e}')
-        torque = 0.0
+        torque = 0.
 
     return torque
 
 
-def torque_avg_rip(J0, ang_co, deg_co, bd, bw, bh, bg):
-    initial = maxang.max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bg)
+def torque_avg_rip(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_mp):
+    initial = maxang.max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_mp)
     if initial is None:
         torque_avg = 0
         torque_ripple = 0
@@ -75,8 +75,13 @@ def torque_avg_rip(J0, ang_co, deg_co, bd, bw, bh, bg):
                                                  bd=bd,
                                                  bw=bw,
                                                  bh=bh,
-                                                 bg=bg*0.5,
-                                                 ia=ia
+                                                 bg=bgp*0.5 + mh,
+                                                 ia=ia,
+                                                 mh=mh,
+                                                 ang_m=ang_m,
+                                                 ang_mp=ang_mp,
+                                                 deg_m=deg_m,
+                                                 deg_mp=deg_mp
                                                  )
             model.problem_definition(variables)
 

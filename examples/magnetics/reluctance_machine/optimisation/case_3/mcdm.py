@@ -8,7 +8,7 @@ from pymcdm.helpers import rankdata, rrankdata
 from pymcdm.methods.comet_tools import MethodExpert
 from pymcdm import visuals
 
-df_base = pd.read_csv('results/nsga2_case2_p50o50g100_obj6_20240701.csv')
+df_base = pd.read_csv('results/optimisation/nsga2_X7_p50o25g100_top10.csv')
 
 df_alts = df_base.iloc[:, -2:]
 
@@ -52,7 +52,7 @@ fig, ax = plt.subplots(dpi=150, tight_layout=True)
 visuals.ranking_flows(ranks, colors=colors, labels=method_names, ax=ax, better_grid=True)
 plt.ylabel('Position in the ranking [u.]', fontsize=14)
 ax.set_xticklabels(method_names, rotation=0, fontsize=14)
-# ax.set_yticklabels(list(range(1, 10)), rotation=0, fontsize=14)
+ax.set_yticklabels(list(range(1, 10)), rotation=0, fontsize=14)
 
-# plt.savefig('D:\Respositories\py2femm\examples\magnetics/reluctance_machine\optimisation\case_2/figures/flow_ranking_span5', bbox_inches='tight')
+plt.savefig('D:\Respositories\py2femm\examples\magnetics/reluctance_machine\optimisation\case_2/figures/flow_ranking_span5', bbox_inches='tight')
 plt.show()

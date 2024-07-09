@@ -1,8 +1,7 @@
 import csv
+import logging
 import math
 import os
-import pathlib
-import re
 import time
 
 import numpy as np
@@ -14,55 +13,41 @@ from src.executor import Executor
 
 
 def execute_model(counter):
+
+    time.sleep(0.1)
+
+    femm = Executor()
+    current_file_path = os.path.abspath(__file__)
+    folder_path = os.path.dirname(current_file_path)
+
+    lua_file = os.path.join(folder_path, f'temp_ang/ang{counter}.lua')
+    femm.run(lua_file)
+
+    logging.basicConfig(level=logging.ERROR, format='%(asctime)s - %(levelname)s - %(message)s')
+
     try:
         time.sleep(0.1)
 
-        femm = Executor()
         current_file_path = os.path.abspath(__file__)
         folder_path = os.path.dirname(current_file_path)
-
-        lua_file = os.path.join(folder_path, f'temp_ang/ang{counter}.lua')
-        femm.run(lua_file)
-
-        time.sleep(0.1)
 
         with open(os.path.join(folder_path, f'temp_ang/ang{counter}.csv'), 'r') as file:
             csvfile = [i for i in csv.reader(file)]
             number = csvfile[0][0].replace('wTorque_0 = ', '')
             torque = float(number) * 4 * -1000
 
-    except IndexError:
-        print(f'Error1 at ang{counter}!')
+    except (csv.Error, IndexError) as e:
+        logging.error(f'Error at ang{counter}: {e}')
         torque = 0.0
-        pass
-
-    try:
-        time.sleep(0.1)
-
-        current_file_path = os.path.abspath(__file__)
-        folder_path = os.path.dirname(current_file_path)
-
-        del_fem = pathlib.Path(os.path.join(folder_path, f'temp_ang/ang{counter}.fem'))
-        del_ans = pathlib.Path(os.path.join(folder_path, f'temp_ang/ang{counter}.ans'))
-        del_lua = pathlib.Path(os.path.join(folder_path, f'temp_ang/ang{counter}.lua'))
-        del_csv = pathlib.Path(os.path.join(folder_path, f'temp_ang/ang{counter}.csv'))
-
-        del_lua.unlink()
-        # del_fem.unlink()
-        del_ans.unlink()
-        del_csv.unlink()
-
-    except PermissionError or FileNotFoundError:
-        print(f'Error2 at ang{counter}!')
-        pass
 
     return torque
 
 
 def max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_mp):
-    resol = 1
-    a = 30
-    b = 45
+    resol = 24
+    a = 25
+    b = 48
+    feasibility = 1
     for counter, alpha in zip(range(0, resol), np.linspace(a, b, resol)):
         JUp = J0 * math.cos(math.radians(alpha))
         JUn = -JUp
@@ -81,11 +66,11 @@ def max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg
                                              JCp=JWp,
                                              JCn=JWn,
                                              ang_co=ang_co,
-                                             deg_co=deg_co,
+                                             deg_co=deg_co*10,
                                              bd=bd,
                                              bw=bw,
                                              bh=bh,
-                                             bg=mh + bgp,
+                                             bg=bgp*0.5 + mh,
                                              ia=0,
                                              mh=mh,
                                              ang_m=ang_m,
@@ -93,14 +78,21 @@ def max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg
                                              deg_m=deg_m,
                                              deg_mp=deg_mp
                                              )
-        model.problem_definition(variables)
+        feasibility = model.problem_definition(variables)
+        if feasibility == 0:
+            break
 
-    with Pool(8) as p:
-        res = p.map(execute_model, list(range(0, resol)))
+    if feasibility == 1:
+        with Pool(8) as p:
+            res = p.map(execute_model, list(range(0, resol)))
 
-    res = list(res)
+        res = list(res)
 
-    ind = res.index((max(res)))
-    torque_ang = a + ind * ((b - a) / (resol - 1))
+        ind = res.index((max(res)))
+        torque_ang = a + ind * ((b - a) / (resol - 1))
+    else:
+        torque_ang = None
+
+    print(torque_ang)
 
     return torque_ang

@@ -90,6 +90,6 @@ if __name__ == '__main__':
                        'X5': [i*0.5 for i in X[:, 4]], 'AVG': F[:, 0], 'RIP': F[:, 1]})
     current_file_path = os.path.abspath(__file__)
     folder_path = os.path.dirname(current_file_path)
-    file_path = os.path.join(folder_path, f'results/nsga2_case1_p50o50g100_obj5_20240701.csv')
+    file_path = os.path.join(folder_path, f'results/nsga2_case1_p50o50g100_obj5_20240704.csv')
     df.to_csv(file_path, encoding='utf-8', index=False)
 
