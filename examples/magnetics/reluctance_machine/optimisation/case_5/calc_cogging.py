@@ -76,7 +76,7 @@ def thd(abs_data):
     return thd
 
 
-def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, deg_m):
+def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_mp):
 
     folder_path = 'temp_cog'
 
@@ -114,7 +114,9 @@ def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, deg_m):
                                              ia=ia,
                                              mh=mh,
                                              ang_m=ang_m,
+                                             ang_mp=ang_mp,
                                              deg_m=deg_m,
+                                             deg_mp=deg_mp
                                              )
         feasibility = model.problem_definition(variables)
         if feasibility == 0:

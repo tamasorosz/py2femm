@@ -45,9 +45,9 @@ def execute_model(counter):
     return torque
 
 
-def torque_avg_rip(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, deg_m):
+def torque_avg_rip(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_mp):
 
-    initial = maxang.max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, deg_m)
+    initial = maxang.max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_mp)
 
     folder_path = 'temp_avg_rip'
 
@@ -89,7 +89,9 @@ def torque_avg_rip(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, deg_m):
                                                  ia=ia,
                                                  mh=mh,
                                                  ang_m=ang_m,
-                                                 deg_m=deg_m
+                                                 ang_mp=ang_mp,
+                                                 deg_m=deg_m,
+                                                 deg_mp=deg_mp
                                                  )
             model.problem_definition(variables)
 

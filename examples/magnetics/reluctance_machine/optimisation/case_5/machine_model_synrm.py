@@ -18,7 +18,7 @@ n0 = Node(0, 0)
 class VariableParameters:
 
     def __init__(self, fold, out, counter, JAp, JAn, JBp, JBn, JCp, JCn, ang_co, deg_co, bd, bw, bh, bg, ia, mh,
-                 ang_m, deg_m):
+                 ang_m, ang_mp, deg_m, deg_mp):
         self.fold = fold
         self.out = out
         self.counter = counter
@@ -41,9 +41,9 @@ class VariableParameters:
         self.ia = ia
 
         self.ang_m = ang_m
-        self.ang_mp = ang_m
+        self.ang_mp = ang_mp
         self.deg_m = deg_m/2
-        self.deg_mp = deg_m/2
+        self.deg_mp = deg_mp/2
 
         self.mh = mh
 
@@ -566,7 +566,7 @@ def problem_definition(var: VariableParameters):
     problem = FemmProblem(out_file=os.path.join(folder_path, f'temp_{var.fold}/{var.out}{var.counter}.csv'))
     variables = VariableParameters(var.fold, var.out, var.counter, var.JAp, var.JAn, var.JBp, var.JBn, var.JCp, var.JCn,
                                    var.ang_co, var.deg_co, var.bd, var.bw, var.bh, var.bg, var.ia, var.mh, var.ang_m,
-                                   var.deg_m)
+                                   var.ang_mp, var.deg_m, var.deg_mp)
 
     problem.magnetic_problem(0, LengthUnit.MILLIMETERS, "planar", depth=40)
 

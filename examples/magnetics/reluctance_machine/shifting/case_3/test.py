@@ -173,7 +173,7 @@ import numpy as np
 #     print(refined_y)
 #
 #     # Specify the full filename path
-#     filename = r'D:\Respositories\py2femm\examples\magnetics\reluctance_machine\shifting\case_3\results\thd/FFT_span5.csv'
+#     filename = r'D:\Respositories\py2femm\examples\magnetics\reluctance_machine\shifting\case_5\results\thd/FFT_span5.csv'
 #
 #     # Ensure the directory exists
 #     os.makedirs(os.path.dirname(filename), exist_ok=True)

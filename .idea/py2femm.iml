@@ -8,10 +8,13 @@
       <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_2/temp_cog" />
       <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_1/temp_ang" />
       <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_1/temp_avg_rip" />
+      <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/shifting/case_3n/temp_ang" />
+      <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_5/temp_cog" />
+      <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_5/temp_avg_rip" />
+      <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_5/temp_ang" />
       <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_3/temp_ang" />
       <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_3/temp_avg_rip" />
       <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_3/temp_cog" />
-      <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/shifting/case_3n/temp_ang" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.10 (py2femm)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
