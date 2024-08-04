@@ -138,4 +138,4 @@ def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, deg_m):
 
     print('COG: ' + f'{cogging_pp}' + ', THD: ' + f'{res_thd}' + '\n-----------------------------------------------')
 
-    return cogging_pp, res_thd
+    return cogging_pp, res_thd, res

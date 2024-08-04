@@ -37,8 +37,8 @@ if __name__ == "__main__":
     # xl = np.array([15, 9, 1, 1, 1, 10]),
     # xu = np.array([25, 14, 4, 4, 2, 15]),
 
-    y = calc_max_torque_angle.max_torque_angle(30, 20, 15, 1, 0.5, 1, 1, 1.5, 15, 15, 16, 16)
-    print(list(y)[0])
+    y = calc_max_torque_angle.max_torque_angle(30, 25, 150, 1, 0.5, 1, 1, 1.5, 15, 15, 16, 16)
+
     # x = [25, 15, 4, 4, 1, 15]
     # g = (math.tan(math.radians(x[0] / 2)) * (22 - (x[4] * 0.5 + 1.5)) + x[2] + x[3]) - 8
     # if g > 0:

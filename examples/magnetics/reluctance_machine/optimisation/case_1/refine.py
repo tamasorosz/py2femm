@@ -3,7 +3,7 @@ import pandas as pd
 from matplotlib import pyplot as plt
 from matplotlib.patches import Ellipse
 
-df_base = pd.read_csv('results/nsga2_const_p50o25g100.csv')
+df_base = pd.read_csv('../../cogmob24/nsga2_const_p50o25g100.csv')
 
 df_x = df_base.iloc[:, 0:5]
 df_x = np.round(df_x, 1)
