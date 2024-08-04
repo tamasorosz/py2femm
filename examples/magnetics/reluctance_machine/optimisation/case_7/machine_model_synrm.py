@@ -591,10 +591,3 @@ def problem_definition(var: VariableParameters):
         feasibility = 0
 
     return feasibility
-
-# def run_model(var: VariableParameters):
-#     problem_definition(var)
-#
-#     femm = Executor()
-#     lua_file = os.path.join(folder_path, f'temp_{var.fold}/{var.out}{var.counter}.lua')
-#     femm.run(lua_file)

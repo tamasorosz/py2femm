@@ -54,9 +54,9 @@ def execute_model(counter):
 
 
 def max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, ang_m, mh):
-    resol = 8
-    a = 41
-    b = 48
+    resol = 361
+    a = 0
+    b = 360
     feasibility = 1
     for counter, alpha in zip(range(0, resol), np.linspace(a, b, resol)):
         JUp = J0 * math.cos(math.radians(alpha))
@@ -90,7 +90,7 @@ def max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, ang_m, mh):
             break
 
     if feasibility == 1:
-        with Pool(8) as p:
+        with Pool(24) as p:
             res = p.map(execute_model, list(range(0, resol)))
 
         res = list(res)
@@ -100,4 +100,4 @@ def max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, ang_m, mh):
     else:
         torque_ang = None
 
-    return torque_ang
+    return torque_ang, res

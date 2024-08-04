@@ -13,30 +13,25 @@ from multiprocessing import Pool
 
 from src.executor import Executor
 
-
+logging.basicConfig(level=logging.ERROR, format='%(asctime)s - %(levelname)s - %(message)s')
 def execute_model(counter):
-
-    time.sleep(0.15)
-
-    femm = Executor()
-    current_file_path = os.path.abspath(__file__)
-    folder_path = os.path.dirname(current_file_path)
-
-    lua_file = os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.lua')
-    femm.run(lua_file)
-
-    logging.basicConfig(level=logging.ERROR, format='%(asctime)s - %(levelname)s - %(message)s')
-
     try:
-        time.sleep(0.15)
-
+        femm = Executor()
         current_file_path = os.path.abspath(__file__)
         folder_path = os.path.dirname(current_file_path)
+
+        lua_file = os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.lua')
+        femm.run(lua_file)
 
         with open(os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.csv'), 'r') as file:
             csvfile = [i for i in csv.reader(file)]
             number = csvfile[0][0].replace('wTorque_0 = ', '')
             torque = float(number) * 4 * -1000
+
+        os.unlink(os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.lua'))
+        os.unlink(os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.fem'))
+        os.unlink(os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.ans'))
+        os.unlink(os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.csv'))
 
     except (csv.Error, IndexError) as e:
         logging.error(f'Error at avg_rip{counter}: {e}')
@@ -44,17 +39,9 @@ def execute_model(counter):
 
     return torque
 
-
 def torque_avg_rip(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_mp):
 
     initial = maxang.max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_mp)
-
-    folder_path = 'temp_avg_rip'
-
-    if os.path.exists(folder_path):
-        shutil.rmtree(folder_path)
-
-    os.makedirs(folder_path)
 
     if initial is None:
         torque_avg = 0
@@ -95,9 +82,7 @@ def torque_avg_rip(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m
                                                  )
             model.problem_definition(variables)
 
-
-
-        with Pool(8) as p:
+        with Pool(16) as p:
             res = p.map(execute_model, list(range(0, resol)))
 
         if None in res:
@@ -107,6 +92,6 @@ def torque_avg_rip(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m
             torque_avg = np.round(-1 * np.average(list(res)), 2)
             torque_ripple = np.round(-100 * (np.max(list(res)) - np.min(list(res))) / torque_avg, 2)
 
-    print('ANG: ' + f'{initial}' + ', AVG: ' + f'{torque_avg}' + ', RIP: ' + f'{torque_ripple}')
+    # print('ANG: ' + f'{initial}' + ', AVG: ' + f'{torque_avg}' + ', RIP: ' + f'{torque_ripple}')
 
     return torque_avg, torque_ripple

@@ -3,24 +3,19 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/venv" />
-      <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_2/temp_ang" />
-      <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_2/temp_avg_rip" />
-      <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_2/temp_cog" />
-      <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_1/temp_ang" />
-      <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_1/temp_avg_rip" />
-      <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/shifting/case_3n/temp_ang" />
-      <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_5/temp_cog" />
-      <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_5/temp_avg_rip" />
-      <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_5/temp_ang" />
       <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_3/temp_ang" />
       <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_3/temp_avg_rip" />
       <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_3/temp_cog" />
+      <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_1/temp_ang" />
+      <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_2/temp_ang" />
+      <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_4/temp_ang" />
+      <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_4/temp_avg_rip" />
+      <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_4/temp_cog" />
+      <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_7/temp_ang" />
+      <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_7/temp_avg_rip" />
+      <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_7/temp_cog" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.10 (py2femm)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.12 (py2femm)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-  </component>
-  <component name="PyDocumentationSettings">
-    <option name="format" value="PLAIN" />
-    <option name="myDocStringFormat" value="Plain" />
   </component>
 </module>

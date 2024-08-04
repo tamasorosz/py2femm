@@ -53,9 +53,9 @@ def max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, deg_m):
 
     os.makedirs(folder_path)
 
-    resol = 361
-    a = 0
-    b = 360
+    resol = 8
+    a = 42
+    b = 49
     feasibility = 1
     for counter, alpha in zip(range(0, resol), np.linspace(a, b, resol)):
         JUp = J0 * math.cos(math.radians(alpha))
@@ -90,7 +90,7 @@ def max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, deg_m):
             break
 
     if feasibility == 1:
-        with Pool(24) as p:
+        with Pool(8) as p:
             res = p.map(execute_model, list(range(0, resol)))
 
         res = list(res)
@@ -100,4 +100,4 @@ def max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, deg_m):
     else:
         torque_ang = None
 
-    return torque_ang, res
+    return torque_ang

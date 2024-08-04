@@ -27,7 +27,7 @@ def execute_model(counter):
     logging.basicConfig(level=logging.ERROR, format='%(asctime)s - %(levelname)s - %(message)s')
 
     try:
-        time.sleep(0.1)
+        # time.sleep(0.1)
 
         current_file_path = os.path.abspath(__file__)
         folder_path = os.path.dirname(current_file_path)
@@ -39,20 +39,9 @@ def execute_model(counter):
 
     except (csv.Error, IndexError) as e:
         logging.error(f'Error at avg_rip{counter}: {e}')
-        torque = 0.
-
-    # time.sleep(0.1)
-    #
-    # for filename in os.listdir(os.path.join(folder_path, f'temp_avg_rip')):
-    #     file_path = os.path.join(folder_path, f'temp_avg_rip', filename)
-    #     try:
-    #         if os.path.isfile(file_path) or os.path.islink(file_path):
-    #             os.unlink(file_path)
-    #     except Exception as e:
-    #         print(f"Failed to delete {file_path}. Reason: {e}")
+        torque = 0.0
 
     return torque
-
 
 def torque_avg_rip(J0, ang_co, deg_co, bd, bw, bh, bgp, ang_m, mh):
     initial = maxang.max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, ang_m, mh)

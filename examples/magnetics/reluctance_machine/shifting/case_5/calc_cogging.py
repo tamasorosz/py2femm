@@ -7,7 +7,6 @@ import time
 
 import numpy as np
 import machine_model_synrm as model
-import calc_max_torque_angle as maxang
 
 from multiprocessing import Pool
 

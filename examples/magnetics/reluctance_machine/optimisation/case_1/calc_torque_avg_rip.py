@@ -80,7 +80,7 @@ def torque_avg_rip(J0, ang_co, deg_co, bd, bw, bh, bg):
                                                  )
             model.problem_definition(variables)
 
-        with Pool(8) as p:
+        with Pool(16) as p:
             res = p.map(execute_model, list(range(0, resol)))
 
         torque_avg = np.round(-1 * np.average(list(res)), 2)

@@ -13,8 +13,7 @@ from src.executor import Executor
 
 
 def execute_model(counter):
-
-    time.sleep(0.15)
+    time.sleep(0.1)
 
     femm = Executor()
     current_file_path = os.path.abspath(__file__)
@@ -26,7 +25,7 @@ def execute_model(counter):
     logging.basicConfig(level=logging.ERROR, format='%(asctime)s - %(levelname)s - %(message)s')
 
     try:
-        time.sleep(0.15)
+        time.sleep(0.1)
 
         current_file_path = os.path.abspath(__file__)
         folder_path = os.path.dirname(current_file_path)
@@ -76,7 +75,7 @@ def thd(abs_data):
     return thd
 
 
-def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_mp):
+def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, deg_m):
 
     folder_path = 'temp_cog'
 
@@ -85,8 +84,8 @@ def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_m
 
     os.makedirs(folder_path)
 
-    resol = 31
-    e = 15
+    resol = 61
+    e = 30
     feasibility = 1
     for counter, ia in zip(range(0, resol), np.linspace(0, e, resol)):
         JUp = J0
@@ -114,16 +113,14 @@ def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_m
                                              ia=ia,
                                              mh=mh,
                                              ang_m=ang_m,
-                                             ang_mp=ang_mp,
                                              deg_m=deg_m,
-                                             deg_mp=deg_mp
                                              )
         feasibility = model.problem_definition(variables)
         if feasibility == 0:
             break
 
     if feasibility == 1:
-        with Pool(8) as p:
+        with Pool(16) as p:
             res = p.map(execute_model, list(range(0, resol)))
         if None in res:
             cogging_pp = 1000
@@ -141,4 +138,4 @@ def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_m
 
     print('COG: ' + f'{cogging_pp}' + ', THD: ' + f'{res_thd}' + '\n-----------------------------------------------')
 
-    return cogging_pp, res_thd
+    return cogging_pp, res_thd, res
