@@ -1,4 +1,3 @@
-# --------------------------------------------------------------------------------------------------------------------
 import math
 import os
 
@@ -23,7 +22,7 @@ if __name__ == '__main__':
     class MyProblem(ElementwiseProblem):
         def __init__(self):
             super().__init__(n_var=7,
-                             n_obj=4,
+                             n_obj=3,
                              n_ieq_constr=0,
                              n_eq_constr=0,
                              xl=np.array([15, 10, 1, 1, 1, 10, 0]),
@@ -34,7 +33,7 @@ if __name__ == '__main__':
             f1 = calc_torque_avg_rip.torque_avg_rip(30, x[0], x[1], x[2], 0.5, x[3], x[4], 1.5, x[5], x[6])
             f2 = calc_cogging.cogging(0, x[0], x[1], x[2], 0.5, x[3], x[4], 1.5, x[5], x[6])
 
-            out['F'] = [f1[0], f1[1], f2[0], f2[1]]
+            out['F'] = [f1[0], f1[1], f2]
 
     problem = MyProblem()
 
@@ -97,8 +96,8 @@ if __name__ == '__main__':
 
     df = pd.DataFrame({'X1': X[:, 0], 'X2': [i*10 for i in X[:, 1]], 'X3': X[:, 2], 'X4': X[:, 3],
                        'X5': [i*0.5 for i in X[:, 4]], 'X6:': X[:, 5], 'X7:': X[:, 6], 'AVG': F[:, 0], 'RIP': F[:, 1],
-                       'COG': F[:, 2], 'THD': F[:, 3]})
+                       'COG': F[:, 2]})
     current_file_path = os.path.abspath(__file__)
     folder_path = os.path.dirname(current_file_path)
-    file_path = os.path.join(folder_path, f'results/nsga2_case4_p50o50g100_obj7_20240731.csv')
+    file_path = os.path.join(folder_path, f'results/nsga2_case5_p50o50g100_obj7_20240804.csv')
     df.to_csv(file_path, encoding='utf-8', index=False)

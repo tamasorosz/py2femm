@@ -41,40 +41,6 @@ def execute_model(counter):
 
     return torque
 
-
-def fftPlot(sig, dt=None):
-    if dt is None:
-        dt = 1
-        t = np.arange(0, sig.shape[-1])
-    else:
-        t = np.arange(0, sig.shape[-1]) * dt
-
-    if sig.shape[0] % 2 != 0:
-        t = t[0:-1]
-        sig = sig[0:-1]
-
-    sigFFT = np.fft.fft(sig) / t.shape[0]
-
-    freq = np.fft.fftfreq(t.shape[0], d=dt)
-
-    firstNegInd = np.argmax(freq < 0)
-    freqAxisPos = freq[0:firstNegInd]
-    sigFFTPos = 2 * sigFFT[0:firstNegInd]
-
-    return sigFFTPos, freqAxisPos
-
-
-def thd(abs_data):
-    sq_sum = 0.0
-    for r in range(len(abs_data)):
-        sq_sum = sq_sum + (abs_data[r]) ** 2
-
-    sq_harmonics = sq_sum - ((abs_data[1])) ** 2.0
-    thd = 100 * sq_harmonics ** 0.5 / abs_data[1]
-
-    return thd
-
-
 def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, deg_m):
 
     folder_path = 'temp_cog'
@@ -120,22 +86,18 @@ def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, deg_m):
             break
 
     if feasibility == 1:
-        with Pool(16) as p:
+        with Pool(8) as p:
             res = p.map(execute_model, list(range(0, resol)))
         if None in res:
             cogging_pp = 1000
-            res_thd = 1000
 
         else:
             cogging_pp = np.round(np.max(list(res)) - np.min(list(res)), 2)
 
-            y = np.round(np.abs(fftPlot(np.array(res), 1 / (3 * 120))[0]), 3)
-            y[0] = 0
-            res_thd = np.round(thd(y), 2)
     else:
         cogging_pp = 1000
-        res_thd = 1000
 
-    print('COG: ' + f'{cogging_pp}' + ', THD: ' + f'{res_thd}' + '\n-----------------------------------------------')
 
-    return cogging_pp, res_thd, res
+    print('COG: ' + f'{cogging_pp}' + '\n-----------------------------------------------')
+
+    return cogging_pp
