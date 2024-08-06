@@ -16,7 +16,7 @@ from src.executor import Executor
 
 def execute_model(counter):
 
-    time.sleep(0.1)
+    # time.sleep(0.1)
 
     femm = Executor()
     current_file_path = os.path.abspath(__file__)
@@ -28,7 +28,7 @@ def execute_model(counter):
     logging.basicConfig(level=logging.ERROR, format='%(asctime)s - %(levelname)s - %(message)s')
 
     try:
-        time.sleep(0.1)
+        # time.sleep(0.1)
 
         current_file_path = os.path.abspath(__file__)
         folder_path = os.path.dirname(current_file_path)
@@ -61,8 +61,8 @@ def torque_avg_rip(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, deg_m):
         torque_ripple = 1000
 
     else:
-        resol = 16
-        e = 15
+        resol = 31
+        e = 30
         for counter, ia, alpha in zip(range(0, resol), np.linspace(0, e, resol), np.linspace(0, 4 * e, resol)):
             JUp = J0 * math.cos(math.radians(initial + alpha))
             JUn = -JUp
