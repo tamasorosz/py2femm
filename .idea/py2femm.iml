@@ -19,7 +19,7 @@
       <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_4/temp_avg_rip" />
       <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_4/temp_cog" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.10 (projects)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.10 (py2femm)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>

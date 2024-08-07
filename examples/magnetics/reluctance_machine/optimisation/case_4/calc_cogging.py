@@ -50,7 +50,7 @@ def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, deg_m):
 
     os.makedirs(folder_path)
 
-    resol = 61
+    resol = 31
     e = 30
     feasibility = 1
     for counter, ia in zip(range(0, resol), np.linspace(0, e, resol)):
@@ -86,7 +86,7 @@ def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, deg_m):
             break
 
     if feasibility == 1:
-        with Pool(24) as p:
+        with Pool(16) as p:
             res = p.map(execute_model, list(range(0, resol)))
         if None in res:
             cogging_pp = 1000

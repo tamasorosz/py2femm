@@ -16,7 +16,7 @@ from src.executor import Executor
 
 def execute_model(counter):
 
-    # time.sleep(0.1)
+    time.sleep(0.1)
 
     femm = Executor()
     current_file_path = os.path.abspath(__file__)
@@ -28,7 +28,7 @@ def execute_model(counter):
     logging.basicConfig(level=logging.ERROR, format='%(asctime)s - %(levelname)s - %(message)s')
 
     try:
-        # time.sleep(0.1)
+        time.sleep(0.1)
 
         current_file_path = os.path.abspath(__file__)
         folder_path = os.path.dirname(current_file_path)
