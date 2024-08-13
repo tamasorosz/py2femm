@@ -1,6 +1,5 @@
 import math
 import os
-from dataclasses import dataclass
 
 from src.executor import Executor
 from src.femm_problem import FemmProblem
@@ -48,7 +47,6 @@ class VariableParameters:
 
 
 def stator_geometry(femm_problem: FemmProblem):
-    # stator geometry imported from a .dxf file with airgap sliding band: https://www.femm.info/wiki/SlidingBand
     stator_geo = Geometry()
 
     stator_geo.import_dxf("resources/stator.dxf")
@@ -86,12 +84,6 @@ def rotor_geometry(femm_problem: FemmProblem, var: VariableParameters):
 
     rotor_geo.add_sector(co_arcr)
     rotor_geo.add_sector(co_arcl)
-
-    # rot_arc_l = CircleArc(co_e, n0, co_l)
-    # rot_arc_r = CircleArc(co_r, n0, co_s)
-    #
-    # rotor_geo.add_arc(rot_arc_l)
-    # rotor_geo.add_arc(rot_arc_r)
 
     # define sliding band nodes, lines and arc
     sb_l = Node(0.00, 22.10)
@@ -131,8 +123,6 @@ def rotor_geometry(femm_problem: FemmProblem, var: VariableParameters):
     co_arc_ep = co_arc.selection_point()  # Cut-off barrier arc point at 45 deg.
     co_arc_cp = co_arc.center_point()  # Cut-off barrier arc center point.
 
-    # rotor_geo.add_node(co_arc_ep)
-
     d_ep_cp = co_arc_ep.distance_to(co_arc_cp)
     d_n0_ep = co_arc_ep.distance_to(n0)
     d_n0_cp = co_arc_cp.distance_to(n0)
@@ -147,7 +137,6 @@ def rotor_geometry(femm_problem: FemmProblem, var: VariableParameters):
     ib_1l_r = ib_1l.rotate_about(n0, -45, True)
     ib_1r_l = ib_1r.rotate_about(n0, 45, True)
 
-    # rotor_geo.add_node(ib_base1)
     rotor_geo.add_node(ib_1l)
     rotor_geo.add_node(ib_1r)
     rotor_geo.add_node(ib_1r_l)
@@ -247,24 +236,12 @@ def rotor_geometry(femm_problem: FemmProblem, var: VariableParameters):
     ib_mp3 = Line(iblu_arc.selection_point(), iblo_arc.selection_point()).selection_point()
     ib_mp4 = Line(ibru_arc_l.selection_point(), ibro_arc_l.selection_point()).selection_point()
 
-    # rotor_geo.add_node(ib_mp1)
-    # rotor_geo.add_node(ib_mp2)
-    # rotor_geo.add_node(ib_mp3)
-    # rotor_geo.add_node(ib_mp4)
-
     rot_bound1_l = encl_l.selection_point()
     rot_bound1_r = encl_r.selection_point()
     rot_bound2_l = sbl_l.selection_point()
     rot_bound2_r = sbl_r.selection_point()
     rot_bound_arc1 = enc_arc_0.selection_point()
     rot_bound_arc2 = sb_arc.selection_point()
-
-    # rotor_geo.add_node(rot_bound1_l)
-    # rotor_geo.add_node(rot_bound1_r)
-    # rotor_geo.add_node(rot_bound2_l)
-    # rotor_geo.add_node(rot_bound2_r)
-    # rotor_geo.add_node(rot_bound_arc1)
-    # rotor_geo.add_node(rot_bound_arc2)
 
     # LEFT ROTOR MAGNET POCKET-----------------------------------------------------------------------------------------
     nmpbase_lo = Node(22, 0).rotate_about(n0, 67.5, True)
@@ -387,7 +364,7 @@ def rotor_geometry(femm_problem: FemmProblem, var: VariableParameters):
     femm_problem.create_geometry(rotor_geo)
 
     return ib_mp1, ib_mp2, ib_mp3, ib_mp4, rot_bound1_l, rot_bound1_r, rot_bound2_l, rot_bound2_r, rot_bound_arc1, \
-           rot_bound_arc2, lab_mag_l, lab_mag_r
+        rot_bound_arc2, lab_mag_l, lab_mag_r
 
 
 def add_boundaries(femm_problem: FemmProblem, var: VariableParameters, rot: rotor_geometry):

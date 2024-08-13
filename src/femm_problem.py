@@ -139,7 +139,7 @@ class FemmProblem:
         cmd = Template("${field}_addsegment($x1_coord, $y1_coord, $x2_coord, $y2_coord)")
         cmd = cmd.substitute(field=self.field.input_to_string(), x1_coord=start_pt.x, y1_coord=start_pt.y,
                              x2_coord=end_pt.x, y2_coord=end_pt.y)
-        self.lua_script.append(cmd)
+        # self.lua_script.append(cmd)  # Duplicates input
         return cmd
 
     def add_blocklabel(self, label: Node):
@@ -157,7 +157,7 @@ class FemmProblem:
         cmd = Template("${field}_addarc($x_1, $y_1, $x_2, $y_2, $angle, $maxseg)")
         cmd = cmd.substitute(field=self.field.input_to_string(), x_1=start_pt.x, y_1=start_pt.y, x_2=end_pt.x,
                              y_2=end_pt.y, angle=angle, maxseg=maxseg)
-        self.lua_script.append(cmd)
+        # self.lua_script.append(cmd)
 
         return cmd
 

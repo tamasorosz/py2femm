@@ -1,44 +1,48 @@
 import csv
-import logging
+import math
 import os
+import pathlib
 import shutil
-import time
 
 import numpy as np
 import machine_model_synrm as model
 
 from multiprocessing import Pool
-
 from src.executor import Executor
 
 
 def execute_model(counter):
-
-    time.sleep(0.15)
-
-    femm = Executor()
-    current_file_path = os.path.abspath(__file__)
-    folder_path = os.path.dirname(current_file_path)
-
-    lua_file = os.path.join(folder_path, f'temp_cog/cog{counter}.lua')
-    femm.run(lua_file)
-
-    logging.basicConfig(level=logging.ERROR, format='%(asctime)s - %(levelname)s - %(message)s')
-
     try:
-        time.sleep(0.15)
-
+        femm = Executor()
         current_file_path = os.path.abspath(__file__)
         folder_path = os.path.dirname(current_file_path)
+
+        lua_file = os.path.join(folder_path, f'temp_cog/cog{counter}.lua')
+        femm.run(lua_file)
 
         with open(os.path.join(folder_path, f'temp_cog/cog{counter}.csv'), 'r') as file:
             csvfile = [i for i in csv.reader(file)]
             number = csvfile[0][0].replace('wTorque_0 = ', '')
             torque = float(number) * 4 * -1000
 
-    except (csv.Error, IndexError) as e:
-        logging.error(f'Error at cog{counter}: {e}')
-        torque = None
+        try:
+            del_fem = pathlib.Path(os.path.join(folder_path, f'temp_cog/cog{counter}.fem'))
+            del_ans = pathlib.Path(os.path.join(folder_path, f'temp_cog/cog{counter}.ans'))
+            del_lua = pathlib.Path(os.path.join(folder_path, f'temp_cog/cog{counter}.lua'))
+            del_csv = pathlib.Path(os.path.join(folder_path, f'temp_cog/cog{counter}.csv'))
+
+            del_lua.unlink()
+            del_fem.unlink()
+            del_ans.unlink()
+            del_csv.unlink()
+
+        except PermissionError:
+            print(f'PermissionError at cog{counter}')
+            pass
+
+    except(IndexError):
+        print(f'IndexError at cog{counter}')
+        torque = 0.0
 
     return torque
 
@@ -77,34 +81,24 @@ def thd(abs_data):
 
 
 def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_mp):
+    if os.path.exists('temp_cog'):
+        pass
+    else:
+        os.makedirs('temp_cog')
 
-    folder_path = 'temp_cog'
-
-    if os.path.exists(folder_path):
-        shutil.rmtree(folder_path)
-
-    os.makedirs(folder_path)
-
-    resol = 31
+    resol = 16
     e = 15
-    feasibility = 1
-    for counter, ia in zip(range(0, resol), np.linspace(0, e, resol)):
-        JUp = J0
-        JUn = -JUp
-        JVp = J0
-        JVn = -JVp
-        JWp = J0
-        JWn = -JWp
 
+    for counter, ia in zip(range(0, resol), np.linspace(0, e, resol)):
         variables = model.VariableParameters(fold='cog',
                                              out='cog',
                                              counter=counter,
-                                             JAp=JUp,
-                                             JAn=JUn,
-                                             JBp=JVp,
-                                             JBn=JVn,
-                                             JCp=JWp,
-                                             JCn=JWn,
+                                             JAp=J0 * math.cos(math.radians(0)),
+                                             JAn=-J0 * math.cos(math.radians(0)),
+                                             JBp=J0 * math.cos(math.radians(0 + 120)),
+                                             JBn=-J0 * math.cos(math.radians(0 + 120)),
+                                             JCp=J0 * math.cos(math.radians(0 + 240)),
+                                             JCn=-J0 * math.cos(math.radians(0 + 240)),
                                              ang_co=ang_co,
                                              deg_co=deg_co * 10,
                                              bd=bd,
@@ -116,28 +110,26 @@ def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_m
                                              ang_m=ang_m,
                                              ang_mp=ang_mp,
                                              deg_m=deg_m,
-                                             deg_mp=deg_mp
-                                             )
-        feasibility = model.problem_definition(variables)
-        if feasibility == 0:
-            break
+                                             deg_mp=deg_mp)
 
-    if feasibility == 1:
-        with Pool(8) as p:
-            res = p.map(execute_model, list(range(0, resol)))
-        if None in res:
-            cogging_pp = 1000
-            res_thd = 1000
+        model.problem_definition(variables)
 
-        else:
-            cogging_pp = np.round(np.max(list(res)) - np.min(list(res)), 2)
+    with Pool(16) as p:
+        res = list(p.map(execute_model, list(range(0, resol))))
 
-            y = np.round(np.abs(fftPlot(np.array(res), 1 / (3 * 120))[0]), 3)
-            y[0] = 0
-            res_thd = np.round(thd(y), 2)
-    else:
+    if None in res:
         cogging_pp = 1000
         res_thd = 1000
+
+    else:
+        cogging_pp = np.round(np.max(list(res)) - np.min(list(res)), 2)
+
+        y = np.round(np.abs(fftPlot(np.array(res), 1 / (3 * 120))[0]), 3)
+        y[0] = 0
+        res_thd = np.round(thd(y), 2)
+
+        res = []  # To make sure that there is no memory leak
+        y = []  # To make sure that there is no memory leak
 
     print('COG: ' + f'{cogging_pp}' + ', THD: ' + f'{res_thd}' + '\n-----------------------------------------------')
 
