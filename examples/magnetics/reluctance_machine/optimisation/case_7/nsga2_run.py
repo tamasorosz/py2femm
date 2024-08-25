@@ -37,7 +37,7 @@ if __name__ == '__main__':
 
             gc.collect()
 
-            out['F'] = [f1[0], f1[1], f2[0], f2[1]]
+            out['F'] = [f1[0], f1[1], f1[2], f2]
 
     class MyRepair(Repair):
         problem = MyProblem()
@@ -97,7 +97,7 @@ if __name__ == '__main__':
         cvtol=1e-6,
         ftol=0.0025,
         period=5,
-        n_max_gen=250,
+        n_max_gen=350,
         n_max_evals=100000
     )
 
@@ -115,7 +115,7 @@ if __name__ == '__main__':
 
     df = pd.DataFrame({'X1': X[:, 0], 'X2': [i*10 for i in X[:, 1]], 'X3': X[:, 2], 'X4': X[:, 3],
                        'X5': [i*0.5 for i in X[:, 4]], 'X6:': X[:, 5], 'X7:': X[:, 6], 'X8:': X[:, 7], 'X9:': X[:, 8],
-                       'AVG': F[:, 0], 'RIP': F[:, 1], 'COG': F[:, 2], 'THD': F[:, 3]})
+                       'ANG': F[:, 2],'AVG': F[:, 0], 'RIP': F[:, 1], 'COG': F[:, 3]})
 
     current_file_path = os.path.abspath(__file__)
     folder_path = os.path.dirname(current_file_path)
@@ -125,7 +125,7 @@ if __name__ == '__main__':
     else:
         os.makedirs('results')
 
-    file_path = os.path.join(folder_path, f'results/nsga2_case7_p50o50g100_obj9_test.csv')
+    file_path = os.path.join(folder_path, f'results/nsga2_case7_p50o50g150_obj9_20240819.csv')
     df.to_csv(file_path, encoding='utf-8', index=False)
 
     folder_path = ['temp_ang', 'temp_avg_rip', 'temp_cog']

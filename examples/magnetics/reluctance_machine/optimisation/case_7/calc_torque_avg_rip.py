@@ -96,6 +96,9 @@ def torque_avg_rip(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m
 
     res = []  # To make sure that there is no memory leak
 
+    torque_angle = -1 * initial
+
+
     print('ANG: ' + f'{initial}' + ', AVG: ' + f'{torque_avg}' + ', RIP: ' + f'{torque_ripple}')
 
-    return torque_avg, torque_ripple
+    return torque_avg, torque_ripple, torque_angle

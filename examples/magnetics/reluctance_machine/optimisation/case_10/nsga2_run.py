@@ -111,3 +111,9 @@ if __name__ == '__main__':
 
     file_path = os.path.join(folder_path, f'results/nsga2_case10_p50o50g100_obj7_20240823.csv')
     df.to_csv(file_path, encoding='utf-8', index=False)
+
+    folder_path = ['temp_ang', 'temp_avg_rip', 'temp_cog']
+
+    for i in folder_path:
+        if os.path.exists(i):
+            shutil.rmtree(i)
