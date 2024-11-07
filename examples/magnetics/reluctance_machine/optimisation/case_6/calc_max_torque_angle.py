@@ -15,7 +15,7 @@ from src.executor import Executor
 
 def execute_model(counter):
 
-    time.sleep(0.1)
+    # time.sleep(0.15)
 
     femm = Executor()
     current_file_path = os.path.abspath(__file__)
@@ -27,7 +27,7 @@ def execute_model(counter):
     logging.basicConfig(level=logging.ERROR, format='%(asctime)s - %(levelname)s - %(message)s')
 
     try:
-        # time.sleep(0.1)
+        # time.sleep(0.15)
 
         current_file_path = os.path.abspath(__file__)
         folder_path = os.path.dirname(current_file_path)
@@ -44,7 +44,7 @@ def execute_model(counter):
     return torque
 
 
-def max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, deg_m):
+def max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_mp):
 
     folder_path = 'temp_ang'
 
@@ -53,9 +53,9 @@ def max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, deg_m):
 
     os.makedirs(folder_path)
 
-    resol = 8
-    a = 42
-    b = 49
+    resol = 16
+    a = 37
+    b = 52
     feasibility = 1
     for counter, alpha in zip(range(0, resol), np.linspace(a, b, resol)):
         JUp = J0 * math.cos(math.radians(alpha))
@@ -83,14 +83,16 @@ def max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, deg_m):
                                              ia=0,
                                              mh=mh,
                                              ang_m=ang_m,
+                                             ang_mp=ang_mp,
                                              deg_m=deg_m,
+                                             deg_mp=deg_mp
                                              )
         feasibility = model.problem_definition(variables)
         if feasibility == 0:
             break
 
     if feasibility == 1:
-        with Pool(8) as p:
+        with Pool(16) as p:
             res = p.map(execute_model, list(range(0, resol)))
 
         res = list(res)
