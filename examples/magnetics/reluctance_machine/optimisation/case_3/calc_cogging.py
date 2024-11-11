@@ -124,18 +124,13 @@ def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, deg_m):
             res = p.map(execute_model, list(range(0, resol)))
         if None in res:
             cogging_pp = 1000
-            res_thd = 1000
 
         else:
             cogging_pp = np.round(np.max(list(res)) - np.min(list(res)), 2)
 
-            y = np.round(np.abs(fftPlot(np.array(res), 1 / (3 * 120))[0]), 3)
-            y[0] = 0
-            res_thd = np.round(thd(y), 2)
     else:
         cogging_pp = 1000
-        res_thd = 1000
 
-    print('COG: ' + f'{cogging_pp}' + ', THD: ' + f'{res_thd}' + '\n-----------------------------------------------')
+    print('COG: ' + f'{cogging_pp}' + '\n-----------------------------------------------')
 
-    return cogging_pp, res_thd
+    return cogging_pp
