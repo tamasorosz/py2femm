@@ -56,3 +56,5 @@ for i in range(len(df)):
         x[8] = 2 * (43 - x[7] - x[0])
 
     df1.iloc[i] = x
+
+print(df.head(5))
