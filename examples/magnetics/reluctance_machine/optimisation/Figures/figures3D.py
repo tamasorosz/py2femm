@@ -9,8 +9,8 @@ colors = ["#B90276", '#50237F', '#005691', "#008ECF", '#00A8B0', '#78BE20', "#00
 # Load data
 df1 = pd.read_csv('nsga2_case3_p50o50g100_obj7_20240807.csv')
 df2 = pd.read_csv('nsga2_case4_p50o50g100_obj7_20240806.csv')
-df3 = pd.read_csv('nsga2_case6_p50o50g100_obj9_20240811.csv')
-df4 = pd.read_csv('nsga2_case7_p50o50g150_obj9_20240818.csv')
+df4 = pd.read_csv('nsga2_case6_p50o50g100_obj9_20240811.csv')
+df3 = pd.read_csv('nsga2_case7_p50o50g150_obj9_20240818.csv')
 
 # Adjust data
 for d in [df1, df2, df3, df4]:
@@ -53,82 +53,82 @@ plt.savefig('obj_3d.png', format='png', dpi=300)
 plt.show()
 
 # -----------------------------------------------------------------------------------------------------
-# import pandas as pd
-# from matplotlib import pyplot as plt
-#
-# # Define color palette
-# colors = ["#B90276", '#50237F', '#005691', "#008ECF", '#00A8B0', '#78BE20', "#006249", '#525F6B', '#000']
-#
-# # Load data
-# df1 = pd.read_csv('nsga2_case3_p50o50g100_obj7_20240807.csv')
-# df2 = pd.read_csv('nsga2_case4_p50o50g100_obj7_20240806.csv')
-# df3 = pd.read_csv('nsga2_case6_p50o50g100_obj9_20240811.csv')
-# df4 = pd.read_csv('nsga2_case7_p50o50g150_obj9_20240818.csv')
-#
-# # Adjust data
-# for d in [df1, df2, df3, df4]:
-#     d['AVG'] *= -0.001  # Convert torque values to positive
-#
-# df3 = df3[df3["X6"] != df4["X7"]].copy()
-# df4 = df4[df4["X6"] != df4["X7"]].copy()
-#
-# # Prepare datasets
-# datasets = [
-#     (df1, colors[5], 'Case A1'),
-#     (df2, colors[3], 'Case A2'),
-#     (df3, colors[1], 'Case B1'),
-#     (df4, colors[0], 'Case B2')
-# ]
-#
-# ft = 16  # Font size for labels and ticks
-#
-# # XY Projection
-# plt.figure(figsize=(8, 6))
-# for data, color, label in datasets:
-#     plt.scatter(data['AVG'], data['RIP'], color=color, label=label, alpha=0.8)
-#
-# plt.scatter(star_point[0], star_point[1], c=colors[-1], marker='*', s=500, label='Optimum')
-#
-# plt.xlabel("Average Torque [Nm]", fontsize=ft)
-# plt.ylabel("Torque Ripple [%]", fontsize=ft)
-# plt.xticks(fontsize=ft)
-# plt.yticks(fontsize=ft)
-# plt.legend(loc='best', fontsize=ft)
-# plt.grid(color='#dcdcdc', linestyle='--', linewidth=0.5)
-# plt.tight_layout()
-# plt.savefig('obj_avg_rip.png', format='png', dpi=300)
-# plt.show()
-#
-# # XZ Projection
-# plt.figure(figsize=(8, 6))
-# for data, color, label in datasets:
-#     plt.scatter(data['AVG'], data['COG'], color=color, label=label, alpha=0.8)
-#
-# plt.scatter(star_point[0], star_point[2], c=colors[-1], marker='*', s=500, label='Optimum')
-#
-# plt.xlabel("Average Torque [Nm]", fontsize=ft)
-# plt.ylabel("Cogging Torque [mNm]", fontsize=ft)
-# plt.xticks(fontsize=ft)
-# plt.yticks(fontsize=ft)
-# plt.legend(loc='best', fontsize=ft)
-# plt.grid(color='#dcdcdc', linestyle='--', linewidth=0.5)
-# plt.tight_layout()
-# plt.savefig('obj_avg_cog.png', format='png', dpi=300)
-# plt.show()
-#
-# # YZ Projection
-# plt.figure(figsize=(8, 6))
-# for data, color, label in datasets:
-#     plt.scatter(data['RIP'], data['COG'], color=color, label=label, alpha=0.8)
-#
-# plt.scatter(star_point[1], star_point[2], c=colors[-1], marker='*', s=500, label='Optimum')
-#
-# plt.xlabel("Torque Ripple [%]", fontsize=ft)
-# plt.ylabel("Cogging Torque [mNm]", fontsize=ft)
-# plt.xticks(fontsize=ft)
-# plt.yticks(fontsize=ft)
-# plt.legend(loc='best', fontsize=ft)
-# plt.grid(color='#dcdcdc', linestyle='--', linewidth=0.5)
-# plt.tight_layout()
-# plt.savefig('obj_rip_cog.png', format='png', dpi=300)
-# plt.show()
+import pandas as pd
+from matplotlib import pyplot as plt
+
+# Define color palette
+colors = ["#B90276", '#50237F', '#005691', "#008ECF", '#00A8B0', '#78BE20', "#006249", '#525F6B', '#000']
+
+# Load data
+df1 = pd.read_csv('nsga2_case3_p50o50g100_obj7_20240807.csv')
+df2 = pd.read_csv('nsga2_case4_p50o50g100_obj7_20240806.csv')
+df4 = pd.read_csv('nsga2_case6_p50o50g100_obj9_20240811.csv')
+df3 = pd.read_csv('nsga2_case7_p50o50g150_obj9_20240818.csv')
+
+# Adjust data
+for d in [df1, df2, df3, df4]:
+    d['AVG'] *= -0.001  # Convert torque values to positive
+
+df3 = df3[df3["X6"] != df4["X7"]].copy()
+df4 = df4[df4["X6"] != df4["X7"]].copy()
+
+# Prepare datasets
+datasets = [
+    (df1, colors[5], 'Case A1'),
+    (df2, colors[3], 'Case A2'),
+    (df3, colors[1], 'Case B1'),
+    (df4, colors[0], 'Case B2')
+]
+
+ft = 16  # Font size for labels and ticks
+
+# XY Projection
+plt.figure(figsize=(8, 6))
+for data, color, label in datasets:
+    plt.scatter(data['AVG'], data['RIP'], color=color, label=label, alpha=0.8)
+
+plt.scatter(star_point[0], star_point[1], c=colors[-1], marker='*', s=500, label='Optimum')
+
+plt.xlabel("Average Torque [Nm]", fontsize=ft)
+plt.ylabel("Torque Ripple [%]", fontsize=ft)
+plt.xticks(fontsize=ft)
+plt.yticks(fontsize=ft)
+plt.legend(loc='best', fontsize=ft)
+plt.grid(color='#dcdcdc', linestyle='--', linewidth=0.5)
+plt.tight_layout()
+plt.savefig('obj_avg_rip.png', format='png', dpi=300)
+plt.show()
+
+# XZ Projection
+plt.figure(figsize=(8, 6))
+for data, color, label in datasets:
+    plt.scatter(data['AVG'], data['COG'], color=color, label=label, alpha=0.8)
+
+plt.scatter(star_point[0], star_point[2], c=colors[-1], marker='*', s=500, label='Optimum')
+
+plt.xlabel("Average Torque [Nm]", fontsize=ft)
+plt.ylabel("Cogging Torque [mNm]", fontsize=ft)
+plt.xticks(fontsize=ft)
+plt.yticks(fontsize=ft)
+plt.legend(loc='best', fontsize=ft)
+plt.grid(color='#dcdcdc', linestyle='--', linewidth=0.5)
+plt.tight_layout()
+plt.savefig('obj_avg_cog.png', format='png', dpi=300)
+plt.show()
+
+# YZ Projection
+plt.figure(figsize=(8, 6))
+for data, color, label in datasets:
+    plt.scatter(data['RIP'], data['COG'], color=color, label=label, alpha=0.8)
+
+plt.scatter(star_point[1], star_point[2], c=colors[-1], marker='*', s=500, label='Optimum')
+
+plt.xlabel("Torque Ripple [%]", fontsize=ft)
+plt.ylabel("Cogging Torque [mNm]", fontsize=ft)
+plt.xticks(fontsize=ft)
+plt.yticks(fontsize=ft)
+plt.legend(loc='best', fontsize=ft)
+plt.grid(color='#dcdcdc', linestyle='--', linewidth=0.5)
+plt.tight_layout()
+plt.savefig('obj_rip_cog.png', format='png', dpi=300)
+plt.show()

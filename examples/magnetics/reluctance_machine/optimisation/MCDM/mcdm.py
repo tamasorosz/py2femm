@@ -12,10 +12,10 @@ from pymcdm import visuals
 
 df1 = pd.read_csv('nsga2_case3_p50o50g100_obj7_20240807.csv')
 df2 = pd.read_csv('nsga2_case4_p50o50g100_obj7_20240806.csv')
-df3 = pd.read_csv('nsga2_case6_p50o50g100_obj9_20240811.csv')
-df4 = pd.read_csv('nsga2_case7_p50o50g150_obj9_20240818.csv')
+df4 = pd.read_csv('nsga2_case6_p50o50g100_obj9_20240811.csv')
+df3 = pd.read_csv('nsga2_case7_p50o50g150_obj9_20240818.csv')
 
-for d in [df1, df2, df3, df4]:
+for d in [df1, df2, df4, df3]:
     d['AVG'] *= -1  # Convert torque values to positive
 
 del df1['THD']
@@ -27,7 +27,7 @@ df2.insert(7, 'X8', 'NaN')
 df2.insert(8, 'X9', 'NaN')
 df2['CAS'] = [f'A2_{i}' for i in range(1, len(df2)+1)]
 
-df3 = df3[df3["X6"] != df4["X7"]].copy()
+df3 = df3[df3["X6"] != df3["X7"]].copy()
 df3['CAS'] = [f'B1_{i}' for i in range(1, len(df3)+1)]
 
 df4 = df4[df4["X6"] != df4["X7"]].copy()
