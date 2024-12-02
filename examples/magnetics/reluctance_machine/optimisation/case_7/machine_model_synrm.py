@@ -535,6 +535,9 @@ def add_materials(femm_problem: FemmProblem, var: VariableParameters, rot: rotor
     femm_problem.define_block_label(rot[10], ferrite_left)
     femm_problem.define_block_label(rot[11], ferrite_right)
 
+    # femm_problem.define_block_label(rot[10], air)
+    # femm_problem.define_block_label(rot[11], air)
+
 
 def problem_definition(var: VariableParameters):
     problem = FemmProblem(out_file=os.path.join(folder_path, f'temp_{var.fold}/{var.out}{var.counter}.csv'))
