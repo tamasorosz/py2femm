@@ -4,11 +4,14 @@ import numpy as np
 import pandas as pd
 import taguchi01_def
 
-file_path = os.getcwd() + '/robust/' + 'taguchi_res_raw.csv'
+file_path = os.getcwd() + '/taguchi_res_raw.csv'
 
 df = pd.read_csv(file_path)
+del df['X5']
+del df['X6']
 otg = taguchi01_def.data
-
+del otg['X5']
+del otg['X6']
 decimal = 3  # rounding
 
 SSB_all = []
@@ -40,5 +43,5 @@ df_res.loc['SUM'] = df_res.sum()
 print(df_res)
 
 current_dir = os.getcwd()
-file_path = current_dir + '/robust/' + f'taguchi_res_all.csv'
+file_path = current_dir + f'/taguchi_res_all.csv'
 df_res.to_csv(file_path, encoding='utf-8', index=False)

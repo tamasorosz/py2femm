@@ -120,8 +120,8 @@ plt.legend(handles=custom_legend, loc='best', fontsize=ft)
 plt.grid(color='#dcdcdc', linestyle='--', linewidth=0.5)
 ax.set_xlim(0, 10)
 ax.set_ylim(0, 10)
-ax.set_xticks(np.arange(0, 11, 1))  # X-axis ticks from 0 to 10
-ax.set_yticks(np.arange(0, 11, 1))  # Y-axis ticks from 0 to 10
+ax.set_xticks(np.arange(0, 10, 1))  # X-axis ticks from 0 to 10
+ax.set_yticks(np.arange(0, 10, 1))  # Y-axis ticks from 0 to 10
 
 offsetx = -0.5
 offsety = -0.75
@@ -135,10 +135,10 @@ fig, ax = plt.subplots(figsize=(5, 4), dpi=150, tight_layout=True)
 
 x_values = np.linspace(1, 179, 180)  # Create x values
 y_values = x_values  # y = x line
-ax.plot(x_values, y_values, color='black', linestyle='--', label='y = x', zorder=1)  # Plot y = x line
+ax.plot(x_values, y_values, color='black', linestyle='--', label='y = x', zorder=2)  # Plot y = x line
 
 for i in range(len(ranks[0])):
-    ax.scatter(ranks[0][i], ranks[1][i], c=ranks[2][i], zorder=2)
+    ax.scatter(ranks[0][i], ranks[1][i], c=ranks[2][i], zorder=3)
 plt.xlabel("TOPSIS", fontsize=ft)
 plt.ylabel("SPOTIS", fontsize=ft)
 plt.xticks(fontsize=ft)
@@ -150,7 +150,7 @@ custom_legend = [
     Line2D([0], [0], marker='o', color='w', markerfacecolor=colors[1], markersize=10, label='Case B1'),  # Dot for Case B1
     Line2D([0], [0], marker='o', color='w', markerfacecolor=colors[0], markersize=10, label='Case B2'),  # Dot for Case B2
 ]
-
+ax.scatter(1, 4, c=colors[-1], marker='*', s=300, label='Optimum', zorder=1)
 # Add the legend to the plot
 plt.legend(handles=custom_legend, loc='best', fontsize=ft)
 plt.grid(color='#dcdcdc', linestyle='--', linewidth=0.5)

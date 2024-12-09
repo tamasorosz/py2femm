@@ -80,14 +80,16 @@ datasets = [
     (df4, colors[0], 'Case B2')
 ]
 
-ft = 16  # Font size for labels and ticks
+ft = 12  # Font size for labels and ticks
+ss1 = 50
+ss = 300
 
 # XY Projection
-plt.figure(figsize=(8, 6))
+plt.figure(figsize=(5, 4))
 for data, color, label in datasets:
-    plt.scatter(data['AVG'], data['RIP'], color=color, label=label, alpha=0.8)
+    plt.scatter(data['AVG'], data['RIP'], color=color, label=label, alpha=0.8, s=ss1)
 
-plt.scatter(star_point[0], star_point[1], c=colors[-1], marker='*', s=500, label='Optimum')
+plt.scatter(star_point[0], star_point[1], c=colors[-1], marker='*', s=ss, label='Optimum')
 
 plt.xlabel("Average Torque [Nm]", fontsize=ft)
 plt.ylabel("Torque Ripple [%]", fontsize=ft)
@@ -100,11 +102,11 @@ plt.savefig('obj_avg_rip.png', format='png', dpi=300)
 plt.show()
 
 # XZ Projection
-plt.figure(figsize=(8, 6))
+plt.figure(figsize=(5, 4))
 for data, color, label in datasets:
-    plt.scatter(data['AVG'], data['COG'], color=color, label=label, alpha=0.8)
+    plt.scatter(data['AVG'], data['COG'], color=color, label=label, alpha=0.8, s=ss1)
 
-plt.scatter(star_point[0], star_point[2], c=colors[-1], marker='*', s=500, label='Optimum')
+plt.scatter(star_point[0], star_point[2], c=colors[-1], marker='*', s=ss, label='Optimum')
 
 plt.xlabel("Average Torque [Nm]", fontsize=ft)
 plt.ylabel("Cogging Torque [mNm]", fontsize=ft)
@@ -117,11 +119,11 @@ plt.savefig('obj_avg_cog.png', format='png', dpi=300)
 plt.show()
 
 # YZ Projection
-plt.figure(figsize=(8, 6))
+plt.figure(figsize=(5, 4))
 for data, color, label in datasets:
-    plt.scatter(data['RIP'], data['COG'], color=color, label=label, alpha=0.8)
+    plt.scatter(data['RIP'], data['COG'], color=color, label=label, alpha=0.8, s=ss1)
 
-plt.scatter(star_point[1], star_point[2], c=colors[-1], marker='*', s=500, label='Optimum')
+plt.scatter(star_point[1], star_point[2], c=colors[-1], marker='*', s=ss, label='Optimum')
 
 plt.xlabel("Torque Ripple [%]", fontsize=ft)
 plt.ylabel("Cogging Torque [mNm]", fontsize=ft)
