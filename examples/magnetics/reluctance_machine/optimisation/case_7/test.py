@@ -36,7 +36,7 @@ from examples.magnetics.reluctance_machine.optimisation.case_2 import calc_torqu
 if __name__ == "__main__":
     # xl = np.array([15, 9, 1, 1, 1, 10]),
     # xu = np.array([25, 14, 4, 4, 2, 15]),
-
+    22, 110, 1, 2, 0.5, 10, 10, 16, 16
     y = calc_max_torque_angle.max_torque_angle(30, 22, 11, 1, 0.5, 2, 1, 2, 10, 14, 6, 10)
 
     # x = [25, 15, 4, 4, 1, 15]

@@ -1,104 +1,112 @@
 import csv
+import logging
 import math
 import os
-import pathlib
 import shutil
+import time
 
 import numpy as np
 import machine_model_synrm as model
+import calc_max_torque_angle as maxang
 
 from multiprocessing import Pool
-from src.executor import Executor
 
-import calc_max_torque_angle
+from src.executor import Executor
 
 
 def execute_model(counter):
+
+    # time.sleep(0.15)
+
+    femm = Executor()
+    current_file_path = os.path.abspath(__file__)
+    folder_path = os.path.dirname(current_file_path)
+
+    lua_file = os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.lua')
+    femm.run(lua_file)
+
+    logging.basicConfig(level=logging.ERROR, format='%(asctime)s - %(levelname)s - %(message)s')
+
     try:
-        femm = Executor()
+        # time.sleep(0.15)
+
         current_file_path = os.path.abspath(__file__)
         folder_path = os.path.dirname(current_file_path)
-
-        lua_file = os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.lua')
-        femm.run(lua_file)
 
         with open(os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.csv'), 'r') as file:
             csvfile = [i for i in csv.reader(file)]
             number = csvfile[0][0].replace('wTorque_0 = ', '')
             torque = float(number) * 4 * -1000
 
-        try:
-            del_lua = pathlib.Path(os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.lua'))
-            del_fem = pathlib.Path(os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.fem'))
-            del_ans = pathlib.Path(os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.ans'))
-            del_csv = pathlib.Path(os.path.join(folder_path, f'temp_avg_rip/avg_rip{counter}.csv'))
-
-            del_lua.unlink()
-            del_fem.unlink()
-            del_ans.unlink()
-            del_csv.unlink()
-
-        except PermissionError:
-            print(f'PermissionError at avg_rip{counter}')
-            pass
-
-    except(IndexError):
-        print(f'IndexError at avg_rip{counter}')
-        torque = 0.0
+    except (csv.Error, IndexError) as e:
+        logging.error(f'Error at avg_rip{counter}: {e}')
+        torque = None
 
     return torque
 
 
 def torque_avg_rip(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_mp):
-    initial = calc_max_torque_angle.max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m,
-                                                     deg_mp)
-    if os.path.exists('temp_avg_rip'):
-        pass
-    else:
-        os.makedirs('temp_avg_rip')
 
-    resol = 16
-    e = 15
+    initial = maxang.max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_mp)
 
-    for counter, ia, alpha in zip(range(0, resol), np.linspace(0, e, resol), np.linspace(0, 4 * e, resol)):
-        variables = model.VariableParameters(fold='avg_rip',
-                                             out='avg_rip',
-                                             counter=counter,
-                                             JAp=J0 * math.cos(math.radians(initial + alpha)),
-                                             JAn=-J0 * math.cos(math.radians(initial + alpha)),
-                                             JBp=J0 * math.cos(math.radians(initial + alpha + 120)),
-                                             JBn=-J0 * math.cos(math.radians(initial + alpha + 120)),
-                                             JCp=J0 * math.cos(math.radians(initial + alpha + 240)),
-                                             JCn=-J0 * math.cos(math.radians(initial + alpha + 240)),
-                                             ang_co=ang_co,
-                                             deg_co=deg_co * 10,
-                                             bd=bd,
-                                             bw=bw,
-                                             bh=bh,
-                                             bg=bgp * 0.5 + mh,
-                                             ia=ia,
-                                             mh=mh,
-                                             ang_m=ang_m,
-                                             ang_mp=ang_mp,
-                                             deg_m=deg_m,
-                                             deg_mp=deg_mp)
-        model.problem_definition(variables)
+    folder_path = 'temp_avg_rip'
 
-    with Pool(16) as p:
-        res = list(p.map(execute_model, list(range(0, resol))))
+    if os.path.exists(folder_path):
+        shutil.rmtree(folder_path)
 
-    if None in res:
+    os.makedirs(folder_path)
+
+    if initial is None:
         torque_avg = 0
         torque_ripple = 1000
+
     else:
-        torque_avg = np.round(-1 * np.average(res), 2)
-        torque_ripple = np.round(-100 * (np.max(res) - np.min(res)) / torque_avg, 2)
+        resol = 31
+        e = 30
+        for counter, ia, alpha in zip(range(0, resol), np.linspace(0, e, resol), np.linspace(0, 4 * e, resol)):
+            JUp = J0 * math.cos(math.radians(initial + alpha))
+            JUn = -JUp
+            JVp = J0 * math.cos(math.radians(initial + alpha + 120))
+            JVn = -JVp
+            JWp = J0 * math.cos(math.radians(initial + alpha + 240))
+            JWn = -JWp
 
-    res = []  # To make sure that there is no memory leak
+            variables = model.VariableParameters(fold='avg_rip',
+                                                 out='avg_rip',
+                                                 counter=counter,
+                                                 JAp=JUp,
+                                                 JAn=JUn,
+                                                 JBp=JVp,
+                                                 JBn=JVn,
+                                                 JCp=JWp,
+                                                 JCn=JWn,
+                                                 ang_co=ang_co,
+                                                 deg_co=deg_co*10,
+                                                 bd=bd,
+                                                 bw=bw,
+                                                 bh=bh,
+                                                 bg=bgp*0.5 + mh,
+                                                 ia=ia,
+                                                 mh=mh,
+                                                 ang_m=ang_m,
+                                                 ang_mp=ang_mp,
+                                                 deg_m=deg_m,
+                                                 deg_mp=deg_mp
+                                                 )
+            model.problem_definition(variables)
 
-    torque_angle = -1 * initial
 
+
+        with Pool(16) as p:
+            res = p.map(execute_model, list(range(0, resol)))
+
+        if None in res:
+            torque_avg = 0
+            torque_ripple = 1000
+        else:
+            torque_avg = np.round(-1 * np.average(list(res)), 2)
+            torque_ripple = np.round(-100 * (np.max(list(res)) - np.min(list(res))) / torque_avg, 2)
 
     print('ANG: ' + f'{initial}' + ', AVG: ' + f'{torque_avg}' + ', RIP: ' + f'{torque_ripple}')
 
-    return torque_avg, torque_ripple, torque_angle
+    return torque_avg, torque_ripple
