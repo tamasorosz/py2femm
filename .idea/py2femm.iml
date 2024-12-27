@@ -30,8 +30,14 @@
       <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_6/temp_ang" />
       <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_6/temp_avg_rip" />
       <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_6/temp_cog" />
+      <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_7/robust/temp_ang" />
+      <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_7/robust/temp_avg_rip" />
+      <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_7/robust/temp_cog" />
+      <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_7/fullfact/temp_ang" />
+      <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_7/fullfact/temp_avg_rip" />
+      <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_7/fullfact/temp_cog" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.12 (py2femm)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.10 (py2femm)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>

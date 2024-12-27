@@ -8,31 +8,26 @@ from pymcdm.helpers import rankdata, rrankdata
 from pymcdm.methods.comet_tools import MethodExpert
 from pymcdm import visuals
 
-df_base = pd.read_csv('results/optimisation/nsga2_X7_p50o25g100_top10.csv')
+df_base = pd.read_csv('results/nsga2_case5_p50o50g100_obj7_20240806.csv')
 
-df_alts = df_base.iloc[:, -2:]
+df_alts = df_base.iloc[:, -3:]  # Specifies the average torque, the torque ripple and cogging torque in the .csv
 
-df_alts.iloc[:, 0] *= -1
+df_alts.iloc[:, 0] *= -1  # Makes average torque positive in .csv as it is negative in optimisation for minimalisation
 
 alts = df_alts.to_numpy()
 
-weights = w.entropy_weights(alts)
-types = np.array([1, -1])
-
-cvalues = COMET.make_cvalues(alts)
-
-expert_function = MethodExpert(TOPSIS(), weights, types)
+weights = w.entropy_weights(alts)  # Calculates the entropy weights
+print(weights)
+types = np.array([1, -1, -1])  # Specifies the purpose of the objective function as it is cost or profit
 
 bounds = SPOTIS.make_bounds(alts)
 
 methods = [
     TOPSIS(),
-    MABAC(),
-    COMET(cvalues, expert_function),
     SPOTIS(bounds)
 ]
 
-method_names = ['TOPSIS', 'MABAC', 'COMET', 'SPOTIS']
+method_names = ['TOPSIS', 'SPOTIS']
 
 prefs = []
 ranks = []
@@ -52,7 +47,7 @@ fig, ax = plt.subplots(dpi=150, tight_layout=True)
 visuals.ranking_flows(ranks, colors=colors, labels=method_names, ax=ax, better_grid=True)
 plt.ylabel('Position in the ranking [u.]', fontsize=14)
 ax.set_xticklabels(method_names, rotation=0, fontsize=14)
-ax.set_yticklabels(list(range(1, 10)), rotation=0, fontsize=14)
+# ax.set_yticklabels(list(range(1, 10)), rotation=0, fontsize=14)
 
-plt.savefig('D:\Respositories\py2femm\examples\magnetics/reluctance_machine\optimisation\case_2/figures/flow_ranking_span5', bbox_inches='tight')
+# plt.savefig('D:\Respositories\py2femm\examples\magnetics/reluctance_machine\optimisation\case_2/figures/flow_ranking_span5', bbox_inches='tight')
 plt.show()

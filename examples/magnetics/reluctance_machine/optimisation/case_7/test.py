@@ -31,14 +31,20 @@ import calc_max_torque_angle
 #                                                    mh=1.5
 #                                                    )
 #
-from examples.magnetics.reluctance_machine.optimisation.case_2 import calc_torque_avg_rip
+from examples.magnetics.reluctance_machine.optimisation.case_7 import calc_torque_avg_rip
+from examples.magnetics.reluctance_machine.optimisation.case_7 import calc_cogging
 #
 if __name__ == "__main__":
     # xl = np.array([15, 9, 1, 1, 1, 10]),
     # xu = np.array([25, 14, 4, 4, 2, 15]),
-    22, 110, 1, 2, 0.5, 10, 10, 16, 16
-    y = calc_max_torque_angle.max_torque_angle(30, 22, 11, 1, 0.5, 2, 1, 2, 10, 14, 6, 10)
 
+    # y = calc_torque_avg_rip.torque_avg_rip(30, 21, 14, 1, 0.5, 3, 1, 1.5, 10, 11, 16, 14)
+    # z = calc_cogging.cogging(0, 21, 14, 1, 0.5, 3, 1, 1.5, 10, 11, 16, 14)
+    # y = calc_torque_avg_rip.torque_avg_rip(30, 21, 14, 1, 0.5, 3, 1, 1.5, 9.85, 10.85, 15.85, 13.85)
+    z = calc_cogging.cogging(0, 21, 14, 1, 0.5, 3, 1, 1.5, 9.85, 10.85, 15.85, 13.85)
+
+    # print(y)
+    print(z)
     # x = [25, 15, 4, 4, 1, 15]
     # g = (math.tan(math.radians(x[0] / 2)) * (22 - (x[4] * 0.5 + 1.5)) + x[2] + x[3]) - 8
     # if g > 0:
