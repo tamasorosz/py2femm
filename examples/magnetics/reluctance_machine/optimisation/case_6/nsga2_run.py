@@ -21,28 +21,6 @@ import calc_torque_avg_rip
 import calc_cogging
 
 if __name__ == '__main__':
-    current_file_path = os.path.abspath(__file__)
-    folder_path = os.path.dirname(current_file_path)
-    file_path = os.path.join(folder_path, f'results/all_res_avg.csv')
-
-    # Delete the CSV file if it exists
-    if os.path.exists(file_path):
-        os.remove(file_path)
-        print(f"File {file_path} deleted.")
-    else:
-        print(f"File {file_path} does not exist.")
-
-    current_file_path = os.path.abspath(__file__)
-    folder_path = os.path.dirname(current_file_path)
-    file_path = os.path.join(folder_path, f'results/all_res_cog.csv')
-
-    # Delete the CSV file if it exists
-    if os.path.exists(file_path):
-        os.remove(file_path)
-        print(f"File {file_path} deleted.")
-    else:
-        print(f"File {file_path} does not exist.")
-
     class MyProblem(ElementwiseProblem):
         def __init__(self):
             super().__init__(n_var=9,
@@ -150,7 +128,7 @@ if __name__ == '__main__':
     else:
         os.makedirs('results')
 
-    file_path = os.path.join(folder_path, f'results/nsga2_case7_p50o50g300_obj9_20241227.csv')
+    file_path = os.path.join(folder_path, f'results/nsga2_case6_p50o50g300_obj9_20241227.csv')
     df.to_csv(file_path, encoding='utf-8', index=False)
 
     folder_path = ['temp_ang', 'temp_avg_rip', 'temp_cog']

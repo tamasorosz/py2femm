@@ -106,7 +106,7 @@ def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_m
 
     # Append the DataFrame to the CSV file
     with open(file_path, 'a', newline='') as f:
-        df.to_csv(f, header=not os.path.exists(file_path), index=False)
+        df.to_csv(f, header=not file_exists, index=False)
 
     # Count the number of rows in a separate operation
     with open(file_path, 'r') as f:

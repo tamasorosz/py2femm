@@ -30,10 +30,10 @@ def execute_model(counter):
             del_ans = pathlib.Path(os.path.join(folder_path, f'temp_ang/ang{counter}.ans'))
             del_csv = pathlib.Path(os.path.join(folder_path, f'temp_ang/ang{counter}.csv'))
 
-            # del_lua.unlink()
-            # del_fem.unlink()
-            # del_ans.unlink()
-            # del_csv.unlink()
+            del_lua.unlink()
+            del_fem.unlink()
+            del_ans.unlink()
+            del_csv.unlink()
 
         except PermissionError:
             print(f'PermissionError at ang{counter}')
@@ -52,9 +52,9 @@ def max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg
     else:
         os.makedirs('temp_ang')
 
-    resol = 24
-    a = 25
-    b = 48
+    resol = 16
+    a = 35
+    b = 50
 
     for counter, alpha in zip(range(0, resol), np.linspace(a, b, resol)):
         variables = model.VariableParameters(fold='ang',
@@ -80,11 +80,11 @@ def max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg
                                              deg_mp=deg_mp)
         model.problem_definition(variables)
 
-    with Pool(24) as p:
+    with Pool(16) as p:
         res = list(p.map(execute_model, list(range(0, resol))))
 
     torque_ang = a + res.index((max(res))) * ((b - a) / (resol - 1))
 
-    res = []  # To make sure that there is no memory leak
+    res.clear()
 
     return torque_ang
