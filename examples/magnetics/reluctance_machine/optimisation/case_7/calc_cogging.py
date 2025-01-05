@@ -54,8 +54,8 @@ def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_m
     else:
         os.makedirs('temp_cog')
 
-    resol = 16
-    e = 15
+    resol = 31
+    e = 30
 
     for counter, ia in zip(range(0, resol), np.linspace(0, e, resol)):
         variables = model.VariableParameters(fold='cog',
@@ -82,7 +82,7 @@ def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_m
 
         model.problem_definition(variables)
 
-    with Pool(16) as p:
+    with Pool(31) as p:
         res = list(p.map(execute_model, list(range(0, resol))))
 
     if None in res:
@@ -99,7 +99,7 @@ def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_m
 
     current_file_path = os.path.abspath(__file__)
     folder_path = os.path.dirname(current_file_path)
-    file_path = os.path.join(folder_path, f'results/all_res_cog.csv')
+    file_path = os.path.join(folder_path, f'results/all_res_cog_case7_20250102.csv')
 
     # Check if the file exists
     file_exists = os.path.isfile(file_path)
