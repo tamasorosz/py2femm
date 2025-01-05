@@ -2,7 +2,6 @@ import csv
 import math
 import os
 import pathlib
-import shutil
 
 import numpy as np
 import machine_model_synrm as model

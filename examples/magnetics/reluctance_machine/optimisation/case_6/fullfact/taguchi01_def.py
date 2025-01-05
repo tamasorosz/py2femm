@@ -32,3 +32,5 @@ for i, j in enumerate(factors):
     for k in range(data.shape[0]):
         if i < len(factors):
             df1.iloc[k, i] = float(j.level[int(data.iloc[k, i] - 1)])
+
+print(len(df1))

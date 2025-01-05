@@ -1,54 +1,34 @@
-import csv
-import math
-import os
-import re
-
 import numpy as np
 import pandas as pd
-from matplotlib import pyplot as plt
+import itertools
 
-import calc_max_torque_angle
+# Specify the path to your CSV file
+csv_file_path = "results/torq_res_avg.csv"
 
-# variables = machine_model_synrm.VariableParameters(fold='ang',
-#                                                    out='ang',
-#                                                    counter=0,
-#                                                    JAp=10,
-#                                                    JAn=-10,
-#                                                    JBp=-5,
-#                                                    JBn=5,
-#                                                    JCp=-5,
-#                                                    JCn=5,
-#
-#                                                    ang_co=24.3,
-#                                                    deg_co=91.5,
-#                                                    bd=1.0,
-#                                                    bw=0.5,
-#                                                    bh=2.4,
-#                                                    bg=1.5,
-#
-#                                                    ia=0,
-#                                                    ang_m=20,
-#                                                    mh=1.5
-#                                                    )
-#
-from examples.magnetics.reluctance_machine.optimisation.case_2 import calc_torque_avg_rip
-#
-if __name__ == "__main__":
-    # xl = np.array([15, 9, 1, 1, 1, 10]),
-    # xu = np.array([25, 14, 4, 4, 2, 15]),
-    22, 110, 1, 2, 0.5, 10, 10, 16, 16
-    y = calc_max_torque_angle.max_torque_angle(30, 22, 11, 1, 0.5, 2, 1, 1.5, 10, 12, 14, 12)
+# Open the file using open() and read it with pandas
+with open(csv_file_path, 'r') as file:
+    df = pd.read_csv(file)
 
-    # x = [25, 15, 4, 4, 1, 15]
-    # g = (math.tan(math.radians(x[0] / 2)) * (22 - (x[4] * 0.5 + 1.5)) + x[2] + x[3]) - 8
-    # if g > 0:
-    #     temp_x3 = int(8 - (math.tan(math.radians(x[0] / 2)) * (22 - (x[4] * 0.5 + 1.5))) - x[2])
-    #     if temp_x3 < 1:
-    #         x[3] = 1
-    #         x[2] = x[2] - (1 - temp_x3)
-    #         if x[2] < 1:
-    #             x[2] = 1
-    #     else:
-    #         x[3] = temp_x3
-    # print(x)
-    # y = calc_max_torque_angle.max_torque_angle(30, x[0], x[1], x[2], 0.5, x[3], x[4], x[5], 1.5)
+for i in range(len(df['AVG'])):
+    df.loc[i, 'AVG'] = [float(j) for j in df.loc[i, 'AVG'].split(',')]
+
+range1 = range(4, 7)
+range2 = range(7, 10)
+range3 = range(11, 14)
+range4 = range(14, 17)
+
+
+combinations = list(itertools.combinations(range(21), 4))
+lst=[]
+for x1, x2, x3, x4 in combinations:
+    result = [(a + b + c + d + e) / 5 for a, b, c, d, e in zip(df['AVG'][x1], df['AVG'][x2], df['AVG'][5], df['AVG'][x3], df['AVG'][x4])]
+
+    avg = np.average(result)
+    rip = 100 * (np.max(result) - np.min(result)) / avg
+
+
+    lst.append(rip)
+print(min(lst))
+# import calc_torque_avg_rip
+# if __name__ == '__main__':
+#     calc_torque_avg_rip.torque_avg_rip(30, 21, 15, 1, 0.5, 3, 1.0, 1.5, 12, 17, 10, 0)

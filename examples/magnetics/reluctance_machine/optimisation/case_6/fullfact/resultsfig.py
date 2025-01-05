@@ -67,45 +67,45 @@ print()
 # # plt.savefig('ff_avg.png', format='png', dpi=300)
 # # plt.show()
 #
-# df_t_avg = df1["Trip"].sort_values(ignore_index=True)
-# df_f_avg = df2["Trip"].sort_values(ignore_index=True)
-#
-# bins = [min(df_f_avg) + ((max(df_f_avg)-min(df_f_avg)) / 10) * i for i in range(10)]
-# print(bins)
-#
-# binnum = [0 if bins[0] <= i < bins[1] else 1 if bins[1] <= i < bins[2] else 2 if bins[2] <= i < bins[3]
-# else 3 if bins[3] <= i < bins[4] else 4 if bins[4] <= i < bins[5] else 5 if bins[5] <= i < bins[6]
-#           else 6 if bins[6] <= i < bins[7] else 7 if bins[7] <= i < bins[8]
-#           else 8 if bins[8] <= i < bins[9] else 9 if bins[9] <= i else 10 for i in df_t_avg]
-#
-# taguchinum = [binnum.count(0), binnum.count(1), binnum.count(2), binnum.count(3), binnum.count(4),
-#               binnum.count(5), binnum.count(6), binnum.count(7), binnum.count(8), binnum.count(9)]
-#
-# binnumff = [0 if bins[0] <= i < bins[1] else 1 if bins[1] <= i < bins[2] else 2 if bins[2] <= i < bins[3]
-# else 3 if bins[3] <= i < bins[4] else 4 if bins[4] <= i < bins[5] else 5 if bins[5] <= i < bins[6]
-#           else 6 if bins[6] <= i < bins[7] else 7 if bins[7] <= i < bins[8]
-#           else 8 if bins[8] <= i < bins[9] else 9 if bins[9] <= i else 10 for i in df_f_avg]
-#
-# ffnum = [binnumff.count(0), binnumff.count(1), binnumff.count(2), binnumff.count(3), binnumff.count(4),
-#          binnumff.count(5), binnumff.count(6), binnumff.count(7), binnumff.count(8), binnumff.count(9)]
-#
-# fig, ax = plt.subplots(figsize=(5, 4), dpi=150, tight_layout=True)
-# plt.grid(axis='y', linestyle='--', alpha=0.7, zorder=1)
-# plt.bar(list(range(10)), ffnum, color=colors[2], zorder=2, label='Full Factorial')
-# plt.bar(list(range(10)), taguchinum, color=colors[0], zorder=3, label='Taguchi')
-# plt.vlines(2, 0, 130, color=colors[8], linestyle='--', label='Optimal')
-# plt.xlabel("Torque ripple range [%]", fontsize=ft)
-# plt.ylabel("Number of models [u.]", fontsize=ft)
-# plt.xticks(fontsize=ft)
-# plt.yticks(fontsize=ft)
-# plt.legend(loc='best', fontsize=ft)
-#
-# ax.set_xlim(-1, 10)
-# # ax.set_ylim(0, 100)
-# ax.set_xticks(np.arange(0, 10, 1))  # X-axis ticks from 0 to 10
-# # ax.set_yticks(np.arange(0, 10, 1))  # Y-axis ticks from 0 to 10
-# # plt.savefig('ff_rip.png', format='png', dpi=300)
-# # plt.show()
+df_t_avg = df1["Trip"].sort_values(ignore_index=True)
+df_f_avg = df2["Trip"].sort_values(ignore_index=True)
+
+bins = [min(df_f_avg) + ((max(df_f_avg)-min(df_f_avg)) / 10) * i for i in range(10)]
+print(bins)
+
+binnum = [0 if bins[0] <= i < bins[1] else 1 if bins[1] <= i < bins[2] else 2 if bins[2] <= i < bins[3]
+else 3 if bins[3] <= i < bins[4] else 4 if bins[4] <= i < bins[5] else 5 if bins[5] <= i < bins[6]
+          else 6 if bins[6] <= i < bins[7] else 7 if bins[7] <= i < bins[8]
+          else 8 if bins[8] <= i < bins[9] else 9 if bins[9] <= i else 10 for i in df_t_avg]
+
+taguchinum = [binnum.count(0), binnum.count(1), binnum.count(2), binnum.count(3), binnum.count(4),
+              binnum.count(5), binnum.count(6), binnum.count(7), binnum.count(8), binnum.count(9)]
+
+binnumff = [0 if bins[0] <= i < bins[1] else 1 if bins[1] <= i < bins[2] else 2 if bins[2] <= i < bins[3]
+else 3 if bins[3] <= i < bins[4] else 4 if bins[4] <= i < bins[5] else 5 if bins[5] <= i < bins[6]
+          else 6 if bins[6] <= i < bins[7] else 7 if bins[7] <= i < bins[8]
+          else 8 if bins[8] <= i < bins[9] else 9 if bins[9] <= i else 10 for i in df_f_avg]
+
+ffnum = [binnumff.count(0), binnumff.count(1), binnumff.count(2), binnumff.count(3), binnumff.count(4),
+         binnumff.count(5), binnumff.count(6), binnumff.count(7), binnumff.count(8), binnumff.count(9)]
+
+fig, ax = plt.subplots(figsize=(5, 4), dpi=150, tight_layout=True)
+plt.grid(axis='y', linestyle='--', alpha=0.7, zorder=1)
+plt.bar(list(range(10)), ffnum, color=colors[2], zorder=2, label='Full Factorial')
+plt.bar(list(range(10)), taguchinum, color=colors[0], zorder=3, label='Taguchi')
+plt.vlines(2, 0, 130, color=colors[8], linestyle='--', label='Optimal')
+plt.xlabel("Torque ripple range [%]", fontsize=ft)
+plt.ylabel("Number of models [u.]", fontsize=ft)
+plt.xticks(fontsize=ft)
+plt.yticks(fontsize=ft)
+plt.legend(loc='best', fontsize=ft)
+
+ax.set_xlim(-1, 10)
+# ax.set_ylim(0, 100)
+ax.set_xticks(np.arange(0, 10, 1))  # X-axis ticks from 0 to 10
+# ax.set_yticks(np.arange(0, 10, 1))  # Y-axis ticks from 0 to 10
+# plt.savefig('ff_rip.png', format='png', dpi=300)
+# plt.show()
 #
 # df_t_avg = df1["Tcog"].sort_values(ignore_index=True)
 # df_f_avg = df2["Tcog"].sort_values(ignore_index=True)

@@ -15,7 +15,7 @@ plt.bar(df.keys(), df.iloc[2], label='COG', color=colors[3])
 
 plt.xlabel('Parameters', fontsize=14)
 plt.ylabel('SSB [u.]', fontsize=14)
-plt.xticks(fontsize=14)
+plt.xticks(ticks=range(len(df.keys())), labels=["X8", "X9", "X10", "X11"], fontsize=14)
 plt.yticks(fontsize=14)
 plt.grid(True)
 plt.legend(fontsize=14)

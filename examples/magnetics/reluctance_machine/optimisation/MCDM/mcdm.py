@@ -52,7 +52,7 @@ pd.set_option('display.width', None)  # Adjust width to avoid line breaks
 pd.set_option('display.max_colwidth', None)  # Adjust max column width if needed
 print(df)
 types = np.array([1, -1])  # Specifies the purpose of the objective function as it is cost or profit
-alts = df.iloc[:, -4:-2].to_numpy()
+alts = df.iloc[:, -4:-1].to_numpy()
 # print(alts)
 weights = w.entropy_weights(alts)
 # weights = w.variance_weights(alts)
@@ -93,6 +93,7 @@ ranks.append(np.array([colors[5]]*df[df['CAS'].str.startswith('A1_')].shape[0] +
                       [colors[0]]*df[df['CAS'].str.startswith('B2_')].shape[0]))
 
 ft = 12
+print(len(ranks[0]))
 
 fig, ax = plt.subplots(figsize=(5, 4), dpi=150, tight_layout=True)
 
