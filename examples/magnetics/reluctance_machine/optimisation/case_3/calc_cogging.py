@@ -1,109 +1,72 @@
 import csv
-import logging
+import math
 import os
+import pathlib
 import shutil
-import time
 
 import numpy as np
+import pandas as pd
+
 import machine_model_synrm as model
 
 from multiprocessing import Pool
-
 from src.executor import Executor
 
 
 def execute_model(counter):
-    # time.sleep(0.1)
-
-    femm = Executor()
-    current_file_path = os.path.abspath(__file__)
-    folder_path = os.path.dirname(current_file_path)
-
-    lua_file = os.path.join(folder_path, f'temp_cog/cog{counter}.lua')
-    femm.run(lua_file)
-
-    logging.basicConfig(level=logging.ERROR, format='%(asctime)s - %(levelname)s - %(message)s')
-
     try:
-        # time.sleep(0.1)
-
+        femm = Executor()
         current_file_path = os.path.abspath(__file__)
         folder_path = os.path.dirname(current_file_path)
+
+        lua_file = os.path.join(folder_path, f'temp_cog/cog{counter}.lua')
+        femm.run(lua_file)
 
         with open(os.path.join(folder_path, f'temp_cog/cog{counter}.csv'), 'r') as file:
             csvfile = [i for i in csv.reader(file)]
             number = csvfile[0][0].replace('wTorque_0 = ', '')
             torque = float(number) * 4 * -1000
 
-    except (csv.Error, IndexError) as e:
-        logging.error(f'Error at cog{counter}: {e}')
-        torque = None
+        try:
+            del_fem = pathlib.Path(os.path.join(folder_path, f'temp_cog/cog{counter}.fem'))
+            del_ans = pathlib.Path(os.path.join(folder_path, f'temp_cog/cog{counter}.ans'))
+            del_lua = pathlib.Path(os.path.join(folder_path, f'temp_cog/cog{counter}.lua'))
+            del_csv = pathlib.Path(os.path.join(folder_path, f'temp_cog/cog{counter}.csv'))
+
+            del_lua.unlink()
+            del_fem.unlink()
+            del_ans.unlink()
+            del_csv.unlink()
+
+        except PermissionError:
+            print(f'PermissionError at cog{counter}')
+            pass
+
+    except(IndexError):
+        print(f'IndexError at cog{counter}')
+        torque = 0.0
 
     return torque
 
-
-def fftPlot(sig, dt=None):
-    if dt is None:
-        dt = 1
-        t = np.arange(0, sig.shape[-1])
-    else:
-        t = np.arange(0, sig.shape[-1]) * dt
-
-    if sig.shape[0] % 2 != 0:
-        t = t[0:-1]
-        sig = sig[0:-1]
-
-    sigFFT = np.fft.fft(sig) / t.shape[0]
-
-    freq = np.fft.fftfreq(t.shape[0], d=dt)
-
-    firstNegInd = np.argmax(freq < 0)
-    freqAxisPos = freq[0:firstNegInd]
-    sigFFTPos = 2 * sigFFT[0:firstNegInd]
-
-    return sigFFTPos, freqAxisPos
-
-
-def thd(abs_data):
-    sq_sum = 0.0
-    for r in range(len(abs_data)):
-        sq_sum = sq_sum + (abs_data[r]) ** 2
-
-    sq_harmonics = sq_sum - ((abs_data[1])) ** 2.0
-    thd = 100 * sq_harmonics ** 0.5 / abs_data[1]
-
-    return thd
-
-
 def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, deg_m):
+    if os.path.exists('temp_cog'):
+        pass
+    else:
+        os.makedirs('temp_cog')
 
-    folder_path = 'temp_cog'
-
-    if os.path.exists(folder_path):
-        shutil.rmtree(folder_path)
-
-    os.makedirs(folder_path)
-
-    resol = 31
+    resol = 16
     e = 15
-    feasibility = 1
-    for counter, ia in zip(range(0, resol), np.linspace(0, e, resol)):
-        JUp = J0
-        JUn = -JUp
-        JVp = J0
-        JVn = -JVp
-        JWp = J0
-        JWn = -JWp
 
+    for counter, ia in zip(range(0, resol), np.linspace(0, e, resol)):
         variables = model.VariableParameters(fold='cog',
                                              out='cog',
                                              counter=counter,
-                                             JAp=JUp,
-                                             JAn=JUn,
-                                             JBp=JVp,
-                                             JBn=JVn,
-                                             JCp=JWp,
-                                             JCn=JWn,
+                                             JAp=J0 * math.cos(math.radians(0)),
+                                             JAn=-J0 * math.cos(math.radians(0)),
+                                             JBp=J0 * math.cos(math.radians(0 + 120)),
+                                             JBn=-J0 * math.cos(math.radians(0 + 120)),
+                                             JCp=J0 * math.cos(math.radians(0 + 240)),
+                                             JCn=-J0 * math.cos(math.radians(0 + 240)),
                                              ang_co=ang_co,
                                              deg_co=deg_co * 10,
                                              bd=bd,
@@ -113,24 +76,39 @@ def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, deg_m):
                                              ia=ia,
                                              mh=mh,
                                              ang_m=ang_m,
-                                             deg_m=deg_m,
-                                             )
-        feasibility = model.problem_definition(variables)
-        if feasibility == 0:
-            break
+                                             deg_m=deg_m)
 
-    if feasibility == 1:
-        with Pool(16) as p:
-            res = p.map(execute_model, list(range(0, resol)))
-        if None in res:
-            cogging_pp = 1000
+        model.problem_definition(variables)
 
-        else:
-            cogging_pp = np.round(np.max(list(res)) - np.min(list(res)), 2)
+    with Pool(16) as p:
+        res = list(p.map(execute_model, list(range(0, resol))))
 
-    else:
+    if None in res:
         cogging_pp = 1000
 
-    print('COG: ' + f'{cogging_pp}' + '\n-----------------------------------------------')
+    else:
+        cogging_pp = np.round(np.max(list(res)) - np.min(list(res)), 2)
+
+        res.clear()  # To make sure that there is no memory leak
+
+    df = pd.DataFrame({'X1': [ang_co], 'X2': [deg_co * 10], 'X3': [bd], 'X4': [bw],
+                       'X5': [bh], 'X6': [bgp * 0.5 + mh], 'X7': [mh], 'X8': [ang_m],
+                       'X9': [deg_m], 'COG': [cogging_pp]})
+
+    current_file_path = os.path.abspath(__file__)
+    folder_path = os.path.dirname(current_file_path)
+    file_path = os.path.join(folder_path, f'results/all_res_cog_20250106.csv')
+
+    # Check if the file exists
+    file_exists = os.path.isfile(file_path)
+
+    # Append the DataFrame to the CSV file
+    with open(file_path, 'a', newline='') as f:
+        df.to_csv(f, header=not file_exists, index=False)
+
+    # Count the number of rows in a separate operation
+    with open(file_path, 'r') as f:
+        num_rows = sum(1 for _ in f)
+        print('COG: ' + f'{cogging_pp}' + ', IND: ' + f'{num_rows}' + '\n-----------------------------------------------')
 
     return cogging_pp

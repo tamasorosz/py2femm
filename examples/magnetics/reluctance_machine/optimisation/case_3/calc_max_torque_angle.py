@@ -1,103 +1,88 @@
 import csv
-import logging
 import math
 import os
-import shutil
-import time
+import pathlib
 
 import numpy as np
 import machine_model_synrm as model
 
 from multiprocessing import Pool
-
 from src.executor import Executor
 
 
 def execute_model(counter):
-
-    # time.sleep(0.15)
-
-    femm = Executor()
-    current_file_path = os.path.abspath(__file__)
-    folder_path = os.path.dirname(current_file_path)
-
-    lua_file = os.path.join(folder_path, f'temp_ang/ang{counter}.lua')
-    femm.run(lua_file)
-
-    logging.basicConfig(level=logging.ERROR, format='%(asctime)s - %(levelname)s - %(message)s')
-
     try:
-        # time.sleep(0.1)
-
+        femm = Executor()
         current_file_path = os.path.abspath(__file__)
         folder_path = os.path.dirname(current_file_path)
+
+        lua_file = os.path.join(folder_path, f'temp_ang/ang{counter}.lua')
+        femm.run(lua_file)
 
         with open(os.path.join(folder_path, f'temp_ang/ang{counter}.csv'), 'r') as file:
             csvfile = [i for i in csv.reader(file)]
             number = csvfile[0][0].replace('wTorque_0 = ', '')
             torque = float(number) * 4 * -1000
 
-    except (csv.Error, IndexError) as e:
-        logging.error(f'Error at ang{counter}: {e}')
+        try:
+            del_lua = pathlib.Path(os.path.join(folder_path, f'temp_ang/ang{counter}.lua'))
+            del_fem = pathlib.Path(os.path.join(folder_path, f'temp_ang/ang{counter}.fem'))
+            del_ans = pathlib.Path(os.path.join(folder_path, f'temp_ang/ang{counter}.ans'))
+            del_csv = pathlib.Path(os.path.join(folder_path, f'temp_ang/ang{counter}.csv'))
+
+            del_lua.unlink()
+            del_fem.unlink()
+            del_ans.unlink()
+            del_csv.unlink()
+
+        except PermissionError:
+            print(f'PermissionError at ang{counter}')
+            pass
+
+    except(IndexError):
+        print(f'IndexError at ang{counter}')
         torque = 0.0
 
     return torque
 
 
 def max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, deg_m):
+    if os.path.exists('temp_ang'):
+        pass
+    else:
+        os.makedirs('temp_ang')
 
-    folder_path = 'temp_ang'
+    resol = 24
+    a = 25
+    b = 48
 
-    if os.path.exists(folder_path):
-        shutil.rmtree(folder_path)
-
-    os.makedirs(folder_path)
-
-    resol = 31
-    a = 20
-    b = 50
-    feasibility = 1
     for counter, alpha in zip(range(0, resol), np.linspace(a, b, resol)):
-        JUp = J0 * math.cos(math.radians(alpha))
-        JUn = -JUp
-        JVp = J0 * math.cos(math.radians(alpha + 120))
-        JVn = -JVp
-        JWp = J0 * math.cos(math.radians(alpha + 240))
-        JWn = -JWp
-
         variables = model.VariableParameters(fold='ang',
                                              out='ang',
                                              counter=counter,
-                                             JAp=JUp,
-                                             JAn=JUn,
-                                             JBp=JVp,
-                                             JBn=JVn,
-                                             JCp=JWp,
-                                             JCn=JWn,
+                                             JAp=J0 * math.cos(math.radians(alpha)),
+                                             JAn=-J0 * math.cos(math.radians(alpha)),
+                                             JBp=J0 * math.cos(math.radians(alpha + 120)),
+                                             JBn=-J0 * math.cos(math.radians(alpha + 120)),
+                                             JCp=J0 * math.cos(math.radians(alpha + 240)),
+                                             JCn=-J0 * math.cos(math.radians(alpha + 240)),
                                              ang_co=ang_co,
-                                             deg_co=deg_co*10,
+                                             deg_co=deg_co * 10,
                                              bd=bd,
                                              bw=bw,
                                              bh=bh,
-                                             bg=bgp*0.5 + mh,
+                                             bg=bgp * 0.5 + mh,
                                              ia=0,
                                              mh=mh,
                                              ang_m=ang_m,
-                                             deg_m=deg_m,
-                                             )
-        feasibility = model.problem_definition(variables)
-        if feasibility == 0:
-            break
+                                             deg_m=deg_m)
+        model.problem_definition(variables)
 
-    if feasibility == 1:
-        with Pool(16) as p:
-            res = p.map(execute_model, list(range(0, resol)))
+    with Pool(24) as p:
+        res = list(p.map(execute_model, list(range(0, resol))))
 
-        res = list(res)
+    torque_ang = a + res.index((max(res))) * ((b - a) / (resol - 1))
 
-        ind = res.index((max(res)))
-        torque_ang = a + ind * ((b - a) / (resol - 1))
-    else:
-        torque_ang = None
+    res.clear()
 
     return torque_ang
