@@ -17,8 +17,7 @@ n0 = Node(0, 0)
 
 class VariableParameters:
 
-    def __init__(self, fold, out, counter, JAp, JAn, JBp, JBn, JCp, JCn, ang_co, deg_co, bd, bw, bh, bg, ia, ang_m,
-                 mh):
+    def __init__(self, fold, out, counter, JAp, JAn, JBp, JBn, JCp, JCn, ang_co, deg_co, bd, bw, bh, bg, ia, mh, ang_m):
         self.fold = fold
         self.out = out
         self.counter = counter
@@ -512,8 +511,8 @@ def add_materials(femm_problem: FemmProblem, var: VariableParameters, rot: rotor
 def problem_definition(var: VariableParameters):
     problem = FemmProblem(out_file=os.path.join(folder_path, f'temp_{var.fold}/{var.out}{var.counter}.csv'))
     variables = VariableParameters(var.fold, var.out, var.counter, var.JAp, var.JAn, var.JBp, var.JBn, var.JCp,
-                                   var.JCn, var.ang_co, var.deg_co, var.bd, var.bw, var.bh, var.bg, var.ia,
-                                   var.ang_m, var.mh)
+                                   var.JCn, var.ang_co, var.deg_co, var.bd, var.bw, var.bh, var.bg, var.ia,  var.mh,
+                                   var.ang_m)
 
     problem.magnetic_problem(0, LengthUnit.MILLIMETERS, "planar", depth=40)
 

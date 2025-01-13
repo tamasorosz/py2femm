@@ -1,8 +1,11 @@
+import gc
 import math
 import os
+import shutil
 
 import numpy as np
 import pandas as pd
+
 from pymoo.core.problem import ElementwiseProblem
 from pymoo.algorithms.moo.nsga2 import NSGA2
 from pymoo.core.repair import Repair
@@ -10,11 +13,12 @@ from pymoo.operators.crossover.sbx import SBX
 from pymoo.operators.mutation.pm import PM
 from pymoo.operators.repair.rounding import RoundingRepair
 from pymoo.operators.sampling.rnd import IntegerRandomSampling
+from pymoo.termination import get_termination
 from pymoo.termination.default import DefaultMultiObjectiveTermination
 from pymoo.optimize import minimize
 
 import calc_torque_avg_rip
-from examples.magnetics.reluctance_machine.optimisation.case_2 import calc_cogging
+import calc_cogging
 
 if __name__ == '__main__':
     class MyProblem(ElementwiseProblem):
@@ -28,17 +32,18 @@ if __name__ == '__main__':
                              vtype=int)
 
         def _evaluate(self, x, out, *args, **kwargs):
-            f1 = calc_torque_avg_rip.torque_avg_rip(30, x[0], x[1], x[2], 0.5, x[3], x[4], x[5], 1.5)
-            f2 = calc_cogging.cogging(0, x[0], x[1], x[2], 0.5, x[3], x[4], x[5], 1.5)
+            print(x)
+            f1 = calc_torque_avg_rip.torque_avg_rip(30, x[0], x[1], x[2], 0.5, x[3], x[4], 1.5, x[5])
+            f2 = calc_cogging.cogging(0, x[0], x[1], x[2], 0.5, x[3], x[4], 1.5, x[5])
 
-            out['F'] = [f1[0], f1[1], f2[0], f2[1]]
+            gc.collect()
 
-    problem = MyProblem()
+            out['F'] = [f1[0], f1[1], f1[2], f2]
 
     class MyRepair(Repair):
-        constrained_problem = MyProblem()
+        problem = MyProblem()
 
-        def _do(self, constrained_problem, x, **kwargs):
+        def _do(self, problem, x, **kwargs):
 
             for i in range(len(x)):
                 g = (math.tan(math.radians(x[i][0] / 2)) * (22 - (x[i][4]*0.5 + 1.5)) + x[i][2] + x[i][3]) - 8
@@ -46,17 +51,18 @@ if __name__ == '__main__':
                     temp_x3 = np.round((8 - (math.tan(math.radians(x[i][0] / 2)) * (22 - (x[i][4]*0.5 + 1.5))) - x[i][2]), 1)
                     if temp_x3 < 1:
                         x[i][3] = 1
-                        x[i][2] = np.round(x[i][2] - (1 - temp_x3), 1)
+                        x[i][2] = int(x[i][2] - (1 - temp_x3))
                         if x[i][2] < 1:
                             x[i][2] = 1
                     else:
                         x[i][3] = temp_x3
             return x
 
+    problem = MyProblem()
 
     algorithm = NSGA2(
-        pop_size=50,
-        n_offsprings=50,
+        pop_size=1,
+        n_offsprings=1,
         sampling=IntegerRandomSampling(),
         crossover=SBX(prob=0.9, eta=15, vtype=float, repair=RoundingRepair()),
         mutation=PM(prob=1, eta=20, vtype=float, repair=RoundingRepair()),
@@ -64,14 +70,16 @@ if __name__ == '__main__':
         repair=MyRepair()
     )
 
-    termination = DefaultMultiObjectiveTermination(
-        xtol=1e-8,
-        cvtol=1e-6,
-        ftol=0.0025,
-        period=5,
-        n_max_gen=100,
-        n_max_evals=5000
-    )
+    # termination = DefaultMultiObjectiveTermination(
+    #     xtol=1e-8,
+    #     cvtol=1e-6,
+    #     ftol=0.0025,
+    #     period=5,
+    #     n_max_gen=300,
+    #     n_max_evals=1000000
+    # )
+
+    termination = get_termination("n_gen", 1)
 
     res = minimize(problem,
                    algorithm,
@@ -86,9 +94,15 @@ if __name__ == '__main__':
     print('Execution time: ' + str(res.exec_time / 60 / 60) + ' hours')
 
     df = pd.DataFrame({'X1': X[:, 0], 'X2': [i*10 for i in X[:, 1]], 'X3': X[:, 2], 'X4': X[:, 3],
-                       'X5': [i*0.5 for i in X[:, 4]], 'X6:': X[:, 5], 'AVG': F[:, 0], 'RIP': F[:, 1], 'COG': F[:, 2],
-                       'THD': F[:, 3]})
+                       'X5': [i*0.5 for i in X[:, 4]], 'X6:': X[:, 5],
+                       'ANG': F[:, 2], 'AVG': F[:, 0], 'RIP': F[:, 1], 'COG': F[:, 3]})
     current_file_path = os.path.abspath(__file__)
     folder_path = os.path.dirname(current_file_path)
-    file_path = os.path.join(folder_path, f'results/nsga2_case2_p50o50g100_obj6_20240701.csv')
+
+    if os.path.exists('results'):
+        pass
+    else:
+        os.makedirs('results')
+
+    file_path = os.path.join(folder_path, f'results/nsga2_case2_p100o100g200_obj6_20250120.csv')
     df.to_csv(file_path, encoding='utf-8', index=False)
