@@ -20,7 +20,7 @@ plt.yticks(fontsize=14)
 plt.grid(True)
 plt.legend(fontsize=14)
 plt.tight_layout()
-plt.savefig(os.getcwd() + '/figures/' + 'taguchi_res_all_c0.png')
+plt.savefig(os.getcwd() + '/figures/' + 'taguchi_res_all_c9.png')
 plt.show()
 
 # ----------------------------------------------------------------
@@ -35,7 +35,7 @@ plt.yticks(fontsize=14)
 plt.grid(True)
 plt.legend(fontsize=14)
 plt.tight_layout()
-plt.savefig(os.getcwd() + '/figures/' + 'taguchi_res_avg_c0.png')
+plt.savefig(os.getcwd() + '/figures/' + 'taguchi_res_avg_c9.png')
 plt.show()
 
 # ----------------------------------------------------------------
@@ -50,7 +50,7 @@ plt.yticks(fontsize=14)
 plt.grid(True)
 plt.legend(fontsize=14)
 plt.tight_layout()
-plt.savefig(os.getcwd() + '/figures/' + 'taguchi_res_rip_c0.png')
+plt.savefig(os.getcwd() + '/figures/' + 'taguchi_res_rip_c9.png')
 plt.show()
 
 # ----------------------------------------------------------------
@@ -65,5 +65,6 @@ plt.yticks(fontsize=14)
 plt.grid(True)
 plt.legend(fontsize=14)
 plt.tight_layout()
-plt.savefig(os.getcwd() + '/figures/' + 'taguchi_res_cog_c0.png')
+plt.savefig(os.getcwd() + '/figures/' + 'taguchi_res_cog_c9.png')
 plt.show()
+

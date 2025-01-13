@@ -15,7 +15,7 @@ class FactorL27(ABC):
 
 
 file_path = os.getcwd() + '/results/' + f'taguchi_L27.csv'
-cols = ["X1", "X2", "X3", "X4", "X5", "X6", "X7", "X8", "X9", 'X10', 'X11']
+cols = ["X1", "X2", "X3", "X4", "X5", "X6", "X7", "X8", "X9"]
 data = pd.read_csv(file_path, usecols=cols)
 
 X1 = FactorL27("X1", list(np.linspace(15, 25, 3)))  # ang_co
@@ -26,18 +26,16 @@ X5 = FactorL27("X5", list(np.linspace(1, 4, 3)))  # bh
 X6 = FactorL27("X6", list(np.linspace(1, 2, 3)))  # bgp
 X7 = FactorL27("X7", list(np.linspace(1, 1.5, 3)))  # mh
 X8 = FactorL27("X8", list(np.linspace(10, 15, 3)))  # ang_m
-X9 = FactorL27("X9", list(np.linspace(10, 18, 3)))  # ang_mp
-X10 = FactorL27("X9", list(np.linspace(0, 16, 3)))  # deg_m
-X11 = FactorL27("X9", list(np.linspace(0, 16, 3)))  # deg_mp
+X9 = FactorL27("X9", list(np.linspace(0, 16, 3)))  # deg_m
 
-df = pd.DataFrame([[float(0.00)] * len(cols)] * 27, columns=cols)
-df1 = pd.DataFrame([[float(0.00)] * len(cols)] * 27, columns=cols)
-df2 = pd.DataFrame([[float(0.00)] * len(cols)] * 27, columns=cols)
+df = pd.DataFrame([[float(0.00)] * 9] * 27, columns=cols)
+df1 = pd.DataFrame([[float(0.00)] * 9] * 27, columns=cols)
+df2 = pd.DataFrame([[float(0.00)] * 9] * 27, columns=cols)
 
-factors = [X1, X2, X3, X4, X5, X6, X7, X8, X9, X10, X11]
+factors = [X1, X2, X3, X4, X5, X6, X7, X8, X9]
 for i, j in enumerate(factors):
     for k in range(df.shape[0]):
-        if i < len(factors):
+        if i < 9:
             df.iloc[k, i] = float(j.level[int(data.iloc[k, i] - 1)])
 
 for i in range(len(df)):
@@ -54,16 +52,8 @@ for i in range(len(df)):
         else:
             x[4] = temp_x3
 
-    if x[8] + x[10] / 2 + x[0] > 43:
-        x[8] = 18 - x[10] / 2
-
-    if x[7] > x[8]:
-        x[7] = x[8]
-        x[9] = x[10]
-    else:
-        if x[9] > (x[8] - x[7]) * 2 + x[10]:
-            x[9] = (x[8] - x[7]) * 2 + x[10]
-        if x[9] < -(x[8] - x[7]) * 2 + x[10]:
-            x[9] = -(x[8] - x[7]) * 2 + x[10]
+    if x[7] + x[8] / 2 + x[0] > 43:
+        x[8] = 2 * (43 - x[7] - x[0])
 
     df1.iloc[i] = x
+

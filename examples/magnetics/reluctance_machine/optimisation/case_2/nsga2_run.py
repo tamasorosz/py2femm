@@ -61,8 +61,8 @@ if __name__ == '__main__':
     problem = MyProblem()
 
     algorithm = NSGA2(
-        pop_size=1,
-        n_offsprings=1,
+        pop_size=100,
+        n_offsprings=100,
         sampling=IntegerRandomSampling(),
         crossover=SBX(prob=0.9, eta=15, vtype=float, repair=RoundingRepair()),
         mutation=PM(prob=1, eta=20, vtype=float, repair=RoundingRepair()),
@@ -79,7 +79,7 @@ if __name__ == '__main__':
     #     n_max_evals=1000000
     # )
 
-    termination = get_termination("n_gen", 1)
+    termination = get_termination("n_gen", 200)
 
     res = minimize(problem,
                    algorithm,

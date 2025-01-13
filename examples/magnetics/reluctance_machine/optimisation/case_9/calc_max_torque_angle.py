@@ -46,7 +46,7 @@ def execute_model(counter):
     return torque
 
 
-def max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_mp):
+def max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, deg_m):
     if os.path.exists('temp_ang'):
         pass
     else:
@@ -75,9 +75,7 @@ def max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg
                                              ia=0,
                                              mh=mh,
                                              ang_m=ang_m,
-                                             ang_mp=ang_mp,
-                                             deg_m=deg_m,
-                                             deg_mp=deg_mp)
+                                             deg_m=deg_m)
         model.problem_definition(variables)
 
     with Pool(24) as p:
@@ -85,6 +83,6 @@ def max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg
 
     torque_ang = a + res.index((max(res))) * ((b - a) / (resol - 1))
 
-    res = []  # To make sure that there is no memory leak
+    res.clear()
 
     return torque_ang

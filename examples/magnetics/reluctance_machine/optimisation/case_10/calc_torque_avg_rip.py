@@ -2,9 +2,9 @@ import csv
 import math
 import os
 import pathlib
-import shutil
-
 import numpy as np
+import pandas as pd
+
 import machine_model_synrm as model
 
 from multiprocessing import Pool
@@ -49,8 +49,9 @@ def execute_model(counter):
     return torque
 
 
-def torque_avg_rip(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, deg_m):
-    initial = calc_max_torque_angle.max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, deg_m)
+def torque_avg_rip(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_mp):
+    initial = calc_max_torque_angle.max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m,
+                                                     deg_mp)
     if os.path.exists('temp_avg_rip'):
         pass
     else:
@@ -78,7 +79,9 @@ def torque_avg_rip(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, deg_m):
                                              ia=ia,
                                              mh=mh,
                                              ang_m=ang_m,
-                                             deg_m=deg_m)
+                                             ang_mp=ang_mp,
+                                             deg_m=deg_m,
+                                             deg_mp=deg_mp)
         model.problem_definition(variables)
 
     with Pool(16) as p:
@@ -91,8 +94,27 @@ def torque_avg_rip(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, deg_m):
         torque_avg = np.round(-1 * np.average(res), 2)
         torque_ripple = np.round(-100 * (np.max(res) - np.min(res)) / torque_avg, 2)
 
-    res = []  # To make sure that there is no memory leak
+    res.clear()  # To make sure that there is no memory leak
 
-    print('ANG: ' + f'{initial}' + ', AVG: ' + f'{torque_avg}' + ', RIP: ' + f'{torque_ripple}')
+    torque_angle = -1 * initial
 
-    return torque_avg, torque_ripple
+    print('ANG: ' + f'{initial}' + ', AVG: ' + f'{-1 * torque_avg}' + ', RIP: ' + f'{torque_ripple}')
+
+    df = pd.DataFrame({
+        'X1': [ang_co], 'X2': [deg_co * 10], 'X3': [bd], 'X4': [bw],
+        'X5': [bh], 'X6': [bgp * 0.5 + mh], 'X7': [mh], 'X8': [ang_m], 'X9': [ang_mp], 'X10': [deg_m],
+        'X11': [deg_mp], 'ANG': [torque_angle], 'AVG': [torque_avg], 'RIP': [torque_ripple]
+    })
+
+    current_file_path = os.path.abspath(__file__)
+    folder_path = os.path.dirname(current_file_path)
+    file_path = os.path.join(folder_path, f'results/all_res_avg_case10.csv')
+
+    # Check if the file exists
+    file_exists = os.path.isfile(file_path)
+
+    # Write to CSV
+    with open(file_path, 'a', newline='') as f:
+        df.to_csv(f, header=not file_exists, index=False)
+
+    return torque_avg, torque_ripple, torque_angle

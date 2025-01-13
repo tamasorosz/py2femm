@@ -21,12 +21,6 @@
       <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_7/temp_ang" />
       <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_7/temp_avg_rip" />
       <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_7/temp_cog" />
-      <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_9/temp_ang" />
-      <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_10/temp_ang" />
-      <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_10/temp_avg_rip" />
-      <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_10/temp_cog" />
-      <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_9/temp_avg_rip" />
-      <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_9/temp_cog" />
       <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_6/temp_ang" />
       <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_6/temp_avg_rip" />
       <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_6/temp_cog" />
@@ -36,6 +30,12 @@
       <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_6/fullfact/temp_cog" />
       <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_6/fullfact/temp_avg_rip" />
       <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_6/fullfact/temp_ang" />
+      <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_9/temp_cog" />
+      <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_9/temp_avg_rip" />
+      <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_9/temp_ang" />
+      <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_10/temp_cog" />
+      <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_10/temp_avg_rip" />
+      <excludeFolder url="file://$MODULE_DIR$/examples/magnetics/reluctance_machine/optimisation/case_10/temp_ang" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.10 (py2femm)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />

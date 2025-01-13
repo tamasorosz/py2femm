@@ -20,13 +20,15 @@ if __name__ == '__main__':
         X7 = taguchi01_def.df1.iloc[i, 6]
         X8 = taguchi01_def.df1.iloc[i, 7]
         X9 = taguchi01_def.df1.iloc[i, 8]
+        X10 = taguchi01_def.df1.iloc[i, 9]
+        X11 = taguchi01_def.df1.iloc[i, 10]
 
-        res = calc_torque_avg_rip.torque_avg_rip(30, X1, X2, X3, X4, X5, X6, X7, X8, X9)
+        res = calc_torque_avg_rip.torque_avg_rip(30, X1, X2, X3, X4, X5, X6, X7, X8, X9, X10, X11)
 
-        avg.append(-1*res[0])
+        avg.append(-1 * res[0])
         rip.append(res[1])
 
-        res = calc_cogging.cogging(0, X1, X2, X3, X4, X5, X6, X7, X8, X9)
+        res = calc_cogging.cogging(0, X1, X2, X3, X4, X5, X6, X7, X8, X9, X10, X11)
 
         cog.append(res)
 
