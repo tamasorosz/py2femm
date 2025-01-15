@@ -16,7 +16,6 @@ from typing import Union
 from src.magnetics import MagneticMaterial
 from src.geometry import Geometry, Node
 from src.general import Material, AutoMeshOption, Boundary, FemmFields, LengthUnit
-from src.electrostatics import ElectrostaticVolumeIntegral
 
 
 class FemmProblem:
@@ -847,6 +846,18 @@ class FemmProblem:
 
         self.set_segment_prop(boundary.name or "<None>", automesh=automesh, elementsize=elementsize)
         self.clear_selected()
+
+    def create_model(self, filename="temp"):
+        if self.field == FemmFields.MAGNETIC:
+            filename += ".fem"
+        elif self.field == FemmFields.ELECTROSTATIC:
+            filename += ".fee"
+        elif self.field == FemmFields.CURRENT_FLOW:
+            filename += ".fec"
+        elif self.field == FemmFields.HEAT_FLOW:
+            filename += ".feh"
+
+        self.save_as(filename)
 
     def make_analysis(self, filename="temp"):
 
