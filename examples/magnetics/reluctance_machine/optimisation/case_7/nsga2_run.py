@@ -129,7 +129,7 @@ if __name__ == '__main__':
     else:
         os.makedirs('results')
 
-    file_path = os.path.join(folder_path, f'results/nsga2_case7_p50o50g300_obj9_20250102.csv')
+    file_path = os.path.join(folder_path, f'results/nsga2_case7_p50o50g300_obj9_20250119.csv')
     df.to_csv(file_path, encoding='utf-8', index=False)
 
     folder_path = ['temp_ang', 'temp_avg_rip', 'temp_cog']
