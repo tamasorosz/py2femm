@@ -937,6 +937,18 @@ class FemmProblem:
         self.set_arc_segment_prop(propname=boundary.name or "<None>", maxsegdeg=maxsegdeg, hide=0, group=0)
         self.clear_selected()
 
+    def create_model(self, filename="temp"):
+        if self.field == FemmFields.MAGNETIC:
+            filename += ".fem"
+        elif self.field == FemmFields.ELECTROSTATIC:
+            filename += ".fee"
+        elif self.field == FemmFields.CURRENT_FLOW:
+            filename += ".fec"
+        elif self.field == FemmFields.HEAT_FLOW:
+            filename += ".feh"
+
+        self.save_as(filename)
+
     def make_analysis(self, filename="temp"):
 
         if self.field == FemmFields.MAGNETIC:
