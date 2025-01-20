@@ -568,8 +568,8 @@ def add_materials(femm_problem: FemmProblem, var: VariableParameters, rot: rotor
     femm_problem.define_block_label(Node(22.05, 0.00).rotate_about(n0, 45, True), air)
     femm_problem.define_block_label(Node(7, 0.00).rotate_about(n0, 45, True), FeSi65)
 
-    # femm_problem.define_block_label(rot[10], ferrite_left)
-    # femm_problem.define_block_label(rot[11], ferrite_right)
+    femm_problem.define_block_label(rot[10], ferrite_left)
+    femm_problem.define_block_label(rot[11], ferrite_right)
     #
     # femm_problem.define_block_label(rot[10], air)
     # femm_problem.define_block_label(rot[11], air)
