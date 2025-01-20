@@ -1,4 +1,3 @@
-# --------------------------------------------------------------------------------------------------------------------
 import gc
 import math
 import os
@@ -15,7 +14,6 @@ from pymoo.operators.mutation.pm import PM
 from pymoo.operators.repair.rounding import RoundingRepair
 from pymoo.operators.sampling.rnd import IntegerRandomSampling
 from pymoo.termination import get_termination
-from pymoo.termination.default import DefaultMultiObjectiveTermination
 from pymoo.optimize import minimize
 
 import calc_torque_avg_rip
@@ -50,9 +48,10 @@ if __name__ == '__main__':
                 x[i][7] = int(x[i][7] * 2)
                 x[i][8] = int(x[i][8] * 2)
 
-                g = (math.tan(math.radians(x[i][0] / 2)) * (22 - (x[i][4]*0.5 + 1.5)) + x[i][2] + x[i][3]) - 8
+                g = (math.tan(math.radians(x[i][0] / 2)) * (22 - (x[i][4] * 0.5 + 1.5)) + x[i][2] + x[i][3]) - 8
                 if g > 0:
-                    temp_x3 = np.round((8 - (math.tan(math.radians(x[i][0] / 2)) * (22 - (x[i][4]*0.5 + 1.5))) - x[i][2]), 1)
+                    temp_x3 = np.round(
+                        (8 - (math.tan(math.radians(x[i][0] / 2)) * (22 - (x[i][4] * 0.5 + 1.5))) - x[i][2]), 1)
                     if temp_x3 < 1:
                         x[i][3] = 1
                         x[i][2] = int(x[i][2] - (1 - temp_x3))
@@ -73,6 +72,9 @@ if __name__ == '__main__':
 
                 if x[i][7] > int((x[i][6] - x[i][5]) * 2) + x[i][8]:
                     x[i][7] = int((x[i][6] - x[i][5]) * 2) + x[i][8]
+
+                if x[i][8] > int((x[i][6] - x[i][5]) * 2) + x[i][7]:
+                    x[i][8] = int((x[i][6] - x[i][5]) * 2) + x[i][7]
 
                 x[i][8] = int(x[i][8])
                 x[i][7] = int(x[i][7])
@@ -97,16 +99,11 @@ if __name__ == '__main__':
         repair=MyRepair()
     )
 
-    # termination = DefaultMultiObjectiveTermination(
-    #     xtol=1e-8,
-    #     cvtol=1e-6,
-    #     ftol=0.0025,
-    #     period=3,
-    #     n_max_gen=200,
-    #     n_max_evals=5000
-    # )
+    current_file_path = os.path.abspath(__file__)
+    folder_path = os.path.dirname(current_file_path)
+    file_path = os.path.join(folder_path, f'results/all_res_cog_case7_20250120.csv')
 
-    termination = get_termination("n_gen", 200)
+    termination = get_termination("n_size", file_path, 20000)
 
     res = minimize(problem,
                    algorithm,
@@ -124,9 +121,6 @@ if __name__ == '__main__':
                        'X5': [i * 0.5 for i in X[:, 4]], 'X6': X[:, 5], 'X7': X[:, 6], 'X8': X[:, 7], 'X9': X[:, 8],
                        'ANG': F[:, 2], 'AVG': F[:, 0], 'RIP': F[:, 1], 'COG': F[:, 3]})
 
-    current_file_path = os.path.abspath(__file__)
-    folder_path = os.path.dirname(current_file_path)
-
     if os.path.exists('results'):
         pass
     else:
@@ -140,4 +134,3 @@ if __name__ == '__main__':
     for i in folder_path:
         if os.path.exists(i):
             shutil.rmtree(i)
-
