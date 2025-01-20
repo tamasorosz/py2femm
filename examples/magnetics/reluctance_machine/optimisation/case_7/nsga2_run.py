@@ -68,6 +68,9 @@ if __name__ == '__main__':
                     x[i][5] = x[i][6]
                     x[i][7] = x[i][8]
 
+                if x[i][5] == x[i][6]:
+                    x[i][7] = x[i][8]
+
                 if x[i][7] > int((x[i][6] - x[i][5]) * 2) + x[i][8]:
                     x[i][7] = int((x[i][6] - x[i][5]) * 2) + x[i][8]
 
@@ -129,7 +132,7 @@ if __name__ == '__main__':
     else:
         os.makedirs('results')
 
-    file_path = os.path.join(folder_path, f'results/nsga2_case7_p100o100g200_obj9_20250119.csv')
+    file_path = os.path.join(folder_path, f'results/nsga2_case7_p100o100g200_obj9_20250120.csv')
     df.to_csv(file_path, encoding='utf-8', index=False)
 
     folder_path = ['temp_ang', 'temp_avg_rip', 'temp_cog']
