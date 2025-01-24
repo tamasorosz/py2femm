@@ -1,7 +1,6 @@
 import gc
 import math
 import os
-import shutil
 
 import numpy as np
 import pandas as pd
@@ -14,8 +13,8 @@ from pymoo.operators.mutation.pm import PM
 from pymoo.operators.repair.rounding import RoundingRepair
 from pymoo.operators.sampling.rnd import IntegerRandomSampling
 from pymoo.termination import get_termination
-from pymoo.termination.default import DefaultMultiObjectiveTermination
 from pymoo.optimize import minimize
+from pymoo.termination.default import DefaultMultiObjectiveTermination
 
 import calc_torque_avg_rip
 import calc_cogging

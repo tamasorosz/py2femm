@@ -39,7 +39,7 @@ def execute_model(counter):
             print(f'PermissionError at ang{counter}')
             pass
 
-    except(IndexError):
+    except IndexError:
         print(f'IndexError at ang{counter}')
         torque = 0.0
 

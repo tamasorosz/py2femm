@@ -42,7 +42,7 @@ def execute_model(counter):
             print(f'PermissionError at avg_rip{counter}')
             pass
 
-    except(IndexError):
+    except IndexError:
         print(f'IndexError at avg_rip{counter}')
         torque = 0.0
 
