@@ -41,7 +41,7 @@ if __name__ == "__main__":
 # plt.show()
 
 #
-# from examples.magnetics.reluctance_machine.optimisation.case_2 import calc_torque_avg_rip
+# from examples.magnetics.reluctance_machine.optimisation.case_1_withPM import calc_torque_avg_rip
 # #
 # if __name__ == "__main__":
 #     # x = calc_max_torque_angle.max_torque_angle(30, 25.0, 147.1, 1.1, 1.0, 2.5, 0.5, 5.1, 1.5)
@@ -107,7 +107,7 @@ if __name__ == "__main__":
 #
 # if __name__ == "__main__":
 #     lista = []
-#     with open("D:\Respositories\py2femm\examples\magnetics/reluctance_machine\optimisation\case_2/results\optimised\pmasynrm_span5_cogging.csv") as f:
+#     with open("D:\Respositories\py2femm\examples\magnetics/reluctance_machine\optimisation\case_1_withPM/results\optimised\pmasynrm_span5_cogging.csv") as f:
 #         reader = csv.reader(f, delimiter=",")
 #         for i in reader:
 #             lista.append(i[0])
