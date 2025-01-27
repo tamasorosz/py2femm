@@ -1,0 +1,591 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="deaed303-3e86-4a5c-961a-818b3d4a1f98" name="Changes" comment="Resolved conflict with main." />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="MIXED" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2f8tLwxTKu2zr3SOMjjBNvCCSUP" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Respositories/py2femm/examples/magnetics/reluctance_machine/optimisation/case_6&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Respositories\py2femm\examples\magnetics\reluctance_machine\optimisation\case_6" />
+      <recent name="D:\Respositories\py2femm\examples\magnetics\reluctance_machine\optimisation\case_6\MachineLearning" />
+      <recent name="D:\Respositories\py2femm\examples\magnetics\reluctance_machine\optimisation\case_7" />
+      <recent name="D:\Respositories\py2femm\examples\magnetics\reluctance_machine\optimisation\case_7\robust" />
+      <recent name="D:\Respositories\py2femm\examples\magnetics\reluctance_machine\optimisation\MCDM" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Respositories\py2femm\examples\magnetics\ISPMSM" />
+      <recent name="D:\Respositories\py2femm\examples\magnetics\FI-PMaSynRM" />
+      <recent name="D:\Respositories\py2femm\examples\magnetics\reluctance_machine\optimisation\case_6" />
+      <recent name="D:\Respositories\py2femm\examples\magnetics\reluctance_machine\optimisation\case_6\results" />
+      <recent name="D:\Respositories\py2femm\examples\magnetics\reluctance_machine" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.test">
+    <configuration name="machine_model" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="py2femm" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/examples/magnetics/ISPMSM" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/examples/magnetics/ISPMSM/machine_model.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="nsga2_run (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="py2femm" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/examples/magnetics/reluctance_machine/optimisation/case_9" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/examples/magnetics/reluctance_machine/optimisation/case_9/nsga2_run.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="nsga2_run (2)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="py2femm" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/examples/magnetics/reluctance_machine/optimisation/case_10" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/examples/magnetics/reluctance_machine/optimisation/case_10/nsga2_run.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="test (3)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="py2femm" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/examples/magnetics/reluctance_machine/optimisation/case_10" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/examples/magnetics/reluctance_machine/optimisation/case_10/test.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="py2femm" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/examples/magnetics/ISPMSM" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/examples/magnetics/ISPMSM/test.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.test (3)" />
+        <item itemvalue="Python.test" />
+        <item itemvalue="Python.nsga2_run (2)" />
+        <item itemvalue="Python.nsga2_run (1)" />
+        <item itemvalue="Python.machine_model" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="deaed303-3e86-4a5c-961a-818b3d4a1f98" name="Changes" comment="" />
+      <created>1713194481180</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1713194481180</updated>
+    </task>
+    <task id="LOCAL-00019" summary="A load of results">
+      <created>1715240660433</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1715240660433</updated>
+    </task>
+    <task id="LOCAL-00020" summary="A load of results">
+      <created>1716843328553</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1716843328553</updated>
+    </task>
+    <task id="LOCAL-00021" summary="A load of results">
+      <created>1716843498818</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1716843498818</updated>
+    </task>
+    <task id="LOCAL-00022" summary="A load of results">
+      <created>1717024012969</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1717024012969</updated>
+    </task>
+    <task id="LOCAL-00023" summary="A load of results">
+      <created>1717168258076</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1717168258077</updated>
+    </task>
+    <task id="LOCAL-00024" summary="A load of results">
+      <created>1717337237923</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1717337237923</updated>
+    </task>
+    <task id="LOCAL-00025" summary="Corrected the simulations.">
+      <created>1717378953515</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1717378953515</updated>
+    </task>
+    <task id="LOCAL-00026" summary="Corrected the simulations.">
+      <created>1717591949442</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1717591949442</updated>
+    </task>
+    <task id="LOCAL-00027" summary="Results">
+      <created>1717595575588</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1717595575588</updated>
+    </task>
+    <task id="LOCAL-00028" summary="Results">
+      <created>1717610503606</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1717610503606</updated>
+    </task>
+    <task id="LOCAL-00029" summary="Results">
+      <created>1717610536340</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1717610536340</updated>
+    </task>
+    <task id="LOCAL-00030" summary="Results">
+      <created>1717611158073</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1717611158073</updated>
+    </task>
+    <task id="LOCAL-00031" summary="Results">
+      <created>1717614198577</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1717614198577</updated>
+    </task>
+    <task id="LOCAL-00032" summary="Poster ready for ESCO24">
+      <created>1717754452539</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1717754452539</updated>
+    </task>
+    <task id="LOCAL-00033" summary="COGMOB24 conference figures added">
+      <created>1718800571202</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1718800571202</updated>
+    </task>
+    <task id="LOCAL-00034" summary="COGMOB24 conference figures added">
+      <created>1718800585749</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1718800585749</updated>
+    </task>
+    <task id="LOCAL-00035" summary="COGMOB24 conference figures added Taguchi too">
+      <created>1718811897689</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1718811897689</updated>
+    </task>
+    <task id="LOCAL-00036" summary="COGMOB24 conference figures added Taguchi too">
+      <created>1718811940088</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1718811940088</updated>
+    </task>
+    <task id="LOCAL-00037" summary="COGMOB24 conference figures added Taguchi too">
+      <created>1718812260474</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1718812260474</updated>
+    </task>
+    <task id="LOCAL-00038" summary="COGMOB24 conference figures">
+      <created>1718977129912</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1718977129912</updated>
+    </task>
+    <task id="LOCAL-00039" summary="Simulation prepared for case3, repaired THD">
+      <created>1719265793533</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1719265793533</updated>
+    </task>
+    <task id="LOCAL-00040" summary="Simulation result of case3 with 4 objectives added, stopped after 64 generations instead of 125, as there were not enough unique offsprings.">
+      <created>1719351399214</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1719351399214</updated>
+    </task>
+    <task id="LOCAL-00041" summary="The negative and positive shift cause mirroring in the static torque curve, that creates an error in the data. Mirrored designs are identical in physical result, so rerun without negative shift.">
+      <created>1719356167743</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1719356167743</updated>
+    </task>
+    <task id="LOCAL-00042" summary="Case3 results">
+      <created>1719527722568</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1719527722568</updated>
+    </task>
+    <task id="LOCAL-00043" summary="Case2 correction_v1">
+      <created>1719695148736</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1719695148736</updated>
+    </task>
+    <task id="LOCAL-00044" summary="Case2 results">
+      <created>1720080132803</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1720080132803</updated>
+    </task>
+    <task id="LOCAL-00045" summary="Case3 files">
+      <created>1720555979347</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1720555979347</updated>
+    </task>
+    <task id="LOCAL-00046" summary="Case3 files">
+      <created>1720709171005</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1720709171005</updated>
+    </task>
+    <task id="LOCAL-00047" summary="Case3 results">
+      <created>1720949346367</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1720949346367</updated>
+    </task>
+    <task id="LOCAL-00048" summary="Case3 results">
+      <created>1722770136761</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1722770136761</updated>
+    </task>
+    <task id="LOCAL-00049" summary="Organising">
+      <created>1722770626001</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1722770626001</updated>
+    </task>
+    <task id="LOCAL-00050" summary="Organising">
+      <created>1722770708331</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1722770708341</updated>
+    </task>
+    <task id="LOCAL-00051" summary="Organising">
+      <created>1722771103270</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1722771103270</updated>
+    </task>
+    <task id="LOCAL-00052" summary="Organising">
+      <created>1722772373598</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1722772373598</updated>
+    </task>
+    <task id="LOCAL-00053" summary="Case4 results">
+      <created>1723054357750</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1723054357750</updated>
+    </task>
+    <task id="LOCAL-00054" summary="Case3 results">
+      <created>1723275324525</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1723275324525</updated>
+    </task>
+    <task id="LOCAL-00055" summary="Case9 and 10">
+      <created>1724416513135</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1724416513135</updated>
+    </task>
+    <task id="LOCAL-00056" summary="Opt done">
+      <created>1733162010509</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1733162010509</updated>
+    </task>
+    <task id="LOCAL-00057" summary="Opt done">
+      <created>1733162023022</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1733162023022</updated>
+    </task>
+    <task id="LOCAL-00058" summary="Opt done">
+      <created>1733162610113</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1733162610113</updated>
+    </task>
+    <task id="LOCAL-00059" summary="Robustness done">
+      <created>1733762279910</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1733762279910</updated>
+    </task>
+    <task id="LOCAL-00060" summary="Robustness pics">
+      <created>1733835348755</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1733835348755</updated>
+    </task>
+    <task id="LOCAL-00061" summary="Tried machine learning.">
+      <created>1736100581087</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1736100581087</updated>
+    </task>
+    <task id="LOCAL-00062" summary="Case 2 updated.">
+      <created>1736756546874</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1736756546874</updated>
+    </task>
+    <task id="LOCAL-00063" summary="Case 9 and 10 updated.">
+      <created>1736780693466</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1736780693466</updated>
+    </task>
+    <task id="LOCAL-00064" summary="Deleted from src.electrostatics import ElectrostaticVolumeIntegral line as it is not used.&#10;&#10;Added create_model() function which creates the FEMM file without analysis.">
+      <created>1736945714441</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1736945714441</updated>
+    </task>
+    <task id="LOCAL-00065" summary="Updated the machine model with stator.">
+      <created>1736945811367</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1736945811367</updated>
+    </task>
+    <task id="LOCAL-00066" summary="Added stator geometry as a dxf source file.">
+      <created>1736945836453</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1736945836453</updated>
+    </task>
+    <task id="LOCAL-00067" summary="Resolved conflict with main.">
+      <created>1737379185683</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1737379185683</updated>
+    </task>
+    <option name="localTasksCounter" value="68" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="date">
+                    <value>
+                      <list>
+                        <option value="1737292434940" />
+                        <option value="" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="Results" />
+    <MESSAGE value="Poster ready for ESCO24" />
+    <MESSAGE value="COGMOB24 conference figures added" />
+    <MESSAGE value="COGMOB24 conference figures added Taguchi too" />
+    <MESSAGE value="COGMOB24 conference figures" />
+    <MESSAGE value="Simulation prepared for case3, repaired THD" />
+    <MESSAGE value="Simulation result of case3 with 4 objectives added, stopped after 64 generations instead of 125, as there were not enough unique offsprings." />
+    <MESSAGE value="The negative and positive shift cause mirroring in the static torque curve, that creates an error in the data. Mirrored designs are identical in physical result, so rerun without negative shift." />
+    <MESSAGE value="Case2 correction_v1" />
+    <MESSAGE value="Case2 results" />
+    <MESSAGE value="Case3 files" />
+    <MESSAGE value="Organising" />
+    <MESSAGE value="Case4 results" />
+    <MESSAGE value="Case3 results" />
+    <MESSAGE value="Case9 and 10" />
+    <MESSAGE value="Opt done" />
+    <MESSAGE value="Robustness done" />
+    <MESSAGE value="Robustness pics" />
+    <MESSAGE value="Tried machine learning." />
+    <MESSAGE value="Case 2 updated." />
+    <MESSAGE value="Case 9 and 10 updated." />
+    <MESSAGE value="Deleted from src.electrostatics import ElectrostaticVolumeIntegral line as it is not used.&#10;&#10;Added create_model() function which creates the FEMM file without analysis." />
+    <MESSAGE value="Updated the machine model with stator." />
+    <MESSAGE value="Added stator geometry as a dxf source file." />
+    <MESSAGE value="Resolved conflict with main." />
+    <option name="LAST_COMMIT_MESSAGE" value="Resolved conflict with main." />
+  </component>
+</project>
