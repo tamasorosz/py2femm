@@ -5,23 +5,20 @@ import os  # For specifying the current folder path.
 # The FemmProblem class defines the .lua file which is an input of the FEMM solver.
 import numpy as np
 
-from src import femm_problem
-from src.executor import Executor
 from src.femm_problem import FemmProblem
+
 from src.general import LengthUnit
 
 from src.geometry import Geometry, Node, CircleArc, Line
 
-# Creating static global variables -------------------------------------------------------------------------------------
-
-# Gets the current file's folder path to specify the path of the output FEMM model file with .lua extension ------------
 from src.magnetics import MagneticMaterial
 
+# Creating static global variables -------------------------------------------------------------------------------------
+# Gets the current file's folder path to specify the path of the output FEMM model file with .lua extension ------------
 current_folder_path = os.path.dirname(os.path.abspath(__file__))
 
 # The zero node specifies the center point of the machine, discretising the coordinate system --------------------------
 N0 = Node(0, 0)
-
 
 # Creating the variables of the machine to simplify the functions later on ---------------------------------------------
 class VariableParameters:
