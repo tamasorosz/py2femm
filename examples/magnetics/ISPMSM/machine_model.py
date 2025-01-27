@@ -5,6 +5,7 @@ import os  # For specifying the current folder path.
 # The FemmProblem class defines the .lua file which is an input of the FEMM solver.
 import numpy as np
 
+from src import femm_problem
 from src.executor import Executor
 from src.femm_problem import FemmProblem
 from src.general import LengthUnit
@@ -14,10 +15,13 @@ from src.geometry import Geometry, Node, CircleArc, Line
 # Creating static global variables -------------------------------------------------------------------------------------
 
 # Gets the current file's folder path to specify the path of the output FEMM model file with .lua extension ------------
+from src.magnetics import MagneticMaterial
+
 current_folder_path = os.path.dirname(os.path.abspath(__file__))
 
 # The zero node specifies the center point of the machine, discretising the coordinate system --------------------------
 N0 = Node(0, 0)
+
 
 # Creating the variables of the machine to simplify the functions later on ---------------------------------------------
 class VariableParameters:
@@ -46,6 +50,7 @@ class VariableParameters:
         self.output_file = f"{current_folder_path}/{folder}/{filename}_{rotor_position}"
         self.output_folder = f"{current_folder_path}/{folder}"
 
+
 # Importing stator geometry from a dxf file instead of manually defining the nodes, lines and arc ----------------------
 def stator_geometry(femm_model: FemmProblem):
     """Creating stator geometry."""
@@ -55,10 +60,13 @@ def stator_geometry(femm_model: FemmProblem):
 
     femm_model.create_geometry(stator)
 
+
 # Creating the parametric rotor geometry manually to make it possible to optimise --------------------------------------
 def rotor_geometry(femm_model: FemmProblem, variables: VariableParameters):
     """Creating rotor geometry."""
     rotor = Geometry()
+    magnet_line_for_material_left = []
+    magnet_line_for_material_right = []
 
     # Creating the shaft -----------------------------------------------------------------------------------------------
 
@@ -83,12 +91,11 @@ def rotor_geometry(femm_model: FemmProblem, variables: VariableParameters):
     magnet_nolori = vertical_node_lower.rotate_about(N0, np.radians(variables.magnet_width / 2))
 
     for poles in [i * (2 * np.pi / (variables.pole_pairs * 2)) for i in range(variables.pole_pairs * 2 + 1)]:
+        magnet_node_circumference_left = magnet_nocile.rotate_about(N0, poles + np.radians(variables.rotor_position))
+        magnet_node_circumference_right = magnet_nociri.rotate_about(N0, poles + np.radians(variables.rotor_position))
 
-        magnet_node_circumference_left = magnet_nocile.rotate_about(N0, poles)
-        magnet_node_circumference_right = magnet_nociri.rotate_about(N0, poles)
-
-        magnet_node_lower_left = magnet_nolole.rotate_about(N0, poles)
-        magnet_node_lower_right = magnet_nolori.rotate_about(N0, poles)
+        magnet_node_lower_left = magnet_nolole.rotate_about(N0, poles + np.radians(variables.rotor_position))
+        magnet_node_lower_right = magnet_nolori.rotate_about(N0, poles + np.radians(variables.rotor_position))
 
         magnet_line_left = Line(magnet_node_circumference_left, magnet_node_lower_left)
         magnet_line_right = Line(magnet_node_circumference_right, magnet_node_lower_right)
@@ -97,6 +104,9 @@ def rotor_geometry(femm_model: FemmProblem, variables: VariableParameters):
 
         rotor.add_line(magnet_line_left)
         rotor.add_line(magnet_line_right)
+
+        magnet_line_for_material_left.append(magnet_line_left)
+        magnet_line_for_material_right.append(magnet_line_right)
 
         rotor.add_arc(magnet_arc_lower)
 
@@ -112,8 +122,32 @@ def rotor_geometry(femm_model: FemmProblem, variables: VariableParameters):
 
     femm_model.create_geometry(rotor)
 
-def model_creation(variables: VariableParameters):
+    return magnet_line_for_material_left, magnet_line_for_material_right
 
+
+# Creating and adding the material labels for the simulation -----------------------------------------------------------
+def material_definition(femm_model: FemmProblem, variables: VariableParameters, rotor: rotor_geometry):
+
+    # Adding N55 NdFeB magnet to the model from the material library ---------------------------------------------------
+    for oscillation, (line_left, line_right) in enumerate(zip(rotor[0], rotor[1])):
+        magnet_midpoint = Line(line_left.selection_point(), line_right.selection_point()).selection_point()
+
+        magnet = MagneticMaterial(material_name=f"N55_{oscillation}", H_c=922850, Sigma=0.667)
+
+        magnet.remanence_angle = ((-1) ** oscillation) * math.atan2(magnet_midpoint.y, magnet_midpoint.x)
+
+        femm_model.add_material(magnet)
+
+        femm_model.add_bh_curve(material_name=f"N55_{oscillation}",
+                                data_b=[0.000000, 0.075300, 0.150600, 0.225900, 0.301200, 0.376500, 0.451800, 0.527100,
+                                        0.602400, 1.506000],
+                                data_h=[0.000000, 5371.000000, 12456.000000, 22657.000000, 39606.000000, 72533.000000,
+                                        124321.000000, 180991.000000, 238036.000000, 922850.000000])
+
+        femm_model.define_block_label(magnet_midpoint, magnet)
+
+
+def model_creation(variables: VariableParameters):
     if not os.path.exists(variables.output_folder):
         os.makedirs(variables.output_folder)
 
@@ -122,7 +156,8 @@ def model_creation(variables: VariableParameters):
     problem.magnetic_problem(0, LengthUnit.MILLIMETERS, "planar", depth=variables.stack_lenght)
 
     stator_geometry(problem)
-    rotor_geometry(problem, variables)
+    rotor = rotor_geometry(problem, variables)
+    material_definition(problem, variables, rotor)
 
     problem.create_model(filename=variables.output_file)
 
