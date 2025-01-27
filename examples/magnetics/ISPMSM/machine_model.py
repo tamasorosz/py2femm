@@ -134,7 +134,7 @@ def material_definition(femm_model: FemmProblem, variables: VariableParameters, 
 
         magnet = MagneticMaterial(material_name=f"N55_{oscillation}", H_c=922850, Sigma=0.667)
 
-        magnet.remanence_angle = ((-1) ** oscillation) * math.atan2(magnet_midpoint.y, magnet_midpoint.x)
+        magnet.remanence_angle = (180 * (oscillation % 2)) + np.degrees(math.atan2(magnet_midpoint.y, magnet_midpoint.x))
 
         femm_model.add_material(magnet)
 
