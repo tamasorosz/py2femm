@@ -11,7 +11,10 @@ variables = machine_model.VariableParameters(folder="test",
                                              magnet_width=30,
                                              magnet_height=5,
                                              pole_pairs=4,
-                                             stack_lenght=1)
+                                             stack_lenght=1,
+                                             winding_scheme='AabBCcaABbcC',
+                                             shortening=1
+                                             )
 
 model = machine_model.model_creation(variables)
 
