@@ -903,10 +903,9 @@ class FemmProblem:
         self.add_blocklabel(label)
         self.select_label(label)
 
-        if isinstance(material, MagneticMaterial):
+        if isinstance(material, MagneticMaterial) and material.remanence_angle is not None:
             self.set_blockprop(blockname=material.material_name, automesh=material.auto_mesh,
-                               meshsize=material.mesh_size)
-            # magdirection=material.remanence_angle)
+                               meshsize=material.mesh_size, magdirection=material.remanence_angle)
         else:
             self.set_blockprop(blockname=material.material_name, automesh=material.auto_mesh,
                                meshsize=material.mesh_size)
