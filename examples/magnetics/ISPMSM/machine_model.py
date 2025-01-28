@@ -4,6 +4,7 @@ import os  # For specifying the current folder path.
 
 # The FemmProblem class defines the .lua file which is an input of the FEMM solver.
 import numpy as np
+import re
 
 from src.femm_problem import FemmProblem
 
@@ -11,7 +12,7 @@ from src.general import LengthUnit
 
 from src.geometry import Geometry, Node, CircleArc, Line
 
-from src.magnetics import MagneticMaterial
+from src.magnetics import MagneticMaterial, LamType
 
 # Creating static global variables -------------------------------------------------------------------------------------
 # Gets the current file's folder path to specify the path of the output FEMM model file with .lua extension ------------
@@ -24,7 +25,9 @@ N0 = Node(0, 0)
 class VariableParameters:
 
     def __init__(self, folder, filename, current_density, current_angle, rotor_position, rotor_diameter, shaft_diameter,
-                 magnet_width, magnet_height, pole_pairs, stack_lenght):
+                 magnet_width, magnet_height, pole_pairs, stack_lenght, winding_scheme='A|b|C|a|B|c|A|b|C|a|B|c|',
+                 shortening=0):
+
         self.folder = folder
         self.filename = filename
 
@@ -41,19 +44,42 @@ class VariableParameters:
         self.magnet_width = magnet_width
         self.magnet_height = magnet_height
         self.pole_pairs = pole_pairs
+        self.shortening = shortening
 
         self.stack_lenght = stack_lenght
+
+        if bool(re.fullmatch(r"^(?:[A-Ca-c]\|){12}$", winding_scheme)):
+            self.winding_scheme = list(filter(lambda item: item != '|', winding_scheme))
+            self.winding_layers = False
+            self.winding_type = 'distributed'
+        elif bool(re.fullmatch(r"^(?:[A-Ca-c][A-Ca-c]\|){12}$", winding_scheme)):
+            self.winding_scheme = list(filter(lambda item: item != '|', winding_scheme))
+            self.winding_layers = True
+            self.winding_type = 'distributed'
+        elif bool(re.fullmatch(r"^(?:[A-Ca-c]){12}$", winding_scheme)):
+            self.winding_scheme = list(filter(lambda item: item != '|', winding_scheme))
+            self.winding_layers = False
+            self.winding_type = 'concentrated'
+        else:
+            raise Exception('Invalid input for winding scheme!')
 
         self.output_file = f"{current_folder_path}/{folder}/{filename}_{rotor_position}"
         self.output_folder = f"{current_folder_path}/{folder}"
 
 
 # Importing stator geometry from a dxf file instead of manually defining the nodes, lines and arc ----------------------
-def stator_geometry(femm_model: FemmProblem):
+def stator_geometry(femm_model: FemmProblem, variables: VariableParameters):
     """Creating stator geometry."""
     stator = Geometry()
 
-    stator.import_dxf("stator.dxf")
+    if not variables.winding_layers and variables.winding_type == 'distributed':
+        stator.import_dxf("stator_distributed_1layer.dxf")
+    elif variables.winding_layers and variables.winding_type == 'distributed':
+        stator.import_dxf("stator_distributed_2layers.dxf")
+    elif not variables.winding_layers and variables.winding_type == 'concentrated':
+        stator.import_dxf("stator_concentrated.dxf")
+    else:
+        pass
 
     femm_model.create_geometry(stator)
 
@@ -143,6 +169,65 @@ def material_definition(femm_model: FemmProblem, variables: VariableParameters, 
 
         femm_model.define_block_label(magnet_midpoint, magnet)
 
+    # Adding 1018 steel to the model from the material library -----------------------------------------------------
+    steel = MagneticMaterial(material_name="1018 steel", Phi_hmax=20, Sigma=5.8, Lam_d=0.5, lam_fill=0.98)
+
+    femm_model.add_material(steel)
+
+    femm_model.add_bh_curve(material_name=f"1018 steel",
+                            data_b=[0.000000, 0.250300, 0.925000, 1.250000, 1.390000, 1.525000, 1.710000, 1.870000,
+                                    1.955000, 2.020000, 2.110000, 2.225000, 2.430000],
+                            data_h=[0.000000, 238.732500, 795.775000, 1591.550000, 2387.325000, 3978.875000,
+                                    7957.750000, 15915.500000, 23873.250000, 39788.750000, 79577.500000,
+                                    159155.000000, 318310.000000])
+
+    femm_model.define_block_label(Node(0, variables.shaft_diameter / 2 + 1), steel)
+
+    femm_model.define_block_label(Node(0, 40), steel)
+
+    # Adding air to the model from material library ----------------------------------------------------------------
+    air = MagneticMaterial(material_name="air")
+
+    femm_model.add_material(air)
+
+    femm_model.define_block_label(Node(0, variables.rotor_diameter / 2 + 1), air)
+    femm_model.define_block_label(N0, air)
+
+def winding_definition(femm_model: FemmProblem, variables: VariableParameters):
+    pass
+
+    phases = ['A', 'B', 'C', 'a', 'b', 'c']
+
+    excitation_map = {'A': variables.JUp,
+                      'a': variables.JUn,
+                      'B': variables.JVp,
+                      'b': variables.JVn,
+                      'C': variables.JWp,
+                      'c': variables.JWn}
+
+    phase_map = {f'{i}': MagneticMaterial(material_name=f"{i}", J=excitation_map[i], Sigma=58,
+                                       LamType=LamType.MAGNET_WIRE, WireD=1) for i in phases}
+
+    for phase in phases:
+        femm_model.add_material(phase_map[phase])
+
+    if not variables.winding_layers and variables.winding_type == 'distributed':
+        for slot, phase in enumerate(variables.winding_scheme):
+            femm_model.define_block_label(Node(0, 30.5).rotate_about(N0, -1 * 30 * slot, degrees=True), phase_map[phase])
+
+    elif variables.winding_layers and variables.winding_type == 'distributed':
+        for slot, phase in enumerate(variables.winding_scheme[0::2]):
+            femm_model.define_block_label(Node(0, 33.5).rotate_about(N0, -1 * 30 * slot, degrees=True), phase_map[phase])
+        for slot, phase in enumerate(variables.winding_scheme[1::2]):
+            femm_model.define_block_label(Node(0, 27.5).rotate_about(N0, -1 * 30 * (slot + variables.shortening),
+                                                                     degrees=True), phase_map[phase])
+
+    elif not variables.winding_layers and variables.winding_type == 'concentrated':
+        for slot, phase in enumerate(variables.winding_scheme):
+            femm_model.define_block_label(Node(-2, 30.5).rotate_about(N0, -1 * 30 * slot, degrees=True), phase_map[phase])
+            femm_model.define_block_label(Node(2, 30.5).rotate_about(N0, -1 * 30 * slot, degrees=True),
+                                          phase_map[phase.swapcase()])
+
 
 def model_creation(variables: VariableParameters):
     if not os.path.exists(variables.output_folder):
@@ -152,9 +237,10 @@ def model_creation(variables: VariableParameters):
 
     problem.magnetic_problem(0, LengthUnit.MILLIMETERS, "planar", depth=variables.stack_lenght)
 
-    stator_geometry(problem)
+    stator_geometry(problem, variables)
     rotor = rotor_geometry(problem, variables)
     material_definition(problem, variables, rotor)
+    winding_definition(problem, variables)
 
     problem.create_model(filename=variables.output_file)
 
