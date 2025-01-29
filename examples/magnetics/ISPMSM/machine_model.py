@@ -17,7 +17,7 @@ from src.magnetics import MagneticMaterial, LamType, MagneticDirichlet, Magnetic
 
 # Creating static global variables -------------------------------------------------------------------------------------
 # Gets the current file's folder path to specify the path of the output FEMM model file with .lua extension ------------
-current_folder_path = Path(__file__).resolve().parent
+current_folder_path = str(Path(__file__).resolve().parent).replace("\\", "/")
 
 # The zero node specifies the center point of the machine, discretising the coordinate system --------------------------
 N0 = Node(0, 0)
