@@ -1,10 +1,11 @@
 # Importing the packages from py2femm and third party packages too -----------------------------------------------------
 import math  # For trigonometric functions to define the rotor geometry easier in Cartesian coordinate system.
-import os  # For specifying the current folder path.
 
 # The FemmProblem class defines the .lua file which is an input of the FEMM solver.
 import numpy as np
 import re
+
+from pathlib import Path  # For specifying the current folder path.
 
 from src.femm_problem import FemmProblem
 
@@ -16,10 +17,11 @@ from src.magnetics import MagneticMaterial, LamType, MagneticDirichlet, Magnetic
 
 # Creating static global variables -------------------------------------------------------------------------------------
 # Gets the current file's folder path to specify the path of the output FEMM model file with .lua extension ------------
-current_folder_path = os.path.dirname(os.path.abspath(__file__))
+current_folder_path = Path(__file__).resolve().parent
 
 # The zero node specifies the center point of the machine, discretising the coordinate system --------------------------
 N0 = Node(0, 0)
+
 
 # Creating the variables of the machine to simplify the functions later on ---------------------------------------------
 class VariableParameters:
@@ -150,7 +152,6 @@ def rotor_geometry(femm_model: FemmProblem, variables: VariableParameters):
 
 # Creating and adding the material labels for the simulation -----------------------------------------------------------
 def material_definition(femm_model: FemmProblem, variables: VariableParameters, rotor: rotor_geometry):
-
     magnet_midpoints = []
 
     # Adding N55 NdFeB magnet to the model from the material library ---------------------------------------------------
@@ -159,7 +160,8 @@ def material_definition(femm_model: FemmProblem, variables: VariableParameters, 
 
         magnet = MagneticMaterial(material_name=f"N55_{oscillation}", H_c=922850, Sigma=0.667)
 
-        magnet.remanence_angle = (180 * (oscillation % 2)) + np.degrees(math.atan2(magnet_midpoint.y, magnet_midpoint.x))
+        magnet.remanence_angle = (180 * (oscillation % 2)) + np.degrees(
+            math.atan2(magnet_midpoint.y, magnet_midpoint.x))
 
         femm_model.add_material(magnet)
 
@@ -199,6 +201,7 @@ def material_definition(femm_model: FemmProblem, variables: VariableParameters, 
 
     return steel_label_node, magnet_midpoints
 
+
 def winding_definition(femm_model: FemmProblem, variables: VariableParameters):
     pass
 
@@ -212,30 +215,33 @@ def winding_definition(femm_model: FemmProblem, variables: VariableParameters):
                       'c': variables.JWn}
 
     phase_map = {f'{i}': MagneticMaterial(material_name=f"{i}", J=excitation_map[i], Sigma=58,
-                                       LamType=LamType.MAGNET_WIRE, WireD=1) for i in phases}
+                                          LamType=LamType.MAGNET_WIRE, WireD=1) for i in phases}
 
     for phase in phases:
         femm_model.add_material(phase_map[phase])
 
     if not variables.winding_layers and variables.winding_type == 'distributed':
         for slot, phase in enumerate(variables.winding_scheme):
-            femm_model.define_block_label(Node(0, 30.5).rotate_about(N0, (-1) * 30 * slot, degrees=True), phase_map[phase])
+            femm_model.define_block_label(Node(0, 30.5).rotate_about(N0, (-1) * 30 * slot, degrees=True),
+                                          phase_map[phase])
 
     elif variables.winding_layers and variables.winding_type == 'distributed':
         for slot, phase in enumerate(variables.winding_scheme[0::2]):
-            femm_model.define_block_label(Node(0, 33.5).rotate_about(N0, (-1) * 30 * slot, degrees=True), phase_map[phase])
+            femm_model.define_block_label(Node(0, 33.5).rotate_about(N0, (-1) * 30 * slot, degrees=True),
+                                          phase_map[phase])
         for slot, phase in enumerate(variables.winding_scheme[1::2]):
             femm_model.define_block_label(Node(0, 27.5).rotate_about(N0, (-1) * 30 * (slot + variables.shortening),
                                                                      degrees=True), phase_map[phase])
 
     elif not variables.winding_layers and variables.winding_type == 'concentrated':
         for slot, phase in enumerate(variables.winding_scheme):
-            femm_model.define_block_label(Node(-2, 30.5).rotate_about(N0, (-1) * 30 * slot, degrees=True), phase_map[phase])
+            femm_model.define_block_label(Node(-2, 30.5).rotate_about(N0, (-1) * 30 * slot, degrees=True),
+                                          phase_map[phase])
             femm_model.define_block_label(Node(2, 30.5).rotate_about(N0, (-1) * 30 * slot, degrees=True),
                                           phase_map[phase.swapcase()])
 
-def boundary_definition(femm_model: FemmProblem, variables: VariableParameters):
 
+def boundary_definition(femm_model: FemmProblem, variables: VariableParameters):
     A0 = MagneticDirichlet(name="a0", a_0=0, a_1=0, a_2=0, phi=0)
 
     femm_model.add_boundary(A0)
@@ -246,9 +252,10 @@ def boundary_definition(femm_model: FemmProblem, variables: VariableParameters):
     femm_model.set_boundary_definition_arc(Node(0, variables.shaft_diameter / 2), A0)
     femm_model.set_boundary_definition_arc(Node(0, (-1) * variables.shaft_diameter / 2), A0)
 
+
 def model_creation(variables: VariableParameters):
-    if not os.path.exists(variables.output_folder):
-        os.makedirs(variables.output_folder)
+    if not Path(variables.output_folder).exists():
+        Path(variables.output_folder).mkdir(parents=True, exist_ok=True)
 
     problem = FemmProblem(out_file=variables.output_file + ".csv", )
 
