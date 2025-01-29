@@ -12,7 +12,7 @@ variables = machine_model.VariableParameters(folder="test",
                                              magnet_height=5,
                                              pole_pairs=4,
                                              stack_lenght=1,
-                                             winding_scheme='AabBCcaABbcC',
+                                             winding_scheme='A|b|C|a|B|c|A|b|C|a|B|c|',
                                              shortening=1
                                              )
 
