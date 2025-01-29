@@ -1,22 +1,26 @@
-import machine_model
+import machine_model as model
+import calculate_max_torque_angle as angle
 from src.executor import Executor
 
-variables = machine_model.VariableParameters(folder="test",
-                                             filename="test",
-                                             current_density=0,
-                                             current_angle=0,
-                                             rotor_position=0,
-                                             rotor_diameter=40,
-                                             shaft_diameter=10,
-                                             magnet_width=30,
-                                             magnet_height=5,
-                                             pole_pairs=4,
-                                             stack_lenght=1,
-                                             winding_scheme='A|b|C|a|B|c|A|b|C|a|B|c|',
-                                             shortening=1
-                                             )
+if __name__ == '__main__':
 
-model = machine_model.model_creation(variables)
+    variables = model.VariableParameters(folder="ang",
+                                         filename="ang",
+                                         current_density=100,
+                                         current_angle=0,
+                                         initial_rotor_position=0,
+                                         rotor_diameter=40,
+                                         shaft_diameter=10,
+                                         magnet_width=30,
+                                         magnet_height=5,
+                                         pole_pairs=4,
+                                         stack_lenght=1,
+                                         winding_scheme='AA|bb|CC|aa|BB|cc|AA|bb|CC|aa|BB|cc|',
+                                         shortening=1,
+                                         rotor_position=0
+                                         )
 
-femm = Executor()
-femm.run(variables.output_file + ".lua")
+    x, y = angle.max_torque_angle(variables, resolution=11, start_position=0, end_position=10, rounding=3,
+                                  delete_after=True)
+    print(x)
+    print(y)
