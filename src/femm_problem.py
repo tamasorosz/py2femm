@@ -87,7 +87,7 @@ class FemmProblem:
                 )
             )
 
-    def init_problem(self, out_file="femm_data.csv"):
+    def init_problem(self, out_file="femm_data.csv", elements=False):
         """
         This commands initialize a femm console and flush the variables
         :param out_file: defines the default output file
@@ -105,34 +105,36 @@ class FemmProblem:
         if self.field == FemmFields.CURRENT_FLOW:
             cmd_list.append("newdocument(3)")  # the 3 specifies current flow problem
 
-        # user specified outpu
+        # user specified output
         cmd = Template('file_out = openfile("$outfile", "w")')
         cmd = cmd.substitute(outfile=out_file)
         cmd_list.append(cmd)
 
-        # mesh output
-        cmd_list.append(f'mesh_file = openfile("{self.mesh_file}", "w")')
-        self.lua_script.extend(cmd_list)
+        if elements:
+            # mesh output
+            cmd_list.append(f'mesh_file = openfile("{self.mesh_file}", "w")')
 
-        # node output
-        cmd_list.append(f'node_file = openfile("{self.node_file}", "w")')
+            # node output
+            cmd_list.append(f'node_file = openfile("{self.node_file}", "w")')
+
         self.lua_script.extend(cmd_list)
 
         return cmd_list
 
-    def close(self):
+    def close(self, elements=False):
 
         cmd_list = []
 
-        cmd_list.append("closefile(file_out)")
-        cmd_list.append("closefile(mesh_file)")
+        if elements:
+            cmd_list.append("closefile(file_out)")
+            cmd_list.append("closefile(mesh_file)")
 
+        cmd_list.append("closefile(file_out)")
         cmd_list.append(f"{self.field.output_to_string()}_close()")
         cmd_list.append(f"{self.field.input_to_string()}_close()")
-
         cmd_list.append("quit()")
-
         self.lua_script.extend(cmd_list)
+
         return cmd_list
 
     def analyze(self, flag=0):
