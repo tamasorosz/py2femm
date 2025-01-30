@@ -26,12 +26,12 @@ N0 = Node(0, 0)
 # Creating the variables of the machine to simplify the functions later on ---------------------------------------------
 class VariableParameters:
 
-    def __init__(self, folder, filename, current_density, current_angle, initial_rotor_position,
+    def __init__(self, folder_name, file_name, current_density, current_angle, initial_rotor_position,
                  rotor_diameter, shaft_diameter, magnet_width, magnet_height, pole_pairs, stack_lenght,
                  winding_scheme='A|b|C|a|B|c|A|b|C|a|B|c|', shortening=0, rotor_position=0):
 
-        self.folder = folder
-        self.filename = filename
+        self.folder = folder_name
+        self.filename = file_name
 
         self.current_density = current_density
         self.current_angle = current_angle
@@ -71,14 +71,54 @@ class VariableParameters:
         self.output_file = f"{current_folder_path}/{self.folder}/{self.filename}_{self.rotor_position}"
         self.output_folder = f"{current_folder_path}/{self.folder}"
 
+    def update_initial_rotor_position(self, new_initial_rotor_position):
+        """ Update initial_rotor_position dynamically. """
+        self.initial_rotor_position = new_initial_rotor_position
+
     def update_rotor_position(self, new_rotor_position):
-        """ Update rotor_position and regenerate output_file dynamically. """
+        """ Update rotor_position and regenerate output_file and output_folder  dynamically. """
         self.rotor_position = new_rotor_position
         self.update_output_file()
+        self.update_output_folder()
+
+    def update_folder_name(self, new_folder_name):
+        """ Update folder and regenerate output_file and output_folder  dynamically. """
+        self.folder = new_folder_name
+        self.update_output_file()
+        self.update_output_folder()
+
+    def update_file_name(self, new_file_name):
+        """ Update folder and regenerate output_file and output_folder dynamically. """
+        self.filename = new_file_name
+        self.update_output_file()
+        self.update_output_folder()
 
     def update_output_file(self):
-        """ Update output_file dynamically whenever rotor_position changes. """
+        """ Update output_file dynamically whenever it changes. """
         self.output_file = f"{current_folder_path}/{self.folder}/{self.filename}_{self.rotor_position}"
+
+    def update_output_folder(self):
+        """ Update output_folder dynamically whenever it changes. """
+        self.output_folder = f"{current_folder_path}/{self.folder}"
+
+    def update_current_angle(self, new_current_angle):
+        """ Update current_angle dynamically whenever current_angle changes. """
+        self.current_angle = new_current_angle
+        self.update_phases()
+
+    def update_current_density(self, new_current_density):
+        """ Update current_density dynamically whenever current_density changes. """
+        self.current_angle = new_current_density
+        self.update_phases()
+
+    def update_phases(self):
+        """ Update phases dynamically whenever current_angle or current_density changes. """
+        self.JUp = self.current_density * math.cos(math.radians(self.current_angle))
+        self.JUn = (-1) * self.JUp
+        self.JVp = self.current_density * math.cos(math.radians(self.current_angle + 120))
+        self.JVn = (-1) * self.JVp
+        self.JWp = self.current_density * math.cos(math.radians(self.current_angle + 240))
+        self.JWn = (-1) * self.JWp
 
 # Importing stator geometry from a dxf file instead of manually defining the nodes, lines and arc ----------------------
 def stator_geometry(femm_model: FemmProblem, variables: VariableParameters):
@@ -101,8 +141,8 @@ def stator_geometry(femm_model: FemmProblem, variables: VariableParameters):
 def rotor_geometry(femm_model: FemmProblem, variables: VariableParameters):
     """Creating rotor geometry."""
     rotor = Geometry()
-    magnet_line_for_material_left = []
-    magnet_line_for_material_right = []
+    magnet_arc_for_material_upper = []
+    magnet_arc_for_material_lower = []
 
     # Creating the shaft -----------------------------------------------------------------------------------------------
 
@@ -145,12 +185,13 @@ def rotor_geometry(femm_model: FemmProblem, variables: VariableParameters):
         magnet_line_right = Line(magnet_node_circumference_right, magnet_node_lower_right)
 
         magnet_arc_lower = CircleArc(magnet_node_lower_left, N0, magnet_node_lower_right)
+        magnet_arc_upper = CircleArc(magnet_node_circumference_left, N0, magnet_node_circumference_right)
 
         rotor.add_line(magnet_line_left)
         rotor.add_line(magnet_line_right)
 
-        magnet_line_for_material_left.append(magnet_line_left)
-        magnet_line_for_material_right.append(magnet_line_right)
+        magnet_arc_for_material_lower.append(magnet_arc_lower)
+        magnet_arc_for_material_upper.append(magnet_arc_upper)
 
         rotor.add_arc(magnet_arc_lower)
 
@@ -166,7 +207,7 @@ def rotor_geometry(femm_model: FemmProblem, variables: VariableParameters):
 
     femm_model.create_geometry(rotor)
 
-    return magnet_line_for_material_left, magnet_line_for_material_right
+    return magnet_arc_for_material_lower, magnet_arc_for_material_upper
 
 
 # Creating and adding the material labels for the simulation -----------------------------------------------------------
@@ -175,8 +216,8 @@ def material_definition(femm_model: FemmProblem, variables: VariableParameters, 
 
     # Adding N55 NdFeB magnet to the model from the material library ---------------------------------------------------
     if variables.pole_pairs == 1:
-        for oscillation, (line_left, line_right) in enumerate(zip(rotor[0], rotor[1])):
-            magnet_midpoint = Line(line_left.selection_point(), line_right.selection_point()).selection_point()
+        for oscillation, (arc_low, arc_high) in enumerate(zip(rotor[0], rotor[1])):
+            magnet_midpoint = Line(arc_low.selection_point(), arc_high.selection_point()).selection_point()
 
             magnet = MagneticMaterial(material_name=f"N55_{oscillation}", H_c=922850, Sigma=0.667)
 
@@ -195,12 +236,12 @@ def material_definition(femm_model: FemmProblem, variables: VariableParameters, 
             magnet_midpoints.append(magnet_midpoint)
 
     else:
-        for oscillation, (line_left, line_right) in enumerate(zip(rotor[0], rotor[1])):
-            magnet_midpoint = Line(line_left.selection_point(), line_right.selection_point()).selection_point()
+        for oscillation, (arc_low, arc_high) in enumerate(zip(rotor[0], rotor[1])):
+            magnet_midpoint = Line(arc_low.selection_point(), arc_high.selection_point()).selection_point()
 
             magnet = MagneticMaterial(material_name=f"N55_{oscillation}", H_c=922850, Sigma=0.667)
 
-            magnet.remanence_angle = (180 * (oscillation % 2)) + np.degrees(
+            magnet.remanence_angle = (-180 * (oscillation % 2)) + np.degrees(
                 math.atan2(magnet_midpoint.y, magnet_midpoint.x))
 
             femm_model.add_material(magnet)
@@ -275,9 +316,9 @@ def winding_definition(femm_model: FemmProblem, variables: VariableParameters):
 
     elif not variables.winding_layers and variables.winding_type == 'concentrated':
         for slot, phase in enumerate(variables.winding_scheme):
-            femm_model.define_block_label(Node(-2, 30.5).rotate_about(N0, (-1) * 30 * slot, degrees=True),
-                                          phase_map[phase])
             femm_model.define_block_label(Node(2, 30.5).rotate_about(N0, (-1) * 30 * slot, degrees=True),
+                                          phase_map[phase])
+            femm_model.define_block_label(Node(13.5, 27.5).rotate_about(N0, (-1) * 30 * slot, degrees=True),
                                           phase_map[phase.swapcase()])
 
 

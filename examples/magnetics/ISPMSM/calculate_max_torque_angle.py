@@ -42,7 +42,6 @@ def max_torque_angle(variables: model.VariableParameters, resolution, start_posi
                      delete_after=True):
 
     all_variables = []
-    mutable_variables = copy.deepcopy(variables)
 
     if not Path(variables.output_folder).exists():
         Path(variables.output_folder).mkdir(parents=True, exist_ok=True)
@@ -55,12 +54,12 @@ def max_torque_angle(variables: model.VariableParameters, resolution, start_posi
 
         all_variables.append((mutable_variables, rounding, delete_after))
 
-    with Pool(11) as pool:
+    with Pool() as pool:
         result = list(pool.map(execute_model, all_variables))
 
     torque_ang = start_position + result.index((max(result))) * ((end_position - start_position) / (resolution - 1))
 
-    result.clear()
-    all_variables.clear()
+    # result.clear()
+    # all_variables.clear()
 
-    return torque_ang
+    return torque_ang, result
