@@ -12,7 +12,6 @@ folder_path = os.path.dirname(current_file_path)
 
 n0 = Node(0, 0)
 
-
 class VariableParameters:
 
     def __init__(self, fold, out, counter, JAp, JAn, JBp, JBn, JCp, JCn, ang_co, deg_co, bd, bw, bh, bg, ia, mh,
