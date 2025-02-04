@@ -40,12 +40,11 @@ def execute_model(args):
     return torque
 
 
-def average_torque_and_ripple(variables: model.VariableParameters, resolution_angle, start_position_angle,
-                              end_position_angle, resolution_average_ripple, start_position_average_ripple,
+def average_torque_and_ripple(variables: model.VariableParameters, resolution_average_ripple, start_position_average_ripple,
                               end_position_average_ripple, rounding, initial_rotor_position=0, folder_name_angle='ang',
                               file_name_angle='ang', folder_name_average='avg', file_name_average='avg',
-                              delete_after=True):
-
+                              delete_after=True, resolution_angle=0, start_position_angle=0,
+                              end_position_angle=0):
     if initial_rotor_position != 0:
         pass
     else:
@@ -55,6 +54,7 @@ def average_torque_and_ripple(variables: model.VariableParameters, resolution_an
                                                                              start_position_angle,
                                                                              end_position_angle, rounding,
                                                                              delete_after)
+
     variables.update_folder_name(folder_name_average)
     variables.update_file_name(file_name_average)
 
@@ -70,7 +70,7 @@ def average_torque_and_ripple(variables: model.VariableParameters, resolution_an
         mutable_variables = copy.deepcopy(variables)
         mutable_variables.update_initial_rotor_position(initial_rotor_position)
         mutable_variables.update_rotor_position(alpha)
-        mutable_variables.update_current_angle((-1) * beta)
+        mutable_variables.update_current_angle(beta)
 
         model.model_creation(mutable_variables)
 
@@ -79,7 +79,10 @@ def average_torque_and_ripple(variables: model.VariableParameters, resolution_an
     with Pool(8) as pool:
         result = list(pool.map(execute_model, all_variables))
 
-    torque_average = np.round(-1 * np.average(result), rounding)
-    torque_ripple = np.round(-100 * (np.max(result) - np.min(result)) / torque_average, rounding)
+    torque_average = np.round(np.average(result), rounding)
+    torque_ripple = np.round((-100) * (np.max(result) - np.min(result)) / torque_average, rounding)
 
-    return torque_average, torque_ripple, result
+    print(f'ANGLE: {initial_rotor_position}, AVERAGE: {(1) * torque_average}, RIPPLE: {torque_ripple}')
+    print('-------------------------------------')
+
+    return torque_average, torque_ripple

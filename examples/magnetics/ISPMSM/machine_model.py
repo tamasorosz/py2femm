@@ -26,20 +26,21 @@ N0 = Node(0, 0)
 # Creating the variables of the machine to simplify the functions later on ---------------------------------------------
 class VariableParameters:
 
-    def __init__(self, folder_name, file_name, current_density, current_angle, initial_rotor_position,
-                 rotor_diameter, shaft_diameter, magnet_width, magnet_height, pole_pairs, stack_lenght,
-                 winding_scheme='A|b|C|a|B|c|A|b|C|a|B|c|', shortening=0, rotor_position=0):
+    def __init__(self, current_density, rotor_diameter, shaft_diameter, magnet_width, magnet_height, pole_pairs,
+                 stack_lenght, winding_scheme='A|b|C|a|B|c|A|b|C|a|B|c|', shortening=0, initial_current_angle=0,
+                 initial_rotor_position=0, folder_name='test', file_name='test', current_angle=0, rotor_position=0):
 
         self.folder = folder_name
         self.filename = file_name
 
         self.current_density = current_density
         self.current_angle = current_angle
-        self.JUp = self.current_density * math.cos(math.radians(self.current_angle))
+        self.initial_current_angle = initial_current_angle
+        self.JUp = self.current_density * math.cos(math.radians(self.current_angle + self.initial_current_angle))
         self.JUn = (-1) * self.JUp
-        self.JVp = self.current_density * math.cos(math.radians(self.current_angle + 120))
+        self.JVp = self.current_density * math.cos(math.radians(self.current_angle + self.initial_current_angle + 120))
         self.JVn = (-1) * self.JVp
-        self.JWp = self.current_density * math.cos(math.radians(self.current_angle + 240))
+        self.JWp = self.current_density * math.cos(math.radians(self.current_angle + self.initial_current_angle + 240))
         self.JWn = (-1) * self.JWp
 
         self.rotor_position = rotor_position
@@ -277,7 +278,7 @@ def material_definition(femm_model: FemmProblem, variables: VariableParameters, 
 
     femm_model.add_material(air)
 
-    femm_model.define_block_label(Node(0, variables.rotor_diameter / 2 + 1), air)
+    femm_model.define_block_label(Node(0, 22.85), air)
     femm_model.define_block_label(N0, air)
 
     return steel_label_node, magnet_midpoints

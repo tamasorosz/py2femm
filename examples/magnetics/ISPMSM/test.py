@@ -9,39 +9,36 @@ if __name__ == '__main__':
     variables = model.VariableParameters(folder_name="ang",
                                          file_name="ang",
                                          current_density=30,
-                                         current_angle=0,
+                                         initial_current_angle=-120,
                                          initial_rotor_position=0,
-                                         rotor_diameter=44,
+                                         rotor_diameter=44.5,
                                          shaft_diameter=10,
-                                         magnet_width=45,
-                                         magnet_height=5,
+                                         magnet_width=40,
+                                         magnet_height=2,
                                          pole_pairs=4,
                                          stack_lenght=40,
                                          winding_scheme='ABCABCABCABC',
-                                         shortening=0,
-                                         rotor_position=0
                                          )
 
-    x, y = angle.max_torque_angle(variables, resolution=46, start_position=0, end_position=90, rounding=None,
-                                  delete_after=False)
-
-    print(x)
-    print(y)
-
-    plt.plot(y)
-    plt.show()
-    #
-    # variables.update_folder_name("test")
-    # variables.update_file_name("test")
-    #
-    # x, y, z = average.average_torque_and_ripple(variables, resolution_angle=9, start_position_angle=0,
-    #                                             end_position_angle=8, resolution_average_ripple=9,
-    #                                             start_position_average_ripple=0, end_position_average_ripple=8,
-    #                                             rounding=2, initial_rotor_position=-15, delete_after=False)
+    # x, y = angle.max_torque_angle(variables, resolution=8, start_position=19, end_position=26, rounding=None,
+    #                               delete_after=False,)
     #
     # print(x)
     # print(y)
-    # print(z)
     #
-    # plt.plot(z)
+    # plt.plot(y)
     # plt.show()
+
+    variables.update_folder_name("test")
+    variables.update_file_name("test")
+
+    x, y, z = average.average_torque_and_ripple(variables, initial_rotor_position=21, resolution_average_ripple=16,
+                                                start_position_average_ripple=0, end_position_average_ripple=15,
+                                                rounding=2, delete_after=False)
+
+    print(x)
+    print(y)
+    print(z)
+
+    plt.plot(z)
+    plt.show()

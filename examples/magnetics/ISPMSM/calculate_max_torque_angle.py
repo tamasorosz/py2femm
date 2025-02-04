@@ -54,12 +54,11 @@ def max_torque_angle(variables: model.VariableParameters, resolution, start_posi
 
         all_variables.append((mutable_variables, rounding, delete_after))
 
-    with Pool() as pool:
+    with Pool(8) as pool:
         result = list(pool.map(execute_model, all_variables))
 
     torque_ang = start_position + result.index((max(result))) * ((end_position - start_position) / (resolution - 1))
 
-    # result.clear()
-    # all_variables.clear()
+    print(f'X1: {variables.rotor_diameter}, X2: {variables.magnet_width}, X3: {variables.magnet_height}')
 
-    return torque_ang, result
+    return torque_ang
