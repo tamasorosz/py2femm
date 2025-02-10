@@ -26,9 +26,22 @@ N0 = Node(0, 0)
 # Creating the variables of the machine to simplify the functions later on ---------------------------------------------
 class VariableParameters:
 
-    def __init__(self, current_density, rotor_diameter, shaft_diameter, magnet_width, magnet_height, pole_pairs,
-                 stack_lenght, winding_scheme='A|b|C|a|B|c|A|b|C|a|B|c|', shortening=0, initial_current_angle=0,
-                 initial_rotor_position=0, folder_name='test', file_name='test', current_angle=0, rotor_position=0):
+    def __init__(self, folder_name='test',
+                 file_name='test',
+                 current_density=30,
+                 initial_current_angle=0,
+                 current_angle=0,
+                 initial_rotor_position=0,
+                 rotor_position=0,
+                 rotor_diameter=44,
+                 shaft_diameter=10,
+                 magnet_width=1,
+                 magnet_height=1,
+                 pole_pairs=1,
+                 stack_lenght=1,
+                 winding_scheme='A|b|C|a|B|c|A|b|C|a|B|c|',
+                 shortening=0
+                 ):
 
         self.folder = folder_name
         self.filename = file_name
@@ -72,6 +85,12 @@ class VariableParameters:
         self.output_file = f"{current_folder_path}/{self.folder}/{self.filename}_{self.rotor_position}"
         self.output_folder = f"{current_folder_path}/{self.folder}"
 
+    def update_current_density(self, new_current_density):
+        """ Updates current_density dynamically whenever current_density changes. """
+        self.current_angle = new_current_density
+        self.update_phases()
+
+
     def update_initial_rotor_position(self, new_initial_rotor_position):
         """ Update initial_rotor_position dynamically. """
         self.initial_rotor_position = new_initial_rotor_position
@@ -105,11 +124,6 @@ class VariableParameters:
     def update_current_angle(self, new_current_angle):
         """ Update current_angle dynamically whenever current_angle changes. """
         self.current_angle = new_current_angle
-        self.update_phases()
-
-    def update_current_density(self, new_current_density):
-        """ Update current_density dynamically whenever current_density changes. """
-        self.current_angle = new_current_density
         self.update_phases()
 
     def update_phases(self):
