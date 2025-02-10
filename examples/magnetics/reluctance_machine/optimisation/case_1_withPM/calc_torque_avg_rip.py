@@ -104,7 +104,7 @@ def torque_avg_rip(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m):
 
     current_file_path = os.path.abspath(__file__)
     folder_path = os.path.dirname(current_file_path)
-    file_path = os.path.join(folder_path, f'results/all_res_avg_case1_20250125.csv')
+    file_path = os.path.join(folder_path, f'results/all_res_avg_case1_20250205.csv')
 
     # Check if the file exists
     file_exists = os.path.isfile(file_path)
