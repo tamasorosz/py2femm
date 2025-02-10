@@ -3,6 +3,7 @@ import copy
 
 from pathlib import Path
 import numpy as np
+
 import machine_model as model
 
 from multiprocessing import Pool
@@ -19,10 +20,8 @@ def execute_model(args):
         csvfile = next(csv.reader(file))
         if isinstance(rounding, int):
             torque = np.round(float(''.join(csvfile).replace('wTorque_0 = ', '')), rounding)
-        elif rounding is None:
-            torque = float(''.join(csvfile).replace('wTorque_0 = ', ''))
         else:
-            raise Exception("x")
+            torque = float(''.join(csvfile).replace('wTorque_0 = ', ''))
 
     if delete_after:
         try:
@@ -39,7 +38,7 @@ def execute_model(args):
 
 
 def max_torque_angle(variables: model.VariableParameters, resolution, start_position, end_position, rounding,
-                     delete_after=True):
+                     delete_after=True, optimisation=False):
 
     all_variables = []
 
@@ -59,6 +58,7 @@ def max_torque_angle(variables: model.VariableParameters, resolution, start_posi
 
     torque_ang = start_position + result.index((max(result))) * ((end_position - start_position) / (resolution - 1))
 
-    print(f'X1: {variables.rotor_diameter}, X2: {variables.magnet_width}, X3: {variables.magnet_height}')
+    if optimisation:
+        print(f'X1: {variables.rotor_diameter}, X2: {variables.magnet_width}, X3: {variables.magnet_height}')
 
-    return torque_ang
+    return torque_ang, result
