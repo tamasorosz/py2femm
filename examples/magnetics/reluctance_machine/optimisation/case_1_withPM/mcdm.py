@@ -8,7 +8,7 @@ from pymcdm.helpers import rankdata, rrankdata
 from pymcdm.methods.comet_tools import MethodExpert
 from pymcdm import visuals
 
-df_base = pd.read_csv('results/nsga2_case2_p50o50g100_obj6_20240701.csv')
+df_base = pd.read_csv('results/nsga2_case1_p50o50g100_obj6_20240701.csv')
 
 df_alts = df_base.iloc[:, -2:]
 
