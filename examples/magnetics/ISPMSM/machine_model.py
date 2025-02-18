@@ -1,4 +1,4 @@
-# Importing the packages from py2femm and third party packages too -----------------------------------------------------
+# Importing the packages from py2femm and third party packages too
 import math  # For trigonometric functions to define the rotor geometry easier in Cartesian coordinate system.
 
 # The FemmProblem class defines the .lua file which is an input of the FEMM solver.
@@ -15,16 +15,16 @@ from src.geometry import Geometry, Node, CircleArc, Line
 
 from src.magnetics import MagneticMaterial, LamType, MagneticDirichlet, MagneticVolumeIntegral
 
-# Creating static global variables -------------------------------------------------------------------------------------
-# Gets the current file's folder path to specify the path of the output FEMM model file with .lua extension ------------
+# Creating static global variables
+# Gets the current file's folder path to specify the path of the output FEMM model file with .lua extension
 current_folder_path = str(Path(__file__).resolve().parent).replace("\\", "/")
 
-# The zero node specifies the center point of the machine, discretising the coordinate system --------------------------
+# The zero node specifies the center point of the machine, discretising the coordinate system
 N0 = Node(0, 0)
 
 
-# Creating the variables of the machine to simplify the functions later on ---------------------------------------------
 class VariableParameters:
+    """Store all the variables to create the machine model."""
 
     def __init__(self, folder_name='test',
                  file_name='test',
@@ -67,6 +67,7 @@ class VariableParameters:
 
         self.stack_lenght = stack_lenght
 
+        # Check the validity of the winding scheme as it can crash the simulation.
         if bool(re.fullmatch(r"^(?:[A-Ca-c]\|){12}$", winding_scheme)):
             self.winding_scheme = list(filter(lambda item: item != '|', winding_scheme))
             self.winding_layers = False
@@ -89,7 +90,6 @@ class VariableParameters:
         """ Updates current_density dynamically whenever current_density changes. """
         self.current_angle = new_current_density
         self.update_phases()
-
 
     def update_initial_rotor_position(self, new_initial_rotor_position):
         """ Update initial_rotor_position dynamically. """
@@ -135,9 +135,9 @@ class VariableParameters:
         self.JWp = self.current_density * math.cos(math.radians(self.current_angle + 240))
         self.JWn = (-1) * self.JWp
 
-# Importing stator geometry from a dxf file instead of manually defining the nodes, lines and arc ----------------------
+
 def stator_geometry(femm_model: FemmProblem, variables: VariableParameters):
-    """Creating stator geometry."""
+    """Importing stator geometry from a dxf file instead of manually defining the nodes, lines and arcs."""
     stator = Geometry()
 
     if not variables.winding_layers and variables.winding_type == 'distributed':
@@ -152,15 +152,13 @@ def stator_geometry(femm_model: FemmProblem, variables: VariableParameters):
     femm_model.create_geometry(stator)
 
 
-# Creating the parametric rotor geometry manually to make it possible to optimise --------------------------------------
 def rotor_geometry(femm_model: FemmProblem, variables: VariableParameters):
-    """Creating rotor geometry."""
+    """Create rotor geometry."""
     rotor = Geometry()
     magnet_arc_for_material_upper = []
     magnet_arc_for_material_lower = []
 
-    # Creating the shaft -----------------------------------------------------------------------------------------------
-
+    # Creating the shaft
     shaft_node_left = Node((-1) * variables.shaft_diameter / 2, 0.0)
     shaft_node_right = Node(1 * variables.shaft_diameter / 2, 0.0)
 
@@ -170,8 +168,7 @@ def rotor_geometry(femm_model: FemmProblem, variables: VariableParameters):
     rotor.add_arc(shaft_arc_lower)
     rotor.add_arc(shaft_arc_upper)
 
-    # Creating the magnets by creating the first magnet around the vertical line through the zero and copy-rotate ------
-
+    # Creating the magnets by creating the first magnet around the vertical line through the zero and copy-rotate
     vertical_node_circumference = Node(0.0, variables.rotor_diameter / 2)
     vertical_node_lower = Node(0.0, variables.rotor_diameter / 2 - variables.magnet_height)
 
@@ -210,7 +207,7 @@ def rotor_geometry(femm_model: FemmProblem, variables: VariableParameters):
 
         rotor.add_arc(magnet_arc_lower)
 
-    # Creating rotor circumference -------------------------------------------------------------------------------------
+    # Creating rotor circumference
     horizontal_node_circumference_left = Node((-1) * variables.rotor_diameter / 2, 0.0)
     horizontal_node_circumference_right = Node(variables.rotor_diameter / 2, 0.0)
 
@@ -225,11 +222,12 @@ def rotor_geometry(femm_model: FemmProblem, variables: VariableParameters):
     return magnet_arc_for_material_lower, magnet_arc_for_material_upper
 
 
-# Creating and adding the material labels for the simulation -----------------------------------------------------------
 def material_definition(femm_model: FemmProblem, variables: VariableParameters, rotor: rotor_geometry):
+    """Create and add materials to the simulation."""
+
     magnet_midpoints = []
 
-    # Adding N55 NdFeB magnet to the model from the material library ---------------------------------------------------
+    # Adding N55 NdFeB magnet to the model from the material library
     if variables.pole_pairs == 1:
         for oscillation, (arc_low, arc_high) in enumerate(zip(rotor[0], rotor[1])):
             magnet_midpoint = Line(arc_low.selection_point(), arc_high.selection_point()).selection_point()
@@ -271,7 +269,7 @@ def material_definition(femm_model: FemmProblem, variables: VariableParameters, 
 
             magnet_midpoints.append(magnet_midpoint)
 
-    # Adding 1018 steel to the model from the material library -----------------------------------------------------
+    # Adding 1018 steel to the model from the material library.
     steel = MagneticMaterial(material_name="1018 steel", Phi_hmax=20, Sigma=5.8, Lam_d=0.5, lam_fill=0.98)
 
     femm_model.add_material(steel)
@@ -287,7 +285,7 @@ def material_definition(femm_model: FemmProblem, variables: VariableParameters, 
 
     femm_model.define_block_label(Node(0, 40), steel)
 
-    # Adding air to the model from material library ----------------------------------------------------------------
+    # Adding air to the model from material library.
     air = MagneticMaterial(material_name="air")
 
     femm_model.add_material(air)
@@ -299,7 +297,7 @@ def material_definition(femm_model: FemmProblem, variables: VariableParameters, 
 
 
 def winding_definition(femm_model: FemmProblem, variables: VariableParameters):
-    pass
+    """Create and add the winding scheme."""
 
     phases = ['A', 'B', 'C', 'a', 'b', 'c']
 
@@ -310,17 +308,21 @@ def winding_definition(femm_model: FemmProblem, variables: VariableParameters):
                       'C': variables.JWp,
                       'c': variables.JWn}
 
+    # Initialise the phases for the FEMM model.
     phase_map = {f'{i}': MagneticMaterial(material_name=f"{i}", J=excitation_map[i], Sigma=58,
                                           LamType=LamType.MAGNET_WIRE, WireD=1) for i in phases}
 
+    # Add phases to the FEMM model.
     for phase in phases:
         femm_model.add_material(phase_map[phase])
 
+    # Create distributed, one layer winding scheme.
     if not variables.winding_layers and variables.winding_type == 'distributed':
         for slot, phase in enumerate(variables.winding_scheme):
             femm_model.define_block_label(Node(0, 30.5).rotate_about(N0, (-1) * 30 * slot, degrees=True),
                                           phase_map[phase])
 
+    # Create distributed, two layer winding scheme.
     elif variables.winding_layers and variables.winding_type == 'distributed':
         for slot, phase in enumerate(variables.winding_scheme[0::2]):
             femm_model.define_block_label(Node(0, 33.5).rotate_about(N0, (-1) * 30 * slot, degrees=True),
@@ -329,6 +331,7 @@ def winding_definition(femm_model: FemmProblem, variables: VariableParameters):
             femm_model.define_block_label(Node(0, 27.5).rotate_about(N0, (-1) * 30 * (slot + variables.shortening),
                                                                      degrees=True), phase_map[phase])
 
+    # Create concentrated winding scheme.
     elif not variables.winding_layers and variables.winding_type == 'concentrated':
         for slot, phase in enumerate(variables.winding_scheme):
             femm_model.define_block_label(Node(2, 30.5).rotate_about(N0, (-1) * 30 * slot, degrees=True),
@@ -338,10 +341,15 @@ def winding_definition(femm_model: FemmProblem, variables: VariableParameters):
 
 
 def boundary_definition(femm_model: FemmProblem, variables: VariableParameters):
+    """Create and add the boundaries to the model."""
+
+    # Create A0 boundary condition.
     A0 = MagneticDirichlet(name="a0", a_0=0, a_1=0, a_2=0, phi=0)
 
+    # Add A0 boundary condition to the FEMM model.
     femm_model.add_boundary(A0)
 
+    # Add the boundary condition to specified elements of the geometry.
     femm_model.set_boundary_definition_arc(Node(0, 43.25), A0)
     femm_model.set_boundary_definition_arc(Node(0, (-1) * 43.25), A0)
 
@@ -350,22 +358,30 @@ def boundary_definition(femm_model: FemmProblem, variables: VariableParameters):
 
 
 def model_creation(variables: VariableParameters):
+    """Put all the block together to create the machine model."""
+
     if not Path(variables.output_folder).exists():
         Path(variables.output_folder).mkdir(parents=True, exist_ok=True)
 
+    # Call the FEMM class.
     problem = FemmProblem(out_file=variables.output_file + ".csv", )
 
+    # Initialise the FEMM class.
     problem.magnetic_problem(0, LengthUnit.MILLIMETERS, "planar", depth=variables.stack_lenght)
 
+    # Initialise the machine model blocks.
     stator_geometry(problem, variables)
     rotor = rotor_geometry(problem, variables)
     materials = material_definition(problem, variables, rotor)
     winding_definition(problem, variables)
     boundary_definition(problem, variables)
 
+    # Create the .lua file's content as txt.
     problem.make_analysis(filename=variables.output_file)
 
+    # Initialise the intended output values to calculate. In this case the torque.
     problem.get_integral_values(label_list=[materials[0]] + materials[1], save_image=False,
                                 variable_name=MagneticVolumeIntegral.wTorque)
 
+    # Create .lua file.
     problem.write(file_name=variables.output_file + '.lua')

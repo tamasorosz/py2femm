@@ -1,3 +1,4 @@
+import re
 import subprocess
 import sys
 
@@ -26,14 +27,15 @@ if __name__ == '__main__':
         'start_position_cogging (int/float)',  # 10 – convert to float
         'end_position_cogging (int/float)',  # 11 – convert to float
         'rounding (int/pos)',  # 12 – convert to int
-        'delete_after (bool)'  # 13 – convert to bool
+        'delete_after (bool)',  # 13 – convert to bool
+        'number_of_cores (int/pos)'  # 14 - convert to int
     ]
 
 
     def go_back():
         """Closes the simulation GUI and reopens the selector."""
         root.destroy()
-        subprocess.run([sys.executable, "selector.py"])
+        subprocess.run([sys.executable, "run_selector.py"])
 
 
     def process_entries(dict_of_entries):
@@ -68,14 +70,14 @@ if __name__ == '__main__':
                                                  start_position=dict_of_entries[labels[10]],
                                                  end_position=dict_of_entries[labels[11]],
                                                  rounding=dict_of_entries[labels[12]],
-                                                 delete_after=dict_of_entries[labels[13]]
-                                                 )
+                                                 delete_after=dict_of_entries[labels[13]],
+                                                 cores=dict_of_entries[labels[14]])
 
         # Print the results of the calculation.
         print(f'The cogging torque is {cogging_torque} Nm')
         print(f'The list of torque values: {result}')
 
-        # Plot the results
+        # Plot the results of the calculation.
         plt.figure(figsize=(8, 6))
         plt.plot(result, color='blue', linestyle='-', marker='o')
         plt.title('Cogging Torque')
@@ -88,7 +90,7 @@ if __name__ == '__main__':
     def submit():
         """
         Retrieves inputs from all entry widgets, converts the values according to their type hints,
-        and, if all conversions succeed, passes the dictionary of entries to process_entries(). If not it raises
+        and, if all conversions succeed, passes the dictionary of entries to process_entries(). If not, it raises
         exceptions.
         """
         # Gather the content from each widget in the entries list.
@@ -141,15 +143,24 @@ if __name__ == '__main__':
                         print(f"Error: {label_text} must be 'True' or 'False'.")
                         return
 
-                elif input_values[10] <= input_values[11]:
+                elif input_values[10] >= input_values[11]:
                     print(f"Error: {labels[11]} must be larger than {labels[10]}.")
                     return
 
                 else:
-                    valid_inputs[label_text] = input_value
+                    if bool(re.fullmatch(r"^(?:[A-Ca-c]\|){12}$", input_value)):
+                        valid_inputs[label_text] = input_value
+                    elif bool(re.fullmatch(r"^(?:[A-Ca-c][A-Ca-c]\|){12}$", input_value)):
+                        valid_inputs[label_text] = input_value
+                    elif bool(re.fullmatch(r"^(?:[A-Ca-c]){12}$", input_value)):
+                        valid_inputs[label_text] = input_value
+                    else:
+                        print(f"Error: {label_text} must be a valid winding topology."
+                              f"Check the user guide for more information.")
+                        return
 
         except (ValueError, TypeError) as e:
-            print(f"Error processing {label_text}: {e}")
+            print(f"Error processing {label_text}: {e}. Please enter a valid type as specified!")
             return
 
         # If all inputs are valid, proceed with processing
@@ -160,13 +171,14 @@ if __name__ == '__main__':
     root.title("CALCULATING COGGING TORQUE")
 
     # List to hold the widget or variable associated with each input.
+    # For Entry fields, we store the tk.Entry widget.
     entries = []
-    num_columns = 2  # Two input pairs per row.
+    num_columns = 3  # Two input pairs per row (each pair occupies 2 grid columns).
 
     # Loop through each label and create a label widget and its corresponding input widget.
     for i, label_text in enumerate(labels):
-        row = i // num_columns  # Determines the current row.
-        col_group = i % num_columns  # Determines the current column group.
+        row = i // num_columns  # Determine the current row.
+        col_group = i % num_columns  # Determine the current column group.
 
         # Create and position the label.
         label = tk.Label(root, text=f"{label_text}:")
@@ -177,6 +189,13 @@ if __name__ == '__main__':
             var = tk.StringVar(root)
             var.set("True")  # Default value.
             option_menu = tk.OptionMenu(root, var, "True", "False")
+            option_menu.config(width=10)
+            option_menu.grid(row=row, column=col_group * 2 + 1, padx=5, pady=5, sticky="w")
+            entries.append(var)
+        elif 'number_of_cores (int/pos)' in label_text:
+            var = tk.StringVar(root)
+            var.set("1")  # Default value.
+            option_menu = tk.OptionMenu(root, var, "2", "3", "4", "5", "6", "7", "8")
             option_menu.config(width=10)
             option_menu.grid(row=row, column=col_group * 2 + 1, padx=5, pady=5, sticky="w")
             entries.append(var)
