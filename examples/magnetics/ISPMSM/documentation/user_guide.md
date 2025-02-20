@@ -92,3 +92,14 @@ calculation "avg" is recommended. Each file is unique as all ends with a number 
 ## How to tweak this project to your own uses
 
 ### Functions and building blocks 
+
+## Find a bug or want to contribute?
+- open issue
+- fill pull request template
+
+**Many thanks for the contribution!**
+
+## Like this project?
+If you are feeling generous buy me a coffee:
+
+**Many thanks for the support!**
