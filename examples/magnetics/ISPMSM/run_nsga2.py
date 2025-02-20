@@ -49,6 +49,14 @@ if __name__ == '__main__':
         'delete_after (bool)'  # 21 – convert to bool
     ]
 
+    # Define paths
+    folder_path = Path(__file__).resolve().parent
+    results_path = folder_path / 'results'
+    results_path.mkdir(exist_ok=True)  # Ensure the 'results' directory exists
+
+    # Generate filename with date
+    date_str = datetime.today().strftime('%Y%m%d')
+    file_path_all = results_path / f'nsga2_all_{date_str}.csv'
 
     def process_entries(dict_of_entries):
         """Uses the submitted input to perform the simulation and plot the results."""
@@ -133,11 +141,7 @@ if __name__ == '__main__':
             if os.path.exists(i):
                 shutil.rmtree(i)
 
-        # Generate filename with date
-        date_str = datetime.today().strftime('%Y%m%d')
-        file_path = results_path / f'nsga2_all_{date_str}.csv'
-
-        with open(file_path, 'r') as f:
+        with open(file_path_all, 'r') as f:
             df = pd.read_csv(f)
 
         # Plot the results
