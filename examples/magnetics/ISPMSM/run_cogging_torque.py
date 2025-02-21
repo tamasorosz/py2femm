@@ -2,6 +2,7 @@ import re
 import subprocess
 import sys
 
+import numpy as np
 from matplotlib import pyplot as plt
 import tkinter as tk
 import calculate_cogging_torque as cogging
@@ -79,7 +80,9 @@ if __name__ == '__main__':
 
         # Plot the results of the calculation.
         plt.figure(figsize=(8, 6))
-        plt.plot(result, color='blue', linestyle='-', marker='o')
+        plt.plot(np.linspace(dict_of_entries[labels[10]], dict_of_entries[labels[11]], dict_of_entries[labels[9]]),
+                 result,
+                 color='blue', linestyle='-', marker='o')
         plt.title('Cogging Torque')
         plt.xlabel('Rotor position [deg]')
         plt.ylabel('Torque [Nm]')
@@ -163,12 +166,16 @@ if __name__ == '__main__':
             print(f"Error: {labels[3]} must be lower than {constraint} degrees.")
             return
 
-        elif valid_inputs[labels[4]] > (constraint := (valid_inputs[labels[1]] - valid_inputs[labels[2]]) / 2):
+        elif valid_inputs[labels[4]] > (constraint := (valid_inputs[labels[1]] - valid_inputs[labels[2]]) / 2 - 1.5):
             print(f"Error: {labels[4]} must be lower than {constraint} millimeters.")
             return
 
         elif valid_inputs[labels[10]] >= valid_inputs[labels[11]]:
             print(f"Error: {labels[11]} must be larger than {labels[10]}.")
+            return
+
+        elif valid_inputs[labels[12]] > 10:
+            print(f"Error: {labels[12]} must be lower than 10.")
             return
 
         # If all inputs are valid, proceed with processing

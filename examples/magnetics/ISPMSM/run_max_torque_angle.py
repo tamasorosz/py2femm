@@ -2,6 +2,7 @@ import re
 import subprocess
 import sys
 
+import numpy as np
 from matplotlib import pyplot as plt
 import tkinter as tk
 import calculate_max_torque_angle as angle
@@ -14,7 +15,7 @@ if __name__ == '__main__':
     # The type hint in parentheses is used for input and type conversion.
     # For detailed description of each parameter check: user_guide.md.
     labels = [
-        'current_density (int/float/pos)',  # 0 – convert to float
+        'current (int/float/pos)',  # 0 – convert to float
         'initial_current_angle (int/float)',  # 1 – convert to float
         'initial_rotor_position (int/float)',  # 2 – convert to float
         'rotor_diameter (int/float/pos)',  # 3 – convert to float
@@ -81,7 +82,9 @@ if __name__ == '__main__':
 
         # Plot the results of the calculation.
         plt.figure(figsize=(8, 6))
-        plt.plot(result, color='blue', linestyle='-', marker='o')
+        plt.plot(np.linspace(dict_of_entries[labels[12]], dict_of_entries[labels[13]], dict_of_entries[labels[11]]),
+                 result,
+                 color='blue', linestyle='-', marker='o')
         plt.title('Static Torque')
         plt.xlabel('Rotor position [deg]')
         plt.ylabel('Torque [Nm]')
@@ -107,14 +110,6 @@ if __name__ == '__main__':
                 if not input_value.strip():  # Check for empty input
                     print(f"Error: {label_text} cannot be empty.")
                     return
-
-                if "resolution" in label_text:
-                    value = int(input_value)
-                    if value > 1:
-                        valid_inputs[label_text] = value
-                    else:
-                        print(f"Error: {label_text} must be greater than 1.")
-                        return
 
                 elif "(int/float)" in label_text:
                     valid_inputs[label_text] = float(input_value)
@@ -145,10 +140,6 @@ if __name__ == '__main__':
                         print(f"Error: {label_text} must be 'True' or 'False'.")
                         return
 
-                elif input_values[10] >= input_values[11]:
-                    print(f"Error: {labels[11]} must be larger than {labels[10]}.")
-                    return
-
                 else:
                     if bool(re.fullmatch(r"^(?:[A-Ca-c]\|){12}$", input_value)):
                         valid_inputs[label_text] = input_value
@@ -165,8 +156,33 @@ if __name__ == '__main__':
             print(f"Error processing {label_text}: {e}. Please enter a valid type as specified!")
             return
 
+        if valid_inputs[labels[4]] >= valid_inputs[labels[3]]:
+            print(f"Error: {labels[3]} must be larger than {labels[4]}.")
+            return
+
+        elif valid_inputs[labels[3]] >= 45:
+            print(f"Error: {labels[3]} must be lower than 45 millimeters.")
+            return
+
+        elif valid_inputs[labels[5]] > (constraint := 360 / (valid_inputs[labels[7]] * 2)):
+            print(f"Error: {labels[5]} must be lower than {constraint} degrees.")
+            return
+
+        elif valid_inputs[labels[6]] > (constraint := (valid_inputs[labels[3]] - valid_inputs[labels[4]]) / 2 - 1.5):
+            print(f"Error: {labels[6]} must be lower than {constraint} millimeters.")
+            return
+
+        elif valid_inputs[labels[12]] >= valid_inputs[labels[13]]:
+            print(f"Error: {labels[13]} must be larger than {labels[12]}.")
+            return
+
+        elif valid_inputs[labels[14]] > 10:
+            print(f"Error: {labels[14]} must be lower than 10.")
+            return
+
         # If all inputs are valid, proceed with processing
         process_entries(valid_inputs)
+
 
     # Create the main application window with tkinter.
     root = tk.Tk()
