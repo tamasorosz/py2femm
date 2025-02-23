@@ -47,7 +47,7 @@ def execute_model(counter):
 
     return torque
 
-def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, deg_m):
+def cogging(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, deg_m):
     if os.path.exists('temp_cog'):
         pass
     else:
@@ -60,12 +60,12 @@ def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, deg_m):
         variables = model.VariableParameters(fold='cog',
                                              out='cog',
                                              counter=counter,
-                                             JAp=J0 * math.cos(math.radians(0)),
-                                             JAn=-J0 * math.cos(math.radians(0)),
-                                             JBp=J0 * math.cos(math.radians(0 + 120)),
-                                             JBn=-J0 * math.cos(math.radians(0 + 120)),
-                                             JCp=J0 * math.cos(math.radians(0 + 240)),
-                                             JCn=-J0 * math.cos(math.radians(0 + 240)),
+                                             IAp=I0 * math.cos(math.radians(0)),
+                                             IAn=-I0 * math.cos(math.radians(0)),
+                                             IBp=I0 * math.cos(math.radians(0 + 120)),
+                                             IBn=-I0 * math.cos(math.radians(0 + 120)),
+                                             ICp=I0 * math.cos(math.radians(0 + 240)),
+                                             ICn=-I0 * math.cos(math.radians(0 + 240)),
                                              ang_co=ang_co,
                                              deg_co=deg_co * 10,
                                              bd=bd,
@@ -96,7 +96,7 @@ def cogging(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, deg_m):
 
     current_file_path = os.path.abspath(__file__)
     folder_path = os.path.dirname(current_file_path)
-    file_path = os.path.join(folder_path, f'results/all_res_cog_case4_20250125.csv')
+    file_path = os.path.join(folder_path, f'results/all_res_cog_case4_20250223.csv')
 
     # Check if the file exists
     file_exists = os.path.isfile(file_path)

@@ -17,18 +17,22 @@ n0 = Node(0, 0)
 
 class VariableParameters:
 
-    def __init__(self, fold, out, counter, JAp, JAn, JBp, JBn, JCp, JCn, ang_co, deg_co, bd, bw, bh, bg, ia, mh,
+    def __init__(self, fold, out, counter, IAp, IAn, IBp, IBn, ICp, ICn, ang_co, deg_co, bd, bw, bh, bg, ia, mh,
                  ang_m, deg_m):
         self.fold = fold
         self.out = out
         self.counter = counter
 
-        self.JAp = JAp
-        self.JAn = JAn
-        self.JBp = JBp
-        self.JBn = JBn
-        self.JCp = JCp
-        self.JCn = JCn
+        coil_area = 53.5104  # area of the slot [mm^2]
+        Nturns_pos = 12  # turns of the coil in one slot [u.]
+        Nturns_neg = 11  # turns of the coil in one slot [u.]
+
+        self.JAp = IAp * Nturns_pos / coil_area
+        self.JAn = IAn * Nturns_neg / coil_area
+        self.JBp = IBp * Nturns_pos / coil_area
+        self.JBn = IBn * Nturns_neg / coil_area
+        self.JCp = ICp * Nturns_pos / coil_area
+        self.JCn = ICn * Nturns_neg / coil_area
 
         self.ang_co = ang_co
         self.deg_co = deg_co
@@ -564,16 +568,13 @@ def add_materials(femm_problem: FemmProblem, var: VariableParameters, rot: rotor
 
 def problem_definition(var: VariableParameters):
     problem = FemmProblem(out_file=os.path.join(folder_path, f'temp_{var.fold}/{var.out}{var.counter}.csv'))
-    variables = VariableParameters(var.fold, var.out, var.counter, var.JAp, var.JAn, var.JBp, var.JBn, var.JCp, var.JCn,
-                                   var.ang_co, var.deg_co, var.bd, var.bw, var.bh, var.bg, var.ia, var.mh, var.ang_m,
-                                   var.deg_m)
 
     problem.magnetic_problem(0, LengthUnit.MILLIMETERS, "planar", depth=40)
 
     stator_geometry(problem)
-    rot = rotor_geometry(problem, variables)
-    add_boundaries(problem, variables, rot)
-    add_materials(problem, variables, rot)
+    rot = rotor_geometry(problem, var)
+    add_boundaries(problem, var, rot)
+    add_materials(problem, var, rot)
 
     problem.make_analysis(os.path.join(folder_path, f'temp_{var.fold}/{var.out}{var.counter}'))
 
