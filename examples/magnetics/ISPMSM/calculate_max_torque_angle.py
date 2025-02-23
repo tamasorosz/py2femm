@@ -81,4 +81,4 @@ def max_torque_angle(variables: model.VariableParameters,
 
     torque_ang = start_position + result.index((max(result))) * ((end_position - start_position) / (resolution - 1))
 
-    return torque_ang, result
+    return torque_ang, [float(i) for i in result]

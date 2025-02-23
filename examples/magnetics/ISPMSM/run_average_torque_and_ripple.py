@@ -14,7 +14,7 @@ if __name__ == '__main__':
     # The type hint in parentheses is used for input and type conversion.
     # For detailed description of each parameter check: user_guide.md.
     labels = [
-        'current_density (int/float/pos)',  # 0 – convert to float
+        'current (int/float/pos)',  # 0 – convert to float
         'initial_current_angle (int/float)',  # 1 – convert to float
         'initial_rotor_position (int/float)',  # 2 – convert to float
         'rotor_diameter (int/float/pos)',  # 3 – convert to float
@@ -55,7 +55,7 @@ if __name__ == '__main__':
         # Create the variable parameters from the dictionary of entries for the machine model.
         variables = model.VariableParameters(folder_name='avg',
                                              file_name='avg',
-                                             current_density=dict_of_entries[labels[0]],
+                                             current=dict_of_entries[labels[0]],
                                              initial_current_angle=dict_of_entries[labels[1]],
                                              current_angle=0,
                                              initial_rotor_position=dict_of_entries[labels[2]],

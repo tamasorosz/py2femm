@@ -2,6 +2,7 @@ import re
 import subprocess
 import sys
 
+import numpy as np
 from matplotlib import pyplot as plt
 import tkinter as tk
 import calculate_cogging_torque as cogging
@@ -49,7 +50,7 @@ if __name__ == '__main__':
         # Create the variable parameters from the dictionary of entries for the machine model.
         variables = model.VariableParameters(folder_name='cog',
                                              file_name='cog',
-                                             current_density=0,
+                                             current=0,
                                              initial_current_angle=0,
                                              current_angle=0,
                                              initial_rotor_position=dict_of_entries[labels[0]],
@@ -79,7 +80,9 @@ if __name__ == '__main__':
 
         # Plot the results of the calculation.
         plt.figure(figsize=(8, 6))
-        plt.plot(result, color='blue', linestyle='-', marker='o')
+        plt.plot(np.linspace(dict_of_entries[labels[10]], dict_of_entries[labels[11]], dict_of_entries[labels[9]]),
+                 result,
+                 color='blue', linestyle='-', marker='o')
         plt.title('Cogging Torque')
         plt.xlabel('Rotor position [deg]')
         plt.ylabel('Torque [Nm]')
@@ -105,14 +108,6 @@ if __name__ == '__main__':
                 if not input_value.strip():  # Check for empty input
                     print(f"Error: {label_text} cannot be empty.")
                     return
-
-                if "resolution" in label_text:
-                    value = int(input_value)
-                    if value > 1:
-                        valid_inputs[label_text] = value
-                    else:
-                        print(f"Error: {label_text} must be greater than 1.")
-                        return
 
                 elif "(int/float)" in label_text:
                     valid_inputs[label_text] = float(input_value)
@@ -143,10 +138,6 @@ if __name__ == '__main__':
                         print(f"Error: {label_text} must be 'True' or 'False'.")
                         return
 
-                elif input_values[10] >= input_values[11]:
-                    print(f"Error: {labels[11]} must be larger than {labels[10]}.")
-                    return
-
                 else:
                     if bool(re.fullmatch(r"^(?:[A-Ca-c]\|){12}$", input_value)):
                         valid_inputs[label_text] = input_value
@@ -163,8 +154,33 @@ if __name__ == '__main__':
             print(f"Error processing {label_text}: {e}. Please enter a valid type as specified!")
             return
 
+        if valid_inputs[labels[2]] >= valid_inputs[labels[1]]:
+            print(f"Error: {labels[1]} must be larger than {labels[2]}.")
+            return
+
+        elif valid_inputs[labels[1]] >= 45:
+            print(f"Error: {labels[1]} must be lower than 45 millimeters.")
+            return
+
+        elif valid_inputs[labels[3]] > (constraint := 360 / (valid_inputs[labels[5]] * 2)):
+            print(f"Error: {labels[3]} must be lower than {constraint} degrees.")
+            return
+
+        elif valid_inputs[labels[4]] > (constraint := (valid_inputs[labels[1]] - valid_inputs[labels[2]]) / 2 - 1.5):
+            print(f"Error: {labels[4]} must be lower than {constraint} millimeters.")
+            return
+
+        elif valid_inputs[labels[10]] >= valid_inputs[labels[11]]:
+            print(f"Error: {labels[11]} must be larger than {labels[10]}.")
+            return
+
+        elif valid_inputs[labels[12]] > 10:
+            print(f"Error: {labels[12]} must be lower than 10.")
+            return
+
         # If all inputs are valid, proceed with processing
         process_entries(valid_inputs)
+
 
     # Create the main application window with tkinter.
     root = tk.Tk()

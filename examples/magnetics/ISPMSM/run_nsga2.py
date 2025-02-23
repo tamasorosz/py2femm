@@ -25,7 +25,7 @@ if __name__ == '__main__':
     # List of labels for each input field.
     # The type hint in parentheses is used for input.
     labels = [
-        'current_density (int/float)',  # 0 – convert to float
+        'current (int/float)',  # 0 – convert to float
         'initial_current_angle (int/float)',  # 1 – convert to float
         'initial_rotor_position (int/float)',  # 2 – convert to float
         'rotor_diameter (int/float)',  # 3 – convert to float
@@ -74,7 +74,7 @@ if __name__ == '__main__':
                                  vtype=int)
 
             def _evaluate(self, x, out, *args, **kwargs):
-                variables = model.VariableParameters(current_density=dict_of_entries[labels[0]],
+                variables = model.VariableParameters(current=dict_of_entries[labels[0]],
                                                      initial_current_angle=dict_of_entries[labels[1]],
                                                      initial_rotor_position=dict_of_entries[labels[2]],
                                                      rotor_diameter=dict_of_entries[labels[3]] - x[0] / 10,
