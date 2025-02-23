@@ -52,7 +52,7 @@ if __name__ == '__main__':
         # Create the variable parameters from the dictionary of entries for the machine model.
         variables = model.VariableParameters(folder_name='ang',
                                              file_name='ang',
-                                             current_density=dict_of_entries[labels[0]],
+                                             current=dict_of_entries[labels[0]],
                                              initial_current_angle=dict_of_entries[labels[1]],
                                              current_angle=0,
                                              initial_rotor_position=dict_of_entries[labels[2]],

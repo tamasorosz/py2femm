@@ -28,7 +28,8 @@ class VariableParameters:
 
     def __init__(self, folder_name='test',
                  file_name='test',
-                 current_density=30,
+                 current=30,
+                 number_of_coil_turns=11,
                  initial_current_angle=0,
                  current_angle=0,
                  initial_rotor_position=0,
@@ -46,15 +47,7 @@ class VariableParameters:
         self.folder = folder_name
         self.filename = file_name
 
-        self.current_density = current_density
-        self.current_angle = current_angle
-        self.initial_current_angle = initial_current_angle
-        self.JUp = self.current_density * math.cos(math.radians(self.current_angle + self.initial_current_angle))
-        self.JUn = (-1) * self.JUp
-        self.JVp = self.current_density * math.cos(math.radians(self.current_angle + self.initial_current_angle + 120))
-        self.JVn = (-1) * self.JVp
-        self.JWp = self.current_density * math.cos(math.radians(self.current_angle + self.initial_current_angle + 240))
-        self.JWn = (-1) * self.JWp
+        self.number_of_coil_turns = number_of_coil_turns
 
         self.rotor_position = rotor_position
         self.initial_rotor_position = initial_rotor_position
@@ -72,23 +65,38 @@ class VariableParameters:
             self.winding_scheme = list(filter(lambda item: item != '|', winding_scheme))
             self.winding_layers = False
             self.winding_type = 'distributed'
+            self.slot_cross_section_area = 113.895
+            self.current = current * self.number_of_coil_turns / self.slot_cross_section_area
         elif bool(re.fullmatch(r"^(?:[A-Ca-c][A-Ca-c]\|){12}$", winding_scheme)):
             self.winding_scheme = list(filter(lambda item: item != '|', winding_scheme))
             self.winding_layers = True
             self.winding_type = 'distributed'
+            self.slot_cross_section_area = 113.895 / 2
+            self.current = current * self.number_of_coil_turns / self.slot_cross_section_area
         elif bool(re.fullmatch(r"^(?:[A-Ca-c]){12}$", winding_scheme)):
             self.winding_scheme = list(filter(lambda item: item != '|', winding_scheme))
             self.winding_layers = False
             self.winding_type = 'concentrated'
+            self.slot_cross_section_area = 113.895 / 2
+            self.current = current * self.number_of_coil_turns / self.slot_cross_section_area
         else:
             raise Exception('Invalid input for winding scheme!')
+
+        self.current_angle = current_angle
+        self.initial_current_angle = initial_current_angle
+        self.JUp = self.current * math.cos(math.radians(self.current_angle + self.initial_current_angle))
+        self.JUn = (-1) * self.JUp
+        self.JVp = self.current * math.cos(math.radians(self.current_angle + self.initial_current_angle + 120))
+        self.JVn = (-1) * self.JVp
+        self.JWp = self.current * math.cos(math.radians(self.current_angle + self.initial_current_angle + 240))
+        self.JWn = (-1) * self.JWp
 
         self.output_file = f"{current_folder_path}/{self.folder}/{self.filename}_{self.rotor_position}"
         self.output_folder = f"{current_folder_path}/{self.folder}"
 
-    def update_current_density(self, new_current_density):
-        """ Updates current_density dynamically whenever current_density changes. """
-        self.current_angle = new_current_density
+    def update_current_density(self, new_current):
+        """ Updates current dynamically whenever current changes. """
+        self.current = new_current * self.number_of_coil_turns / self.slot_cross_section_area
         self.update_phases()
 
     def update_initial_rotor_position(self, new_initial_rotor_position):
@@ -127,12 +135,12 @@ class VariableParameters:
         self.update_phases()
 
     def update_phases(self):
-        """ Update phases dynamically whenever current_angle or current_density changes. """
-        self.JUp = self.current_density * math.cos(math.radians(self.current_angle))
+        """ Update phases dynamically whenever current_angle or current or number_of_coil_turns changes. """
+        self.JUp = self.current* math.cos(math.radians(self.current_angle))
         self.JUn = (-1) * self.JUp
-        self.JVp = self.current_density * math.cos(math.radians(self.current_angle + 120))
+        self.JVp = self.current * math.cos(math.radians(self.current_angle + 120))
         self.JVn = (-1) * self.JVp
-        self.JWp = self.current_density * math.cos(math.radians(self.current_angle + 240))
+        self.JWp = self.current * math.cos(math.radians(self.current_angle + 240))
         self.JWn = (-1) * self.JWp
 
 

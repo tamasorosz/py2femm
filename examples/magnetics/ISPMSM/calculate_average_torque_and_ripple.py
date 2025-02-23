@@ -120,7 +120,7 @@ def average_torque_and_ripple(variables: model.VariableParameters,
         print('-------------------------------------')
 
         labels = [
-            'current_density',  # 0
+            'current',  # 0
             'rotor_diameter',  # 1
             'shaft_diameter',  # 2
             'magnet_width',  # 3
@@ -131,7 +131,7 @@ def average_torque_and_ripple(variables: model.VariableParameters,
             'shortening',  # 8
         ]
 
-        df = pd.DataFrame({labels[0]: mutable_variables.current_density,
+        df = pd.DataFrame({labels[0]: mutable_variables.current,
                            labels[1]: mutable_variables.rotor_diameter,
                            labels[2]: mutable_variables.shaft_diameter,
                            labels[3]: mutable_variables.magnet_width,

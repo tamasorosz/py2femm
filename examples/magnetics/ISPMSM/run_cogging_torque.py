@@ -50,7 +50,7 @@ if __name__ == '__main__':
         # Create the variable parameters from the dictionary of entries for the machine model.
         variables = model.VariableParameters(folder_name='cog',
                                              file_name='cog',
-                                             current_density=0,
+                                             current=0,
                                              initial_current_angle=0,
                                              current_angle=0,
                                              initial_rotor_position=dict_of_entries[labels[0]],
