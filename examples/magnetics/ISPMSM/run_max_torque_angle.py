@@ -25,13 +25,14 @@ if __name__ == '__main__':
         'pole_pairs (int/pos)',  # 7 – convert to int
         'stack_length (int/float/pos)',  # 8 – convert to float
         'winding_scheme (str)',  # 9 – string
-        'shortening (int/float)',  # 10 – convert to float
-        'resolution (int/pos)',  # 11 – convert to int
-        'start_position (int/float)',  # 12 – convert to float
-        'end_position (int/float)',  # 13 – convert to float
-        'rounding (int/pos)',  # 14 – convert to int
-        'delete_after (bool)',  # 15 – convert to bool
-        'number_of_cores (int/pos)'  # 16 - convert to int
+        'number_of_coil_turns (int/pos)',  # 10 - convert to int
+        'shortening (int/float)',  # 11 – convert to float
+        'resolution (int/pos)',  # 12 – convert to int
+        'start_position (int/float)',  # 13 – convert to float
+        'end_position (int/float)',  # 14 – convert to float
+        'rounding (int/pos)',  # 15 – convert to int
+        'delete_after (bool)',  # 16 – convert to bool
+        'number_of_cores (int/pos)'  # 17 - convert to int
     ]
 
 
@@ -64,17 +65,18 @@ if __name__ == '__main__':
                                              pole_pairs=dict_of_entries[labels[7]],
                                              stack_lenght=dict_of_entries[labels[8]],
                                              winding_scheme=dict_of_entries[labels[9]],
-                                             shortening=dict_of_entries[labels[10]]
+                                             number_of_coil_turns=dict_of_entries[labels[10]],
+                                             shortening=dict_of_entries[labels[11]]
                                              )
 
         # Run the torque angle calculation.
         torque_ang, result = angle.max_torque_angle(variables,
-                                                    resolution=dict_of_entries[labels[11]],
-                                                    start_position=dict_of_entries[labels[12]],
-                                                    end_position=dict_of_entries[labels[13]],
-                                                    rounding=dict_of_entries[labels[14]],
-                                                    delete_after=dict_of_entries[labels[15]],
-                                                    cores=dict_of_entries[labels[16]])
+                                                    resolution=dict_of_entries[labels[12]],
+                                                    start_position=dict_of_entries[labels[13]],
+                                                    end_position=dict_of_entries[labels[14]],
+                                                    rounding=dict_of_entries[labels[15]],
+                                                    delete_after=dict_of_entries[labels[16]],
+                                                    cores=dict_of_entries[labels[17]])
 
         # Print the results of the calculation.
         print(f'The rotor position where the torque is maximal: {torque_ang} deg')
@@ -82,7 +84,7 @@ if __name__ == '__main__':
 
         # Plot the results of the calculation.
         plt.figure(figsize=(8, 6))
-        plt.plot(np.linspace(dict_of_entries[labels[12]], dict_of_entries[labels[13]], dict_of_entries[labels[11]]),
+        plt.plot(np.linspace(dict_of_entries[labels[13]], dict_of_entries[labels[14]], dict_of_entries[labels[12]]),
                  result,
                  color='blue', linestyle='-', marker='o')
         plt.title('Static Torque')
@@ -172,12 +174,12 @@ if __name__ == '__main__':
             print(f"Error: {labels[6]} must be lower than {constraint} millimeters.")
             return
 
-        elif valid_inputs[labels[12]] >= valid_inputs[labels[13]]:
-            print(f"Error: {labels[13]} must be larger than {labels[12]}.")
+        elif valid_inputs[labels[13]] >= valid_inputs[labels[14]]:
+            print(f"Error: {labels[14]} must be larger than {labels[13]}.")
             return
 
-        elif valid_inputs[labels[14]] > 10:
-            print(f"Error: {labels[14]} must be lower than 10.")
+        elif valid_inputs[labels[15]] > 10:
+            print(f"Error: {labels[15]} must be lower than 10.")
             return
 
         # If all inputs are valid, proceed with processing

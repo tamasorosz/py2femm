@@ -2,6 +2,7 @@ import re
 import subprocess
 import sys
 
+import numpy as np
 from matplotlib import pyplot as plt
 import tkinter as tk
 import calculate_average_torque_and_ripple as average
@@ -24,16 +25,17 @@ if __name__ == '__main__':
         'pole_pairs (int/pos)',  # 7 – convert to int
         'stack_length (int/float/pos)',  # 8 – convert to float
         'winding_scheme (str)',  # 9 – string
-        'shortening (int/float)',  # 10 – convert to float
-        'resolution_angle (int/pos)',  # 11 - convert to int
-        'start_position_angle (int/float)',  # 12 - convert to float
-        'end_position_angle (int/float)',  # 13 - convert to float
-        'resolution_average_ripple (int/pos)',  # 14 – convert to int
-        'start_position_average_ripple (int/float)',  # 15 – convert to float
-        'end_position_average_ripple (int/float)',  # 16 – convert to float
-        'rounding (int/pos)',  # 17 – convert to int
-        'delete_after (bool)',  # 18 – convert to bool
-        'number_of_cores (int/pos)'  # 19 - convert to int
+        'number_of_coil_turns (int/pos)',  # 10 - convert to int
+        'shortening (int/float)',  # 11 – convert to float
+        'resolution_angle (int/pos)',  # 12 - convert to int
+        'start_position_angle (int/float)',  # 13 - convert to float
+        'end_position_angle (int/float)',  # 14 - convert to float
+        'resolution_average_ripple (int/pos)',  # 15 – convert to int
+        'start_position_average_ripple (int/float)',  # 16 – convert to float
+        'end_position_average_ripple (int/float)',  # 17 – convert to float
+        'rounding (int/pos)',  # 18 – convert to int
+        'delete_after (bool)',  # 19 – convert to bool
+        'number_of_cores (int/pos)'  # 20 - convert to int
     ]
 
 
@@ -67,30 +69,47 @@ if __name__ == '__main__':
                                              pole_pairs=dict_of_entries[labels[7]],
                                              stack_lenght=dict_of_entries[labels[8]],
                                              winding_scheme=dict_of_entries[labels[9]],
-                                             shortening=dict_of_entries[labels[10]]
+                                             number_of_coil_turns=dict_of_entries[labels[10]],
+                                             shortening=dict_of_entries[labels[11]]
                                              )
 
         # Run the average torque and torque ripple calculation.
-        average_torque, torque_ripple, result = average.average_torque_and_ripple(
+        average_torque, torque_ripple, result, initial_rotor_position, result_angle = average.average_torque_and_ripple(
             variables,
-            resolution_angle=dict_of_entries[labels[11]],
-            start_position_angle=dict_of_entries[labels[12]],
-            end_position_angle=dict_of_entries[labels[13]],
-            resolution_average_ripple=dict_of_entries[labels[14]],
-            start_position_average_ripple=dict_of_entries[labels[15]],
-            end_position_average_ripple=dict_of_entries[labels[16]],
-            rounding=dict_of_entries[labels[17]],
-            delete_after=dict_of_entries[labels[18]],
-            cores=dict_of_entries[labels[19]])
+            resolution_angle=dict_of_entries[labels[12]],
+            start_position_angle=dict_of_entries[labels[13]],
+            end_position_angle=dict_of_entries[labels[14]],
+            resolution_average_ripple=dict_of_entries[labels[15]],
+            start_position_average_ripple=dict_of_entries[labels[16]],
+            end_position_average_ripple=dict_of_entries[labels[17]],
+            rounding=dict_of_entries[labels[18]],
+            delete_after=dict_of_entries[labels[19]],
+            cores=dict_of_entries[labels[20]])
 
         # Print the results of the calculation.
+        print(f'The rotor position where the torque is maximal is {initial_rotor_position} degrees')
+        print(f'The list of torque values: {result_angle} for the torque angle calculation' )
         print(f'The average torque is {average_torque} Nm')
-        print(f'The torque ripple is {torque_ripple} Nm')
-        print(f'The list of torque values: {result}')
+        print(f'The torque ripple is {torque_ripple} %')
+        print(f'The list of torque values: {result} for average torque calculation' )
+
+        if result_angle is not None:
+            # Plot the results of the calculation.
+            plt.figure(figsize=(8, 6))
+            plt.plot(np.linspace(dict_of_entries[labels[13]], dict_of_entries[labels[14]], dict_of_entries[labels[12]]),
+                     result_angle,
+                     color='blue', linestyle='-', marker='o')
+            plt.title('Static Torque')
+            plt.xlabel('Rotor position [deg]')
+            plt.ylabel('Torque [Nm]')
+            plt.grid(True)
+            plt.show()
 
         # Plot the results of the calculation.
         plt.figure(figsize=(8, 6))
-        plt.plot(result, color='blue', linestyle='-', marker='o')
+        plt.plot(np.linspace(dict_of_entries[labels[16]], dict_of_entries[labels[17]], dict_of_entries[labels[15]]),
+                 result,
+                 color='blue', linestyle='-', marker='o')
         plt.title('Dynamic Torque')
         plt.xlabel('Rotor position [deg]')
         plt.ylabel('Torque [Nm]')
@@ -116,14 +135,6 @@ if __name__ == '__main__':
                 if not input_value.strip():  # Check for empty input
                     print(f"Error: {label_text} cannot be empty.")
                     return
-
-                if "resolution" in label_text:
-                    value = int(input_value)
-                    if value > 1:
-                        valid_inputs[label_text] = value
-                    else:
-                        print(f"Error: {label_text} must be greater than 1.")
-                        return
 
                 elif "(int/float)" in label_text:
                     valid_inputs[label_text] = float(input_value)
@@ -154,10 +165,6 @@ if __name__ == '__main__':
                         print(f"Error: {label_text} must be 'True' or 'False'.")
                         return
 
-                elif input_values[10] >= input_values[11]:
-                    print(f"Error: {labels[11]} must be larger than {labels[10]}.")
-                    return
-
                 else:
                     if bool(re.fullmatch(r"^(?:[A-Ca-c]\|){12}$", input_value)):
                         valid_inputs[label_text] = input_value
@@ -174,8 +181,37 @@ if __name__ == '__main__':
             print(f"Error processing {label_text}: {e}. Please enter a valid type as specified!")
             return
 
+        if valid_inputs[labels[4]] >= valid_inputs[labels[3]]:
+            print(f"Error: {labels[3]} must be larger than {labels[4]}.")
+            return
+
+        elif valid_inputs[labels[3]] >= 45:
+            print(f"Error: {labels[3]} must be lower than 45 millimeters.")
+            return
+
+        elif valid_inputs[labels[5]] > (constraint := 360 / (valid_inputs[labels[7]] * 2)):
+            print(f"Error: {labels[5]} must be lower than {constraint} degrees.")
+            return
+
+        elif valid_inputs[labels[6]] > (constraint := (valid_inputs[labels[3]] - valid_inputs[labels[4]]) / 2 - 1.5):
+            print(f"Error: {labels[6]} must be lower than {constraint} millimeters.")
+            return
+
+        elif valid_inputs[labels[13]] >= valid_inputs[labels[14]]:
+            print(f"Error: {labels[14]} must be larger than {labels[13]}.")
+            return
+
+        elif valid_inputs[labels[16]] >= valid_inputs[labels[17]]:
+            print(f"Error: {labels[17]} must be larger than {labels[16]}.")
+            return
+
+        elif valid_inputs[labels[18]] > 10:
+            print(f"Error: {labels[18]} must be lower than 10.")
+            return
+
         # If all inputs are valid, proceed with processing
         process_entries(valid_inputs)
+
 
     # Create the main application window with tkinter.
     root = tk.Tk()
@@ -184,7 +220,7 @@ if __name__ == '__main__':
     # List to hold the widget or variable associated with each input.
     # For Entry fields, we store the tk.Entry widget.
     entries = []
-    num_columns = 2  # Two input pairs per row (each pair occupies 2 grid columns).
+    num_columns = 3  # Two input pairs per row (each pair occupies 2 grid columns).
 
     # Loop through each label and create a label widget and its corresponding input widget.
     for i, label_text in enumerate(labels):

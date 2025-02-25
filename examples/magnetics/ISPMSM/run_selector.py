@@ -17,7 +17,7 @@ def option_3():
 
 def option_4():
     """ Opens the NSGA-II optimisation from the selector. """
-    open_second_gui('run_nsga2.py.py')
+    open_second_gui('run_nsga2.py')
 
 def open_second_gui(filepath):
     """Closes the first GUI and opens another script. """
