@@ -759,14 +759,71 @@ Winding scheme: **bA|Cb|aC|Ba|cB|Ac|bA|Cb|aC|Ba|cB|Ac|** (https://www.bavaria-di
 
 ### Selecting cogging torque calculation (COGGING).
 
+![img_19.png](img_19.png)
+
+As the cogging does not depend on the winding scheme just the number of slots or poles and stator and rotor geometry,
+the result would be the same. So The rotor diameter is changed to 44.9 millimeters, meaning 0.1 millimeters air gap and
+10 millimeters magnet height instead of 4 millimeters which should increase the amplitude of the cogging torque as it is
+shown in the following figure.
+
+![img_20.png](img_20.png)
+
+    The cogging torque is -7.799 Nm
+    The list of torque values: [0.01, -0.606, -1.202, -1.76, -2.268, -2.732, -3.143, -3.459, -3.706, -3.849,
+    -3.894, -3.816, -3.606, -3.241, -2.185, 0.008, 2.188, 3.246, 3.615, 3.833, 3.905, 3.863, 3.714, 3.482, 3.155,
+    2.746, 2.284, 1.771, 1.22, 0.619, 0.004]
 
 ### Selecting torque angle calculation (TORQUE ANGLE).
 
+![img_21.png](img_21.png)
+
+In this test case all the parameters are similar only the winding scheme is different from the last test case. Because of 
+the different winding the initial rotor position is also different.
+
+![img_22.png](img_22.png)
+
+    The rotor position where the torque is maximal: 36.0 deg
+    The list of torque values: [0.002, 2.875, 4.658, 5.911, 6.875, 7.66, 8.291, 8.793, 9.193, 9.511,
+    9.744, 9.901, 9.981, 10.099, 10.516, 11.925, 13.423, 13.864, 13.932, 13.88, 13.788, 13.669, 13.476,
+    13.203, 12.828, 12.331, 11.716, 10.971, 10.142, 9.582, 9.987, 10.389, 9.778, 8.795, 7.64, 6.406, 5.153,
+    3.915, 2.726, 1.633, 0.685, -0.097, -0.726, -1.106, -1.042, 0.002, 1.048, 1.112, 0.734, 0.11, -0.675,
+    -1.624, -2.719, -3.908, -5.145, -6.398, -7.633, -8.791, -9.774, -10.385, -9.989, -9.583, -10.142,
+    -10.972, -11.722, -12.34, -12.831, -13.199, -13.469, -13.669, -13.789, -13.881, -13.925, -13.856,
+    -13.412, -11.928, -10.504, -10.093, -9.987, -9.898, -9.741, -9.507, -9.187, -8.783, -8.28, -7.65, -6.865,
+    -5.902, -4.65, -2.873, 0.002]
 
 ### Selecting average torque and torque ripple calculation (AVERAGE TORQUE).
 
+![img_23.png](img_23.png)
+
+![img_24.png](img_24.png)
+
+    The rotor position where the torque is maximal is 79.0 degrees
+    The list of torque values: [-6.084, -6.325, -6.583, -6.855, -7.13, -7.406, -7.671, -7.925, -8.152, -8.342, -8.456,
+    -8.492, -8.401, -8.11, -7.476, -6.496, -5.495, -4.788, -4.379, -4.137, -4.01, -3.93, -3.906, -3.9, -3.919, -3.947,
+    -3.97, -3.999, -4.025, -4.056, -4.077, -4.083, -4.096, -4.093, -4.071, -4.034, -3.98, -3.904, -3.799, -3.64,
+    -3.433, -3.146, -2.744, -2.136, -1.211, -0.016, 1.197, 2.129, 2.74, 3.147, 3.444, 3.661, 3.824, 3.955, 4.055,
+    4.132, 4.192, 4.247, 4.284, 4.31, 4.333, 4.35, 4.361, 4.364, 4.359, 4.358, 4.357, 4.367, 4.382, 4.417, 4.482,
+    4.607, 4.802, 5.159, 5.823, 6.799, 7.708, 8.287, 8.533, 8.608, 8.585, 8.491, 8.365, 8.201, 8.007, 7.792, 7.568,
+    7.345, 7.127, 6.913, 6.707, 6.511, 6.327, 6.152, 5.987, 5.827, 5.676, 5.532, 5.395, 5.269, 5.166, 5.096, 5.089,
+    5.219, 5.627, 6.278, 6.902, 7.211, 7.18, 6.965, 6.626, 6.217, 5.752, 5.255, 4.73, 4.191, 3.646, 3.099, 2.558,
+    2.028, 1.521, 1.047, 0.589, 0.172, -0.218, -0.578, -0.906, -1.194, -1.434, -1.613, -1.736, -1.783, -1.723,
+    -1.475, -0.905, -0.041, 0.825, 1.38, 1.591, 1.614, 1.517, 1.33, 1.076, 0.758, 0.406, 0.005, -0.431, -0.911,
+    -1.419, -1.96, -2.503, -3.067, -3.631, -4.183, -4.739, -5.274, -5.788, -6.277, -6.728, -7.124, -7.454, -7.69,
+    -7.787, -7.682, -7.22, -6.421, -5.55, -4.982, -4.72, -4.615, -4.598, -4.644, -4.724, -4.831, -4.958, -5.105,
+    -5.267, -5.45, -5.646, -5.856, -6.084] for the torque angle calculation
+
+    The average torque is 7.199 Nm
+    The torque ripple is 41.033 %
+    The list of torque values: [8.608, 8.557, 8.453, 8.331, 8.189, 8.038, 7.887, 7.74, 7.597, 7.454, 7.309, 7.166,
+    7.023, 6.877, 6.727, 6.575, 6.42, 6.264, 6.11, 5.963, 5.829, 5.724, 5.66, 5.676, 5.859, 6.368, 7.186, 7.962,
+    8.426, 8.591, 8.614] for average torque calculation
 
 ### Selecting NSGA-II optimisation (OPTIMISATION).
+
+![img_25.png](img_25.png)
+
+![img_26.png](img_26.png)
 
 
 ## Concentrated winding, 12 slots and 8 poles
