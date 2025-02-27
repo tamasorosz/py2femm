@@ -343,9 +343,9 @@ def winding_definition(femm_model: FemmProblem, variables: VariableParameters):
     # Create concentrated winding scheme.
     elif not variables.winding_layers and variables.winding_type == 'concentrated':
         for slot, phase in enumerate(variables.winding_scheme):
-            femm_model.define_block_label(Node(2, 30.5).rotate_about(N0, (-1) * 30 * slot, degrees=True),
+            femm_model.define_block_label(Node(2, 30.5).rotate_about(N0, 30 * slot, degrees=True),
                                           phase_map[phase])
-            femm_model.define_block_label(Node(13.5, 27.5).rotate_about(N0, (-1) * 30 * slot, degrees=True),
+            femm_model.define_block_label(Node(13.5, 27.5).rotate_about(N0, 30 * slot, degrees=True),
                                           phase_map[phase.swapcase()])
 
 

@@ -64,7 +64,7 @@ behaviour of the electric machine. **For some examples and limitations check tes
 
 ## What each parameter in the simulations represents
 
-### machine_model.py
+### [machine_model.py](../machine_model.py)
 
 This file contains the machine model. Its stator is built from a .dxf file directly, while its winding, rotor, materials
 boundary conditions are parameterised with the p2FEMM functions to communicate with FEMM which accepts .lua commands.
@@ -78,14 +78,22 @@ necessary for the file handling, some for the geometry and some for the simulati
 torque calculation function. It can be any kind of character which is valid for a folder name. For cogging torque
 calculation "cog", for torque angle calculation "ang", for average torque and torque ripple calculation "avg" is
 recommended.
+
+
 * **file_name**: It specifies the name of the temporary simulation files separately for each type of
 torque calculation function stored in the according folders. It can be any kind of character which is valid for a file
 name. For cogging torque calculation "cog", for torque angle calculation "ang", for average torque and torque ripple
 calculation "avg" is recommended. Each file is unique as all ends with a number corresponding to the rotor position.
 
-#### Geometry parameters of VariableParameters class:
+#### Geometry and physics parameters of VariableParameters class:
+\*some parameters not covered here, please check [tests_and_examples.md](tests_and_examples.md)
 
 
+* **current_angle [electrical degrees]**: It specifies the resulting magnetic field and rotates the magnetic field in
+each simulation step.
+
+
+* **rotor_position [mechanical degrees]:** It specifies the rotor position and rotates it in every simulation step.
 
 
 

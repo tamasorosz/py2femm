@@ -836,11 +836,51 @@ Winding scheme: **ABCABCABCABC** (https://www.bavaria-direct.co.za/scheme/calcul
 
 ### Selecting cogging torque calculation (COGGING).
 
+![img_27.png](img_27.png)
+
+![img_28.png](img_28.png)
+
+    The cogging torque is -0.211 Nm
+    The list of torque values: [0.005, -0.012, -0.029, -0.032, -0.04, -0.053, -0.064, -0.074, -0.081,
+    -0.107, -0.104, -0.093, -0.049, -0.008, 0.013, -0.01, -0.022, -0.007, 0.039, 0.073, 0.104,
+    0.096, 0.075, 0.066, 0.044, 0.038, 0.034, 0.026, 0.014, 0.008, -0.009]
 
 ### Selecting torque angle calculation (TORQUE ANGLE).
 
+![img_29.png](img_29.png)
+
+![img_30.png](img_30.png)
+
+    The rotor position where the torque is maximal: 26.0 deg
+    The list of torque values: [0.006, 0.533, 1.113, 1.734, 2.466, 3.373, 4.543,
+    6.098, 7.824, 9.357, 10.461, 11.244, 11.807, 12.232, 12.491, 12.645, 12.65,
+    12.54, 12.349, 12.131, 11.859, 11.745, 11.968, 12.471, 13.126, 13.493, 13.554,
+    13.441, 13.144, 12.702, 12.051, 11.111, 9.998, 8.741, 7.423, 6.135, 4.877,
+    3.601, 2.436, 1.665, 1.143, 0.764, 0.49, 0.27, 0.114, 0.003, -0.127, -0.277,
+    -0.494, -0.758, -1.152, -1.661, -2.43, -3.601, -4.875, -6.133, -7.428, -8.744,
+    -9.995, -11.109, -12.046, -12.712, -13.144, -13.443, -13.557, -13.493, -13.13,
+    -12.486, -11.975, -11.746, -11.862, -12.142, -12.373, -12.55, -12.666, -12.65,
+    -12.495, -12.217, -11.815, -11.251, -10.469, -9.349, -7.835, -6.104, -4.548,
+    -3.382, -2.469, -1.733, -1.098, -0.529, 0.006]
 
 ### Selecting average torque and torque ripple calculation (AVERAGE TORQUE).
 
+![img_31.png](img_31.png)
+
+![img_32.png](img_32.png)
+
+    The rotor position where the torque is maximal is 51.0 degrees
+    The list of torque values: None for the torque angle calculation
+    The average torque is 13.351 Nm
+    The torque ripple is 24.051 %
+    The list of torque values: [11.745, 11.912, 12.213, 12.599, 13.084,
+    13.619, 14.087, 14.418, 14.644, 14.79, 14.862, 14.895, 14.859,
+    14.783, 14.677, 14.537, 14.361, 14.178, 13.938, 13.697, 13.437,
+    13.192, 12.936, 12.686, 12.451, 12.237, 12.02, 11.859, 11.737,
+    11.684, 11.751] for average torque calculation
 
 ### Selecting NSGA-II optimisation (OPTIMISATION).
+
+![img_33.png](img_33.png)
+
+![img_34.png](img_34.png)
