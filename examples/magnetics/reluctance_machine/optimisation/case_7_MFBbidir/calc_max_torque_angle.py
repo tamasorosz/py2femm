@@ -46,7 +46,7 @@ def execute_model(counter):
     return torque
 
 
-def max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_mp):
+def max_torque_angle(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_mp):
     if os.path.exists('temp_ang'):
         pass
     else:
@@ -60,12 +60,12 @@ def max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg
         variables = model.VariableParameters(fold='ang',
                                              out='ang',
                                              counter=counter,
-                                             JAp=J0 * math.cos(math.radians(alpha)),
-                                             JAn=-J0 * math.cos(math.radians(alpha)),
-                                             JBp=J0 * math.cos(math.radians(alpha + 120)),
-                                             JBn=-J0 * math.cos(math.radians(alpha + 120)),
-                                             JCp=J0 * math.cos(math.radians(alpha + 240)),
-                                             JCn=-J0 * math.cos(math.radians(alpha + 240)),
+                                             IAp=I0 * math.cos(math.radians(0)),
+                                             IAn=-I0 * math.cos(math.radians(0)),
+                                             IBp=I0 * math.cos(math.radians(0 + 120)),
+                                             IBn=-I0 * math.cos(math.radians(0 + 120)),
+                                             ICp=I0 * math.cos(math.radians(0 + 240)),
+                                             ICn=-I0 * math.cos(math.radians(0 + 240)),
                                              ang_co=ang_co,
                                              deg_co=deg_co * 10,
                                              bd=bd,

@@ -32,7 +32,7 @@ if __name__ == '__main__':
 
         def _evaluate(self, x, out, *args, **kwargs):
 
-            f1 = calc_torque_avg_rip.torque_avg_rip(30, x[0], x[1], x[2], 0.5, x[3], x[4], 1.5, x[5])
+            f1 = calc_torque_avg_rip.torque_avg_rip(110, x[0], x[1], x[2], 0.5, x[3], x[4], 1.5, x[5])
             f2 = calc_cogging.cogging(0, x[0], x[1], x[2], 0.5, x[3], x[4], 1.5, x[5])
 
             gc.collect()
@@ -102,7 +102,7 @@ if __name__ == '__main__':
     else:
         os.makedirs('results')
 
-    file_path = os.path.join(folder_path, f'results/nsga2_case1_p100o100g200_var6_20250205.csv')
+    file_path = os.path.join(folder_path, f'results/nsga2_case1_p100o100g200_var6_20250223.csv')
     df.to_csv(file_path, encoding='utf-8', index=False)
 
     folder_path = ['temp_ang', 'temp_avg_rip', 'temp_cog']
