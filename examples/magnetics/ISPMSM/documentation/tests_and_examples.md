@@ -1,22 +1,32 @@
 # Tests for the Electric Machine Torque Calculations
 
-## Some tests that are also intended as an example which helps to represent the physics behind the simulations
+## Some tests that are also intended as examples
 
-This documentation serves a sum of examples which were calculated during the tests of the codebase. There are some
-tricks and tips regarding the code and the physics and also the limitations are highlighted. The documentation is not
-intended to cover all the physics behind the simulations. It assumes a basic knowledge in electric engineering. For a 
-complete coverage refer to the Design of **Rotating Electrical Machines, Juha Pyrhönen, Tapani Jokinen, Valéria Hrabovcová, 
-DOI:10.1002/9781118701591** or for hungarian speaking fellows **Villamos Gépek** series from **József Liska**.
+This documentation serves as a sum of examples calculated during the algorithm tests. Some tricks and tips regarding the
+code, the physics behind it and the limitations are highlighted. The documentation is not intended to cover all the
+physics behind the simulations. It assumes basic knowledge of electrical engineering and electric machines. For  
+complete coverage, refer to the Design of **Rotating Electrical Machines, Juha Pyrhönen, Tapani Jokinen, Valéria Hrabovcová, 
+DOI:10.1002/9781118701591** or for Hungarian-speaking fellows **Villamos Gépek** series from **József Liska**.
 
-* Distributed winding, 1 layer, 12 slots and 4 poles
-* Distributed winding, 2 layers, 1 shortening, 12 slots and 4 poles
-* Concentrated winding, 12 slots and 8 poles
 
-## Distributed winding, 1 layer, 12 slots and 4 poles
+
+## Test cases:
+
+* Distributed winding, 1 layer, 12 slots and 4 poles (2 pole pairs)
+* Distributed winding, 2 layers, 1 shortening, 12 slots and 4 poles  (2 pole pairs)
+* Concentrated winding, 12 slots and 8 poles  (4 pole pairs)
+
+## Distributed winding, 1 layer, 12 slots and 4 poles  (2 pole pairs)
 
 Winding scheme: **A|b|C|a|B|c|A|b|C|a|B|c|** (https://www.bavaria-direct.co.za/scheme/calculator/)
 
-        start up run_selector.py
+The example machine is shown below. This is the model created in FEMM (https://www.femm.info/wiki/HomePage).
+
+![img_35.png](img_35.png)
+
+The example FEMM file is: [example_test1.fem](example_test1.fem)
+
+start up run_selector.py
 
 ![img_1.png](img_1.png)
 
@@ -27,23 +37,23 @@ permanent magnets of the rotor and the stator teeth. Cogging torque results from
 the rotor moves relative to the stator. This effect is particularly noticeable in permanent magnet synchronous machines
 (PMSMs), leading to vibration, noise, and reduced smoothness in motion.
 
-* Rotate the rotor in small steps (e.g., 1° or less) over an electrical period. For each step, compute the 
+* Rotate the rotor in small steps (one degree or less) over an electrical period. For each step, compute the
 electromagnetic torque using FEM without any current.
 
 An electrical period for this slot/magnet pole combination will have 12 cogging steps per turn due to the Least Common
-Multiple _LCM(12,4)=**12**_. It means that 12 period is present over one rotation, so over 360 mechanical degrees. 
+Multiple _LCM(12,4)=**12**_. This means that 12 periods are present over one rotation, so over 360 mechanical degrees. 
 To decrease the computational burden _360/12=**30**_ degrees is enough to calculate one period of the cogging torque.
 
 ![img.png](img.png)
 
-After selecting the _cogging_ option the parameter list jumps up shown above. First of all, every parameter is limited
-to a given input type. Those parameters are always checked for valid input and the program will not start until all
-differences are solved. Please keep that in mind!
+After selecting the _cogging_ option, the parameter list jumps up, as shown above. First of all, every parameter is limited
+to a given input type. Those parameters are constantly checked for valid input, and the program will not start until all
+exceptions are solved. Please keep that in mind! The algorithm checks the input if you press _start simulation_.
 
-        int/float:          int (integer) means discrete whole-number values, and float (floating-point) means
+        int/float:          int (integer) means discrete whole-number values and float (floating-point) means
                             continuous decimal values, allowing for higher precision
 
-        int/float/pos:      int (integer) means discrete whole-number values, and float (floating-point) means
+        int/float/pos:      int (integer) means discrete whole-number values and float (floating-point) means
                             continuous decimal values, allowing for higher precision but only positive numbers higher
                             than zero (>0)
 
@@ -52,68 +62,67 @@ differences are solved. Please keep that in mind!
 
         str:                str (string) is a sequence of characters used to represent text
 
-1) **initial_rotor_position [mechanical degrees]:** set the initial rotor position in mechanical degrees, which helps to
+1) **initial_rotor_position [mechanical degrees]:** Set the initial rotor position in mechanical degrees, which helps to
 position the rotor where the torque of the first calculation is zero. It helps to find the starting point of a period.
 The starting point depends on the number of poles, the winding scheme, the shortening and the rotor geometry. It is not
-a neccessary step but helps to interpret and plot the results. The easiest way to determine the starting point run the
+a necessary step, but it helps interpret and plot the results. The easiest way to determine the starting point is to run
 the cogging torque calculation and correct for the second run.
 
 
-2) **rotor_diameter [millimeters]:** set the rotor diameter (shown in the image below). Be aware that the rotor diameter
+2) **rotor_diameter [millimetres]:** Set the rotor diameter (shown in the image below). Be aware that the rotor diameter
 should be larger than the shaft diameter. Plus, keep in mind that there should be enough space for the magnets to
 accommodate. Please input a positive number.
 
 
-3) **shaft_diameter [millimeters]:** set the shaft diameter (shown in the image below). Be aware that the shaft diameter
+3) **shaft_diameter [millimetres]:** Set the shaft diameter (shown in the image below). Be aware that the shaft diameter
 should be lower than the rotor diameter. Plus, keep in mind that there should be enough space for the magnets to
-accommodate. Please input a positive number. Please input a positive number.
+accommodate. Please input a positive number.
 
 
-4) **magnet_width [degrees]:** set the width of the magnets (shown in the image below). As an ISPMSM the magnets are
+4) **magnet_width [degrees]:** Set the width of the magnets. As an ISPMSM, the magnets are
 inset to the circumference of the rotor and bent to the circle arc of the rotor, so it is more convenient to define the
-width in degrees. Be aware that the magnet width cannot be larger than the width of a pole which is calculated from the
+width in degrees. Be aware that the magnet width cannot be larger than the width of a pole, which is calculated from the
 number of poles _360/4=**90**_. Please input a positive number.
 
 
-5) **magnet_height [millimeters]:** set the height of the magnets (shown in the image below). Keep in mind that the 
-magnet cannot be larger than the half of difference of the rotor diameter and the shaft diameter. Please input a 
-positive number.
+5) **magnet_height [millimetres]:** Set the height of the magnets (shown in the image below). Remember that the 
+magnet cannot exceed half the difference between the rotor and shaft diameters minus 1.5 millimetres. It is a technical solution to define the rotor material. Please input a positive number.
 
 
-6) **pole_pairs [-]**: set the number of pole pairs. Be aware that it is the half of the number of poles. This
-convention is a tribute to the Hungarian professors who have contributed a lot to the development of Hungarian 
-electrical engineering of electric machines. Be aware that some slot and pole combination is not viable, so check every
+6) **pole_pairs [-]**: set the number of pole pairs. Be aware that it is half of the number of poles. This
+convention is a tribute to the Hungarian professors who have contributed a lot to developing the Hungarian 
+electrical engineering of electric machines. On the other hand, one pole cannot be interpreted. Be aware that some slot and pole combinations are not viable, so check every
 time with https://www.bavaria-direct.co.za/scheme/calculator/.
 
 
-7) **stack_length [millimeters]:** set the lenght of the electric machine's active parts. As the simulations run on a
-cross-section model of a radial flux electric machine it assumes that the same flux is generated along the whole length
+7) **stack_length [millimetres]:** Set the length of the electric machine's active parts. As the simulations run on a
+cross-section model of a radial flux electric machine, it assumes that the same flux is generated along the whole length
 of the active parts. A rough estimation is that the torque increases linearly with the length of the active parts. 
 Please input a positive number.
 
 
-8) **winding_scheme [-]:** set the winding of the electric machine. As the type of the winding distinguishes the
-two electric machines with the same geometry it is a complex field of study in engineering. Fortunately, there are some
-websites that could help determine the possible winding schemes. One such website is https://www.emetor.com/windings/
-which calculates the possible winding schemes and more for a given slot/poles combination. In this program the website 
+8) **winding_scheme [-]:** set the winding of the electric machine. As the type of winding distinguishes the
+two electric machines with the same geometry it is a complex field of study in engineering. Fortunately, some
+websites could help determine the possible winding schemes. One such website is https://www.emetor.com/windings/
+which calculates the possible winding schemes and more for a given slot/pole combination. In this program, the website 
 https://www.bavaria-direct.co.za/scheme/calculator/ is utilised. Enter the number of slots (12) and number of poles (4)
-and press calculate. The website gives you a string describing the winding scheme (A|b|C|a|B|c|A|b|C|a|B|c|).
-Copy that into the **winding_scheme** slot. This program automatically recognise the structure and the layers. This
+and press calculate. The website gives a string describing the winding scheme (A|b|C|a|B|c|A|b|C|a|B|c|).
+Copy that into the **winding_scheme** slot. This program automatically recognises the structure and the layers. This
 program accepts a winding structure given in the format of this website only.
 
 ![img_2.png](img_2.png)
 
 
-9) **shortening [-]:** set the shortening of a 2 layer winding. It is not applicable in this case. Check the following
+9) **shortening [-]:** Set the shortening of a 2-layer winding. It is not applicable in this case. Check the following
 test cases.
 
 
-10) **resolution [degrees]:** set the resolution of the cogging torque calculation between the starting rotor position and
-the resulting rotor position. It is recommended to set it to a resolution of one degrees. A valid resolution is
-calculated as _(**end_position_cogging** - **start_position_cogging** + 1)_. As previously mentioned you only need to
-calculate one period of cogging torque if the machine is symmetrical which means if the **start_position_cogging** is
-zero than one period ends at _360/12=**30**_ **end_position_cogging**. So the resolution should be **31**. If you want
-a higher resolution for example 0.5 degrees thant the resolution should be **61**.
+10) **resolution [degrees]:** Set the resolution of the cogging torque calculation between the starting rotor position and
+the resulting rotor position. It is recommended that it be set to a resolution of one degree. A valid resolution is
+calculated as _(**end_position_cogging** - **start_position_cogging** + 1)_. As previously mentioned, you only need to
+calculate one period of cogging torque if the machine is symmetrical, which means if the **start_position_cogging** is
+zero, then one period ends at _360/12=**30**_ **end_position_cogging**. So the resolution should be **31**. If you want
+a higher resolution, for example, 0.5 degrees, the resolution should be **61**.
 
 
 11) **start_position_cogging [mechanical degrees]:** set the starting rotor position of the calculation.
@@ -121,31 +130,31 @@ Should be lower than the **end_position_cogging**.
 
 
 12) **end_position_cogging [mechanical degrees]:** set the ending rotor position of the calculation. 
-As previously mentioned you only need to calculate one period of cogging torque if the machine is symmetrical
-which means if the **start_position_cogging** is zero than one period ends at _360/12=**30**_ **end_position_cogging**.
+As previously mentioned, you only need to calculate one period of cogging torque if the machine is symmetrical
+which means if the **start_position_cogging** is zero then one period ends at _360/12=**30**_ **end_position_cogging**.
 
 
 13) **rounding [-]:** set the rounding of the resulting torque, using the np.round() function in Python, part of the 
 NumPy library. It is used for rounding elements in an array to a specified number of decimal places.
-It takes an array and an optional ‘decimals’. The function returns a new array with rounded values, without altering 
-the original array. To get a distinguishable result, please use at least 1. For more precision use larger number.
+It takes an array and an optional 'decimals'. The function returns a new array with rounded values without altering 
+the original array. To get a distinguishable result, please use at least 1. For more precision, use a larger number.
 
 
-14) **delete_after [bool]:** if True than the simulation files are deleted after the simulation ends, if false then the 
-program stores the simulation files in the corresponding folder, in this case _cog_ folder.
+14) **delete_after [bool]:** If True, then the simulation files are deleted after the simulation ends; if false, then the 
+the program stores the simulation files in the corresponding folder, which, in this case, is the _cog_ folder.
 
 
-15) **number_of_cores [-]:** set the number of cores used for the parallel calculations. Please do not use all the cores
+15) **number_of_cores [-]:** Set the number of cores used for the parallel calculations. Please do not use all the cores
 of your machine as it may freeze.
 
 
-16) **RUN SIMULATION:** the button starts the simulation. First it prints all the input variables to make it possible to
-check manually. If the simulation end it prints the cogging torque, meaning the amplitude difference between the minimum
+16) **RUN SIMULATION:** the button starts the simulation. First, it prints all the input variables to make it possible to
+check manually. If the simulation ends, it prints the cogging torque, meaning the amplitude difference between the minimum
 and maximum value in a period. It also prints all the calculated values as a list, plus plots it.
 
 ![img_3.png](img_3.png)
 
-The algorith prints out:
+The algorithm prints out the following:
 
             The cogging torque is -4.798 Nm
             The list of torque values: [0.006, -0.335, -0.673, -1.011,
@@ -155,33 +164,33 @@ The algorith prints out:
 
 ![img_4.png](img_4.png)
 
-17) **BACK:** step back to the selector GUI.
+17) **BACK:** Step back to the selector GUI.
 
 ### Selecting torque angle calculation (TORQUE ANGLE).
 
-In a Permanent Magnet Synchronous Machines (PMSM), the torque is maximized when the rotor magnetic field is perpendicular
-to the stator magnetic field. In a machine which has 2 poles so 1 pole pairs the electrical and mechanical degrees are
-similar. In the case of higher pole pair numbers the the electrical angle is calculated as
+In Permanent Magnet Synchronous Machines (PMSM), the torque is maximised when the rotor magnetic field is perpendicular
+to the stator magnetic field. The electrical and mechanical degrees are similar in a machine with two poles, so one pole pairs.
+In the case of higher pole pair numbers the the electrical angle is calculated as
 _electrical_angle = mechanical_angle * pole_pair_number_. In the case of a perfectly symmetrical electric machine with
-1 pole pairs the maximal torque is at the rotor position 90 degrees. With higher pole pair numbers like 2 it is 90/2=45
-degrees and so on. It is really depends on the geometry of the rotor. This function aims to show how the rotor position
+one pole pair, the maximal torque is at the rotor position at 90 degrees. With higher pole pair numbers like 2, it is 90/2=45
+degrees and so on. It really depends on the geometry of the rotor. This function aims to show how the rotor position
 corresponding to the maximal torque varies in different cases.
 
-* Rotate the rotor in small steps (e.g., 1° or less) over an electrical period. For each step, compute the
+* Rotate the rotor in small steps (1 degree or less) over an electrical period. For each step, compute the
 electromagnetic torque using FEM at a given current.
 
 An electrical period for this slot/magnet pole combination will have two torque periods per turn due to the number of poles,
-you should calculate at least half period the get the rotor position corresponding to the maximal torque. It is
-recommended to calculate one period to understand working as a motor (positive torque) or as a generator (negative torque).
+you should calculate at least half the period to get the rotor position corresponding to the maximal torque. It is
+recommended to calculate one period to understand whether it is working as a motor (positive torque) or a generator (negative torque).
 
-After selecting the _torque angle_ option the parameter list jumps up shown above. First of all, every parameter is limited
-to a given input type. Those parameters are always checked for valid input and the program will not start until all
-differences are solved. Please keep that in mind!
+The parameter list jumps up after selecting the _torque angle_ option. First of all, every parameter is limited
+to a given input type. Those parameters are constantly checked for valid input, and the program will not start until all
+the exceptions are resolved. Please keep that in mind!
 
-        int/float:          int (integer) means discrete whole-number values, and float (floating-point) means
+        int/float:          int (integer) means discrete whole-number values and float (floating-point) means
                             continuous decimal values, allowing for higher precision
 
-        int/float/pos:      int (integer) means discrete whole-number values, and float (floating-point) means
+        int/float/pos:      int (integer) means discrete whole-number values and float (floating-point) means
                             continuous decimal values, allowing for higher precision but only positive numbers higher
                             than zero (>0)
 
@@ -192,84 +201,85 @@ differences are solved. Please keep that in mind!
 
 ![img_5.png](img_5.png)
 
-1) **current [A]:** set the peak value of the current used to excite the machine. The program automatically calculates
+1) **current [A]:** Set the peak value of the current used to excite the machine. The program automatically calculates
 current value for each step in the rotation for each phase. 
 
 
-2) **initial_current_angle [electrical degrees]:** set the current angle in electrical degrees, which helps to position
-the stator magnetic filed to a position where the torque of the first calculation is zero. It helps to find the starting
+2) **initial_current_angle [electrical degrees]:** Set the current angle in electrical degrees, which helps to position
+the stator magnetic field to a position where the torque of the first calculation is zero. It helps to find the starting
 point of a period. The starting point depends on the number of poles, the winding scheme, the shortening and the rotor
-geometry. It is not a neccessary step but helps to interpret and plot the results. The easiest way to determine the 
-starting point run the the torque angle calculation and correct for the second run. By default it should be zero.
+geometry. It is not a necessary step, but it helps interpret and plot the results. The easiest way to determine the 
+starting point is to calculate the torque angle and correct it for the second run. By default, it should be zero.
 
 
-3) **initial_rotor_position [mechanical degrees]:** set the initial rotor position in mechanical degrees, which helps to
+3) **initial_rotor_position [mechanical degrees]:** Set the initial rotor position in mechanical degrees, which helps to
 position the rotor where the torque of the first calculation is zero. It helps to find the starting point of a period.
 The starting point depends on the number of poles, the winding scheme, the shortening and the rotor geometry. It is not
-a neccessary step but helps to interpret and plot the results. The easiest way to determine the starting point run the
-the torque angle calculation and correct for the second run.
+a necessary step, but it helps interpret and plot the results. The easiest way to determine the starting point is to 
+calculate the torque angle and correct it for the second run.
 
 
-4) **rotor_diameter [millimeters]:** set the rotor diameter (shown in the image below). Be aware that the rotor diameter
+4) **rotor_diameter [millimetres]:** Set the rotor diameter. Be aware that the rotor diameter
 should be larger than the shaft diameter. Plus, keep in mind that there should be enough space for the magnets to
 accommodate. Please input a positive number.
 
 
-5) **shaft_diameter [millimeters]:** set the shaft diameter (shown in the image below). Be aware that the shaft diameter
+5) **shaft_diameter [millimetres]:** Set the shaft diameter. Be aware that the shaft diameter
 should be lower than the rotor diameter. Plus, keep in mind that there should be enough space for the magnets to
 accommodate. Please input a positive number. Please input a positive number.
 
 
-6) **magnet_width [degrees]:** set the width of the magnets (shown in the image below). As an ISPMSM the magnets are
+6) **magnet_width [degrees]:** Set the width of the magnets (shown in the image below). As an ISPMSM, the magnets are
 inset to the circumference of the rotor and bent to the circle arc of the rotor, so it is more convenient to define the
-width in degrees. Be aware that the magnet width cannot be larger than the width of a pole which is calculated from the
+width in degrees. Be aware that the magnet width cannot be larger than the width of a pole, which is calculated from the
 number of poles _360/4=**90**_. Please input a positive number.
 
 
-7) **magnet_height [millimeters]:** set the height of the magnets (shown in the image below). Keep in mind that the 
-magnet cannot be larger than the half of difference of the rotor diameter and the shaft diameter. Please input a 
-positive number.
+7) **magnet_height [millimetres]:** Set the height of the magnets (shown in the image below). Remember that the 
+magnet cannot exceed half the difference between the rotor and shaft diameters minus 1.5 millimetres.
+It is a technical solution to define the rotor material. Please input a positive number.
 
 
-8) **pole_pairs [-]**: set the number of pole pairs. Be aware that it is the half of the number of poles. This
-convention is a tribute to the Hungarian professors who have contributed a lot to the development of Hungarian 
-electrical engineering of electric machines. Be aware that some slot and pole combination is not viable, so check every
+8) **pole_pairs [-]**: set the number of pole pairs. Be aware that it is half of the number of poles. This
+convention is a tribute to the Hungarian professors who have contributed a lot to developing the Hungarian 
+electrical engineering of electric machines. On the other hand, one pole cannot be interpreted. Be aware that 
+some slot and pole combinations are not viable, so check every
 time with https://www.bavaria-direct.co.za/scheme/calculator/.
 
 
-9) **stack_length [millimeters]:** set the lenght of the electric machine's active parts. As the simulations run on a
-cross-section model of a radial flux electric machine it assumes that the same flux is generated along the whole length
+9) **stack_length [millimetres]:** Set the length of the electric machine's active parts. As the simulations run on a
+cross-section model of a radial flux electric machine, it assumes that the same flux is generated along the whole length
 of the active parts. A rough estimation is that the torque increases linearly with the length of the active parts. 
 Please input a positive number.
 
 
-10) **winding_scheme [-]:** set the winding of the electric machine. As the type of the winding distinguishes the
-two electric machines with the same geometry it is a complex field of study in engineering. Fortunately, there are some
-websites that could help determine the possible winding schemes. One such website is https://www.emetor.com/windings/
-which calculates the possible winding schemes and more for a given slot/poles combination. In this program the website 
+10) **winding_scheme [-]:** set the winding of the electric machine. As the type of winding distinguishes the
+two electric machines with the same geometry it is a complex field of study in engineering. Fortunately, some
+websites could help determine the possible winding schemes. One such website is https://www.emetor.com/windings/
+which calculates the possible winding schemes and more for a given slot/pole combination. In this program, the website 
 https://www.bavaria-direct.co.za/scheme/calculator/ is utilised. Enter the number of slots (12) and number of poles (4)
-and press calculate. The website gives you a string describing the winding scheme (A|b|C|a|B|c|A|b|C|a|B|c|).
-Copy that into the **winding_scheme** slot. This program automatically recognise the structure and the layers. This
+and press calculate. The website gives a string describing the winding scheme (A|b|C|a|B|c|A|b|C|a|B|c|).
+Copy that into the **winding_scheme** slot. This program automatically recognises the structure and the layers. This
 program accepts a winding structure given in the format of this website only.
 
 ![img_2.png](img_2.png)
 
 
-11) **number_of_coil_turns [-]:** set the number of coil turns around one tooth in case of concentrated winding, or the
-number of conductors in one slot in case of distributed winding. The magnetic field generated by the currents flowing
+11) **number_of_coil_turns [-]:** Set the number of coil turns around one tooth in case of concentrated winding or the
+number of conductors in one slot in distributed winding. The magnetic field generated by the currents flowing
 through the conductors depends on the total current in one slot, meaning **number_of_coil_turns** * **current**.
 
 
-12) **shortening [-]:** set the shortening of a 2 layer winding. It is not applicable in this case. Check the following
+12) **shortening [-]:** Set the shortening of a 2-layer winding. It is not applicable in this case. Check the following
 test cases.
 
 
-13) **resolution [degrees]:** set the resolution of the torque angle calculation between the starting rotor position and
-the resulting rotor position. It is recommended to set it to a resolution of one degrees. A valid resolution is
-calculated as _(**end_position** - **start_position** + 1)_. As previously mentioned you only need to
-calculate at least half period if the machine is symmetrical which means if the **start_position** is
-zero than one period ends at _360/4=**90**_ **end_position**. So the resolution should be **91**. If you want
-a higher resolution for example 0.5 degrees thant the resolution should be **181**.
+13) **resolution [degrees]:** Set the resolution of the torque angle calculation between the starting rotor position and
+the resulting rotor position. It is recommended that it be set to a resolution of one degree. A valid resolution is
+calculated as _(**end_position** - **start_position** + 1)_. As previously mentioned, you only need to
+calculate at least half period if the machine is symmetrical, which means if the **start_position** is
+zero, then one period ends at _360/4=**90**_ **end_position**. So the resolution should be **91**. If you want
+a higher resolution, for example, 0.5 degrees, the resolution should be **181**.
 
 
 14) **start_position [mechanical degrees]:** set the starting rotor position of the calculation.
@@ -277,32 +287,32 @@ Should be lower than the **end_position**.
 
 
 15) **end_position [mechanical degrees]:** set the ending rotor position of the calculation. 
-As previously mentioned you only need to calculate at least one period if the machine is symmetrical
+As previously mentioned, you only need to calculate at least one period if the machine is symmetrical
 which means if the **start_position** is zero than one period ends at _360/4=**90**_ **end_position**.
 
 
 16) **rounding [-]:** set the rounding of the resulting torque, using the np.round() function in Python, part of the 
 NumPy library. It is used for rounding elements in an array to a specified number of decimal places.
-It takes an array and an optional ‘decimals’. The function returns a new array with rounded values, without altering 
-the original array. To get a distinguishable result, please use at least 1. For more precision use larger number.
+It takes an array and an optional 'decimals'. The function returns a new array with rounded values, without altering 
+the original array. To get a distinguishable result, please use at least 1. For more precision, use a larger number.
 
 
-17) **delete_after [bool]:** if True than the simulation files are deleted after the simulation ends, if false then the 
-program stores the simulation files in the corresponding folder, in this case _ang_ folder.
+17) **delete_after [bool]:** If True, then the simulation files are deleted after the simulation ends; if false, then the 
+program stores the simulation files in the corresponding folder, which, in this case, is the _ang_ folder.
 
 
-18) **number_of_cores [-]:** set the number of cores used for the parallel calculations. Please do not use all the cores
+18) **number_of_cores [-]:** Set the number of cores used for the parallel calculations. Please do not use all the cores
 of your machine as it may freeze.
 
 
-19) **RUN SIMULATION:** the button starts the simulation. First it prints all the input variables to make it possible to
-check manually. If the simulation end it prints the rotor position corresponding to the maximal torque, meaning the 
+19) **RUN SIMULATION:** the button starts the simulation. First, it prints all the input variables to make it possible to
+check manually. If the simulation ends, it prints the rotor position corresponding to the maximal torque, meaning the 
 amplitude difference between the minimum and maximum value in a period. It also prints all the calculated values as a
 list, plus plots it.
 
 ![img_6.png](img_6.png)
 
-The algorith prints out:
+The algorithm prints out the following:
 
     The rotor position where the torque is maximal: 34.0 deg
     The list of torque values: [0.007, 1.23, 2.162, 2.776, 3.189, 3.486, 3.702, 3.86, 3.984, 4.08, 4.139, 4.196, 4.23,
@@ -320,13 +330,13 @@ The algorith prints out:
 
 ![img_7.png](img_7.png)
 
-20) **BACK:** step back to the selector GUI.
+20) **BACK:** Step back to the selector GUI.
 
 ### Selecting average torque and torque ripple calculation (AVERAGE TORQUE).
 
-There are two different functions in this selection. By default if you set the **initial_torque_angle** to zero than the
-algorithm automatically calculates the rotor position where the torque is maximal and it will calculate the torque there.
-On the other hand if the **initial_rotor_position** is not zero then the algorithm will not calculate the rotor position
+There are two different functions in this selection. By default, if you set the **initial_torque_angle** to zero, than the
+algorithm automatically calculates the rotor position where the torque is maximal and calculates the torque there.
+On the other hand, if the **initial_rotor_position** is not zero, then the algorithm will not calculate the rotor position
 where the torque is maximal but will use the **initial_rotor_position** allowing to calculate other working points than
 the maximal torque.
 
@@ -343,12 +353,12 @@ where:
 - \( T \) = one electrical period (360° electrical)  
 
 ### **FEM Method for Calculation**  
-1. Run a **quasi-static magnetic simulation** in FEMM. It is quasi-static as the program calculates static working points
-but with adequately high resolution, the results approximate the transient simulations well in terms of torque.
+1. Run a **quasi-static magnetic simulation** in FEMM. It is quasi-static as the program calculates static working points,
+but with adequately high resolution, the results approximate the steady-state condition well in terms of torque.
 2. Simulate the **torque vs. rotor position** over one electrical period, where the rotor position is modified in each
 simulation, but the magnetic field is also manually rotated. It is important to take into consideration that the
 magnetic field of the stator is rotated by electrical angles while the rotor with mechanical angles.
-3. Extract **instantaneous torque values** at small angle steps (e.g., every 1°).  
+3. Extract **instantaneous torque values** at small angle steps (at least 1 degree).  
 4. Compute **the mean of all sampled torque values**:
    
 \[
@@ -379,10 +389,10 @@ where:
 3. Apply the formula to compute **percentage torque ripple**.
 
 
-        int/float:          int (integer) means discrete whole-number values, and float (floating-point) means
+        int/float:          int (integer) means discrete whole-number values and float (floating-point) means
                             continuous decimal values, allowing for higher precision
 
-        int/float/pos:      int (integer) means discrete whole-number values, and float (floating-point) means
+        int/float/pos:      int (integer) means discrete whole-number values and float (floating-point) means
                             continuous decimal values, allowing for higher precision but only positive numbers higher
                             than zero (>0)
 
@@ -393,130 +403,130 @@ where:
 
 ![img_8.png](img_8.png)
 
-1) **current [A]:** set the peak value of the current used to excite the machine. The program automatically calculates
+1) **current [A]:** Set the peak value of the current used to excite the machine. The program automatically calculates
 current value for each step in the rotation for each phase. 
 
 
-2) **initial_current_angle [electrical degrees]:** set the current angle in electrical degrees, which helps to position
-the stator magnetic filed to a position where the torque of the first calculation is zero. It helps to find the starting
+2) **initial_current_angle [electrical degrees]:** Set the current angle in electrical degrees, which helps to position
+the stator magnetic field to a position where the torque of the first calculation is zero. It helps to find the starting
 point of a period. The starting point depends on the number of poles, the winding scheme, the shortening and the rotor
-geometry. It is not a neccessary step but helps to interpret and plot the results. The easiest way to determine the 
-starting point run the torque angle calculation and correct for the second run. By default it should be zero.
+geometry. It is not a necessary step, but it helps interpret and plot the results. The easiest way to determine the 
+starting point is to run the torque angle calculation and correct for the second run. By default, it should be zero.
 
 
-3) **initial_rotor_position [mechanical degrees]:** set the initial rotor position in mechanical degrees, which helps to
-position the rotor where the torque of the first calculation is zero. In this case it also represents the torque angle, 
-so if you set to another position as zero, the algorithm will not calculate the rotor position where the torque is
+3) **initial_rotor_position [mechanical degrees]:** Set the initial rotor position in mechanical degrees, which helps to
+position the rotor where the torque of the first calculation is zero. In this case, it also represents the torque angle, 
+so if you set it to another position as zero, the algorithm will not calculate the rotor position where the torque is
 maximal, so it can be used to calculate other working points than the maximal torque.
 
 
-4) **rotor_diameter [millimeters]:** set the rotor diameter (shown in the image below). Be aware that the rotor diameter
+4) **rotor_diameter [millimetres]:** Set the rotor diameter. Be aware that the rotor diameter
 should be larger than the shaft diameter. Plus, keep in mind that there should be enough space for the magnets to
 accommodate. Please input a positive number.
 
 
-5) **shaft_diameter [millimeters]:** set the shaft diameter (shown in the image below). Be aware that the shaft diameter
+5) **shaft_diameter [millimetres]:** Set the shaft diameter. Be aware that the shaft diameter
 should be lower than the rotor diameter. Plus, keep in mind that there should be enough space for the magnets to
 accommodate. Please input a positive number. Please input a positive number.
 
 
-6) **magnet_width [degrees]:** set the width of the magnets (shown in the image below). As an ISPMSM the magnets are
+6) **magnet_width [degrees]:** Set the width of the magnets (shown in the image below). As an ISPMSM, the magnets are
 inset to the circumference of the rotor and bent to the circle arc of the rotor, so it is more convenient to define the
-width in degrees. Be aware that the magnet width cannot be larger than the width of a pole which is calculated from the
+width in degrees. Be aware that the magnet width cannot be larger than the width of a pole, which is calculated from the
 number of poles _360/4=**90**_. Please input a positive number.
 
 
-7) **magnet_height [millimeters]:** set the height of the magnets (shown in the image below). Keep in mind that the 
-magnet cannot be larger than the half of difference of the rotor diameter and the shaft diameter. Please input a 
-positive number.
+7) **magnet_height [millimetres]:** Set the height of the magnets (shown in the image below). Remember that the 
+magnet cannot exceed half the difference between the rotor and shaft diameters minus 1.5 millimetres.
+It is a technical solution to define the rotor material. Please input a positive number.
 
 
-8) **pole_pairs [-]**: set the number of pole pairs. Be aware that it is the half of the number of poles. This
-convention is a tribute to the Hungarian professors who have contributed a lot to the development of Hungarian 
-electrical engineering of electric machines. Be aware that some slot and pole combination is not viable, so check every
+8) **pole_pairs [-]**: set the number of pole pairs. Be aware that it is half of the number of poles. This
+convention is a tribute to the Hungarian professors who have contributed a lot to developing the Hungarian 
+electrical engineering of electric machines. On the other hand, one pole cannot be interpreted. Be aware that some slot and pole combinations are not viable, so check every
 time with https://www.bavaria-direct.co.za/scheme/calculator/.
 
 
-9) **stack_length [millimeters]:** set the lenght of the electric machine's active parts. As the simulations run on a
-cross-section model of a radial flux electric machine it assumes that the same flux is generated along the whole length
+9) **stack_length [millimetres]:** Set the length of the electric machine's active parts. As the simulations run on a
+cross-section model of a radial flux electric machine, it assumes that the same flux is generated along the whole length
 of the active parts. A rough estimation is that the torque increases linearly with the length of the active parts. 
 Please input a positive number.
 
 
-10) **winding_scheme [-]:** set the winding of the electric machine. As the type of the winding distinguishes the
-two electric machines with the same geometry it is a complex field of study in engineering. Fortunately, there are some
-websites that could help determine the possible winding schemes. One such website is https://www.emetor.com/windings/
-which calculates the possible winding schemes and more for a given slot/poles combination. In this program the website 
+10) **winding_scheme [-]:** set the winding of the electric machine. As the type of winding distinguishes the
+two electric machines with the same geometry it is a complex field of study in engineering. Fortunately, some
+websites could help determine the possible winding schemes. One such website is https://www.emetor.com/windings/
+which calculates the possible winding schemes and more for a given slot/pole combination. In this program, the website 
 https://www.bavaria-direct.co.za/scheme/calculator/ is utilised. Enter the number of slots (12) and number of poles (4)
-and press calculate. The website gives you a string describing the winding scheme (A|b|C|a|B|c|A|b|C|a|B|c|).
-Copy that into the **winding_scheme** slot. This program automatically recognise the structure and the layers. This
+and press calculate. The website gives a string describing the winding scheme (A|b|C|a|B|c|A|b|C|a|B|c|).
+Copy that into the **winding_scheme** slot. This program automatically recognises the structure and the layers. This
 program accepts a winding structure given in the format of this website only.
 
 ![img_2.png](img_2.png)
 
 
-11) **number_of_coil_turns [-]:** set the number of coil turns around one tooth in case of concentrated winding, or the
+11) **number_of_coil_turns [-]:** Set the number of coil turns around one tooth in case of concentrated winding or the
 number of conductors in one slot in case of distributed winding. The magnetic field generated by the currents flowing
 through the conductors depends on the total current in one slot, meaning **number_of_coil_turns** * **current**.
 
 
-12) **shortening [-]:** set the shortening of a 2 layer winding. It is not applicable in this case. Check the following
+12) **shortening [-]:** Set the shortening of a 2-layer winding. It is not applicable in this case. Check the following
 test cases.
 
 
-13) **resolution_angle [degrees]:** set the resolution of the torque angle calculation between the starting rotor position and
-the resulting rotor position. It is recommended to set it to a resolution of one degree. A valid resolution is
-calculated as _(**end_position_angle** - **start_position_angle** + 1)_. As previously mentioned you only need to
-calculate at least half period if the machine is symmetrical which means if the **start_position** is
-zero than one period ends at _360/4=**90**_ **end_position**. So the resolution should be **91**. If you want
-a higher resolution for example 0.5 degrees thant the resolution should be **181**.
+13) **resolution_angle [degrees]:** Set the resolution of the torque angle calculation between the starting rotor position and
+the resulting rotor position. It is recommended that it be set to a resolution of one degree. A valid resolution is
+calculated as _(**end_position_angle** - **start_position_angle** + 1)_. As previously mentioned, you only need to
+calculate at least half period if the machine is symmetrical, which means if the **start_position** is
+zero, then one period ends at _360/4=**90**_ **end_position**. So the resolution should be **91**. If you want
+a higher resolution, for example, 0.5 degrees, the resolution should be **181**.
 (ONLY FUNCTIONAL IF **initial_rotor_position** is zero)
 
 
-14) **start_position_angle [mechanical degrees]:** set the starting rotor position of the torque angle 
+14) **start_position_angle [mechanical degrees]:** Set the starting rotor position of the torque angle 
 calculation. Should be lower than the **end_position_angle**.
 (ONLY FUNCTIONAL IF **initial_rotor_position** is zero)
 
 
-15) **end_position_angle [mechanical degrees]:** set the ending rotor position of the torque angle calculation. 
-As previously mentioned you only need to calculate at least one period if the machine is symmetrical
+15) **end_position_angle [mechanical degrees]:** Set the ending rotor position of the torque angle calculation. 
+As previously mentioned, you only need to calculate at least one period if the machine is symmetrical
 which means if the **start_position_angle** is zero than one period ends at _360/4=**90**_ **end_position_angle**.
 
 
-16) **resolution_average_ripple [degrees]:** set the resolution of the average torque calculation between the starting rotor position and
-the resulting rotor position. It is recommended to set it to a resolution of one degree. A valid resolution is
-calculated as _(**end_position_average_ripple** - **start_position_average_ripple** + 1)_. As previously mentioned you only need to
-calculate at least half period if the machine is symmetrical which means if the **start_position_average_ripple** is
-zero than one period ends at _360/4=**90**_ **end_position_average_ripple**. So the resolution should be **91**. If you want
-a higher resolution for example 0.5 degrees thant the resolution should be **181**.
+16) **resolution_average_ripple [degrees]:** Set the resolution of the average torque calculation between the starting rotor position and
+the resulting rotor position. It is recommended that it be set to a resolution of one degree. A valid resolution is
+calculated as _(**end_position_average_ripple** - **start_position_average_ripple** + 1)_. As previously mentioned, you only need to
+calculate at least half period if the machine is symmetrical, which means if the **start_position_average_ripple** is
+zero, then one period ends at _360/4=**90**_ **end_position_average_ripple**. So the resolution should be **91**. If you want
+a higher resolution, for example, 0.5 degrees, the resolution should be **181**.
 
     
-17) **start_position_average_ripple [mechanical degrees]:** set the starting rotor position of the average torque 
+17) **start_position_average_ripple [mechanical degrees]:** Set the starting rotor position of the average torque 
 calculation. Should be lower than the **end_position__average_ripple**.
 
 
-18) **end_position_average_ripple [mechanical degrees]:** set the ending rotor position of the average torque calculation. 
-As previously mentioned you only need to calculate at least one period if the machine is symmetrical
+18) **end_position_average_ripple [mechanical degrees]:** Set the ending rotor position of the average torque calculation. 
+As previously mentioned, you only need to calculate at least one period if the machine is symmetrical
 which means if the **start_position_average_ripple** is zero than one period ends at _360/4=**90**_ **end_position_average_ripple**.
 (ONLY FUNCTIONAL IF **initial_rotor_position** is zero)
 
 
 19) **rounding [-]:** set the rounding of the resulting torque, using the np.round() function in Python, part of the 
 NumPy library. It is used for rounding elements in an array to a specified number of decimal places.
-It takes an array and an optional ‘decimals’. The function returns a new array with rounded values, without altering 
-the original array. To get a distinguishable result, please use at least 1. For more precision use larger number.
+It takes an array and an optional 'decimals'. The function returns a new array with rounded values without altering 
+the original array. To get a distinguishable result, please use at least 1. For more precision, use a larger number.
 
     
-20) **delete_after [bool]:** if True than the simulation files are deleted after the simulation ends, if false then the 
-program stores the simulation files in the corresponding folder, in this case _ang_ folder.
+20) **delete_after [bool]:** If True, then the simulation files are deleted after the simulation ends; if false, then the 
+the program stores the simulation files in the corresponding folder, which, in this case, is the _ang_ folder.
 
 
-21) **number_of_cores [-]:** set the number of cores used for the parallel calculations. Please do not use all the cores
+21) **number_of_cores [-]:** Set the number of cores used for the parallel calculations. Please do not use all the cores
 of your machine as it may freeze.
 
 
-22) **RUN SIMULATION:** the button starts the simulation. First it prints all the input variables to make it possible to
-check manually. If the simulation end it prints the rotor position corresponding to the maximal torque, meaning the 
+22) **RUN SIMULATION:** the button starts the simulation. First, it prints all the input variables to make it possible to
+check manually. If the simulation ends, it prints the rotor position corresponding to the maximal torque, meaning the 
 amplitude difference between the minimum and maximum value in a period. It also prints all the calculated values as a
 list, plus plots it.
 
@@ -524,7 +534,7 @@ list, plus plots it.
 
 ![img_9.png](img_9.png)
 
-The algorith prints out:
+The algorithm prints out the following:
 
     The rotor position where the torque is maximal is 79.0 degrees
     The list of torque values: [-6.411, -6.633, -6.866, -7.115, -7.369, -7.631, -7.877,
@@ -567,7 +577,7 @@ The algorith prints out:
 
 ![img_12.png](img_12.png)
 
-The algorith prints out:
+The algorithm prints out the following:
 
     The rotor position where the torque is maximal is 65.0 degrees
     The list of torque values: None for the torque angle calculation
@@ -581,32 +591,35 @@ The algorith prints out:
 
 ![img_13.png](img_13.png)
 
-23) **BACK:** step back to the selector GUI.
+23) **BACK:** Step back to the selector GUI.
 
 ### Selecting NSGA-II optimisation (OPTIMISATION).
 
 This optimisation process uses the average torque and torque ripple calculations. All the input parameters are similar
-in this case as they are above. For detailed description of the input parameters for the average torque and torque ripple
-calculations please check the previous example step. All the differences are explained and highlighted below.
+to the ones above. Please check the previous example step for a detailed description of the input parameters for the average torque and torque ripple
+calculations. All the differences are explained and highlighted below.
 
-The **Non-dominated Sorting Genetic Algorithm II (NSGA-II)** is a multi-objective optimization algorithm widely used for
-engineering problems, including the optimization of electric machines. The goal is to optimize conflicting objectives 
+The **Non-dominated Sorting Genetic Algorithm II (NSGA-II)** is a multi-objective optimisation algorithm widely used for
+engineering problems, including the optimisation of electric machines. The goal is to optimise conflicting objectives 
 such as **torque ripple** and **average torque**, while considering constraints like **width of the air gap, magnet 
 width** or **magnet height** as in this case.
 
 #### Process of NSGA-II Optimization:
 
 The NSGA-II follows a **genetic algorithm (GA) approach** with additional mechanisms like **fast non-dominated sorting**
-and **crowding distance sorting** to ensure diverse solutions. Here’s how it works:
+and **crowding distance sorting** to ensure diverse solutions. For a detailed description, check
+https://pymoo.org/
+
+Here's how it works:
 
 1) **Define the Design Variables (X1, X2 and X3)**
-Design variables are the independent parameters that define the characteristics and configuration of a system or model
-being optimized. They represent the adjustable inputs of an optimization process, influencing the performance,
-efficiency, and feasibility of the final design. In the context of NSGA-II optimization of an electric machine design
+Design variables are the independent parameters defining the characteristics and configuration of an optimised system or model
+. They represent the adjustable inputs of an optimisation process, influencing the final design's performance,
+efficiency, and feasibility. In the context of NSGA-II optimisation of an electric machine design
 variables may include: **geometric parameters** (e.g., rotor magnet shape, slot dimensions), **material properties**
 (e.g., magnet grade, core material) **electrical parameters** (e.g., number of turns per phase, current density).
-These variables are modified by the optimization algorithm to find an optimal trade-off between competing objectives 
-like torque, efficiency, and cost. For this example the design variables are:
+The optimisation algorithm modifies these variables to find an optimal trade-off between competing objectives 
+like torque, efficiency, and cost. For this example, the design variables are:
 
 - **width of the air gap (X1) [millimeters]** - it is calculated by *rotor_diameter = rotor_diameter + X1 / 10*
 - **magnet_width (X2)**
@@ -615,44 +628,44 @@ like torque, efficiency, and cost. For this example the design variables are:
 
 2) **Define Objective Functions**
 
-NSGA-II is a multi-objective algorithm, so it requires at least two conflicting objectives.
+NSGA-II is a multi-objective algorithm requiring at least two conflicting objectives.
 
 - **Maximizing average torque** for higher power output 
-- **Minimizing torque ripple** to improve performance and reduce vibrations
+- **Minimising torque ripple** to improve performance and reduce vibrations
 
-NSGA-II can only maximize or minimize, so maximizing avarage torque means mininizing (-1) * average torque.
+NSGA-II can only maximise or minimise, so maximising average torque means minimising (-1) * average torque.
 
 3) **Define Constraints**
-The example optimisation is set to integer optimisation meaning the result of a mutation and crossover can only be an
-integer. That is why the width of the air gap which is between [0-1] millimeters should be written as _x/10 where x \in [0-9]_
+The example optimisation is set to integer optimisation, meaning the result of a mutation and crossover can only be an
+integer. That is why the width of the air gap, which is between [0-1] millimetres, should be written as _x/10 where x \in [0-9]_
 
-X1 - lower_boundaries = 0, meaning that the largest possible air gap equals to 1 millimeters if **rotor_diameter** = 44.
+X1 - lower_boundaries = 0, meaning that the largest possible air gap equals 1 millimetre if **rotor_diameter** = 44.
 
-X1 - upper_boundaries = 9, meaning that the smallest air gap is 0.1 millimeters if the **rotor_diameter** = 44.
+X1 - upper_boundaries = 9, meaning that the smallest air gap is 0.1 millimetres if the **rotor_diameter** = 44.
 
 X2 - lower_boundaries = 80, meaning that the magnet width is at least 80 degrees, 10 degrees lower than the span of a pole.
 
-X2 - upper_boundaries = 90, meaning that the magnet width is at most 90 degrees, the span of a pole.
+X2 - upper_boundaries = 90, meaning that the magnet width is, at most, 90 degrees, the span of a pole.
 
-X3 - lower_boundaries = 1, meaning that the magnet is 1 millimeters in height. Keep in mind it should be >0 as =0 means
+X3 - lower_boundaries = 1, meaning that the magnet is 1 millimetre in height. Keep in mind it should be >0 as =0 means
 no magnets which crashes the algorithm
 
-X3 - upper_boundaries = 4, meaning that the magnet is 4 millimeters in height
+X3 - upper_boundaries = 4, meaning that the magnet is 4 millimetres in height
 
 4) **Initialize the Population**
 A random population of N individuals (machine designs) is created. Each individual represents a possible machine
 design encoded as a vector of design variables.
 
-**population_size** - set the initial population number which will be randomly selected from the design space which
-contains all the possible models. It also sets the maximal number of non-dominated solutions in the Pareto front.
+**population_size** - set the initial population number randomly selected from the design space containing all the
+possible models. It also sets the maximum number of non-dominated solutions on the Pareto front.
 
 **number_of_offsprings** - set the population of the following generations created by mutation and crossover.
 
 **number_of_generations** - set the number of generations to be calculated. It is also the termination criterion for the
-optimisation. As the number of generations reach this threshold the process stops.
+optimisation. As the number of generations reaches this threshold, the process stops.
 
 5) **Evaluate the Fitness of Each Design**
-The algorithm calculates the average torque and torque ripple for the generated models (see above).
+The algorithm calculates the generated models' average torque and torque ripple (see above).
 
 
 6) **Perform Non-Dominated Sorting**
@@ -662,7 +675,7 @@ The population is sorted into **Pareto fronts** based on dominance:
 - Subsequent fronts contain solutions dominated by one or more individuals.
 - [nsga2_all_20250225_test1.csv](../results/nsga2_all_20250225_test1.csv), which contains all the calculated models.
 - [nsga2_result_20250225_test1.csv](../results/nsga2_result_20250225_test1.csv), which only stores the final Pareto front.
-These files are automatically generated by the algorithm.
+The algorithm automatically generates these files.
 
 7) **Apply Genetic Operators**
 - **Tournament Selection** – Selects parents based on Pareto ranking and crowding distance.
@@ -674,7 +687,7 @@ These files are automatically generated by the algorithm.
 - The best *N* individuals (based on Pareto ranking and diversity) are selected for the next generation.
 
 9) **Repeat Until Termination Criterion**
-The process continues until a stopping criterion is met, such as maximum number of **generations**.
+The process continues until a stopping criterion is met, such as the maximum number of **generations**.
 
 
 10) Select the Optimal Solution**
@@ -686,8 +699,8 @@ design considerations aka. engineering.
 ![img_15.png](img_15.png)
 
 The algorithm prints out the recent value of the design variables and the corresponding rotor position of the maximal
-torque (ANGLE), the average torque (AVERAGE), the torque ripple (RIPPLE) and the index of evaluation (INDEX). At the end
-the elapsed time also printed.
+torque (ANGLE), the average torque (AVERAGE), the torque ripple (RIPPLE) and the index of evaluation (INDEX). In the end,
+the elapsed time is printed.
 
     --------------------------------------------------------------------------------
     X1: 0.5, X2: 82, X3: 2
@@ -746,14 +759,20 @@ the elapsed time also printed.
 
 ![img_16.png](img_16.png)
 
-The blue dots represent all the dominated results which are all the calculated electric machine models and the red dots
+The blue dots represent all the dominated results, which are all the calculated electric machine models, and the red dots
 represent the non-dominated results of the final Pareto front.
 
 ## Distributed winding, 2 layers, 1 shortening, 12 slots and 4 poles
 
 Winding scheme: **bA|Cb|aC|Ba|cB|Ac|bA|Cb|aC|Ba|cB|Ac|** (https://www.bavaria-direct.co.za/scheme/calculator/)
 
-\*for detailed explanation check the first example 
+\*for a detailed explanation, check the first example
+
+The example machine is shown below. This is the model created in FEMM (https://www.femm.info/wiki/HomePage).
+
+![img_36.png](img_36.png)
+
+The example FEMM file is [example_test2.fem](example_test2.fem)
 
 ![img_17.png](img_17.png)
 
@@ -761,9 +780,9 @@ Winding scheme: **bA|Cb|aC|Ba|cB|Ac|bA|Cb|aC|Ba|cB|Ac|** (https://www.bavaria-di
 
 ![img_19.png](img_19.png)
 
-As the cogging does not depend on the winding scheme just the number of slots or poles and stator and rotor geometry,
-the result would be the same. So The rotor diameter is changed to 44.9 millimeters, meaning 0.1 millimeters air gap and
-10 millimeters magnet height instead of 4 millimeters which should increase the amplitude of the cogging torque as it is
+As the cogging does not depend on the winding scheme, just the number of slots or poles and stator and rotor geometry,
+the result would be the same. So The rotor diameter is changed to 44.9 millimetres, meaning 0.1 millimetres air gap and
+10 millimetres magnet height instead of 4 millimetres, which should increase the amplitude of the cogging torque, as 
 shown in the following figure.
 
 ![img_20.png](img_20.png)
@@ -778,7 +797,7 @@ shown in the following figure.
 ![img_21.png](img_21.png)
 
 In this test case all the parameters are similar only the winding scheme is different from the last test case. Because of 
-the different winding the initial rotor position is also different.
+the different winding, the initial rotor position is also different.
 
 ![img_22.png](img_22.png)
 
@@ -830,7 +849,13 @@ the different winding the initial rotor position is also different.
 
 Winding scheme: **ABCABCABCABC** (https://www.bavaria-direct.co.za/scheme/calculator/)
 
-\*for detailed explanation check the first example 
+\*for a detailed explanation, check the first example
+
+The example machine is shown below. This is the model created in FEMM (https://www.femm.info/wiki/HomePage).
+
+![img_37.png](img_37.png)
+
+The example FEMM file is [example_test3.fem](example_test3.fem)
 
 ![img_18.png](img_18.png)
 
