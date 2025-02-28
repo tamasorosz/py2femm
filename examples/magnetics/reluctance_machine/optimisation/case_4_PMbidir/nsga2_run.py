@@ -69,8 +69,8 @@ if __name__ == '__main__':
     problem = MyProblem()
 
     algorithm = NSGA2(
-        pop_size=3,
-        n_offsprings=3,
+        pop_size=100,
+        n_offsprings=100,
         sampling=IntegerRandomSampling(),
         crossover=SBX(prob=0.9, eta=15, vtype=float, repair=RoundingRepair()),
         mutation=PM(prob=1, eta=20, vtype=float, repair=RoundingRepair()),
@@ -78,7 +78,7 @@ if __name__ == '__main__':
         repair=MyRepair()
     )
 
-    termination = get_termination("n_gen", 3)
+    termination = get_termination("n_gen", 200)
 
     res = minimize(problem,
                    algorithm,
@@ -103,7 +103,7 @@ if __name__ == '__main__':
     else:
         os.makedirs('results')
 
-    file_path = os.path.join(folder_path, f'results/nsga2_case4_p100o100g200_var7_20250125.csv')
+    file_path = os.path.join(folder_path, f'results/nsga2_case4_p100o100g200_var7_20250221.csv')
     df.to_csv(file_path, encoding='utf-8', index=False)
 
     folder_path = ['temp_ang', 'temp_avg_rip', 'temp_cog']
