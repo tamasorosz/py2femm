@@ -99,7 +99,7 @@ def cogging(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp):
 
         current_file_path = os.path.abspath(__file__)
         folder_path = os.path.dirname(current_file_path)
-        file_path = os.path.join(folder_path, f'results/all_res_cog_case2_20250223.csv')
+        file_path = os.path.join(folder_path, f'results/all_res_cog_case2_20250228.csv')
 
         # Check if the file exists
         file_exists = os.path.isfile(file_path)

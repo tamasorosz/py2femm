@@ -12,7 +12,6 @@ folder_path = os.path.dirname(current_file_path)
 
 n0 = Node(0, 0)
 
-
 class VariableParameters:
 
     def __init__(self, fold, out, counter, IAp, IAn, IBp, IBn, ICp, ICn, ang_co, deg_co, bd, bw, bh, bg, ia, mh,
@@ -21,9 +20,13 @@ class VariableParameters:
         self.out = out
         self.counter = counter
 
-        coil_area = 53.5104  # area of the slot [mm^2]
-        Nturns_pos = 12  # turns of the coil in one slot [u.]
-        Nturns_neg = 11  # turns of the coil in one slot [u.]
+        # coil_area = 53.5104  # area of the slot [mm^2]
+        # Nturns_pos = 12  # turns of the coil in one slot [u.]
+        # Nturns_neg = 11  # turns of the coil in one slot [u.]
+
+        coil_area = 1  # area of the slot [mm^2]
+        Nturns_pos = 1  # turns of the coil in one slot [u.]
+        Nturns_neg = 1  # turns of the coil in one slot [u.]
 
         self.JAp = IAp * Nturns_pos / coil_area
         self.JAn = IAn * Nturns_neg / coil_area
@@ -44,8 +47,8 @@ class VariableParameters:
 
         self.ang_m = ang_m
         self.ang_mp = ang_mp
-        self.deg_m = deg_m/2
-        self.deg_mp = deg_mp/2
+        self.deg_m = deg_m / 2
+        self.deg_mp = deg_mp / 2
 
         self.mh = mh
 

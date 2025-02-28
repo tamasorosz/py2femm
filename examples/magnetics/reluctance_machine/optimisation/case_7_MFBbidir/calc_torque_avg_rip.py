@@ -54,7 +54,7 @@ def execute_model(counter):
 def torque_avg_rip(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_mp):
     if ang_m != ang_mp:
         if not (deg_m == 0 and deg_mp == 0):
-            initial = calc_max_torque_angle.max_torque_angle(J0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp,
+            initial = calc_max_torque_angle.max_torque_angle(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp,
                                                              deg_m, deg_mp)
             if os.path.exists('temp_avg_rip'):
                 pass
@@ -67,12 +67,12 @@ def torque_avg_rip(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m
                 variables = model.VariableParameters(fold='avg_rip',
                                                      out='avg_rip',
                                                      counter=counter,
-                                                     IAp=I0 * math.cos(math.radians(0)),
-                                                     IAn=-I0 * math.cos(math.radians(0)),
-                                                     IBp=I0 * math.cos(math.radians(0 + 120)),
-                                                     IBn=-I0 * math.cos(math.radians(0 + 120)),
-                                                     ICp=I0 * math.cos(math.radians(0 + 240)),
-                                                     ICn=-I0 * math.cos(math.radians(0 + 240)),
+                                                     IAp=I0 * math.cos(math.radians(initial + alpha)),
+                                                     IAn=-I0 * math.cos(math.radians(initial + alpha)),
+                                                     IBp=I0 * math.cos(math.radians(initial + 120 + alpha)),
+                                                     IBn=-I0 * math.cos(math.radians(initial + 120 + alpha)),
+                                                     ICp=I0 * math.cos(math.radians(initial + 240 + alpha)),
+                                                     ICn=-I0 * math.cos(math.radians(initial + 240 + alpha)),
                                                      ang_co=ang_co,
                                                      deg_co=deg_co * 10,
                                                      bd=bd,
@@ -112,7 +112,7 @@ def torque_avg_rip(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m
 
             current_file_path = os.path.abspath(__file__)
             folder_path = os.path.dirname(current_file_path)
-            file_path = os.path.join(folder_path, f'results/all_res_avg_case7_20250223.csv')
+            file_path = os.path.join(folder_path, f'results/all_res_avg_case7_20250228.csv')
 
             # Check if the file exists
             file_exists = os.path.isfile(file_path)
