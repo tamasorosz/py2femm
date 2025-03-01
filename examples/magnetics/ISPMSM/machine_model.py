@@ -96,22 +96,22 @@ class VariableParameters:
         self.output_folder = f"{current_folder_path}/{self.folder}"
 
     def update_current(self, new_current):
-        """ Updates current dynamically whenever current changes. """
+        """ Update current dynamically whenever the current parameter changes and the definition of the phases. """
         self.current_density = new_current * self.number_of_coil_turns / self.slot_cross_section_area
         self.update_phases()
 
     def update_initial_rotor_position(self, new_initial_rotor_position):
-        """ Update initial_rotor_position dynamically. """
+        """ Update initial_rotor_position dynamically whenever the rotor is rotated to its initial position. """
         self.initial_rotor_position = new_initial_rotor_position
 
     def update_rotor_position(self, new_rotor_position):
-        """ Update rotor_position and regenerate output_file and output_folder  dynamically. """
+        """ Update rotor_position and regenerate output_file and output_folder dynamically whenever the rotor is rotated. """
         self.rotor_position = new_rotor_position
         self.update_output_file()
         self.update_output_folder()
 
     def update_folder_name(self, new_folder_name):
-        """ Update folder and regenerate output_file and output_folder  dynamically. """
+        """ Update folder and regenerate output_file and output_folder dynamically. """
         self.folder = new_folder_name
         self.update_output_file()
         self.update_output_folder()
@@ -131,7 +131,7 @@ class VariableParameters:
         self.output_folder = f"{current_folder_path}/{self.folder}"
 
     def update_current_angle(self, new_current_angle):
-        """ Update current_angle dynamically whenever current_angle changes. """
+        """ Update current_angle dynamically whenever current_angle changes, so the stator magnetic field is rotated. """
         self.current_angle = new_current_angle
         self.update_phases()
 
