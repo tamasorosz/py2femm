@@ -85,24 +85,24 @@ def torque_avg_rip(I0, ang_co, deg_co, bd, bw, bh, bg):
         torque_avg = 0
         torque_ripple = 1000
     else:
-        torque_avg = np.round(-1 * np.average(res), 2)
-        torque_ripple = np.round(-100 * (np.max(res) - np.min(res)) / torque_avg, 2)
+        torque_avg = np.round(-1 * np.average(res), 3)
+        torque_ripple = np.round(-100 * (np.max(res) - np.min(res)) / torque_avg, 3)
 
     # res.clear()  # To make sure that there is no memory leak
 
     torque_angle = -1 * initial
 
-    print(f'{ang_co, deg_co, bd, bw, bh, bg}' +
+    print(f'{float(ang_co), float(deg_co), float(bd), float(bw), float(bh), float(bg)}' +
           '\n' + 'ANG: ' + f'{initial}' + ', AVG: ' + f'{-1 * torque_avg}' + ', RIP: ' + f'{torque_ripple}' +
           '\n-----------------------------------------------')
 
     df = pd.DataFrame({
-        'X1': [ang_co], 'X2': [deg_co * 10], 'X3': [bd], 'X4': [bw],
-        'X5': [bh], 'X6': [bg * 0.5], 'ANG': [torque_angle], 'AVG': [torque_avg], 'RIP': [torque_ripple]})
+        'X1': [ang_co], 'X2': [np.round(deg_co * 10, 2)], 'X3': [bd], 'X4': [bw],
+        'X5': [bh], 'X6': [np.round(bg * 0.5, 2)], 'ANG': [torque_angle], 'AVG': [torque_avg], 'RIP': [torque_ripple]})
 
     current_file_path = os.path.abspath(__file__)
     folder_path = os.path.dirname(current_file_path)
-    file_path = os.path.join(folder_path, f'results/all_res_avg_case0_20250223.csv')
+    file_path = os.path.join(folder_path, f'results/all_res_avg_case0_20250302.csv')
 
     # Check if the file exists
     file_exists = os.path.isfile(file_path)
