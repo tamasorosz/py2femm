@@ -15,51 +15,30 @@ behaviour of the electric machine. **For some examples, rules, tips and limitati
 
 ## How to install and run this example project
 
-0. Download FEMM https://www.femm.info/wiki/HomePage and install to C:\femm42\bin\femm.exe
-1. Download an IDE (PyCharm Community Edition recommended: https://www.jetbrains.com/pycharm/download/?section=windows)
+1. Download FEMM https://www.femm.info/wiki/HomePage and install to
+   - On Windows:
+   ```C:\femm42\bin\femm.exe```
+   - On Linux/macOS (using Wine):
+   ```~/Downloads/femm42bin_x64.exe```
 2. Download Python 3.9< from https://www.python.org/downloads/
-3. Configure IDE (help: https://www.jetbrains.com/help/pycharm/getting-started.html)
-4. Clone this project from https://github.com/tamasorosz/py2femm
-5. Install packages (list below)
-6. Locate examples>magnetics>ISPMSM>run_selector.py
-7. Enjoy!
+3. Download an IDE (PyCharm Community Edition recommended: https://www.jetbrains.com/pycharm/download/?section=windows)
+   
+   **Note: There is no need for an IDE, you can use the command line too.**
+4. Configure IDE (help: https://www.jetbrains.com/help/pycharm/getting-started.html) if needed.
+5. Clone this project from https://github.com/tamasorosz/py2femm
+   - ```git clone https://github.com/tamasorosz/py2femm```
+6. Install packages from
+   ```pip install -r D:\Respositories\py2femm\examples\magnetics\ISPMSM\requirements.txt```
+7. Locate run_selector.py
+   - ```cd D:\Respositories\py2femm\examples\magnetics\ISPMSM```
+   - Makes sure /src/ is pointed in your PYTHONPATH if necessary
+   - ```python run_selector.py```
+8. Enjoy!
 
-        Third-Party Packages*
-        - math:                    for trigonometric functions
-        - numpy:                   arrays and radians from/to conversion
-        - re:                      exception handling for strings
-        - pathlib:                 folder and file path handling
-        - ezdxf:                   reading dxf files
-        - csv:                     reading and writing .csv files
-        - copy:                    creating copies of the model objects
-        - multiprocessing:         parallel processing of working points
-        - pandas:                  handling numerous data points
-        - subprocess:              calling FEMM solver
-        - sys:                     handling interconnectivity of the GUIs
-        - matplotlib:              plotting results
-        - tkinter:                 handling GUI
-        - os:                      path handling
-        - shuttle:                  removal of temporary files
-        - DateTime:                getting the date of start
-        - py moo:                   NSGA-II optimisation framework
-        
-        *Third party packages directly used by this example.
-         Some more packages are used by py2FEMM, which are not necessarily used
-         in this example but are listed below. If necessary, the IDE will warn you on the run.
+Some more packages are used by py2FEMM, which are not necessarily used
+in this example. If necessary, the IDE will warn you on the run. To solve
 
-       Third-Party Packages for py2FEMM (no duplicates)
-       - dataclasses
-       - string
-       - enum
-       - threading
-       - typing
-       - json
-       - uvicorn
-       - fastapi
-       - pydantic
-       - abc
-       - uuid
-       - itertools
+```pip install -r D:\Respositories\py2femm\requirements.txt```
 
 ## How to tweak the code for your unique project
 
