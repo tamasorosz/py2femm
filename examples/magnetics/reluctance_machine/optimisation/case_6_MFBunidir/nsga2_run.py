@@ -31,7 +31,7 @@ if __name__ == '__main__':
                              vtype=int)
 
         def _evaluate(self, x, out, *args, **kwargs):
-            print(x)
+
             f1 = calc_torque_avg_rip.torque_avg_rip(30, x[0], x[1], x[2], 0.5, x[3], x[4], 1.5, x[5], x[6], x[7], x[8])
             f2 = calc_cogging.cogging(0, x[0], x[1], x[2], 0.5, x[3], x[4], 1.5, x[5], x[6], x[7], x[8])
 
@@ -97,7 +97,7 @@ if __name__ == '__main__':
 
     current_file_path = os.path.abspath(__file__)
     folder_path = os.path.dirname(current_file_path)
-    file_path = os.path.join(folder_path, f'results/all_res_cog_case6_20250128.csv')
+    file_path = os.path.join(folder_path, f'results/all_res_cog_case6_20250228.csv')
 
     termination = get_termination("n_size", file_path, 20000)
 
