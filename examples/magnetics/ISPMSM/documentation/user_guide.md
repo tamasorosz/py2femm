@@ -400,4 +400,12 @@ results in one specific way, but there are many other possibilities. Be brave to
 - open an issue
 - create a pull request with a detailed explanation
 
+### Ideas for contribution
+
+- Creating a button which only creates the model in a .fem file but does not calculate it.
+- Creating a better GUI.
+- Calculating back EMF.
+
+...
+
 **Many thanks for the contribution!**
