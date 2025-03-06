@@ -38,41 +38,51 @@ from examples.magnetics.reluctance_machine.optimisation.case_6_MFBunidir import 
 
 if __name__ == '__main__':
 
-    x =[24,13,2,1,1,11,16,2,5]
-
-    x[7] = int(x[7] * 2)
-    x[8] = int(x[8] * 2)
-
-    g = (math.tan(math.radians(x[0] / 2)) * (22 - (x[4] * 0.5 + 1.5)) + x[2] + x[3]) - 8
-    if g > 0:
-        temp_x3 = np.round(
-            (8 - (math.tan(math.radians(x[0] / 2)) * (22 - (x[4] * 0.5 + 1.5))) - x[2]), 1)
-        if temp_x3 < 1:
-            x[3] = 1
-            x[2] = int(x[2] - (1 - temp_x3))
-            if x[2] < 1:
-                x[2] = 1
-        else:
-            x[3] = temp_x3
-
-    if x[6] + x[8] + x[0] > 43:
-        x[8] = (43 - x[6] - x[0])
-
-    if x[5] > x[6]:
-        x[5] = x[6]
-
-    if x[7] > int((x[6] - x[5])) + x[8]:
-        x[7] = int((x[6] - x[5])) + x[8]
-
-    if x[8] > int((x[6] - x[5])) + x[7]:
-        x[8] = int((x[6] - x[5])) + x[7]
-
-    print(x)
+    # x =[24,13,2,1,1,11,16,2,5]
+    #
+    # x[7] = int(x[7] * 2)
+    # x[8] = int(x[8] * 2)
+    #
+    # g = (math.tan(math.radians(x[0] / 2)) * (22 - (x[4] * 0.5 + 1.5)) + x[2] + x[3]) - 8
+    # if g > 0:
+    #     temp_x3 = np.round(
+    #         (8 - (math.tan(math.radians(x[0] / 2)) * (22 - (x[4] * 0.5 + 1.5))) - x[2]), 1)
+    #     if temp_x3 < 1:
+    #         x[3] = 1
+    #         x[2] = int(x[2] - (1 - temp_x3))
+    #         if x[2] < 1:
+    #             x[2] = 1
+    #     else:
+    #         x[3] = temp_x3
+    #
+    # if x[6] + x[8] + x[0] > 43:
+    #     x[8] = (43 - x[6] - x[0])
+    #
+    # if x[5] > x[6]:
+    #     x[5] = x[6]
+    #
+    # if x[7] > int((x[6] - x[5])) + x[8]:
+    #     x[7] = int((x[6] - x[5])) + x[8]
+    #
+    # if x[8] > int((x[6] - x[5])) + x[7]:
+    #     x[8] = int((x[6] - x[5])) + x[7]
+    #
+    # print(x)
     
-    a, b, c, d = calc_torque_avg_rip.torque_avg_rip(30, x[0], x[1], x[2], 0.5, x[3], x[4], 1.5, x[5], x[6], x[7], x[8])
+    a, b, c, d = calc_torque_avg_rip.torque_avg_rip(30, 21, 14, 1.25, 1, 3, 2, 2, 15, 18, 3, 0)
+    plt.plot(d)
+    # a, b, c, d = calc_torque_avg_rip.torque_avg_rip(30, 21, 14, 1, 0.5, 3, 1, 1.5, 12, 17, 5.5, 4)
     # plt.plot(d)
-    # plt.show()
+    # a, b, c, d = calc_torque_avg_rip.torque_avg_rip(30, 21, 14, 1, 0.5, 3, 1, 1.5, 12, 17, 8, 4)
+    # plt.plot(d)
+    # a, b, c, d = calc_torque_avg_rip.torque_avg_rip(30, 21, 14, 1, 0.5, 3, 1, 1.5, 12, 17, 6, 5)
+    # plt.plot(d)
+    # a, b, c, d = calc_torque_avg_rip.torque_avg_rip(30, 21, 14, 1, 0.5, 3, 1, 1.5, 12, 17, 5.5, 3.5)
+    # plt.plot(d)
+    plt.show()
 
-    # a, b = calc_max_torque_angle.max_torque_angle(30, x[0], x[1], x[2], 0.5, x[3], x[4], 1.5, x[5], x[6], x[7], x[8])
-    # plt.plot(b)
-    # plt.show()
+# 3327   21  140   1  0.5   3  2.0  1.5  12  17  4.0  1.0 -40.0 -1500.03  11.29  19.65
+# 7226   21  140   1  0.5   3  2.0  1.5  12  17  5.5  4.0 -40.0 -1500.03  11.29  19.65
+# 8160   21  140   1  0.5   3  2.0  1.5  12  17  8.0  4.0 -40.0 -1500.03  11.29  19.65
+# 11637  21  140   1  0.5   3  2.0  1.5  12  17  6.0  5.0 -40.0 -1500.03  11.29  19.65
+# 14686  21  140   1  0.5   3  2.0  1.5  12  17  4.5  3.5 -40.0 -1500.03  11.29  19.65

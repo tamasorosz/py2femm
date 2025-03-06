@@ -102,7 +102,7 @@ def torque_avg_rip(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m
 
             torque_angle = -1 * initial
 
-            print(f'{ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_mp}' +
+            print(f'{int(ang_co), int(deg_co), int(bd), int(bw), int(bh), int(bgp), int(mh), int(ang_m), int(ang_mp), int(deg_m), int(deg_mp)}' +
                   '\n' + 'ANG: ' + f'{initial}' + ', AVG: ' + f'{-1 * torque_avg}' + ', RIP: ' + f'{torque_ripple}')
 
             df = pd.DataFrame({
@@ -113,7 +113,7 @@ def torque_avg_rip(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m
 
             current_file_path = os.path.abspath(__file__)
             folder_path = os.path.dirname(current_file_path)
-            file_path = os.path.join(folder_path, f'results/all_res_avg_case6_20250228.csv')
+            file_path = os.path.join(folder_path, f'results/all_res_avg_case6_20250306.csv')
 
             # Check if the file exists
             file_exists = os.path.isfile(file_path)
