@@ -41,6 +41,10 @@ with open ('nsga2_const_p50o25g100.csv', 'r') as f:
 with open('all_res_avg_case1_20250205.csv', 'r') as f:
     df4 = pd.read_csv(f)
 
+with open('all_res_avg_case0_20250306.csv', 'r') as f:
+    dfA = pd.read_csv(f)
+
+
 df6 = df4.head(0).copy()
 
 # for i in range(500, 2000):
@@ -74,4 +78,5 @@ plt.scatter(df3.iloc[:,-2] * -1, df3.iloc[:,-1] *100)
 plt.scatter(df7.iloc[:, -2] * -1, df7.iloc[:, -1])
 # # plt.scatter(df8.iloc[:, -2] * -1, df8.iloc[:, -1])
 # plt.scatter(df9.iloc[:,-2] * -1, df9.iloc[:,-1])
+plt.scatter(dfA.iloc[:, -2] * -1, dfA.iloc[:, -1])
 plt.show()
