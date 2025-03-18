@@ -27,8 +27,8 @@ if __name__ == '__main__':
                              n_obj=2,
                              n_ieq_constr=0,
                              n_eq_constr=0,
-                             xl=np.array([15, 9, 1, 1, 1, 3]),
-                             xu=np.array([25, 15, 4, 4, 1, 5]),
+                             xl=np.array([15, 9, 1, 1, 1, 1]),
+                             xu=np.array([25, 15, 4, 1, 4, 5]),
                              vtype=float)
 
         def _evaluate(self, x, out, *args, **kwargs):
@@ -44,33 +44,13 @@ if __name__ == '__main__':
 
         def _do(self, problem, x, **kwargs):
 
-            # global initial
-            # if initial:
-            #
-            #     with open('results/nsga2_case0_p100o100g200_var6_20250202.csv', 'r') as f:
-            #         df = pd.read_csv(f)
-            #
-            #     df.iloc[:, 1] = (df.iloc[:, 1] / 10).astype(int)
-            #     df.iloc[:, 5] = df.iloc[:, 5]  / 0.5
-            #
-            #     x = [row.tolist() for _, row in df.iloc[:, :6].iterrows()]
-            #
-            #     while len(x) < 100:
-            #         x = x + x
-            #     x = x[:3]
-            #
-            #     initial = False
-            #     print(x)
-            #     return x
-
-
             for i in range(len(x)):
                 g = (math.tan(math.radians(x[i][0] / 2)) * (22 - x[i][5]*0.5) + x[i][2] + x[i][4]) - 8
                 if g > 0:
-                    temp = np.round((8 - (math.tan(math.radians(x[i][0] / 2)) * (22 - x[i][5]*0.5)) - x[i][2]), 2)
+                    temp = 8 - (math.tan(math.radians(x[i][0] / 2)) * (22 - x[i][5]*0.5)) - x[i][2]
                     if temp < 1:
                         x[i][4] = 1
-                        x[i][2] = np.round(x[i][2] - (1 - temp), 2)
+                        x[i][2] = x[i][2] - (1 - temp)
                         if x[i][2] < 1:
                             x[i][2] = 1
                     else:
@@ -94,7 +74,15 @@ if __name__ == '__main__':
         repair=MyRepair()
     )
 
-    termination = get_termination("n_gen", 300)
+    # termination = get_termination("n_gen", 200)
+    termination = DefaultMultiObjectiveTermination(
+        xtol=1e-8,
+        cvtol=1e-6,
+        ftol=0.0025,
+        period=10,
+        n_max_gen=200,
+        n_max_evals=20000
+    )
 
     res = minimize(problem,
                    algorithm,
@@ -118,5 +106,5 @@ if __name__ == '__main__':
     else:
         os.makedirs('results')
 
-    file_path = os.path.join(folder_path, f'results/nsga2_case0_p100o100g200_var6_20250310.csv')
+    file_path = os.path.join(folder_path, f'results/nsga2_case0_p100o100g200_var6_20250316.csv')
     df.to_csv(file_path, encoding='utf-8', index=False)

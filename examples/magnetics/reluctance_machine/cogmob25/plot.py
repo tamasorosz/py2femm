@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
 from pandas.core.interchange.dataframe_protocol import DataFrame
@@ -44,8 +45,24 @@ with open('all_res_avg_case1_20250205.csv', 'r') as f:
 with open('all_res_avg_case0_20250306.csv', 'r') as f:
     dfA = pd.read_csv(f)
 
+print(len(dfA))
+dfA = dfA.drop_duplicates(ignore_index=True)
+print(len(dfA))
 
 df6 = df4.head(0).copy()
+
+with open('all_res_avg_case0_20250310.csv', 'r') as f:
+    df_310 = pd.read_csv(f)
+
+print(len(df_310))
+df_310 = df_310.drop_duplicates(ignore_index=True)
+print(len(df_310))
+
+with open('all_res_avg_case0_20250314.csv', 'r') as f:
+    df_314 = pd.read_csv(f)
+
+with open('all_res_avg_case0_20250316.csv', 'r') as f:
+    df_316 = pd.read_csv(f)
 
 # for i in range(500, 2000):
 #     df_temp = df4[(df4.iloc[:, -2] * -1 <= i) & (df4.iloc[:, -2] * -1 > i - 100)]
@@ -75,8 +92,15 @@ plt.scatter(df3.iloc[:,-2] * -1, df3.iloc[:,-1] *100)
 # plt.scatter(df4.iloc[:,-2] * -1, df4.iloc[:,-1])
 # plt.scatter(df5.iloc[:,-3] * -1, df5.iloc[:,-2])
 # plt.scatter(df6.iloc[:, -2] * -1, df6.iloc[:, -1])
-plt.scatter(df7.iloc[:, -2] * -1, df7.iloc[:, -1])
+# plt.scatter(df7.iloc[:, -2] * -1, df7.iloc[:, -1])
 # # plt.scatter(df8.iloc[:, -2] * -1, df8.iloc[:, -1])
 # plt.scatter(df9.iloc[:,-2] * -1, df9.iloc[:,-1])
-plt.scatter(dfA.iloc[:, -2] * -1, dfA.iloc[:, -1])
+# plt.scatter(dfA.iloc[:, -2] * -1, dfA.iloc[:, -1])
+# plt.scatter(df_314.iloc[:, -2] * -1, df_314.iloc[:, -1])
+plt.scatter(df_316.iloc[:, -2] * -1, df_316.iloc[:, -1])
 plt.show()
+
+# plt.plot(df_310.iloc[:,-3])
+# plt.show()
+
+print(np.linspace(42, 47, 6))
