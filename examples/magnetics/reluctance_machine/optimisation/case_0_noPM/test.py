@@ -8,11 +8,13 @@
 # import calc_max_torque_angle
 # import calc_torque_avg_rip
 #
-# if __name__ == "__main__":
+from examples.magnetics.reluctance_machine.optimisation.case_0_noPM import calc_max_torque_angle
+
+if __name__ == "__main__":
 #
 #     # df_base = pd.read_csv('results/nsga2_case1_p50o50g100_obj5_20240704.csv')
 #
-#     # f = calc_max_torque_angle.max_torque_angle(30, 24.8, 13.9, 1.0, 2, 1.8, 1)
+    f = calc_max_torque_angle.max_torque_angle(30, 24.8, 18, 1.0, 0.5, 1.8, 1)
 #     # g = calc_max_torque_angle.max_torque_angle(30, 24.4, 119.8, 1.1, 0.5, 2.1, 1.5)
 #
 #     # f = calc_torque_avg_rip.torque_avg_rip(30, 24.8, 139.0, 1.0, 0.5, 1.8, 1.5)
@@ -26,7 +28,7 @@
 #     #
 #     plt.plot(g[3])
 #     plt.show()
-import numpy as np
-
-random_number = np.round(np.random.random(), 2)
-print(random_number)
+# import numpy as np
+#
+# random_number = np.round(np.random.random(), 2)
+# print(random_number)

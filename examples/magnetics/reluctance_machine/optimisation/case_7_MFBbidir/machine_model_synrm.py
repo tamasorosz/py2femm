@@ -28,6 +28,7 @@ class VariableParameters:
         Nturns_pos = 1  # turns of the coil in one slot [u.]
         Nturns_neg = 1  # turns of the coil in one slot [u.]
 
+
         self.JAp = IAp * Nturns_pos / coil_area
         self.JAn = IAn * Nturns_neg / coil_area
         self.JBp = IBp * Nturns_pos / coil_area

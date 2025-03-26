@@ -27,8 +27,8 @@ if __name__ == '__main__':
                              n_obj=2,
                              n_ieq_constr=0,
                              n_eq_constr=0,
-                             xl=np.array([15, 9, 1, 1, 1, 1]),
-                             xu=np.array([25, 15, 4, 1, 4, 5]),
+                             xl=np.array([15, 5, 1, 0.5, 1, 1]),
+                             xu=np.array([25, 18, 4, 1, 4, 5]),
                              vtype=float)
 
         def _evaluate(self, x, out, *args, **kwargs):
