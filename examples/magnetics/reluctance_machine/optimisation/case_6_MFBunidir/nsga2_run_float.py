@@ -11,8 +11,7 @@ from pymoo.algorithms.moo.nsga2 import NSGA2
 from pymoo.core.repair import Repair
 from pymoo.operators.crossover.sbx import SBX
 from pymoo.operators.mutation.pm import PM
-from pymoo.operators.repair.rounding import RoundingRepair
-from pymoo.operators.sampling.rnd import IntegerRandomSampling, FloatRandomSampling
+from pymoo.operators.sampling.rnd import FloatRandomSampling
 from pymoo.termination import get_termination
 from pymoo.optimize import minimize
 
@@ -32,8 +31,8 @@ if __name__ == '__main__':
 
         def _evaluate(self, x, out, *args, **kwargs):
 
-            f1 = calc_torque_avg_rip.torque_avg_rip(30, x[0], x[1], x[2], 0.002, x[3], x[4], 1.5, x[5], x[6], x[7], x[8])
-            f2 = calc_cogging.cogging(0, x[0], x[1], x[2], 0.002, x[3], x[4], 1.5, x[5], x[6], x[7], x[8])
+            f1 = calc_torque_avg_rip.torque_avg_rip(30, x[0], x[1], x[2], 0.01, x[3], x[4], 1.5, x[5], x[6], x[7], x[8])
+            f2 = calc_cogging.cogging(0, x[0], x[1], x[2], 0.01, x[3], x[4], 1.5, x[5], x[6], x[7], x[8])
 
             gc.collect()
 
