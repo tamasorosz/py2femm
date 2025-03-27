@@ -102,12 +102,12 @@ def torque_avg_rip(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m
 
             torque_angle = -1 * initial
 
-            print(f'{int(ang_co), int(deg_co), int(bd), int(bw), int(bh), int(bgp), int(mh), int(ang_m), int(ang_mp), int(deg_m), int(deg_mp)}' +
+            print(f'{ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_mp}' +
                   '\n' + 'ANG: ' + f'{initial}' + ', AVG: ' + f'{-1 * torque_avg}' + ', RIP: ' + f'{torque_ripple}')
 
             df = pd.DataFrame({
-                'X1': [ang_co], 'X2': [deg_co * 10], 'X3': [bd], 'X4': [bw],
-                'X5': [bh], 'X6': [bgp * 0.5 + mh], 'X7': [mh], 'X8': [ang_m], 'X9': [ang_mp], 'X10': [deg_m],
+                'X1': [ang_co], 'X2': [np.round(deg_co * 10, 2)], 'X3': [bd], 'X4': [bw],
+                'X5': [bh], 'X6': [np.round(bgp * 0.5 + mh, 2)], 'X7': [mh], 'X8': [ang_m], 'X9': [ang_mp], 'X10': [deg_m],
                 'X11': [deg_mp], 'ANG': [torque_angle], 'AVG': [torque_avg], 'RIP': [torque_ripple]
             })
 
