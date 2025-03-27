@@ -106,5 +106,5 @@ if __name__ == '__main__':
     else:
         os.makedirs('results')
 
-    file_path = os.path.join(folder_path, f'results/nsga2_case0_p100o100g200_var6_20250326.csv')
+    file_path = os.path.join(folder_path, f'results/nsga2_case0_p100o100g200_var6_20250327.csv')
     df.to_csv(file_path, encoding='utf-8', index=False)
