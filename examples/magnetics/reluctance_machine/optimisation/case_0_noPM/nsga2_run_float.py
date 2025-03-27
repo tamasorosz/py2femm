@@ -27,8 +27,8 @@ if __name__ == '__main__':
                              n_obj=2,
                              n_ieq_constr=0,
                              n_eq_constr=0,
-                             xl=np.array([15, 5, 1, 0.5, 1, 1]),
-                             xu=np.array([25, 18, 4, 1, 4, 5]),
+                             xl=np.array([15, 10, 1, 0, 1, 1]),
+                             xu=np.array([25, 15, 4, 1, 4, 5]),
                              vtype=float)
 
         def _evaluate(self, x, out, *args, **kwargs):
@@ -106,5 +106,5 @@ if __name__ == '__main__':
     else:
         os.makedirs('results')
 
-    file_path = os.path.join(folder_path, f'results/nsga2_case0_p100o100g200_var6_20250316.csv')
+    file_path = os.path.join(folder_path, f'results/nsga2_case0_p100o100g200_var6_20250326.csv')
     df.to_csv(file_path, encoding='utf-8', index=False)
