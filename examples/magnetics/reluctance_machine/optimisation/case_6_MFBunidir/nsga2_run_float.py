@@ -32,7 +32,7 @@ if __name__ == '__main__':
 
         def _evaluate(self, x, out, *args, **kwargs):
 
-            f1 = calc_torque_avg_rip.torque_avg_rip(30, x[0], x[1], x[2], 0.00, x[3], x[4], 1.5, x[5], x[6], x[7], x[8])
+            f1 = calc_torque_avg_rip.torque_avg_rip(30, x[0], x[1], x[2], 0.01, x[3], x[4], 1.5, x[5], x[6], x[7], x[8])
             f2 = calc_cogging.cogging(0, x[0], x[1], x[2], 0.01, x[3], x[4], 1.5, x[5], x[6], x[7], x[8])
 
             gc.collect()
