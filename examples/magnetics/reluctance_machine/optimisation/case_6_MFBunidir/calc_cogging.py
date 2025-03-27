@@ -96,8 +96,8 @@ def cogging(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_m
 
                 res.clear()  # To make sure that there is no memory leak
 
-            df = pd.DataFrame({'X1': [ang_co], 'X2': [np.round(deg_co * 10, 2)], 'X3': [bd], 'X4': [bw],
-                               'X5': [bh], 'X6': [np.round(bgp * 0.5 + mh)], 'X7': [mh], 'X8': [ang_m], 'X9': [ang_mp], 'X10': [deg_m],
+            df = pd.DataFrame({'X1': [ang_co], 'X2': [deg_co * 10], 'X3': [bd], 'X4': [bw],
+                               'X5': [bh], 'X6': [bgp * 0.5 + mh], 'X7': [mh], 'X8': [ang_m], 'X9': [ang_mp], 'X10': [deg_m],
                                'X11': [deg_mp], 'COG': [cogging_pp]})
 
             current_file_path = os.path.abspath(__file__)
