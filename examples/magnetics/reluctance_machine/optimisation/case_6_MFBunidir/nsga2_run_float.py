@@ -11,7 +11,8 @@ from pymoo.algorithms.moo.nsga2 import NSGA2
 from pymoo.core.repair import Repair
 from pymoo.operators.crossover.sbx import SBX
 from pymoo.operators.mutation.pm import PM
-from pymoo.operators.sampling.rnd import FloatRandomSampling
+from pymoo.operators.repair.rounding import RoundingRepair
+from pymoo.operators.sampling.rnd import IntegerRandomSampling, FloatRandomSampling
 from pymoo.termination import get_termination
 from pymoo.optimize import minimize
 
