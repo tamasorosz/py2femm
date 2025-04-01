@@ -285,6 +285,11 @@ class Sector:
 
         return centerpoint
 
+    def mid_point(self):
+        mid_point = Node((self.start_pt.x + self.end_pt.x) / 2, (self.start_pt.y + self.end_pt.y) / 2)
+
+        return mid_point
+
 
 class CubicBezier:
     def __init__(

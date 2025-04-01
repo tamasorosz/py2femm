@@ -74,6 +74,10 @@ def rotor_geometry(femm_problem: FemmProblem, var: VariableParameters):
     rotor_geo.add_sector(co_arc)
 
     co_arc_ep = co_arc.selection_point()
+    # rotor_geo.add_node(co_arc.selection_point())
+    # rotor_geo.add_node(co_arc.center_point())
+    # rotor_geo.add_node(co_arc.mid_point())
+
     co_arc_ep_r = co_arc_ep.rotate_about(n0, -45, degrees=True)
     co_arc_ep_l = co_arc_ep.rotate_about(n0, 45, degrees=True)
 
