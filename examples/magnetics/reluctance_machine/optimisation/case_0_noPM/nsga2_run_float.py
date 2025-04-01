@@ -27,7 +27,7 @@ if __name__ == '__main__':
                              n_obj=2,
                              n_ieq_constr=0,
                              n_eq_constr=0,
-                             xl=np.array([15, 10, 1, 0, 1, 1]),
+                             xl=np.array([15, 9, 1, 0.01, 1, 1]),
                              xu=np.array([25, 15, 4, 1, 4, 5]),
                              vtype=float)
 
@@ -44,6 +44,8 @@ if __name__ == '__main__':
 
         def _do(self, problem, x, **kwargs):
 
+            # Bemutattam, hogy nem a paraméterek korlátozása a ludas. Így marad a lenti egyenlet, amit ki
+            # kell bontani, és futtatni egy szimulációt még az alapján.
             for i in range(len(x)):
                 g = (math.tan(math.radians(x[i][0] / 2)) * (22 - x[i][5]*0.5) + x[i][2] + x[i][4]) - 8
                 if g > 0:
@@ -106,5 +108,5 @@ if __name__ == '__main__':
     else:
         os.makedirs('results')
 
-    file_path = os.path.join(folder_path, f'results/nsga2_case0_p100o100g200_var6_20250326.csv')
+    file_path = os.path.join(folder_path, f'results/nsga2_case0_p100o100g200_var6_20250321.csv')
     df.to_csv(file_path, encoding='utf-8', index=False)

@@ -51,8 +51,14 @@ print(len(dfA))
 
 df6 = df4.head(0).copy()
 
+with open('nsga2_case0_p100o100g200_var6_20250306.csv', 'r') as f:
+    df_306p = pd.read_csv(f)
+
 with open('all_res_avg_case0_20250310.csv', 'r') as f:
     df_310 = pd.read_csv(f)
+
+with open('nsga2_case0_p100o100g200_var6_20250310.csv', 'r') as f:
+    df_310p = pd.read_csv(f)
 
 print(len(df_310))
 df_310 = df_310.drop_duplicates(ignore_index=True)
@@ -61,8 +67,20 @@ print(len(df_310))
 with open('all_res_avg_case0_20250314.csv', 'r') as f:
     df_314 = pd.read_csv(f)
 
+with open('nsga2_case0_p100o100g200_var6_20250314.csv', 'r') as f:
+    df_314p = pd.read_csv(f)
+
 with open('all_res_avg_case0_20250316.csv', 'r') as f:
     df_316 = pd.read_csv(f)
+
+with open('nsga2_case0_p100o100g200_var6_20250316.csv', 'r') as f:
+    df_316p = pd.read_csv(f)
+
+with open('all_res_avg_case0_20250326.csv', 'r') as f:
+    df_326 = pd.read_csv(f)
+
+with open('nsga2_case0_p100o100g200_var6_20250326.csv', 'r') as f:
+    df_326p = pd.read_csv(f)
 
 # for i in range(500, 2000):
 #     df_temp = df4[(df4.iloc[:, -2] * -1 <= i) & (df4.iloc[:, -2] * -1 > i - 100)]
@@ -86,9 +104,9 @@ with open('all_res_avg_case0_20250316.csv', 'r') as f:
 
 
 
-plt.scatter(df1.iloc[:, -2] * -1, df1.iloc[:, -1])
+# plt.scatter(df1.iloc[:, -2] * -1, df1.iloc[:, -1])
 # plt.scatter(df2.iloc[:,-2] * -1, df2.iloc[:,-1])
-plt.scatter(df3.iloc[:,-2] * -1, df3.iloc[:,-1] *100)
+# plt.scatter(df3.iloc[:,-2] * -1, df3.iloc[:,-1] *100)
 # plt.scatter(df4.iloc[:,-2] * -1, df4.iloc[:,-1])
 # plt.scatter(df5.iloc[:,-3] * -1, df5.iloc[:,-2])
 # plt.scatter(df6.iloc[:, -2] * -1, df6.iloc[:, -1])
@@ -96,8 +114,17 @@ plt.scatter(df3.iloc[:,-2] * -1, df3.iloc[:,-1] *100)
 # # plt.scatter(df8.iloc[:, -2] * -1, df8.iloc[:, -1])
 # plt.scatter(df9.iloc[:,-2] * -1, df9.iloc[:,-1])
 # plt.scatter(dfA.iloc[:, -2] * -1, dfA.iloc[:, -1])
+plt.scatter(df_306p.iloc[:, -2] * -1, df_306p.iloc[:, -1])
+plt.scatter(df_310p.iloc[:, -2] * -1, df_310p.iloc[:, -1])
 # plt.scatter(df_314.iloc[:, -2] * -1, df_314.iloc[:, -1])
-plt.scatter(df_316.iloc[:, -2] * -1, df_316.iloc[:, -1])
+plt.scatter(df_314p.iloc[:, -2] * -1, df_314p.iloc[:, -1])
+# plt.scatter(df_326.iloc[:, -2] * -1, df_326.iloc[:, -1])
+# plt.scatter(df_316.iloc[:, -2] * -1, df_316.iloc[:, -1])
+plt.scatter(df_316p.iloc[:, -2] * -1, df_316p.iloc[:, -1])
+# plt.scatter(df_314.iloc[:, -2] * -1, df_314.iloc[:, -1])
+plt.scatter(df3.iloc[:,-2] * -1, df3.iloc[:,-1] *100)
+plt.scatter(df_326p.iloc[:, -2] * -1, df_326p.iloc[:, -1])
+
 plt.show()
 
 # plt.plot(df_310.iloc[:,-3])
