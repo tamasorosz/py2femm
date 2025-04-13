@@ -46,7 +46,7 @@ def execute_model(counter):
 
     except IndexError:
         print(f'IndexError at avg_rip{counter}')
-        torque = 0.0
+        return None
 
     return torque
 
@@ -57,6 +57,9 @@ def torque_avg_rip(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m
             if not (deg_m == 0 and deg_mp == 0):
                 initial = calc_max_torque_angle.max_torque_angle(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp,
                                                                  deg_m, deg_mp)
+                if initial is None:
+                    return random.randint(-300, 0), random.randint(100, 150), random.randint(-20, 0)
+
                 if os.path.exists('temp_avg_rip'):
                     pass
                 else:
@@ -93,8 +96,8 @@ def torque_avg_rip(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m
                     res = list(p.map(execute_model, list(range(0, resol))))
 
                 if None in res:
-                    torque_avg = 0
-                    torque_ripple = 1000
+                    res.clear()
+                    return random.randint(-300, 0), random.randint(100, 150), random.randint(-20, 0)
                 else:
                     torque_avg = np.round(-1 * np.average(res), 2)
                     torque_ripple = np.round(-100 * (np.max(res) - np.min(res)) / torque_avg, 2)
@@ -115,7 +118,7 @@ def torque_avg_rip(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m
 
                 current_file_path = os.path.abspath(__file__)
                 folder_path = os.path.dirname(current_file_path)
-                file_path = os.path.join(folder_path, f'results/all_res_avg_case6_20250401_all_variable.csv')
+                file_path = os.path.join(folder_path, f'results/all_res_avg_case6_20250404_all_variable.csv')
 
                 # Check if the file exists
                 file_exists = os.path.isfile(file_path)

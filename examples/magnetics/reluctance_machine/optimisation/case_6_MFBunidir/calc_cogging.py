@@ -44,7 +44,7 @@ def execute_model(counter):
 
     except(IndexError):
         print(f'IndexError at cog{counter}')
-        torque = 0.0
+        return None
 
     return torque
 
@@ -89,7 +89,8 @@ def cogging(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_m
                     res = list(p.map(execute_model, list(range(0, resol))))
 
                 if None in res:
-                    cogging_pp = 1000
+                    res.clear()
+                    return random.randint(30, 50)
 
                 else:
                     cogging_pp = np.round(np.max(list(res)) - np.min(list(res)), 2)
@@ -102,7 +103,7 @@ def cogging(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_m
 
                 current_file_path = os.path.abspath(__file__)
                 folder_path = os.path.dirname(current_file_path)
-                file_path = os.path.join(folder_path, f'results/all_res_cog_case6_20250401_all_variable.csv')
+                file_path = os.path.join(folder_path, f'results/all_res_cog_case6_20250404_all_variable.csv')
 
                 # Check if the file exists
                 file_exists = os.path.isfile(file_path)

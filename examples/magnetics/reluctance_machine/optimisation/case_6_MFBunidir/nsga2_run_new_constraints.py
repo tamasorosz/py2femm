@@ -166,7 +166,7 @@ if __name__ == '__main__':
 
     current_file_path = os.path.abspath(__file__)
     folder_path = os.path.dirname(current_file_path)
-    file_path = os.path.join(folder_path, f'results/all_res_cog_case6_20250401_all_variable.csv')
+    file_path = os.path.join(folder_path, f'results/all_res_cog_case6_20250404_all_variable.csv')
 
     termination = get_termination("n_size", file_path, 20000)
 
