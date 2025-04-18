@@ -25,7 +25,7 @@ if __name__ == '__main__':
         def __init__(self):
             super().__init__(n_var=11,
                              n_obj=4,
-                             n_ieq_constr=0,
+                             n_ieq_constr=2,
                              n_eq_constr=0,
                              xl=np.array([15,  6,  .5, .001, .5, 1, 1.5, 10, 10, 0, 0]),
                              xu=np.array([25, 14,   4,    1,  4, 2,   2, 15, 18, 16, 16]),
@@ -35,10 +35,13 @@ if __name__ == '__main__':
             f1 = calc_torque_avg_rip.torque_avg_rip(30, x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8], x[9], x[10])
             f2 = calc_cogging.cogging(0, x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8], x[9], x[10])
 
+            g1 = f1[0] + 1400
+            g2 = f1[1] + 10
+
             gc.collect()
 
             out['F'] = [f1[0], f1[1], f1[2], f2]
-
+            out['G'] = [g1, g2]
 
     class MyRepair(Repair):
         problem = MyProblem()
@@ -85,7 +88,7 @@ if __name__ == '__main__':
                 x_intersect_l = - b1 / (m1 - np.tan(np.radians(67.5)))
                 y_intersect_l = m1 * x_intersect_l + b1
 
-                constraint_distance = np.sqrt((x_intersect_r - x_rot1) ** 2 + (y_intersect_r - y_rot1) ** 2)
+                # constraint_distance = np.sqrt((x_intersect_r - x_rot1) ** 2 + (y_intersect_r - y_rot1) ** 2)
                 constraining_distance = np.sqrt((x_intersect_l - x_rot1) ** 2 + (y_intersect_l - y_rot1) ** 2)
 
                 if random.choice([True, False]):
@@ -166,7 +169,7 @@ if __name__ == '__main__':
 
     current_file_path = os.path.abspath(__file__)
     folder_path = os.path.dirname(current_file_path)
-    file_path = os.path.join(folder_path, f'results/all_res_cog_case6_20250404_all_variable.csv')
+    file_path = os.path.join(folder_path, f'results/all_res_cog_case6_20250417_all_variable.csv')
 
     termination = get_termination("n_size", file_path, 20000)
 
@@ -191,7 +194,7 @@ if __name__ == '__main__':
     else:
         os.makedirs('results')
 
-    file_path = os.path.join(folder_path, f'results/all_res_cog_case6_20250401_all_variable.csv')
+    file_path = os.path.join(folder_path, f'results/all_res_cog_case6_20250417_all_variable.csv')
     df.to_csv(file_path, encoding='utf-8', index=False)
 
     folder_path = ['temp_ang', 'temp_avg_rip', 'temp_cog']
