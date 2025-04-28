@@ -28,7 +28,6 @@ class VariableParameters:
         Nturns_pos = 1  # turns of the coil in one slot [u.]
         Nturns_neg = 1  # turns of the coil in one slot [u.]
 
-
         self.JAp = IAp * Nturns_pos / coil_area
         self.JAn = IAn * Nturns_neg / coil_area
         self.JBp = IBp * Nturns_pos / coil_area
@@ -93,12 +92,6 @@ def rotor_geometry(femm_problem: FemmProblem, var: VariableParameters):
 
     rotor_geo.add_sector(co_arcr)
     rotor_geo.add_sector(co_arcl)
-
-    # rot_arc_l = CircleArc(co_e, n0, co_l)
-    # rot_arc_r = CircleArc(co_r, n0, co_s)
-    #
-    # rotor_geo.add_arc(rot_arc_l)
-    # rotor_geo.add_arc(rot_arc_r)
 
     # define sliding band nodes, lines and arc
     sb_l = Node(0.00, 22.10)
@@ -254,11 +247,6 @@ def rotor_geometry(femm_problem: FemmProblem, var: VariableParameters):
     ib_mp3 = Line(iblu_arc.selection_point(), iblo_arc.selection_point()).selection_point()
     ib_mp4 = Line(ibru_arc_l.selection_point(), ibro_arc_l.selection_point()).selection_point()
 
-    # rotor_geo.add_node(ib_mp1)
-    # rotor_geo.add_node(ib_mp2)
-    # rotor_geo.add_node(ib_mp3)
-    # rotor_geo.add_node(ib_mp4)
-
     rot_bound1_l = encl_l.selection_point()
     rot_bound1_r = encl_r.selection_point()
     rot_bound2_l = sbl_l.selection_point()
@@ -266,21 +254,14 @@ def rotor_geometry(femm_problem: FemmProblem, var: VariableParameters):
     rot_bound_arc1 = enc_arc_0.selection_point()
     rot_bound_arc2 = sb_arc.selection_point()
 
-    # rotor_geo.add_node(rot_bound1_l)
-    # rotor_geo.add_node(rot_bound1_r)
-    # rotor_geo.add_node(rot_bound2_l)
-    # rotor_geo.add_node(rot_bound2_r)
-    # rotor_geo.add_node(rot_bound_arc1)
-    # rotor_geo.add_node(rot_bound_arc2)
-
     # LEFT ROTOR MAGNET POCKET-----------------------------------------------------------------------------------------
     nmpbase_lo = Node(22, 0).rotate_about(n0, 67.5-var.deg_mp, True)
     nmpbase_lu = Node(22 - var.mh, 0).rotate_about(n0, 67.5-var.deg_mp, True)
 
-    nmp_llo = nmpbase_lo.rotate_about(n0, var.ang_mp/2, True)
-    nmp_rlo = nmpbase_lo.rotate_about(n0, -var.ang_mp/2, True)
-    nmp_llu = nmpbase_lu.rotate_about(n0, var.ang_mp/2, True)
-    nmp_rlu = nmpbase_lu.rotate_about(n0, -var.ang_mp/2, True)
+    nmp_llo = nmpbase_lo.rotate_about(n0, var.ang_mp / 2, True)
+    nmp_rlo = nmpbase_lo.rotate_about(n0, -var.ang_mp / 2, True)
+    nmp_llu = nmpbase_lu.rotate_about(n0, var.ang_mp / 2, True)
+    nmp_rlu = nmpbase_lu.rotate_about(n0, -var.ang_mp / 2, True)
 
     rotor_geo.add_node(nmp_llo)
     rotor_geo.add_node(nmp_rlo)
@@ -304,12 +285,12 @@ def rotor_geometry(femm_problem: FemmProblem, var: VariableParameters):
 
     # LEFT ROTOR MAGNET------------------------------------------------------------------------------------------------
     nmbase_lo = Node(22, 0).rotate_about(n0, 67.5-var.deg_m, True)
-    nmbase_lu = Node(22 - var.mh, 0).rotate_about(n0, 67.5-var.deg_m, True)
+    nmbase_lu = Node(22 - var.mh - 0.01, 0).rotate_about(n0, 67.5-var.deg_m, True)
 
-    nm_llo = nmbase_lo.rotate_about(n0, var.ang_m/2, True)
-    nm_rlo = nmbase_lo.rotate_about(n0, -var.ang_m/2, True)
-    nm_llu = nmbase_lu.rotate_about(n0, var.ang_m/2, True)
-    nm_rlu = nmbase_lu.rotate_about(n0, -var.ang_m/2, True)
+    nm_llo = nmbase_lo.rotate_about(n0, var.ang_m / 2, True)
+    nm_rlo = nmbase_lo.rotate_about(n0, -var.ang_m / 2, True)
+    nm_llu = nmbase_lu.rotate_about(n0, var.ang_m / 2, True)
+    nm_rlu = nmbase_lu.rotate_about(n0, -var.ang_m / 2, True)
 
     rotor_geo.add_node(nm_llo)
     rotor_geo.add_node(nm_rlo)
@@ -322,10 +303,6 @@ def rotor_geometry(femm_problem: FemmProblem, var: VariableParameters):
     rotor_geo.add_line(lm_ll)
     rotor_geo.add_line(lm_lr)
 
-    # am_lu = CircleArc(nm_rlu, n0, nm_llu)
-
-    # rotor_geo.add_arc(am_lu)
-
     lab_mag_l = Line(lm_ll.selection_point(), lm_lr.selection_point()).selection_point()
 
     rot_arc_lc = CircleArc(nm_rlo, n0, nm_llo)
@@ -336,10 +313,10 @@ def rotor_geometry(femm_problem: FemmProblem, var: VariableParameters):
     nmpbase_ro = Node(22, 0).rotate_about(n0, 22.5+var.deg_mp, True)
     nmpbase_ru = Node(22 - var.mh, 0).rotate_about(n0, 22.5+var.deg_mp, True)
 
-    nmp_lro = nmpbase_ro.rotate_about(n0, var.ang_mp/2, True)
-    nmp_rro = nmpbase_ro.rotate_about(n0, -var.ang_mp/2, True)
-    nmp_lru = nmpbase_ru.rotate_about(n0, var.ang_mp/2, True)
-    nmp_rru = nmpbase_ru.rotate_about(n0, -var.ang_mp/2, True)
+    nmp_lro = nmpbase_ro.rotate_about(n0, var.ang_mp / 2, True)
+    nmp_rro = nmpbase_ro.rotate_about(n0, -var.ang_mp / 2, True)
+    nmp_lru = nmpbase_ru.rotate_about(n0, var.ang_mp / 2, True)
+    nmp_rru = nmpbase_ru.rotate_about(n0, -var.ang_mp / 2, True)
 
     rotor_geo.add_node(nmp_lro)
     rotor_geo.add_node(nmp_rro)
@@ -363,12 +340,12 @@ def rotor_geometry(femm_problem: FemmProblem, var: VariableParameters):
 
     # RIGHT ROTOR MAGNET------------------------------------------------------------------------------------------------
     nmbase_ro = Node(22, 0).rotate_about(n0, 22.5+var.deg_m, True)
-    nmbase_ru = Node(22 - var.mh, 0).rotate_about(n0, 22.5+var.deg_m, True)
+    nmbase_ru = Node(22 - var.mh-0.01, 0).rotate_about(n0, 22.5+var.deg_m, True)
 
-    nm_lro = nmbase_ro.rotate_about(n0, var.ang_m/2, True)
-    nm_rro = nmbase_ro.rotate_about(n0, -var.ang_m/2, True)
-    nm_lru = nmbase_ru.rotate_about(n0, var.ang_m/2, True)
-    nm_rru = nmbase_ru.rotate_about(n0, -var.ang_m/2, True)
+    nm_lro = nmbase_ro.rotate_about(n0, var.ang_m / 2, True)
+    nm_rro = nmbase_ro.rotate_about(n0, -var.ang_m / 2, True)
+    nm_lru = nmbase_ru.rotate_about(n0, var.ang_m / 2, True)
+    nm_rru = nmbase_ru.rotate_about(n0, -var.ang_m / 2, True)
 
     rotor_geo.add_node(nm_lro)
     rotor_geo.add_node(nm_rro)
@@ -384,10 +361,6 @@ def rotor_geometry(femm_problem: FemmProblem, var: VariableParameters):
     rot_arc_rc = CircleArc(nm_rro, n0, nm_lro)
 
     rotor_geo.add_arc(rot_arc_rc)
-
-    # am_ru = CircleArc(nm_rru, n0, nm_lru)
-    #
-    # rotor_geo.add_arc(am_ru)
 
     lab_mag_r = Line(lm_rl.selection_point(), lm_rr.selection_point()).selection_point()
 
@@ -566,9 +539,6 @@ def add_materials(femm_problem: FemmProblem, var: VariableParameters, rot: rotor
 
     femm_problem.define_block_label(rot[10], ferrite_left)
     femm_problem.define_block_label(rot[11], ferrite_right)
-    #
-    # femm_problem.define_block_label(rot[10], air)
-    # femm_problem.define_block_label(rot[11], air)
 
 
 def problem_definition(var: VariableParameters):
