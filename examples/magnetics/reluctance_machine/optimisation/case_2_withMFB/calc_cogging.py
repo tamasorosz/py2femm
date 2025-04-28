@@ -44,7 +44,7 @@ def execute_model(counter):
 
     except(IndexError):
         print(f'IndexError at cog{counter}')
-        torque = 0.0
+        return None
 
     return torque
 
@@ -54,67 +54,72 @@ def cogging(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp):
         pass
     else:
         os.makedirs('temp_cog')
+    if mh > 1.5:
+        if ang_m != ang_mp:
+            resol = 16
+            e = 15
 
-    if ang_m != ang_mp:
-        resol = 16
-        e = 15
+            for counter, ia in zip(range(0, resol), np.linspace(0, e, resol)):
+                variables = model.VariableParameters(fold='cog',
+                                                     out='cog',
+                                                     counter=counter,
+                                                     IAp=I0 * math.cos(math.radians(0)),
+                                                     IAn=-I0 * math.cos(math.radians(0)),
+                                                     IBp=I0 * math.cos(math.radians(0 + 120)),
+                                                     IBn=-I0 * math.cos(math.radians(0 + 120)),
+                                                     ICp=I0 * math.cos(math.radians(0 + 240)),
+                                                     ICn=-I0 * math.cos(math.radians(0 + 240)),
+                                                     ang_co=ang_co,
+                                                     deg_co=deg_co * 10,
+                                                     bd=bd,
+                                                     bw=bw,
+                                                     bh=bh,
+                                                     bg=bgp * 0.5 + mh,
+                                                     ia=ia,
+                                                     mh=mh,
+                                                     ang_m=ang_m,
+                                                     ang_mp=ang_mp)
 
-        for counter, ia in zip(range(0, resol), np.linspace(0, e, resol)):
-            variables = model.VariableParameters(fold='cog',
-                                                 out='cog',
-                                                 counter=counter,
-                                                 IAp=I0 * math.cos(math.radians(0)),
-                                                 IAn=-I0 * math.cos(math.radians(0)),
-                                                 IBp=I0 * math.cos(math.radians(0 + 120)),
-                                                 IBn=-I0 * math.cos(math.radians(0 + 120)),
-                                                 ICp=I0 * math.cos(math.radians(0 + 240)),
-                                                 ICn=-I0 * math.cos(math.radians(0 + 240)),
-                                                 ang_co=ang_co,
-                                                 deg_co=deg_co * 10,
-                                                 bd=bd,
-                                                 bw=bw,
-                                                 bh=bh,
-                                                 bg=bgp * 0.5 + mh,
-                                                 ia=ia,
-                                                 mh=mh,
-                                                 ang_m=ang_m,
-                                                 ang_mp=ang_mp)
+                model.problem_definition(variables)
 
-            model.problem_definition(variables)
+            with Pool(16) as p:
+                res = list(p.map(execute_model, list(range(0, resol))))
 
-        with Pool(16) as p:
-            res = list(p.map(execute_model, list(range(0, resol))))
+            if None in res:
+                res.clear()
+                return random.randint(30, 50)
 
-        if None in res:
-            cogging_pp = 1000
+            else:
+                cogging_pp = np.round(np.max(list(res)) - np.min(list(res)), 2)
+
+                res.clear()  # To make sure that there is no memory leak
+
+            df = pd.DataFrame({'X1': [ang_co], 'X2': [np.round(deg_co * 10, 2)], 'X3': [bd], 'X4': [bw],
+                               'X5': [bh], 'X6': [np.round(bgp * 0.5 + mh, 2)], 'X7': [mh], 'X8': [ang_m],
+                               'X9': [ang_mp], 'COG': [cogging_pp]})
+
+            current_file_path = os.path.abspath(__file__)
+            folder_path = os.path.dirname(current_file_path)
+            file_path = os.path.join(folder_path, f'results/all_res_cog_case3_20250428_all_variable.csv')
+
+            # Check if the file exists
+            file_exists = os.path.isfile(file_path)
+
+            # Append the DataFrame to the CSV file
+            with open(file_path, 'a', newline='') as f:
+                df.to_csv(f, header=not file_exists, index=False)
+
+            # Count the number of rows in a separate operation
+            with open(file_path, 'r') as f:
+                num_rows = sum(1 for _ in f)
+                print('COG: ' + f'{cogging_pp}' + ', IND: ' + f'{num_rows}' +
+                      '\n-----------------------------------------------')
+
+            return cogging_pp
 
         else:
-            cogging_pp = np.round(np.max(list(res)) - np.min(list(res)), 2)
-
-            res.clear()  # To make sure that there is no memory leak
-
-        df = pd.DataFrame({'X1': [ang_co], 'X2': [deg_co * 10], 'X3': [bd], 'X4': [bw],
-                           'X5': [bh], 'X6': [bgp * 0.5 + mh], 'X7': [mh], 'X8': [ang_m], 'X9': [ang_mp],
-                           'COG': [cogging_pp]})
-
-        current_file_path = os.path.abspath(__file__)
-        folder_path = os.path.dirname(current_file_path)
-        file_path = os.path.join(folder_path, f'results/all_res_cog_case2_20250228.csv')
-
-        # Check if the file exists
-        file_exists = os.path.isfile(file_path)
-
-        # Append the DataFrame to the CSV file
-        with open(file_path, 'a', newline='') as f:
-            df.to_csv(f, header=not file_exists, index=False)
-
-        # Count the number of rows in a separate operation
-        with open(file_path, 'r') as f:
-            num_rows = sum(1 for _ in f)
-            print('COG: ' + f'{cogging_pp}' + ', IND: ' + f'{num_rows}' +
-                  '\n-----------------------------------------------')
-
-        return cogging_pp
+            return random.randint(30, 50)
 
     else:
         return random.randint(30, 50)
+

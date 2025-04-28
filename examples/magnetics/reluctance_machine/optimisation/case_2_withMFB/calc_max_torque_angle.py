@@ -41,7 +41,7 @@ def execute_model(counter):
 
     except IndexError:
         print(f'IndexError at ang{counter}')
-        torque = 0.0
+        return None
 
     return torque
 
@@ -64,7 +64,7 @@ def max_torque_angle(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp):
                                              IAn=-I0 * math.cos(math.radians(alpha)),
                                              IBp=I0 * math.cos(math.radians(alpha + 120)),
                                              IBn=-I0 * math.cos(math.radians(alpha + 120)),
-                                             ICp=I0 * math.cos(math.radians(alpha+ 240)),
+                                             ICp=I0 * math.cos(math.radians(alpha + 240)),
                                              ICn=-I0 * math.cos(math.radians(alpha + 240)),
                                              ang_co=ang_co,
                                              deg_co=deg_co * 10,
@@ -81,8 +81,10 @@ def max_torque_angle(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp):
     with Pool(8) as p:
         res = list(p.map(execute_model, list(range(0, resol))))
 
-    torque_ang = a + res.index((max(res))) * ((b - a) / (resol - 1))
-
-    res.clear()
-
-    return torque_ang
+    if None in res:
+        res.clear()
+        return None
+    else:
+        torque_ang = a + res.index((max(res))) * ((b - a) / (resol - 1))
+        res.clear()
+        return torque_ang

@@ -107,25 +107,25 @@ sns.set_style("whitegrid")
 fig = plt.figure(figsize=(10, 8))
 ax = fig.add_subplot(111, projection='3d')
 
-# x_plane = np.array([1400, 2200])  # X values
-# y_plane = np.array([20, 20])  # Fixed Y value (horizontal)
-# z_plane = np.array([13, 23])  # Z values range from 13 to 23
-#
-# # Mesh grid for plotting the surface
-# X, Z = np.meshgrid(x_plane, z_plane)
-# Y = np.full_like(X, 20)  # Y value is fixed to 20
-#
-# ax.plot_surface(X, Y, Z, color='b', alpha=0.2)
-#
-# x_plane = np.array([1400, 1400])  # X values
-# y_plane = np.array([9, 20])  # Fixed Y value (horizontal)
-# z_plane = np.array([13, 23])  # Z values range from 13 to 23
-#
-# # Mesh grid for plotting the surface
-# Y, Z = np.meshgrid(y_plane, z_plane)
-# X = np.full_like(X, 1400)  # Y value is fixed to 20
-#
-# ax.plot_surface(X, Y, Z, color='b', alpha=0.2)
+x_plane = np.array([1400, 2200])  # X values
+y_plane = np.array([20, 20])  # Fixed Y value (horizontal)
+z_plane = np.array([13, 23])  # Z values range from 13 to 23
+
+# Mesh grid for plotting the surface
+X, Z = np.meshgrid(x_plane, z_plane)
+Y = np.full_like(X, 20)  # Y value is fixed to 20
+
+ax.plot_surface(X, Y, Z, color='b', alpha=0.2)
+
+x_plane = np.array([1400, 1400])  # X values
+y_plane = np.array([9, 20])  # Fixed Y value (horizontal)
+z_plane = np.array([13, 23])  # Z values range from 13 to 23
+
+# Mesh grid for plotting the surface
+Y, Z = np.meshgrid(y_plane, z_plane)
+X = np.full_like(X, 1400)  # Y value is fixed to 20
+
+ax.plot_surface(X, Y, Z, color='b', alpha=0.2)
 
 # Scatter plot with enhanced visualization
 scatter = ax.scatter(
@@ -213,7 +213,7 @@ ax.set_zticks(np.arange(13, 23, 2))
 # Rotate the 3D view for better visualization
 ax.view_init(elev=20, azim=-140)  # Adjust elevation and azimuth
 plt.legend(fontsize=14, loc="upper center", frameon=True, ncol=3, bbox_to_anchor=(0.5, 1))
-plt.savefig('comp_3D_all.png')
+plt.savefig('comp_3D_all_2.png')
 
 # ax.view_init(elev=90, azim=180, )  # Adjust elevation and azimuth
 # ax.set_zticks([])

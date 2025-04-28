@@ -41,7 +41,7 @@ if __name__ == "__main__":
 
 
     # # CONSTRAINT_0: Does not let the Cc to be lower than the diameter.
-    x = (b ** 2 + c ** 2 - a ** 2) / (2 * C)
+    # x = (b ** 2 + c ** 2 - a ** 2) / (2 * C)
 
 
 
@@ -98,3 +98,36 @@ if __name__ == "__main__":
     # d = CC-(22-X5/2)
     # alpha = np.arccos((np.power(22-X5/2,2)+np.power(b,2)-np.power(CC,2)) / ((22-X5/2) * b))
     # a = np.sqrt(np.power(b,2)+np.power(d,2)-2*b*d*np.cos(alpha))
+
+    i = 19
+    j = 111
+    d = 44
+
+    midpoint = np.cos(np.radians(i / 2)) * 22
+    distance = 2 * np.sin(np.radians(i / 2)) * 22
+    R = (distance / (2 * np.tan(np.radians(j / 2))))
+    centerpoint = midpoint + R
+    radius = np.sqrt(22 ** 2 + centerpoint ** 2 - (2 * 22 * centerpoint * np.cos(np.radians(i / 2))))
+    selection_point = centerpoint - radius
+    # radius2 = np.sqrt(R ** 2 + (distance/2) ** 2)
+    #
+    x0 = np.radians(i)  # Convert x0 to radians
+    x1 = np.radians(j)  # Convert x1 to radians
+    #
+    # sin_x0_2 = math.sin(x0 / 2)
+    # tan_x1_2 = math.tan(x1 / 2)
+    #
+    # radius3 = sin_x0_2 * 44 / 2 * np.sqrt(1 / tan_x1_2**2 + 1)
+    #
+    # print(radius1, radius2, radius3)
+
+    sin_x0_2 = math.sin(x0 / 2)
+    tan_x0_2 = math.tan(x0 / 2)
+    tan_x1_2 = math.tan(x1 / 2)
+
+    # Calculate the full expression
+    s = (d / 2) * sin_x0_2 * (
+            (1 / tan_x0_2) + (1 / tan_x1_2) - math.sqrt(1 + (1 / tan_x1_2 ** 2))
+    )
+
+    print(selection_point, s)
