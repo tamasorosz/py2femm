@@ -41,7 +41,7 @@ def execute_model(counter):
 
     except IndexError:
         print(f'IndexError at ang{counter}')
-        torque = 0.0
+        return None
 
     return torque
 
@@ -52,8 +52,8 @@ def max_torque_angle(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m):
     else:
         os.makedirs('temp_ang')
 
-    resol = 16
-    a = 35
+    resol = 13
+    a = 38
     b = 50
 
     for counter, alpha in zip(range(0, resol), np.linspace(a, b, resol)):
@@ -77,11 +77,13 @@ def max_torque_angle(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m):
                                              ang_m=ang_m)
         model.problem_definition(variables)
 
-    with Pool(16) as p:
+    with Pool(13) as p:
         res = list(p.map(execute_model, list(range(0, resol))))
 
-    torque_ang = a + res.index((max(res))) * ((b - a) / (resol - 1))
-
-    res.clear()
-
-    return torque_ang
+    if None in res:
+        res.clear()
+        return None
+    else:
+        torque_ang = a + res.index((max(res))) * ((b - a) / (resol - 1))
+        res.clear()
+        return torque_ang

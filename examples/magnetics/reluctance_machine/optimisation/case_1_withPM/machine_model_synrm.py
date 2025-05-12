@@ -20,9 +20,13 @@ class VariableParameters:
         self.out = out
         self.counter = counter
 
-        coil_area = 53.5104  # area of the slot [mm^2]
-        Nturns_pos = 12  # turns of the coil in one slot [u.]
-        Nturns_neg = 11  # turns of the coil in one slot [u.]
+        # coil_area = 53.5104  # area of the slot [mm^2]
+        # Nturns_pos = 12  # turns of the coil in one slot [u.]
+        # Nturns_neg = 11  # turns of the coil in one slot [u.]
+
+        coil_area = 1  # area of the slot [mm^2]
+        Nturns_pos = 1  # turns of the coil in one slot [u.]
+        Nturns_neg = 1  # turns of the coil in one slot [u.]
 
         self.JAp = IAp * Nturns_pos / coil_area
         self.JAn = IAn * Nturns_neg / coil_area
@@ -249,7 +253,7 @@ def rotor_geometry(femm_problem: FemmProblem, var: VariableParameters):
 
     # LEFT ROTOR MAGNET------------------------------------------------------------------------------------------------
     nmbase_lo = Node(22, 0).rotate_about(n0, 67.5, True)
-    nmbase_lu = Node(22 - var.mh, 0).rotate_about(n0, 67.5, True)
+    nmbase_lu = Node(22 - var.mh - 0.01, 0).rotate_about(n0, 67.5, True)
 
     nm_llo = nmbase_lo.rotate_about(n0, var.ang_m / 2, True)
     nm_rlo = nmbase_lo.rotate_about(n0, -var.ang_m / 2, True)
@@ -283,7 +287,7 @@ def rotor_geometry(femm_problem: FemmProblem, var: VariableParameters):
 
     # RIGHT ROTOR MAGNET------------------------------------------------------------------------------------------------
     nmbase_ro = Node(22, 0).rotate_about(n0, 22.5, True)
-    nmbase_ru = Node(22 - var.mh, 0).rotate_about(n0, 22.5, True)
+    nmbase_ru = Node(22 - var.mh - 0.01, 0).rotate_about(n0, 22.5, True)
 
     nm_lro = nmbase_ro.rotate_about(n0, var.ang_m / 2, True)
     nm_rro = nmbase_ro.rotate_about(n0, -var.ang_m / 2, True)
