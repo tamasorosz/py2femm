@@ -102,7 +102,7 @@ def torque_avg_rip(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m
                     torque_avg = np.round(-1 * np.average(res), 2)
                     torque_ripple = np.round(-100 * (np.max(res) - np.min(res)) / torque_avg, 2)
 
-                res.clear()  # To make sure that there is no memory leak
+                # res.clear()  # To make sure that there is no memory leak
 
                 torque_angle = -1 * initial
 
@@ -127,7 +127,7 @@ def torque_avg_rip(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m
                 with open(file_path, 'a', newline='') as f:
                     df.to_csv(f, header=not file_exists, index=False)
 
-                return torque_avg, torque_ripple, torque_angle
+                return torque_avg, torque_ripple, torque_angle, res
 
             else:
                 return random.randint(-300, 0), random.randint(100, 150), random.randint(-20, 0)
