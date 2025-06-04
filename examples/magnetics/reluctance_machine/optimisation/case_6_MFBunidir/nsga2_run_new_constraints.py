@@ -25,7 +25,7 @@ if __name__ == '__main__':
     class MyProblem(ElementwiseProblem):
         def __init__(self):
             super().__init__(n_var=11,
-                             n_obj=4,
+                             n_obj=3,
                              n_ieq_constr=1,
                              n_eq_constr=0,
                              xl=np.array([15,  6,  .5, .001, .5, 1, 1.5, 10, 10, 0, 0]),
@@ -33,17 +33,18 @@ if __name__ == '__main__':
                              vtype=float)
 
         def _evaluate(self, x, out, *args, **kwargs):
-            f1 = calc_torque_avg_rip.torque_avg_rip(30, x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8], x[9], x[10])
-            f2 = calc_cogging.cogging(0, x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8], x[9], x[10])
+            f1 = calc_torque_avg_rip.torque_avg_rip(24.32, x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8], x[9], x[10])
+            # f2 = calc_cogging.cogging(0, x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8], x[9], x[10])
 
             # g1 = f1[0] + 1600
-            # g2 = f1[1] + 5
-            g3 = f2 + 15
+            g2 = f1[1] + 5
+            # g3 = f2 + 10
 
             gc.collect()
 
-            out['F'] = [f1[0], f1[1], f1[2], f2]
-            out['G'] = [g3]
+            # out['F'] = [f1[0], f1[1], f1[2], f2]
+            out['F'] = [f1[0], f1[1], f1[2]]
+            out['G'] = [g2]
 
     class MyRepair(Repair):
         problem = MyProblem()
@@ -84,13 +85,9 @@ if __name__ == '__main__':
                 m1 = (y_rot2 - y_rot1) / (x_rot2 - x_rot1)
                 b1 = y_rot1 - m1 * x_rot1
 
-                x_intersect_r = -b1 / (m1 - 1)
-                y_intersect_r = x_intersect_r
-
                 x_intersect_l = - b1 / (m1 - np.tan(np.radians(67.5)))
                 y_intersect_l = m1 * x_intersect_l + b1
 
-                # constraint_distance = np.sqrt((x_intersect_r - x_rot1) ** 2 + (y_intersect_r - y_rot1) ** 2)
                 constraining_distance = np.sqrt((x_intersect_l - x_rot1) ** 2 + (y_intersect_l - y_rot1) ** 2)
 
                 if random.choice([True, False]):
@@ -171,17 +168,17 @@ if __name__ == '__main__':
 
     current_file_path = os.path.abspath(__file__)
     folder_path = os.path.dirname(current_file_path)
-    # file_path = os.path.join(folder_path, f'results/all_res_cog_case6_20250418_all_variable.csv')
-    #
-    # termination = get_termination("n_size", file_path, 20000)
+    file_path = os.path.join(folder_path, f'results/all_res_avg_case6_20250520_8Apermm2.csv')
 
-    termination = DefaultMultiObjectiveTermination(
-        xtol=1e-8,
-        cvtol=1e-6,
-        ftol=0.0025,
-        period=10,
-        n_max_gen=200,
-        n_max_evals=25000)
+    termination = get_termination("n_size", file_path, 20000)
+
+    # termination = DefaultMultiObjectiveTermination(
+    #     xtol=1e-8,
+    #     cvtol=1e-6,
+    #     ftol=0.0025,
+    #     period=10,
+    #     n_max_gen=200,
+    #     n_max_evals=25000)
 
     res = minimize(problem,
                    algorithm,
@@ -195,18 +192,24 @@ if __name__ == '__main__':
 
     print('Execution time: ' + str(res.exec_time / 60 / 60) + ' hours')
 
+    # df = pd.DataFrame({
+    #     'X1': X[:, 0], 'X2': [np.round(i,2) * 10 for i in X[:, 1]], 'X3': X[:, 2], 'X4': X[:, 3],
+    #     'X5': X[:, 4], 'X6': [np.round(i / 2 + j, 2) for i, j in zip(X[:, 5], X[:, 6])], 'X7': X[:, 6],
+    #     'X8': X[:, 7], 'X9': X[:, 8], 'X10': X[:, 9], 'X11': X[:, 10],
+    #     'ANG': F[:, 2], 'AVG': F[:, 0], 'RIP': F[:, 1], 'COG': F[:, 3]})
+
     df = pd.DataFrame({
-        'X1': X[:, 0], 'X2': [np.round(i,2) * 10 for i in X[:, 1]], 'X3': X[:, 2], 'X4': X[:, 3],
+        'X1': X[:, 0], 'X2': [np.round(i, 2) * 10 for i in X[:, 1]], 'X3': X[:, 2], 'X4': X[:, 3],
         'X5': X[:, 4], 'X6': [np.round(i / 2 + j, 2) for i, j in zip(X[:, 5], X[:, 6])], 'X7': X[:, 6],
         'X8': X[:, 7], 'X9': X[:, 8], 'X10': X[:, 9], 'X11': X[:, 10],
-        'ANG': F[:, 2], 'AVG': F[:, 0], 'RIP': F[:, 1], 'COG': F[:, 3]})
+        'ANG': F[:, 2], 'AVG': F[:, 0], 'RIP': F[:, 1]})
 
     if os.path.exists('results'):
         pass
     else:
         os.makedirs('results')
 
-    file_path = os.path.join(folder_path, f'results/nsga2_case6_20250420_all_variable.csv')
+    file_path = os.path.join(folder_path, f'results/nsga2_case6_20250520_8Apermm2.csv')
     df.to_csv(file_path, encoding='utf-8', index=False)
 
     folder_path = ['temp_ang', 'temp_avg_rip', 'temp_cog']

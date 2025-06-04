@@ -36,20 +36,23 @@ class VariableParameters:
                  rotor_position,  # --> To specify the rotor position --------------------------------------------------
                  X1_cut_off_barrier_opening_angle,  # --> To specify the opening angle of the cut-off barrier (X1) -----
                  X2_cut_off_barrier_curve_angle,  # --> To specify the depth of the cut-off barrier (X2)
-                 X3_cut_off_barrier_internal_barrier_distance,  # --> To specify the distance between the cut-off barrier and internal barrier (X3)
+                 X3_cut_off_barrier_internal_barrier_distance,
+                 # --> To specify the distance between the cut-off barrier and internal barrier (X3)
                  X4_rib_width_upper,  # --> To specify the rib with between internal barriers (X4) ---------------------
                  X5_internal_barrier_height_upper,  # --> To specify the height of the internal barrier (X5) -----------
-                 X6_internal_barrier_lower_barrier_distance,  # --> To specify the distance between the upper and lower internal barrier (X6)
+                 X6_internal_barrier_lower_barrier_distance,
+                 # --> To specify the distance between the upper and lower internal barrier (X6)
                  X7_rib_width_lower,  # --> To specify the rib with between internal barriers (X7) ---------------------
                  X8_internal_barrier_height_lower,  # --> To specify the height of the internal barrier (X8) -----------
                  X9_magnet_pocket_width,  # --> To specify the width of the magnet pocket (X9) -------------------------
                  X10_magnet_pocket_height,  # --> To specify the height of the magnet pocket (X10) ---------------------
                  X11_magnet_pocket_shift,  # --> To specify the magnet pocket shift (X11) ------------------------------
                  X12_distance_magnet_pocket_internal_barrier,  # --> To specify the distance between the magnet pocket and the internal barrier (X12)
-                 X13_magnet_width,  # --> To specify the width of the magnet (X13) -------------------------------------
-                 X14_magnet_height,  # --> To specify the height of the magnet (X14) -----------------------------------
-                 X15_magnet_shift,  # --> To specify the shift of the magnet (X15) -------------------------------------
-                 
+                 X13_distance_internal_barriers,  # --> To specify the distance between the internal barriers (X13)
+                 X14_magnet_width,  # --> To specify the width of the magnet (X14) -------------------------------------
+                 X15_magnet_height,  # --> To specify the height of the magnet (X15) -----------------------------------
+                 X16_magnet_shift,  # --> To specify the shift of the magnet (X16) -------------------------------------
+
                  ):
         # Define the output file path which is the name of the temporary simulation file -------------------------------
         # --> update_output_folder_name
@@ -98,9 +101,10 @@ class VariableParameters:
         self.X10_magnet_pocket_height = X10_magnet_pocket_height
         self.X11_magnet_pocket_shift = X11_magnet_pocket_shift
         self.X12_distance_magnet_pocket_internal_barrier = X12_distance_magnet_pocket_internal_barrier
-        self.X13_magnet_width = X13_magnet_width
-        self.X14_magnet_height = X14_magnet_height
-        self.X15_magnet_shift = X15_magnet_shift
+        self.X13_distance_internal_barriers = X13_distance_internal_barriers
+        self.X14_magnet_width = X14_magnet_width
+        self.X15_magnet_height = X15_magnet_height
+        self.X16_magnet_shift = X16_magnet_shift
 
         # Defines the rotor position -----------------------------------------------------------------------------------
         # --> update_rotor_position
@@ -218,13 +222,16 @@ def define_rotor_geometry(model: FemmProblem, var: VariableParameters):
 
         # Define cut-off barrier arcs ----------------------------------------------------------------------------------
         # Cut-off barrier in the middle --------------------------------------------------------------------------------
-        cut_off_barrier_middle_left = Node(22, 0).rotate_about(n0, 45 + var.X1_cut_off_barrier_opening_angle / 2, degrees=True)
-        cut_off_barrier_middle_right = Node(22, 0).rotate_about(n0, 45 - var.X1_cut_off_barrier_opening_angle / 2, degrees=True)
+        cut_off_barrier_middle_left = Node(22, 0).rotate_about(n0, 45 + var.X1_cut_off_barrier_opening_angle / 2,
+                                                               degrees=True)
+        cut_off_barrier_middle_right = Node(22, 0).rotate_about(n0, 45 - var.X1_cut_off_barrier_opening_angle / 2,
+                                                                degrees=True)
 
         rotor_geometry.add_node(cut_off_barrier_middle_left)
         rotor_geometry.add_node(cut_off_barrier_middle_right)
 
-        cut_off_barrier_middle_arc = Sector(cut_off_barrier_middle_left, cut_off_barrier_middle_right, var.X2_cut_off_barrier_curve_angle)
+        cut_off_barrier_middle_arc = Sector(cut_off_barrier_middle_left, cut_off_barrier_middle_right,
+                                            var.X2_cut_off_barrier_curve_angle)
 
         rotor_geometry.add_sector(cut_off_barrier_middle_arc)
 
@@ -240,7 +247,8 @@ def define_rotor_geometry(model: FemmProblem, var: VariableParameters):
         cut_off_barrier_left_half_lower = cut_off_barrier_middle_selection_point.rotate_about(n0, 45, degrees=True)
         rotor_geometry.add_node(cut_off_barrier_left_half_lower)
 
-        cut_off_barrier_left_half_arc = Sector(cut_off_barrier_left_half_lower, cut_off_barrier_left_half_upper, var.X2_cut_off_barrier_curve_angle / 2)
+        cut_off_barrier_left_half_arc = Sector(cut_off_barrier_left_half_lower, cut_off_barrier_left_half_upper,
+                                               var.X2_cut_off_barrier_curve_angle / 2)
         rotor_geometry.add_sector(cut_off_barrier_left_half_arc)
 
         rotor_geometry.add_node(cut_off_barrier_left_half_arc.center_point())  # <<-- FOR DEBUGGING!====================
@@ -253,11 +261,14 @@ def define_rotor_geometry(model: FemmProblem, var: VariableParameters):
         cut_off_barrier_right_half_lower = cut_off_barrier_middle_selection_point.rotate_about(n0, -45, degrees=True)
         rotor_geometry.add_node(cut_off_barrier_right_half_lower)
 
-        cut_off_barrier_right_half_arc = Sector(cut_off_barrier_right_half_upper, cut_off_barrier_right_half_lower, var.X2_cut_off_barrier_curve_angle / 2)
+        cut_off_barrier_right_half_arc = Sector(cut_off_barrier_right_half_upper, cut_off_barrier_right_half_lower,
+                                                var.X2_cut_off_barrier_curve_angle / 2)
         rotor_geometry.add_sector(cut_off_barrier_right_half_arc)
 
-        rotor_geometry.add_node(cut_off_barrier_right_half_arc.center_point())  # <<-- FOR DEBUGGING!====================
-        rotor_geometry.add_node(cut_off_barrier_right_half_arc.selection_point())  # <<-- FOR DEBUGGING!=================
+        rotor_geometry.add_node(
+            cut_off_barrier_right_half_arc.center_point())  # <<-- FOR DEBUGGING!====================
+        rotor_geometry.add_node(
+            cut_off_barrier_right_half_arc.selection_point())  # <<-- FOR DEBUGGING!=================
 
         # Lines of the symmetric boundary conditions -------------------------------------------------------------------
         # Left side ----------------------------------------------------------------------------------------------------
@@ -277,31 +288,48 @@ def define_rotor_geometry(model: FemmProblem, var: VariableParameters):
         # Definition of the rib between the internal barriers ----------------------------------------------------------
         # Upper internal barrier ---------------------------------------------------------------------------------------
         # Upper nodes --------------------------------------------------------------------------------------------------
-        upper_rib_base_node_distance_from_cut_off_barrier_center_point_upper = cut_off_barrier_middle_arc.selection_point().distance_to(cut_off_barrier_middle_arc.center_point()) + var.X3_cut_off_barrier_internal_barrier_distance
-        upper_rib_base_node_distance_from_zero_upper = cut_off_barrier_middle_arc.selection_point().distance_to(n0) - var.X3_cut_off_barrier_internal_barrier_distance
-        upper_rib_base_node_upper = Node(upper_rib_base_node_distance_from_zero_upper, 0).rotate_about(n0, 45, degrees=True)
+        upper_rib_base_node_distance_from_cut_off_barrier_center_point_upper = cut_off_barrier_middle_arc.selection_point().distance_to(
+            cut_off_barrier_middle_arc.center_point()) + var.X3_cut_off_barrier_internal_barrier_distance
+        upper_rib_base_node_distance_from_zero_upper = cut_off_barrier_middle_arc.selection_point().distance_to(
+            n0) - var.X3_cut_off_barrier_internal_barrier_distance
+        upper_rib_base_node_upper = Node(upper_rib_base_node_distance_from_zero_upper, 0).rotate_about(n0, 45,
+                                                                                                       degrees=True)
 
-        rotor_geometry.add_node(upper_rib_base_node_upper) # <<-- FOR DEBUGGING!========================================
+        rotor_geometry.add_node(
+            upper_rib_base_node_upper)  # <<-- FOR DEBUGGING!========================================
 
-        upper_rib_upper_rotation_angle = math.asin((var.X4_rib_width_upper/2) / upper_rib_base_node_distance_from_cut_off_barrier_center_point_upper)
+        upper_rib_upper_rotation_angle = math.asin(
+            (var.X4_rib_width_upper / 2) / upper_rib_base_node_distance_from_cut_off_barrier_center_point_upper)
 
-        upper_rib_upper_node_left = upper_rib_base_node_upper.rotate_about(cut_off_barrier_middle_arc.center_point(), - upper_rib_upper_rotation_angle, degrees=False)
-        upper_rib_upper_node_right = upper_rib_base_node_upper.rotate_about(cut_off_barrier_middle_arc.center_point(), upper_rib_upper_rotation_angle, degrees=False)
+        upper_rib_upper_node_left = upper_rib_base_node_upper.rotate_about(cut_off_barrier_middle_arc.center_point(),
+                                                                           - upper_rib_upper_rotation_angle,
+                                                                           degrees=False)
+        upper_rib_upper_node_right = upper_rib_base_node_upper.rotate_about(cut_off_barrier_middle_arc.center_point(),
+                                                                            upper_rib_upper_rotation_angle,
+                                                                            degrees=False)
 
         rotor_geometry.add_node(upper_rib_upper_node_left)
         rotor_geometry.add_node(upper_rib_upper_node_right)
 
         # Lower nodes --------------------------------------------------------------------------------------------------
-        upper_rib_base_node_distance_from_cut_off_barrier_center_point_lower = cut_off_barrier_middle_arc.selection_point().distance_to(cut_off_barrier_middle_arc.center_point()) + var.X5_internal_barrier_height_upper + var.X3_cut_off_barrier_internal_barrier_distance
-        upper_rib_base_node_distance_from_zero_lower = cut_off_barrier_middle_arc.selection_point().distance_to(n0) - var.X5_internal_barrier_height_upper - var.X3_cut_off_barrier_internal_barrier_distance
-        upper_rib_base_node_lower = Node(upper_rib_base_node_distance_from_zero_lower, 0).rotate_about(n0, 45, degrees=True)
+        upper_rib_base_node_distance_from_cut_off_barrier_center_point_lower = cut_off_barrier_middle_arc.selection_point().distance_to(
+            cut_off_barrier_middle_arc.center_point()) + var.X5_internal_barrier_height_upper + var.X3_cut_off_barrier_internal_barrier_distance
+        upper_rib_base_node_distance_from_zero_lower = cut_off_barrier_middle_arc.selection_point().distance_to(
+            n0) - var.X5_internal_barrier_height_upper - var.X3_cut_off_barrier_internal_barrier_distance
+        upper_rib_base_node_lower = Node(upper_rib_base_node_distance_from_zero_lower, 0).rotate_about(n0, 45,
+                                                                                                       degrees=True)
 
         rotor_geometry.add_node(upper_rib_base_node_lower)  # <<-- FOR DEBUGGING!=======================================
 
-        upper_rib_lower_rotation_angle = math.asin((var.X4_rib_width_upper / 2) / upper_rib_base_node_distance_from_cut_off_barrier_center_point_lower)
+        upper_rib_lower_rotation_angle = math.asin(
+            (var.X4_rib_width_upper / 2) / upper_rib_base_node_distance_from_cut_off_barrier_center_point_lower)
 
-        upper_rib_lower_node_left = upper_rib_base_node_lower.rotate_about(cut_off_barrier_middle_arc.center_point(), - upper_rib_lower_rotation_angle, degrees=False)
-        upper_rib_lower_node_right = upper_rib_base_node_lower.rotate_about(cut_off_barrier_middle_arc.center_point(), upper_rib_lower_rotation_angle, degrees=False)
+        upper_rib_lower_node_left = upper_rib_base_node_lower.rotate_about(cut_off_barrier_middle_arc.center_point(),
+                                                                           - upper_rib_lower_rotation_angle,
+                                                                           degrees=False)
+        upper_rib_lower_node_right = upper_rib_base_node_lower.rotate_about(cut_off_barrier_middle_arc.center_point(),
+                                                                            upper_rib_lower_rotation_angle,
+                                                                            degrees=False)
 
         rotor_geometry.add_node(upper_rib_lower_node_left)
         rotor_geometry.add_node(upper_rib_lower_node_right)
@@ -311,31 +339,47 @@ def define_rotor_geometry(model: FemmProblem, var: VariableParameters):
 
         # Lower internal barrier ---------------------------------------------------------------------------------------
         # Upper nodes --------------------------------------------------------------------------------------------------
-        lower_rib_base_node_distance_from_cut_off_barrier_center_point_upper = upper_rib_base_node_lower.distance_to(cut_off_barrier_middle_arc.center_point()) + var.X6_internal_barrier_lower_barrier_distance
-        lower_rib_base_node_distance_from_zero_upper = upper_rib_base_node_lower.distance_to(n0) - var.X6_internal_barrier_lower_barrier_distance
-        lower_rib_base_node_upper = Node(lower_rib_base_node_distance_from_zero_upper, 0).rotate_about(n0, 45, degrees=True)
+        lower_rib_base_node_distance_from_cut_off_barrier_center_point_upper = upper_rib_base_node_lower.distance_to(
+            cut_off_barrier_middle_arc.center_point()) + var.X6_internal_barrier_lower_barrier_distance
+        lower_rib_base_node_distance_from_zero_upper = upper_rib_base_node_lower.distance_to(
+            n0) - var.X6_internal_barrier_lower_barrier_distance
+        lower_rib_base_node_upper = Node(lower_rib_base_node_distance_from_zero_upper, 0).rotate_about(n0, 45,
+                                                                                                       degrees=True)
 
         rotor_geometry.add_node(lower_rib_base_node_upper)  # <<-- FOR DEBUGGING!=======================================
 
-        lower_rib_upper_rotation_angle = math.asin((var.X7_rib_width_lower / 2) / lower_rib_base_node_distance_from_cut_off_barrier_center_point_upper)
+        lower_rib_upper_rotation_angle = math.asin(
+            (var.X7_rib_width_lower / 2) / lower_rib_base_node_distance_from_cut_off_barrier_center_point_upper)
 
-        lower_rib_upper_node_left = lower_rib_base_node_upper.rotate_about(cut_off_barrier_middle_arc.center_point(), - lower_rib_upper_rotation_angle, degrees=False)
-        lower_rib_upper_node_right = lower_rib_base_node_upper.rotate_about(cut_off_barrier_middle_arc.center_point(), lower_rib_upper_rotation_angle, degrees=False)
+        lower_rib_upper_node_left = lower_rib_base_node_upper.rotate_about(cut_off_barrier_middle_arc.center_point(),
+                                                                           - lower_rib_upper_rotation_angle,
+                                                                           degrees=False)
+        lower_rib_upper_node_right = lower_rib_base_node_upper.rotate_about(cut_off_barrier_middle_arc.center_point(),
+                                                                            lower_rib_upper_rotation_angle,
+                                                                            degrees=False)
 
         rotor_geometry.add_node(lower_rib_upper_node_left)
         rotor_geometry.add_node(lower_rib_upper_node_right)
 
         # Lower nodes --------------------------------------------------------------------------------------------------
-        lower_rib_base_node_distance_from_cut_off_barrier_center_point_lower = upper_rib_base_node_lower.distance_to(cut_off_barrier_middle_arc.center_point()) + var.X8_internal_barrier_height_lower + var.X6_internal_barrier_lower_barrier_distance
-        lower_rib_base_node_distance_from_zero_lower = upper_rib_base_node_lower.distance_to(n0) - var.X8_internal_barrier_height_lower - var.X6_internal_barrier_lower_barrier_distance
-        lower_rib_base_node_lower = Node(lower_rib_base_node_distance_from_zero_lower, 0).rotate_about(n0, 45, degrees=True)
+        lower_rib_base_node_distance_from_cut_off_barrier_center_point_lower = upper_rib_base_node_lower.distance_to(
+            cut_off_barrier_middle_arc.center_point()) + var.X8_internal_barrier_height_lower + var.X6_internal_barrier_lower_barrier_distance
+        lower_rib_base_node_distance_from_zero_lower = upper_rib_base_node_lower.distance_to(
+            n0) - var.X8_internal_barrier_height_lower - var.X6_internal_barrier_lower_barrier_distance
+        lower_rib_base_node_lower = Node(lower_rib_base_node_distance_from_zero_lower, 0).rotate_about(n0, 45,
+                                                                                                       degrees=True)
 
-        rotor_geometry.add_node(lower_rib_base_node_lower)   # <<-- FOR DEBUGGING!======================================
+        rotor_geometry.add_node(lower_rib_base_node_lower)  # <<-- FOR DEBUGGING!======================================
 
-        lower_rib_lower_rotation_angle = math.asin((var.X7_rib_width_lower / 2) / lower_rib_base_node_distance_from_cut_off_barrier_center_point_lower)
+        lower_rib_lower_rotation_angle = math.asin(
+            (var.X7_rib_width_lower / 2) / lower_rib_base_node_distance_from_cut_off_barrier_center_point_lower)
 
-        lower_rib_lower_node_left = lower_rib_base_node_lower.rotate_about(cut_off_barrier_middle_arc.center_point(), - lower_rib_lower_rotation_angle, degrees=False)
-        lower_rib_lower_node_right = lower_rib_base_node_lower.rotate_about(cut_off_barrier_middle_arc.center_point(), lower_rib_lower_rotation_angle, degrees=False)
+        lower_rib_lower_node_left = lower_rib_base_node_lower.rotate_about(cut_off_barrier_middle_arc.center_point(),
+                                                                           - lower_rib_lower_rotation_angle,
+                                                                           degrees=False)
+        lower_rib_lower_node_right = lower_rib_base_node_lower.rotate_about(cut_off_barrier_middle_arc.center_point(),
+                                                                            lower_rib_lower_rotation_angle,
+                                                                            degrees=False)
 
         rotor_geometry.add_node(lower_rib_lower_node_left)
         rotor_geometry.add_node(lower_rib_lower_node_right)
@@ -346,176 +390,438 @@ def define_rotor_geometry(model: FemmProblem, var: VariableParameters):
         # Magnet pocket definition -------------------------------------------------------------------------------------
         # Magnet pocket left upper nodes--------------------------------------------------------------------------------
         # Left----------------------------------------------------------------------------------------------------------
-        magnet_pocket_left_base_node_upper = Line(cut_off_barrier_middle_left, cut_off_barrier_left_half_upper).selection_point()
+        magnet_pocket_left_base_node_upper = Line(cut_off_barrier_middle_left,
+                                                  cut_off_barrier_left_half_upper).selection_point()
 
         # rotor_geometry.add_node(magnet_pocket_left_base_node_upper)  # <<-- FOR DEBUGGING================================
 
-        width_magnet_pocket_left_upperleft = math.tan(np.radians(var.X9_magnet_pocket_width / 2)) * magnet_pocket_left_base_node_upper.distance_to(n0)
+        width_magnet_pocket_left_upperleft = math.tan(
+            np.radians(var.X9_magnet_pocket_width / 2)) * magnet_pocket_left_base_node_upper.distance_to(n0)
         # print(width_magnet_pocket_left_upperleft)  # <<-- FOR DEBUGGING=================================================
 
-        magnet_pocket_left_upperleft_x_no_shift = magnet_pocket_left_base_node_upper.x - math.sin(np.radians(67.5)) * width_magnet_pocket_left_upperleft
-        magnet_pocket_left_upperleft_y_no_shift = magnet_pocket_left_base_node_upper.y + math.cos(np.radians(67.5)) * width_magnet_pocket_left_upperleft
-        magnet_pocket_left_upperleft_no_shift = Node(magnet_pocket_left_upperleft_x_no_shift, magnet_pocket_left_upperleft_y_no_shift)
+        magnet_pocket_left_upperleft_x_no_shift = magnet_pocket_left_base_node_upper.x - math.sin(
+            np.radians(67.5)) * width_magnet_pocket_left_upperleft
+        magnet_pocket_left_upperleft_y_no_shift = magnet_pocket_left_base_node_upper.y + math.cos(
+            np.radians(67.5)) * width_magnet_pocket_left_upperleft
+        magnet_pocket_left_upperleft_no_shift = Node(magnet_pocket_left_upperleft_x_no_shift,
+                                                     magnet_pocket_left_upperleft_y_no_shift)
 
         # rotor_geometry.add_node(magnet_pocket_left_upperleft_no_shift)  # <<-- FOR DEBUGGING============================
 
         if var.X11_magnet_pocket_shift == 0:
             magnet_pocket_left_upperleft = magnet_pocket_left_upperleft_no_shift
         else:
-            magnet_pocket_left_upperleft_distance_shift = magnet_pocket_left_upperleft_no_shift.distance_to(n0) * math.sin(np.radians(var.X11_magnet_pocket_shift)) / math.sin(np.radians(90 - var.X11_magnet_pocket_shift - var.X9_magnet_pocket_width/2))
+            magnet_pocket_left_upperleft_distance_shift = magnet_pocket_left_upperleft_no_shift.distance_to(
+                n0) * math.sin(np.radians(var.X11_magnet_pocket_shift)) / math.sin(
+                np.radians(90 - var.X11_magnet_pocket_shift - var.X9_magnet_pocket_width / 2))
             # print(magnet_pocket_left_upperleft_distance_shift)  # <<-- FOR DEBUGGING====================================
 
-            magnet_pocket_left_upperleft_x = magnet_pocket_left_upperleft_x_no_shift - math.sin(np.radians(67.5)) * magnet_pocket_left_upperleft_distance_shift
-            magnet_pocket_left_upperleft_y = magnet_pocket_left_upperleft_y_no_shift + math.cos(np.radians(67.5)) * magnet_pocket_left_upperleft_distance_shift
+            magnet_pocket_left_upperleft_x = magnet_pocket_left_upperleft_x_no_shift - math.sin(
+                np.radians(67.5)) * magnet_pocket_left_upperleft_distance_shift
+            magnet_pocket_left_upperleft_y = magnet_pocket_left_upperleft_y_no_shift + math.cos(
+                np.radians(67.5)) * magnet_pocket_left_upperleft_distance_shift
             magnet_pocket_left_upperleft = Node(magnet_pocket_left_upperleft_x, magnet_pocket_left_upperleft_y)
 
-        rotor_geometry.add_node(magnet_pocket_left_upperleft)
+        a = magnet_pocket_left_upperleft.distance_to(n0)
+        b = 22
+        B = np.radians(
+            180 - np.degrees(math.atan2(magnet_pocket_left_upperleft.y, magnet_pocket_left_upperleft.x)) + 67.5)
+        A = math.asin((a * math.sin(B)) / b)
+        C = math.pi - A - B
+        c = math.sqrt(a ** 2 + b ** 2 - 2 * a * b * math.cos(C))
+
+        magnet_pocket_left_upperleft_on_radius_x = magnet_pocket_left_upperleft.x + math.sin(np.radians(90 - 67.5)) * c
+        magnet_pocket_left_upperleft_on_radius_y = magnet_pocket_left_upperleft.y + math.cos(np.radians(90 - 67.5)) * c
+        magnet_pocket_left_upperleft_on_radius = Node(magnet_pocket_left_upperleft_on_radius_x,
+                                                      magnet_pocket_left_upperleft_on_radius_y)
+
+        rotor_geometry.add_node(magnet_pocket_left_upperleft_on_radius)
 
         # Right----------------------------------------------------------------------------------------------------------
-        width_magnet_pocket_left_upperright = math.tan(np.radians(var.X9_magnet_pocket_width / 2)) * magnet_pocket_left_base_node_upper.distance_to(n0)
+        width_magnet_pocket_left_upperright = math.tan(
+            np.radians(var.X9_magnet_pocket_width / 2)) * magnet_pocket_left_base_node_upper.distance_to(n0)
         # print(width_magnet_pocket_left_upperright)  # <<-- FOR DEBUGGING================================================
 
-        magnet_pocket_left_upperright_x_no_shift = magnet_pocket_left_base_node_upper.x + math.sin(np.radians(67.5)) * width_magnet_pocket_left_upperright
-        magnet_pocket_left_upperright_y_no_shift = magnet_pocket_left_base_node_upper.y - math.cos(np.radians(67.5)) * width_magnet_pocket_left_upperright
-        magnet_pocket_left_upperright_no_shift = Node(magnet_pocket_left_upperright_x_no_shift,magnet_pocket_left_upperright_y_no_shift)
+        magnet_pocket_left_upperright_x_no_shift = magnet_pocket_left_base_node_upper.x + math.sin(
+            np.radians(67.5)) * width_magnet_pocket_left_upperright
+        magnet_pocket_left_upperright_y_no_shift = magnet_pocket_left_base_node_upper.y - math.cos(
+            np.radians(67.5)) * width_magnet_pocket_left_upperright
+        magnet_pocket_left_upperright_no_shift = Node(magnet_pocket_left_upperright_x_no_shift,
+                                                      magnet_pocket_left_upperright_y_no_shift)
 
         # rotor_geometry.add_node(magnet_pocket_left_upperright_no_shift)  # <<-- FOR DEBUGGING===========================
 
         if var.X11_magnet_pocket_shift == 0:
             magnet_pocket_left_upperright = magnet_pocket_left_upperright_no_shift
         else:
-            magnet_pocket_left_upperright_distance_shift = magnet_pocket_left_upperright_no_shift.distance_to(n0) * math.sin(np.radians(var.X11_magnet_pocket_shift)) / math.sin(np.radians(90 - var.X11_magnet_pocket_shift - var.X9_magnet_pocket_width/2))
+            magnet_pocket_left_upperright_distance_shift = magnet_pocket_left_upperright_no_shift.distance_to(
+                n0) * math.sin(np.radians(var.X11_magnet_pocket_shift)) / math.sin(
+                np.radians(90 - var.X11_magnet_pocket_shift - var.X9_magnet_pocket_width / 2))
             # print(magnet_pocket_left_upperright_distance_shift)  # <<-- FOR DEBUGGING===================================
 
-            magnet_pocket_left_upperright_x = magnet_pocket_left_upperright_x_no_shift - math.sin(np.radians(67.5)) * magnet_pocket_left_upperright_distance_shift
-            magnet_pocket_left_upperright_y = magnet_pocket_left_upperright_y_no_shift + math.cos(np.radians(67.5)) * magnet_pocket_left_upperright_distance_shift
+            magnet_pocket_left_upperright_x = magnet_pocket_left_upperright_x_no_shift - math.sin(
+                np.radians(67.5)) * magnet_pocket_left_upperright_distance_shift
+            magnet_pocket_left_upperright_y = magnet_pocket_left_upperright_y_no_shift + math.cos(
+                np.radians(67.5)) * magnet_pocket_left_upperright_distance_shift
             magnet_pocket_left_upperright = Node(magnet_pocket_left_upperright_x, magnet_pocket_left_upperright_y)
 
-        rotor_geometry.add_node(magnet_pocket_left_upperright)
+        a = magnet_pocket_left_upperright.distance_to(n0)
+        b = 22
+        B = np.radians(
+            180 - np.degrees(math.atan2(magnet_pocket_left_upperright.y, magnet_pocket_left_upperright.x)) + 67.5)
+        A = math.asin((a * math.sin(B)) / b)
+        C = math.pi - A - B
+        c = math.sqrt(a ** 2 + b ** 2 - 2 * a * b * math.cos(C))
+
+        magnet_pocket_left_upperright_on_radius_x = magnet_pocket_left_upperright.x + math.sin(
+            np.radians(90 - 67.5)) * c
+        magnet_pocket_left_upperright_on_radius_y = magnet_pocket_left_upperright.y + math.cos(
+            np.radians(90 - 67.5)) * c
+        magnet_pocket_left_upperright_on_radius = Node(magnet_pocket_left_upperright_on_radius_x,
+                                                       magnet_pocket_left_upperright_on_radius_y)
+
+        rotor_geometry.add_node(magnet_pocket_left_upperright_on_radius)
 
         # Magnet pocket left bottom nodes-------------------------------------------------------------------------------
         # Left----------------------------------------------------------------------------------------------------------
-        magnet_pocket_left_lowerleft_x_no_shift = magnet_pocket_left_upperleft_no_shift.x - math.sin(np.radians(90-67.5)) * var.X10_magnet_pocket_height
-        magnet_pocket_left_lowerleft_y_no_shift = magnet_pocket_left_upperleft_no_shift.y - math.cos(np.radians(90-67.5)) * var.X10_magnet_pocket_height
-        magnet_pocket_left_lowerleft_no_shift = Node(magnet_pocket_left_lowerleft_x_no_shift, magnet_pocket_left_lowerleft_y_no_shift)
+        magnet_pocket_left_lowerleft_x_no_shift = magnet_pocket_left_upperleft_no_shift.x - math.sin(
+            np.radians(90 - 67.5)) * var.X10_magnet_pocket_height
+        magnet_pocket_left_lowerleft_y_no_shift = magnet_pocket_left_upperleft_no_shift.y - math.cos(
+            np.radians(90 - 67.5)) * var.X10_magnet_pocket_height
+        magnet_pocket_left_lowerleft_no_shift = Node(magnet_pocket_left_lowerleft_x_no_shift,
+                                                     magnet_pocket_left_lowerleft_y_no_shift)
 
         # rotor_geometry.add_node(magnet_pocket_left_lowerleft_no_shift)  # <<-- FOR DEBUGGING============================
 
         if var.X11_magnet_pocket_shift == 0:
             magnet_pocket_left_lowerleft = magnet_pocket_left_lowerleft_no_shift
         else:
-            magnet_pocket_left_lowerleft_x = magnet_pocket_left_upperleft_x - math.sin(np.radians(90-67.5)) * var.X10_magnet_pocket_height
-            magnet_pocket_left_lowerleft_y = magnet_pocket_left_upperleft_y - math.cos(np.radians(90-67.5)) * var.X10_magnet_pocket_height
+            magnet_pocket_left_lowerleft_x = magnet_pocket_left_upperleft_x - math.sin(
+                np.radians(90 - 67.5)) * var.X10_magnet_pocket_height
+            magnet_pocket_left_lowerleft_y = magnet_pocket_left_upperleft_y - math.cos(
+                np.radians(90 - 67.5)) * var.X10_magnet_pocket_height
             magnet_pocket_left_lowerleft = Node(magnet_pocket_left_lowerleft_x, magnet_pocket_left_lowerleft_y)
+
+        correction = magnet_pocket_left_lowerleft.distance_to(
+            magnet_pocket_left_upperleft_on_radius) - var.X10_magnet_pocket_height
+        magnet_pocket_left_lowerleft_x_corrected = magnet_pocket_left_lowerleft.x + math.sin(
+            np.radians(90 - 67.5)) * correction
+        magnet_pocket_left_lowerleft_y_corrected = magnet_pocket_left_lowerleft.y + math.cos(
+            np.radians(90 - 67.5)) * correction
+        magnet_pocket_left_lowerleft_corrected = Node(magnet_pocket_left_lowerleft_x_corrected,
+                                                      magnet_pocket_left_lowerleft_y_corrected)
+
+        magnet_pocket_left_lowerleft = magnet_pocket_left_lowerleft_corrected
 
         rotor_geometry.add_node(magnet_pocket_left_lowerleft)
 
         # Right---------------------------------------------------------------------------------------------------------
-        magnet_pocket_left_lowerright_x_no_shift = magnet_pocket_left_upperright_no_shift.x - math.sin(np.radians(90 - 67.5)) * var.X10_magnet_pocket_height
-        magnet_pocket_left_lowerright_y_no_shift = magnet_pocket_left_upperright_no_shift.y - math.cos(np.radians(90 - 67.5)) * var.X10_magnet_pocket_height
-        magnet_pocket_left_lowerright_no_shift = Node(magnet_pocket_left_lowerright_x_no_shift,magnet_pocket_left_lowerright_y_no_shift)
+        magnet_pocket_left_lowerright_x_no_shift = magnet_pocket_left_upperright_no_shift.x - math.sin(
+            np.radians(90 - 67.5)) * var.X10_magnet_pocket_height
+        magnet_pocket_left_lowerright_y_no_shift = magnet_pocket_left_upperright_no_shift.y - math.cos(
+            np.radians(90 - 67.5)) * var.X10_magnet_pocket_height
+        magnet_pocket_left_lowerright_no_shift = Node(magnet_pocket_left_lowerright_x_no_shift,
+                                                      magnet_pocket_left_lowerright_y_no_shift)
 
         # rotor_geometry.add_node(magnet_pocket_left_lowerright_no_shift)  # <<-- FOR DEBUGGING============================
 
         if var.X11_magnet_pocket_shift == 0:
             magnet_pocket_left_lowerright = magnet_pocket_left_lowerright_no_shift
         else:
-            magnet_pocket_left_lowerright_x = magnet_pocket_left_upperright_x - math.sin(np.radians(90 - 67.5)) * var.X10_magnet_pocket_height
-            magnet_pocket_left_lowerright_y = magnet_pocket_left_upperright_y - math.cos(np.radians(90 - 67.5)) * var.X10_magnet_pocket_height
+            magnet_pocket_left_lowerright_x = magnet_pocket_left_upperright_x - math.sin(
+                np.radians(90 - 67.5)) * var.X10_magnet_pocket_height
+            magnet_pocket_left_lowerright_y = magnet_pocket_left_upperright_y - math.cos(
+                np.radians(90 - 67.5)) * var.X10_magnet_pocket_height
             magnet_pocket_left_lowerright = Node(magnet_pocket_left_lowerright_x, magnet_pocket_left_lowerright_y)
+
+        magnet_pocket_left_lowerright_x_corrected = magnet_pocket_left_lowerright.x + math.sin(
+            np.radians(90 - 67.5)) * correction
+        magnet_pocket_left_lowerright_y_corrected = magnet_pocket_left_lowerright.y + math.cos(
+            np.radians(90 - 67.5)) * correction
+        magnet_pocket_left_lowerright_corrected = Node(magnet_pocket_left_lowerright_x_corrected,
+                                                       magnet_pocket_left_lowerright_y_corrected)
+
+        magnet_pocket_left_lowerright = magnet_pocket_left_lowerright_corrected
 
         rotor_geometry.add_node(magnet_pocket_left_lowerright)
 
-        rotor_geometry.add_line(Line(magnet_pocket_left_upperleft, cut_off_barrier_left_half_upper))
-        rotor_geometry.add_line(Line(magnet_pocket_left_upperleft, magnet_pocket_left_lowerleft))
-        rotor_geometry.add_line(Line(magnet_pocket_left_upperright, cut_off_barrier_middle_left))
-        rotor_geometry.add_line(Line(magnet_pocket_left_upperright, magnet_pocket_left_lowerright))
+        # Lines and arcs for magnet pocket left-------------------------------------------------------------------------
+        rotor_geometry.add_line(Line(magnet_pocket_left_upperleft_on_radius, magnet_pocket_left_lowerleft))
+        rotor_geometry.add_line(Line(magnet_pocket_left_upperright_on_radius, magnet_pocket_left_lowerright))
 
         magnet_pocket_baseline = Line(magnet_pocket_left_lowerleft, magnet_pocket_left_lowerright)
         rotor_geometry.add_line(magnet_pocket_baseline)
 
-        # # Magnet pocket right -------------------------------------------------------------------------------------------
-        # rotor_pocket_right_base_node_upper = Line(cut_off_barrier_middle_right, cut_off_barrier_right_half_upper).selection_point()
-        #
-        # # rotor_geometry.add_node(rotor_pocket_right_base_node_upper)  # <<-- FOR DEBUGGING===============================
-        #
-        # width_magnet_pocket_right_upperleft = math.tan(np.radians(var.X9_magnet_pocket_width / 2)) * rotor_pocket_right_base_node_upper.distance_to(n0)
-        # # print(width_magnet_pocket_left_upperleft)  # <<-- FOR DEBUGGING=================================================
-        #
-        # magnet_pocket_right_upperleft_x_no_shift = rotor_pocket_right_base_node_upper.x - math.sin(np.radians(22.5)) * width_magnet_pocket_right_upperleft
-        # magnet_pocket_right_upperleft_y_no_shift = rotor_pocket_right_base_node_upper.y + math.cos(np.radians(22.5)) * width_magnet_pocket_right_upperleft
-        # magnet_pocket_right_upperleft_no_shift = Node(magnet_pocket_right_upperleft_x_no_shift, magnet_pocket_right_upperleft_y_no_shift)
-        #
-        # # rotor_geometry.add_node(magnet_pocket_right_upperleft_no_shift)  # <<-- FOR DEBUGGING===========================
-        #
-        # if var.X11_magnet_pocket_shift == 0:
-        #     rotor_geometry.add_node(magnet_pocket_right_upperleft_no_shift)
-        # else:
-        #     magnet_pocket_right_upperleft_distance_shift = magnet_pocket_right_upperleft_no_shift.distance_to(n0) * math.sin(np.radians(var.X11_magnet_pocket_shift)) / math.sin(np.radians(90 - var.X11_magnet_pocket_shift - var.X9_magnet_pocket_width / 2))
-        #     # print(magnet_pocket_right_upperleft_distance_shift)  # <<-- FOR DEBUGGING===================================
-        #
-        #     magnet_pocket_right_upperleft_x = magnet_pocket_right_upperleft_x_no_shift - math.sin(np.radians(22.5)) * magnet_pocket_right_upperleft_distance_shift
-        #     magnet_pocket_right_upperleft_y = magnet_pocket_right_upperleft_y_no_shift + math.cos(np.radians(22.5)) * magnet_pocket_right_upperleft_distance_shift
-        #
-        #     rotor_geometry.add_node(Node(magnet_pocket_right_upperleft_x, magnet_pocket_right_upperleft_y))
-        #
-        # width_magnet_pocket_right_upperright = math.tan(np.radians(var.X9_magnet_pocket_width / 2)) * rotor_pocket_right_base_node_upper.distance_to(n0)
-        # # print(width_magnet_pocket_right_upperright)  # <<-- FOR DEBUGGING===============================================
-        #
-        # magnet_pocket_right_upperright_x_no_shift = rotor_pocket_right_base_node_upper.x + math.sin(np.radians(22.5)) * width_magnet_pocket_right_upperright
-        # magnet_pocket_right_upperright_y_no_shift = rotor_pocket_right_base_node_upper.y - math.cos(np.radians(22.5)) * width_magnet_pocket_right_upperright
-        # magnet_pocket_right_upperright_no_shift = Node(magnet_pocket_right_upperright_x_no_shift, magnet_pocket_right_upperright_y_no_shift)
-        #
-        # # rotor_geometry.add_node(magnet_pocket_right_upperright_no_shift)  # <<-- FOR DEBUGGING==========================
-        #
-        # if var.X11_magnet_pocket_shift == 0:
-        #     rotor_geometry.add_node(magnet_pocket_right_upperright_no_shift)
-        # else:
-        #     magnet_pocket_right_upperright_distance_shift = magnet_pocket_right_upperright_no_shift.distance_to(n0) * math.sin(np.radians(var.X11_magnet_pocket_shift)) / math.sin(np.radians(90 - var.X11_magnet_pocket_shift - var.X9_magnet_pocket_width / 2))
-        #     # print(magnet_pocket_right_upperright_distance_shift)  # <<-- FOR DEBUGGING==================================
-        #
-        #     magnet_pocket_right_upperright_x = magnet_pocket_right_upperright_x_no_shift - math.sin(np.radians(22.5)) * magnet_pocket_right_upperright_distance_shift
-        #     magnet_pocket_right_upperright_y = magnet_pocket_right_upperright_y_no_shift + math.cos(np.radians(22.5)) * magnet_pocket_right_upperright_distance_shift
-        #
-        #     rotor_geometry.add_node(Node(magnet_pocket_right_upperright_x, magnet_pocket_right_upperright_y))
-        #
-        #     if magnet_pocket_right_upperright_distance_shift == magnet_pocket_right_upperleft_distance_shift:
-        #         raise Exception('Problem with shifting!')
+        rotor_geometry.add_arc(CircleArc(magnet_pocket_left_upperleft_on_radius, n0, cut_off_barrier_left_half_upper))
+        rotor_geometry.add_arc(CircleArc(cut_off_barrier_middle_left, n0, magnet_pocket_left_upperright_on_radius))
 
-        # Upper inner flux barrier left --------------------------------------------------------------------------------
+        #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        # Magnet pocket right upper nodes--------------------------------------------------------------------------------
+        # Left----------------------------------------------------------------------------------------------------------
+        magnet_pocket_right_base_node_upper = Line(cut_off_barrier_middle_right,
+                                                   cut_off_barrier_right_half_upper).selection_point()
 
+        # rotor_geometry.add_node(magnet_pocket_right_base_node_upper)  # <<-- FOR DEBUGGING================================
 
-        # co_r = co_e.rotate_about(n0, -45, degrees=True)
-        # co_l = co_s.rotate_about(n0, 45, degrees=True)
-        #
-        # rotor_geo.add_node(co_s)
-        # rotor_geo.add_node(co_e)
-        # rotor_geo.add_node(co_r)
-        # rotor_geo.add_node(co_l)
-        #
-        # co_arc = Sector(co_e, co_s, var.deg_co)
-        #
-        # rotor_geo.add_sector(co_arc)
-        #
-        # co_arc_ep = co_arc.selection_point()
-        # co_arc_ep_r = co_arc_ep.rotate_about(n0, -45, degrees=True)
-        # co_arc_ep_l = co_arc_ep.rotate_about(n0, 45, degrees=True)
-        #
-        # rotor_geo.add_node(co_arc_ep_r)
-        # rotor_geo.add_node(co_arc_ep_l)
-        #
-        # co_arcr = Sector(co_r, co_arc_ep_r, var.deg_co / 2)
-        # co_arcl = Sector(co_arc_ep_l, co_l, var.deg_co / 2)
-        #
-        # rotor_geo.add_sector(co_arcr)
-        # rotor_geo.add_sector(co_arcl)
+        width_magnet_pocket_right_upperleft = math.tan(
+            np.radians(var.X9_magnet_pocket_width / 2)) * magnet_pocket_right_base_node_upper.distance_to(n0)
+        # print(width_magnet_pocket_right_upperleft)  # <<-- FOR DEBUGGING=================================================
+
+        magnet_pocket_right_upperleft_x_no_shift = magnet_pocket_right_base_node_upper.x - math.sin(
+            np.radians(22.5)) * width_magnet_pocket_right_upperleft
+        magnet_pocket_right_upperleft_y_no_shift = magnet_pocket_right_base_node_upper.y + math.cos(
+            np.radians(22.5)) * width_magnet_pocket_right_upperleft
+        magnet_pocket_right_upperleft_no_shift = Node(magnet_pocket_right_upperleft_x_no_shift,
+                                                      magnet_pocket_right_upperleft_y_no_shift)
+
+        # rotor_geometry.add_node(magnet_pocket_right_upperleft_no_shift)  # <<-- FOR DEBUGGING============================
+
+        if var.X11_magnet_pocket_shift == 0:
+            magnet_pocket_right_upperleft = magnet_pocket_right_upperleft_no_shift
+        else:
+            magnet_pocket_right_upperleft_distance_shift = magnet_pocket_right_upperleft_no_shift.distance_to(
+                n0) * math.sin(np.radians(var.X11_magnet_pocket_shift)) / math.sin(
+                np.radians(90 - var.X11_magnet_pocket_shift - var.X9_magnet_pocket_width / 2))
+            # print(magnet_pocket_right_upperleft_distance_shift)  # <<-- FOR DEBUGGING====================================
+
+            magnet_pocket_right_upperleft_x = magnet_pocket_right_upperleft_x_no_shift - math.sin(
+                np.radians(22.5)) * magnet_pocket_right_upperleft_distance_shift
+            magnet_pocket_right_upperleft_y = magnet_pocket_right_upperleft_y_no_shift + math.cos(
+                np.radians(22.5)) * magnet_pocket_right_upperleft_distance_shift
+            magnet_pocket_right_upperleft = Node(magnet_pocket_right_upperleft_x, magnet_pocket_right_upperleft_y)
+
+        a = magnet_pocket_right_upperleft.distance_to(n0)
+        b = 22
+        B = np.radians(
+            180 - np.degrees(math.atan2(magnet_pocket_right_upperleft.y, magnet_pocket_right_upperleft.x)) + 22.5)
+        A = math.asin((a * math.sin(B)) / b)
+        C = math.pi - A - B
+        c = math.sqrt(a ** 2 + b ** 2 - 2 * a * b * math.cos(C))
+
+        magnet_pocket_right_upperleft_on_radius_x = magnet_pocket_right_upperleft.x + math.sin(
+            np.radians(90 - 22.5)) * c
+        magnet_pocket_right_upperleft_on_radius_y = magnet_pocket_right_upperleft.y + math.cos(
+            np.radians(90 - 22.5)) * c
+        magnet_pocket_right_upperleft_on_radius = Node(magnet_pocket_right_upperleft_on_radius_x,
+                                                       magnet_pocket_right_upperleft_on_radius_y)
+
+        rotor_geometry.add_node(magnet_pocket_right_upperleft_on_radius)
+
+        # Right----------------------------------------------------------------------------------------------------------
+        width_magnet_pocket_right_upperright = math.tan(
+            np.radians(var.X9_magnet_pocket_width / 2)) * magnet_pocket_right_base_node_upper.distance_to(n0)
+        # print(width_magnet_pocket_right_upperright)  # <<-- FOR DEBUGGING================================================
+
+        magnet_pocket_right_upperright_x_no_shift = magnet_pocket_right_base_node_upper.x + math.sin(
+            np.radians(22.5)) * width_magnet_pocket_right_upperright
+        magnet_pocket_right_upperright_y_no_shift = magnet_pocket_right_base_node_upper.y - math.cos(
+            np.radians(22.5)) * width_magnet_pocket_right_upperright
+        magnet_pocket_right_upperright_no_shift = Node(magnet_pocket_right_upperright_x_no_shift,
+                                                       magnet_pocket_right_upperright_y_no_shift)
+
+        # rotor_geometry.add_node(magnet_pocket_right_upperright_no_shift)  # <<-- FOR DEBUGGING===========================
+
+        if var.X11_magnet_pocket_shift == 0:
+            magnet_pocket_right_upperright = magnet_pocket_right_upperright_no_shift
+        else:
+            magnet_pocket_right_upperright_distance_shift = magnet_pocket_right_upperright_no_shift.distance_to(
+                n0) * math.sin(np.radians(var.X11_magnet_pocket_shift)) / math.sin(
+                np.radians(90 - var.X11_magnet_pocket_shift - var.X9_magnet_pocket_width / 2))
+            # print(magnet_pocket_right_upperright_distance_shift)  # <<-- FOR DEBUGGING===================================
+
+            magnet_pocket_right_upperright_x = magnet_pocket_right_upperright_x_no_shift - math.sin(
+                np.radians(22.5)) * magnet_pocket_right_upperright_distance_shift
+            magnet_pocket_right_upperright_y = magnet_pocket_right_upperright_y_no_shift + math.cos(
+                np.radians(22.5)) * magnet_pocket_right_upperright_distance_shift
+            magnet_pocket_right_upperright = Node(magnet_pocket_right_upperright_x, magnet_pocket_right_upperright_y)
+
+        a = magnet_pocket_right_upperright.distance_to(n0)
+        b = 22
+        B = np.radians(
+            180 - np.degrees(math.atan2(magnet_pocket_right_upperright.y, magnet_pocket_right_upperright.x)) + 22.5)
+        A = math.asin((a * math.sin(B)) / b)
+        C = math.pi - A - B
+        c = math.sqrt(a ** 2 + b ** 2 - 2 * a * b * math.cos(C))
+
+        magnet_pocket_right_upperright_on_radius_x = magnet_pocket_right_upperright.x + math.sin(
+            np.radians(90 - 22.5)) * c
+        magnet_pocket_right_upperright_on_radius_y = magnet_pocket_right_upperright.y + math.cos(
+            np.radians(90 - 22.5)) * c
+        magnet_pocket_right_upperright_on_radius = Node(magnet_pocket_right_upperright_on_radius_x,
+                                                        magnet_pocket_right_upperright_on_radius_y)
+
+        rotor_geometry.add_node(magnet_pocket_right_upperright_on_radius)
+
+        # Magnet pocket right bottom nodes-------------------------------------------------------------------------------
+        # Left----------------------------------------------------------------------------------------------------------
+        magnet_pocket_right_lowerleft_x_no_shift = magnet_pocket_right_upperleft_no_shift.x - math.sin(
+            np.radians(90 - 22.5)) * var.X10_magnet_pocket_height
+        magnet_pocket_right_lowerleft_y_no_shift = magnet_pocket_right_upperleft_no_shift.y - math.cos(
+            np.radians(90 - 22.5)) * var.X10_magnet_pocket_height
+        magnet_pocket_right_lowerleft_no_shift = Node(magnet_pocket_right_lowerleft_x_no_shift,
+                                                      magnet_pocket_right_lowerleft_y_no_shift)
+
+        # rotor_geometry.add_node(magnet_pocket_right_lowerleft_no_shift)  # <<-- FOR DEBUGGING============================
+
+        if var.X11_magnet_pocket_shift == 0:
+            magnet_pocket_right_lowerleft = magnet_pocket_right_lowerleft_no_shift
+        else:
+            magnet_pocket_right_lowerleft_x = magnet_pocket_right_upperleft_x - math.sin(
+                np.radians(90 - 22.5)) * var.X10_magnet_pocket_height
+            magnet_pocket_right_lowerleft_y = magnet_pocket_right_upperleft_y - math.cos(
+                np.radians(90 - 22.5)) * var.X10_magnet_pocket_height
+            magnet_pocket_right_lowerleft = Node(magnet_pocket_right_lowerleft_x, magnet_pocket_right_lowerleft_y)
+
+        correction = magnet_pocket_right_lowerleft.distance_to(
+            magnet_pocket_right_upperleft_on_radius) - var.X10_magnet_pocket_height
+        magnet_pocket_right_lowerleft_x_corrected = magnet_pocket_right_lowerleft.x + math.sin(
+            np.radians(90 - 22.5)) * correction
+        magnet_pocket_right_lowerleft_y_corrected = magnet_pocket_right_lowerleft.y + math.cos(
+            np.radians(90 - 22.5)) * correction
+        magnet_pocket_right_lowerleft_corrected = Node(magnet_pocket_right_lowerleft_x_corrected,
+                                                       magnet_pocket_right_lowerleft_y_corrected)
+
+        magnet_pocket_right_lowerleft = magnet_pocket_right_lowerleft_corrected
+
+        rotor_geometry.add_node(magnet_pocket_right_lowerleft)
+
+        # Right---------------------------------------------------------------------------------------------------------
+        magnet_pocket_right_lowerright_x_no_shift = magnet_pocket_right_upperright_no_shift.x - math.sin(
+            np.radians(90 - 22.5)) * var.X10_magnet_pocket_height
+        magnet_pocket_right_lowerright_y_no_shift = magnet_pocket_right_upperright_no_shift.y - math.cos(
+            np.radians(90 - 22.5)) * var.X10_magnet_pocket_height
+        magnet_pocket_right_lowerright_no_shift = Node(magnet_pocket_right_lowerright_x_no_shift,
+                                                       magnet_pocket_right_lowerright_y_no_shift)
+
+        # rotor_geometry.add_node(magnet_pocket_right_lowerright_no_shift)  # <<-- FOR DEBUGGING============================
+
+        if var.X11_magnet_pocket_shift == 0:
+            magnet_pocket_right_lowerright = magnet_pocket_right_lowerright_no_shift
+        else:
+            magnet_pocket_right_lowerright_x = magnet_pocket_right_upperright_x - math.sin(
+                np.radians(90 - 22.5)) * var.X10_magnet_pocket_height
+            magnet_pocket_right_lowerright_y = magnet_pocket_right_upperright_y - math.cos(
+                np.radians(90 - 22.5)) * var.X10_magnet_pocket_height
+            magnet_pocket_right_lowerright = Node(magnet_pocket_right_lowerright_x, magnet_pocket_right_lowerright_y)
+
+        magnet_pocket_right_lowerright_x_corrected = magnet_pocket_right_lowerright.x + math.sin(
+            np.radians(90 - 22.5)) * correction
+        magnet_pocket_right_lowerright_y_corrected = magnet_pocket_right_lowerright.y + math.cos(
+            np.radians(90 - 22.5)) * correction
+        magnet_pocket_right_lowerright_corrected = Node(magnet_pocket_right_lowerright_x_corrected,
+                                                        magnet_pocket_right_lowerright_y_corrected)
+
+        magnet_pocket_right_lowerright = magnet_pocket_right_lowerright_corrected
+
+        rotor_geometry.add_node(magnet_pocket_right_lowerright)
+
+        # Lines and arcs for magnet pocket right------------------------------------------------------------------------
+        rotor_geometry.add_line(Line(magnet_pocket_right_upperleft_on_radius, magnet_pocket_right_lowerleft))
+        rotor_geometry.add_line(Line(magnet_pocket_right_upperright_on_radius, magnet_pocket_right_lowerright))
+
+        magnet_pocket_baseline = Line(magnet_pocket_right_lowerleft, magnet_pocket_right_lowerright)
+        rotor_geometry.add_line(magnet_pocket_baseline)
+
+        rotor_geometry.add_arc(
+            CircleArc(cut_off_barrier_right_half_upper, n0, magnet_pocket_right_upperright_on_radius))
+        rotor_geometry.add_arc(CircleArc(magnet_pocket_right_upperleft_on_radius, n0, cut_off_barrier_middle_right))
+
+        # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        # TOP FLUX BARRIER %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        # Left upper node ----------------------------------------------------------------------------------------------
+
+        top_internal_barrier_distance_left_x = magnet_pocket_left_lowerright.x - math.sin(
+            np.radians(90 - 67.5)) * var.X12_distance_magnet_pocket_internal_barrier
+        top_internal_barrier_distance_left_y = magnet_pocket_left_lowerright.y - math.cos(
+            np.radians(90 - 67.5)) * var.X12_distance_magnet_pocket_internal_barrier
+        top_internal_barrier_distance_left = Node(top_internal_barrier_distance_left_x,
+                                                  top_internal_barrier_distance_left_y)
+
+        # rotor_geometry.add_node(
+        #     top_internal_barrier_distance_left)  # <<-- FOR DEBUGGING================================
+
+        a = top_internal_barrier_distance_left.distance_to(cut_off_barrier_middle_arc.center_point())
+        b = top_internal_barrier_distance_left.distance_to(upper_rib_base_node_upper)
+        c = upper_rib_base_node_upper.distance_to(cut_off_barrier_middle_arc.center_point())
+
+        B = math.acos((a**2 + c**2 - b**2) / (2*a*c))
+
+        top_internal_barrier_upper_left = upper_rib_base_node_upper.rotate_about(
+            cut_off_barrier_middle_arc.center_point(), (-1) * B, degrees=False)
+
+        # rotor_geometry.add_node(top_internal_barrier_upper_left)  # <<-- FOR DEBUGGING================================
+
+        n = upper_rib_base_node_upper.distance_to(cut_off_barrier_middle_arc.center_point())
+        m = top_internal_barrier_distance_left.distance_to(cut_off_barrier_middle_arc.center_point())
+        N = np.radians(90-67.5) + math.atan2(
+            cut_off_barrier_middle_arc.center_point().y - top_internal_barrier_distance_left.y,
+            cut_off_barrier_middle_arc.center_point().x - top_internal_barrier_distance_left.x)
+        M = math.pi - math.asin(math.sin(N) * m / n)
+        L = math.pi - N - M
+        # l = np.sqrt(n**2+m**2-2*n*m*math.cos(L))
+
+        top_internal_barrier_upper_left_corrected = top_internal_barrier_upper_left.rotate_about(
+            cut_off_barrier_middle_arc.center_point(), L, degrees=False)
+
+        rotor_geometry.add_node(top_internal_barrier_upper_left_corrected)
+
+        # Left lowe node ----------------------------------------------------------------------------------------------
+
+        a = top_internal_barrier_distance_left.distance_to(cut_off_barrier_middle_arc.center_point())
+        b = top_internal_barrier_distance_left.distance_to(upper_rib_base_node_lower)
+        c = upper_rib_base_node_lower.distance_to(cut_off_barrier_middle_arc.center_point())
+
+        B = math.acos((a ** 2 + c ** 2 - b ** 2) / (2 * a * c))
+
+        top_internal_barrier_lower_left = upper_rib_base_node_lower.rotate_about(
+            cut_off_barrier_middle_arc.center_point(), (-1) * B, degrees=False)
+
+        # rotor_geometry.add_node(top_internal_barrier_lower_left)  # <<-- FOR DEBUGGING================================
+
+        n = upper_rib_base_node_lower.distance_to(cut_off_barrier_middle_arc.center_point())
+        m = top_internal_barrier_distance_left.distance_to(cut_off_barrier_middle_arc.center_point())
+        N = np.radians(90 - 67.5) + math.atan2(
+            cut_off_barrier_middle_arc.center_point().y - top_internal_barrier_distance_left.y,
+            cut_off_barrier_middle_arc.center_point().x - top_internal_barrier_distance_left.x)
+        M = math.pi - math.asin(math.sin(N) * m / n)
+        L = math.pi - N - M
+        l = np.sqrt(n ** 2 + m ** 2 - 2 * n * m * math.cos(L))
+
+        top_internal_barrier_lower_left_corrected = top_internal_barrier_lower_left.rotate_about(
+            cut_off_barrier_middle_arc.center_point(), L, degrees=False)
+
+        rotor_geometry.add_node(top_internal_barrier_lower_left_corrected)
+
+        top_internal_barrier_left_upper_arc = CircleArc(top_internal_barrier_upper_left_corrected,
+                                                        cut_off_barrier_middle_arc.center_point(),
+                                                        upper_rib_upper_node_left)
+
+        top_internal_barrier_left_lower_arc = CircleArc(top_internal_barrier_lower_left_corrected,
+                                                       cut_off_barrier_middle_arc.center_point(),
+                                                       upper_rib_lower_node_left)
+
+        rotor_geometry.add_arc(top_internal_barrier_left_upper_arc)
+        rotor_geometry.add_arc(top_internal_barrier_left_lower_arc)
+
+        rotor_geometry.add_line(Line(top_internal_barrier_upper_left_corrected, top_internal_barrier_lower_left_corrected))
 
         model.create_geometry(rotor_geometry)
+
+        # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        # BOTTOM FLUX BARRIER %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        # Left upper node ----------------------------------------------------------------------------------------------
+
+        bottom_internal_barrier_upper_left = lower_rib_base_node_upper.rotate_about()
+
+
 
         return True
 
     except ArithmeticError as e:
         raise Exception('{e}')
+
 
 #     # define the nodes and sectors of the cut-off barriers
 #     co_s = Node(22, 0).rotate_about(n0, 45 - var.ang_co / 2, degrees=True)
@@ -984,8 +1290,6 @@ def model_creation(variables: VariableParameters):
     # To manually free memory ------------------------------------------------------------------------------------------
     del stator
     del rotor
-
-
 
 # def problem_definition(var: VariableParameters):
 #     problem = FemmProblem(out_file=os.path.join(folder_path, f'temp_{var.fold}/{var.out}{var.counter}.csv'))

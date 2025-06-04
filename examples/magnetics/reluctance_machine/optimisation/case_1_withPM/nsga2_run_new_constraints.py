@@ -16,7 +16,6 @@ from pymoo.operators.repair.rounding import RoundingRepair
 from pymoo.operators.sampling.rnd import IntegerRandomSampling, FloatRandomSampling
 from pymoo.termination import get_termination
 from pymoo.optimize import minimize
-from pymoo.termination.default import DefaultMultiObjectiveTermination
 
 import calc_torque_avg_rip
 import calc_cogging
@@ -79,13 +78,9 @@ if __name__ == '__main__':
                 m1 = (y_rot2 - y_rot1) / (x_rot2 - x_rot1)
                 b1 = y_rot1 - m1 * x_rot1
 
-                x_intersect_r = -b1 / (m1 - 1)
-                y_intersect_r = x_intersect_r
-
                 x_intersect_l = - b1 / (m1 - np.tan(np.radians(67.5)))
                 y_intersect_l = m1 * x_intersect_l + b1
 
-                # constraint_distance = np.sqrt((x_intersect_r - x_rot1) ** 2 + (y_intersect_r - y_rot1) ** 2)
                 constraining_distance = np.sqrt((x_intersect_l - x_rot1) ** 2 + (y_intersect_l - y_rot1) ** 2)
 
                 if random.choice([True, False]):

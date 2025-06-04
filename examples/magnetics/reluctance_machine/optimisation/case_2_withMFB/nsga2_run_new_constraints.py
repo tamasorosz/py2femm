@@ -150,7 +150,7 @@ if __name__ == '__main__':
 
     current_file_path = os.path.abspath(__file__)
     folder_path = os.path.dirname(current_file_path)
-    file_path = os.path.join(folder_path, f'results/all_res_cog_case2_20250429_all_variable.csv')
+    file_path = os.path.join(folder_path, f'results/all_res_cog_case2_20250528_all_variable.csv')
 
     termination = get_termination("n_size", file_path, 20000)
 
@@ -176,7 +176,7 @@ if __name__ == '__main__':
     else:
         os.makedirs('results')
 
-    file_path = os.path.join(folder_path, f'results/all_res_cog_case2_20250429_all_variable.csv')
+    file_path = os.path.join(folder_path, f'results/nsga2_case2_20250528_all_variable.csv')
     df.to_csv(file_path, encoding='utf-8', index=False)
 
     folder_path = ['temp_ang', 'temp_avg_rip', 'temp_cog']

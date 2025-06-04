@@ -53,14 +53,12 @@ def execute_model(counter):
 
 def torque_avg_rip(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp):
     if mh > 1.5:
-        if ang_m != ang_mp:
+        if ang_m < ang_mp - 1:
             initial = calc_max_torque_angle.max_torque_angle(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp)
         else:
-            print('ang_m = ang_mp')
             return random.randint(-300, 0), random.randint(100, 150), random.randint(-20, 0)
 
         if initial is None:
-            print("initial is none")
             return random.randint(-300, 0), random.randint(100, 150), random.randint(-20, 0)
 
         if os.path.exists('temp_avg_rip'):
@@ -119,7 +117,7 @@ def torque_avg_rip(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp):
 
         current_file_path = os.path.abspath(__file__)
         folder_path = os.path.dirname(current_file_path)
-        file_path = os.path.join(folder_path, f'results/all_res_avg_case2_20250429_all_variable.csv')
+        file_path = os.path.join(folder_path, f'results/all_res_avg_case2_20250528_all_variable.csv')
 
         # Check if the file exists
         file_exists = os.path.isfile(file_path)
@@ -131,5 +129,4 @@ def torque_avg_rip(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp):
         return torque_avg, torque_ripple, torque_angle
 
     else:
-        print('mh < 1.5')
         return random.randint(-300, 0), random.randint(100, 150), random.randint(-20, 0)
