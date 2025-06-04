@@ -52,8 +52,8 @@ def max_torque_angle(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg
     else:
         os.makedirs('temp_ang')
 
-    resol = 49
-    a = 0
+    resol = 24
+    a = 25
     b = 48
 
     for counter, alpha in zip(range(0, resol), np.linspace(a, b, resol)):
