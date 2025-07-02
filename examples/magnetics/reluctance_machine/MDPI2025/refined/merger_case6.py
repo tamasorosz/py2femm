@@ -1,9 +1,9 @@
 import pandas as pd
 
-with open('all_res_avg_case6_20250404_all_variable.csv', 'r') as f:
+with open('../raw/all_res_avg_case6_20250404_all_variable.csv', 'r') as f:
     df1 = pd.read_csv(f)
 
-with open('all_res_cog_case6_20250404_all_variable.csv', 'r') as f:
+with open('../raw/all_res_cog_case6_20250404_all_variable.csv', 'r') as f:
     df2 = pd.read_csv(f)
 
 # Get the first 9 columns from both DataFrames

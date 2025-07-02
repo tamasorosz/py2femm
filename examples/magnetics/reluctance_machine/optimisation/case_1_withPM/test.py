@@ -66,7 +66,7 @@ if __name__ == "__main__":
     #     # print(x)
     #     # y = calc_max_torque_angle.max_torque_angle(30, x[0], x[1], x[2], 0.5, x[3], x[4], x[5], 1.5)
 
-    f = calc_max_torque_angle.max_torque_angle(30, 20, 150, 1, 0.5, 1, 1, 15, 1.5)
+    f = calc_max_torque_angle.max_torque_angle(0, 20, 13, 0.5, 0.5, 3, 1, 1.5, 15)
 
     plt.plot(f[1])
     plt.show()
