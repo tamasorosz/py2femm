@@ -15,4 +15,4 @@ diff_df = pd.DataFrame({'diff': diff})
 
 print(diff_df)
 
-diff_df.to_parquet("diff_X9X8.parquet", index=False)
+# diff_df.to_parquet("diff_X9X8.parquet", index=False)

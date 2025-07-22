@@ -1,3 +1,5 @@
+import json
+
 import pandas as pd
 from matplotlib import pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
@@ -15,7 +17,7 @@ scaled_array = scaler.fit_transform(df.iloc[:, :-3])
 X = pd.DataFrame(scaled_array, columns=df.columns[:11])
 
 # Create 2x4 subplots
-fig, axes = plt.subplots(3, 4, figsize=(16, 10))
+fig, axes = plt.subplots(4, 3, figsize=(16, 16))
 axes = axes.flatten()
 
 # Plot each histogram

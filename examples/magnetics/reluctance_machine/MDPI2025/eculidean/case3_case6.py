@@ -39,4 +39,6 @@ distance_df = pd.DataFrame(
     columns=df6.index
 )
 
-distance_df.round(3).to_parquet("distance_df_case3_case6.parquet", index=False)
+# distance_df.round(3).to_parquet("distance_df_case3_case6.parquet", index=False)
+
+print(distance_df.round(4))

@@ -16,27 +16,27 @@ scaled_array = scaler.fit_transform(df.iloc[:, :-3])
 X = pd.DataFrame(scaled_array, columns=df.columns[:8])
 
 # Create 2x4 subplots
-fig, axes = plt.subplots(2, 4, figsize=(16, 6))
+fig, axes = plt.subplots(3, 3, figsize=(16, 12))
 axes = axes.flatten()
 
 # Plot each histogram
 for i, col in enumerate(X.columns):
     axes[i].hist(X[col], bins=50, color=colors[3], edgecolor='black')
-    axes[i].set_title(f"A{i+1}", fontsize=14)
+    axes[i].set_title(f"A{i+1}", fontsize=18)
     axes[i].set_axisbelow(True)
     axes[i].grid(True)
     # Set tick label font sizes
-    axes[i].tick_params(axis='both', labelsize=12)
+    axes[i].tick_params(axis='both', labelsize=16)
 
 # axes[i].set_xlabel("Value", fontsize=18)
-axes[0].set_ylabel("Frequency", fontsize=14)
-axes[4].set_ylabel("Frequency", fontsize=14)
-axes[4].set_xlabel("Normalised value", fontsize=14)
-axes[5].set_xlabel("Normalised value", fontsize=14)
-axes[6].set_xlabel("Normalised value", fontsize=14)
-axes[7].set_xlabel("Normalised value", fontsize=14)
-
+axes[0].set_ylabel("Frequency", fontsize=16)
+axes[3].set_ylabel("Frequency", fontsize=16)
+axes[6].set_ylabel("Frequency", fontsize=16)
+axes[5].set_xlabel("Normalised value", fontsize=16)
+axes[6].set_xlabel("Normalised value", fontsize=16)
+axes[7].set_xlabel("Normalised value", fontsize=16)
+fig.delaxes(axes[8])
 
 plt.tight_layout()
-# plt.savefig('distribution_case1_params.png', dpi=300)
-# plt.show()
+plt.savefig('distribution_case1_params.png', dpi=300)
+plt.show()
