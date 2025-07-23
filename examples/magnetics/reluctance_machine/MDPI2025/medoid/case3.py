@@ -27,7 +27,7 @@ def compute_silhouette_for_k(args):
 if __name__ == "__main__":
     # ---------------- Simulated Data ----------------
     D = pd.read_parquet(
-        '../eculidean/distance_df_case1_case1.parquet')
+        '../eculidean/distance_df_case3_case3.parquet')
     # chunk_size = 2000
 
     # D = D.iloc[:chunk_size, :chunk_size]

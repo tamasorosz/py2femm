@@ -1,17 +1,29 @@
-import numpy as np
 import pandas as pd
 from scipy.spatial.distance import cdist
 from sklearn.preprocessing import MinMaxScaler
 
-with open('D:\Respositories\py2femm\examples\magnetics/reluctance_machine\MDPI2025/refined\case1_all.csv', 'r') as f:
+with open('../refined/case1_all.csv', 'r') as f:
     df1 = pd.read_csv(f)
 
 del df1['ANG']
 
 scaler = MinMaxScaler()
 
+# print(df1)
+#
+# filtered_df = df1[
+#     (df1.iloc[:, -1] < 20) &
+#     (df1.iloc[:, -2] < 20) &
+#     (df1.iloc[:, -3] < 1400)
+# ]
+#
+# print(filtered_df)
+# print(len(filtered_df))
+
 # Ensure both dataframes have only the 8 feature columns in the same order
-df1 = df1.iloc[:,:-3]
+# df1 = filtered_df.iloc[:, :-3]
+
+df1 = df1.iloc[:, :-3]
 
 # Fit on combined data to ensure consistent scaling
 combined = pd.concat([df1, df1], axis=0)
@@ -26,9 +38,7 @@ distance_matrix = cdist(X1_scaled, X1_scaled, metric='euclidean')
 distance_df = pd.DataFrame(
     distance_matrix,
     index=df1.index,
-    columns=df1.index
+    columns=[str(i) for i in df1.index]
 )
 
 # distance_df.round(3).to_parquet("distance_df_case1_case1.parquet", index=False)
-
-# print(distance_df)

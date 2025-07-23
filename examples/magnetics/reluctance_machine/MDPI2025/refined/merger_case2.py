@@ -41,5 +41,3 @@ print(are_identical)
 merged_x['COG'] = merged_y['COG']
 
 merged_x.to_csv('case2_all.csv', index=False)
-
-

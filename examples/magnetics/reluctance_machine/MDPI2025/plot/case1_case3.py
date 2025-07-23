@@ -97,7 +97,7 @@ print(X)
 shift = []
 
 for i in sim_row:
-    shift.append(X.iloc[int(i), -5])
+    shift.append((X.iloc[int(i), -5])/2)
 
 plt.figure(figsize=(8, 6))
 plt.hist(shift, bins=30, color=colors[7], edgecolor='black', alpha=0.85, label='case C')
