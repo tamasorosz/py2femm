@@ -11,6 +11,7 @@ scaler = MinMaxScaler()
 
 # # Ensure both dataframes have only the geometric feature columns in the same order
 df1 = df1.iloc[:, :-3]
+print(df1)
 
 # Fit on combined data to ensure consistent scaling
 combined = pd.concat([df1, df1], axis=0)

@@ -29,7 +29,7 @@ os.makedirs(os.path.dirname(out_path), exist_ok=True)
 
 df_filtered = df.copy()
 
-for threshold in tqdm(np.concatenate((np.linspace(0.05, 0.1, 6), np.linspace(0.2, 1, 9)))):
+for threshold in tqdm(np.concatenate((np.linspace(0.09, 0.1, 2), np.linspace(0.2, 1, 9)))):
     diff_avg, diff_rip, diff_cog = [], [], []
     df_filtered = df.copy()
 
