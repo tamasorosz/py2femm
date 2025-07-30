@@ -18,10 +18,10 @@ scaler = StandardScaler()
 scaler.fit(df)
 X = scaler.transform(df)
 
-k_values = range(2, 50, 1)
+k_values = range(2,3)
 
 def evaluate_k(k):
-    kmeans = MiniBatchKMeans(n_clusters=k, batch_size=15000, random_state=42)
+    kmeans = MiniBatchKMeans(n_clusters=k, batch_size=2048, random_state=42)
     labels = kmeans.fit_predict(X)
     s_score = silhouette_score(X, labels)
     inertia = kmeans.inertia_
@@ -29,7 +29,7 @@ def evaluate_k(k):
 
 # Parallel evaluation across k values
 with parallel_backend("loky"):
-    results = Parallel(n_jobs=16)(
+    results = Parallel(n_jobs=8)(
         delayed(evaluate_k)(k) for k in tqdm(k_values)
     )
 

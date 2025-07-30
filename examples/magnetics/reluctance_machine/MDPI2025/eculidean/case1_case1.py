@@ -9,20 +9,7 @@ del df1['ANG']
 
 scaler = MinMaxScaler()
 
-# print(df1)
-#
-# filtered_df = df1[
-#     (df1.iloc[:, -1] < 20) &
-#     (df1.iloc[:, -2] < 20) &
-#     (df1.iloc[:, -3] < 1400)
-# ]
-#
-# print(filtered_df)
-# print(len(filtered_df))
-
-# Ensure both dataframes have only the 8 feature columns in the same order
-# df1 = filtered_df.iloc[:, :-3]
-
+# Ensure both dataframes have only the geometric feature columns in the same order
 df1 = df1.iloc[:, :-3]
 
 # Fit on combined data to ensure consistent scaling
@@ -41,4 +28,4 @@ distance_df = pd.DataFrame(
     columns=[str(i) for i in df1.index]
 )
 
-# distance_df.round(3).to_parquet("distance_df_case1_case1.parquet", index=False)
+distance_df.round(3).to_parquet("distance_df_case1_case1.parquet", index=False)

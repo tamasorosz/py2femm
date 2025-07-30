@@ -38,7 +38,7 @@ if __name__ == "__main__":
     args_list = [(k, D, len(D)) for k in k_values]
 
     # ---------------- Parallel Execution ----------------
-    with Pool(32) as pool:
+    with Pool(16) as pool:
         results = pool.map(compute_silhouette_for_k, args_list)
 
     # Sort and extract results
