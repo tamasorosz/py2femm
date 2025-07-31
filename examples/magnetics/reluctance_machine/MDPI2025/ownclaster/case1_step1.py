@@ -24,12 +24,14 @@ df_torq = df_all.iloc[:, -3:]
 length_df = len(df)  # length of the precomputed distance matrix for filtering
 
 clusters = []
-out_path = '../ownclaster/case1_007_1_average.csv'
+out_path = '../ownclaster/case1_m2_s001_e1_average_doublecluster.csv'
 os.makedirs(os.path.dirname(out_path), exist_ok=True)
 
 df_filtered = df.copy()
 
-for threshold in tqdm(np.concatenate((np.linspace(0.07, 0.1, 4), np.linspace(0.2, 1, 9)))):
+min_members = 2
+
+for threshold in tqdm(np.concatenate((np.linspace(0.5, 0.6, 2), np.linspace(0.7, 1, 4)))):
     diff_avg, diff_rip, diff_cog = [], [], []
     df_filtered = df.copy()
 
@@ -38,7 +40,7 @@ for threshold in tqdm(np.concatenate((np.linspace(0.07, 0.1, 4), np.linspace(0.2
             # Find cluster members (rows & columns with distance < threshold)
             ind_int = df_filtered.index[df_filtered[str(j)] < threshold].tolist()
             # print(ind_int)
-            if len(ind_int) < 2:
+            if len(ind_int) < min_members:
                 continue  # Not enough for a cluster
 
             # Compute distance matrix among cluster members
@@ -46,10 +48,14 @@ for threshold in tqdm(np.concatenate((np.linspace(0.07, 0.1, 4), np.linspace(0.2
             total_distances = distance_matrix.sum(axis=1)
             medoid_index = ind_int[np.argmin(total_distances)]
 
+            medoid_ind_int = df_filtered.index[df_filtered[str(medoid_index)] < threshold].tolist()
+
+            merged = list(set(ind_int + medoid_ind_int))
+
             # Extract torque characteristics
-            df_avg = df_torq.iloc[ind_int, -3]
-            df_rip = df_torq.iloc[ind_int, -2]
-            df_cog = df_torq.iloc[ind_int, -1]
+            df_avg = df_torq.iloc[merged, -3]
+            df_rip = df_torq.iloc[merged, -2]
+            df_cog = df_torq.iloc[merged, -1]
 
             avg = max([abs(df_torq.iloc[medoid_index, -3] - df_avg.max()),
                        abs(df_torq.iloc[medoid_index, -3] - df_avg.min())])
@@ -63,7 +69,7 @@ for threshold in tqdm(np.concatenate((np.linspace(0.07, 0.1, 4), np.linspace(0.2
             diff_cog.append(cog)
 
             # Remove all members except medoid
-            ind_remaining = [ind for ind in ind_int if ind != medoid_index]
+            ind_remaining = [ind for ind in merged if ind != medoid_index]
             col_remaining = [str(i) for i in ind_remaining]
 
             df_filtered.drop(index=ind_remaining, columns=col_remaining, inplace=True)

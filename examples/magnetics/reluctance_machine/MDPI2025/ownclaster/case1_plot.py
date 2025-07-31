@@ -34,6 +34,10 @@ lines1, labels1 = ax1.get_legend_handles_labels()
 lines2, labels2 = ax2.get_legend_handles_labels()
 ax1.legend(lines1 + lines2, labels1 + labels2, loc='upper right')
 
+# Add vertical line at threshold = 1.5
+ax1.axvline(x=0.15, color='gray', linestyle='--', linewidth=1.5)
+ax1.axhline(y=1552, color='gray', linestyle='--', linewidth=1.5)
+
 plt.grid(True)
 plt.title('Clustering Threshold vs. Torque Characteristics')
 plt.tight_layout()
