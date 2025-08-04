@@ -1,9 +1,8 @@
 import os
+import random
 
-import matplotlib.pyplot as plt
 import pandas as pd
 from numpy.ma.extras import average
-from sklearn.metrics import pairwise_distances
 from sklearn.preprocessing import MinMaxScaler
 from tqdm import tqdm
 import numpy as np
@@ -17,25 +16,35 @@ del df_all['ANG']
 scaler = MinMaxScaler()
 scaler.fit(df_all)
 df_all = pd.DataFrame(scaler.transform(df_all))
-df_geom = df_all.iloc[:, :-3]
 df_torq = df_all.iloc[:, -3:]
 
 # Creating lists and variables to store data
 length_df = len(df)  # length of the precomputed distance matrix for filtering
 
 clusters = []
-out_path = '../ownclaster/case1_m2_s001_e1_average_doublecluster.csv'
+
+out_path = ('../ownclaster/case1_m2_s001_e2_average_doublecluster_forward_all.csv')
 os.makedirs(os.path.dirname(out_path), exist_ok=True)
+
 
 df_filtered = df.copy()
 
+
+forward = 0
+backward = 1
 min_members = 2
 
-for threshold in tqdm(np.concatenate((np.linspace(0.5, 0.6, 2), np.linspace(0.7, 1, 4)))):
+random.seed(42)  # Set a fixed seed
+my_list = list(range(length_df))
+random.shuffle(my_list)
+
+for threshold in tqdm(np.concatenate((np.linspace(0.01, 0.025, 2), np.linspace(0.05, 1, 39), np.linspace(1.025, 2, 40)))):
     diff_avg, diff_rip, diff_cog = [], [], []
     df_filtered = df.copy()
 
     for j in range(length_df):
+    # for j in range(length_df, -1, -1):
+    # for j in my_list:
         try:
             # Find cluster members (rows & columns with distance < threshold)
             ind_int = df_filtered.index[df_filtered[str(j)] < threshold].tolist()
@@ -44,8 +53,12 @@ for threshold in tqdm(np.concatenate((np.linspace(0.5, 0.6, 2), np.linspace(0.7,
                 continue  # Not enough for a cluster
 
             # Compute distance matrix among cluster members
-            distance_matrix = pairwise_distances(df_geom.iloc[ind_int, :], metric='euclidean')
+            distance_matrix = df_filtered.iloc[ind_int, ind_int].values  # square submatrix
+
+            # Compute total distance from each point to all others in the subset
             total_distances = distance_matrix.sum(axis=1)
+
+            # Medoid is the index with minimum total distance
             medoid_index = ind_int[np.argmin(total_distances)]
 
             medoid_ind_int = df_filtered.index[df_filtered[str(medoid_index)] < threshold].tolist()
@@ -81,9 +94,13 @@ for threshold in tqdm(np.concatenate((np.linspace(0.5, 0.6, 2), np.linspace(0.7,
     row = {
         'threshold': threshold,
         'clusters': df_filtered.shape[0],
-        'distance_avg': average(diff_avg) if diff_avg else np.nan,
-        'distance_rip': average(diff_rip) if diff_rip else np.nan,
-        'distance_cog': average(diff_cog) if diff_cog else np.nan
+        'distance_avg_average': average(diff_avg) if diff_avg else np.nan,
+        'distance_rip_average': average(diff_rip) if diff_rip else np.nan,
+        'distance_cog_average': average(diff_cog) if diff_cog else np.nan,
+        'distance_avg_max': max(diff_avg) if diff_avg else np.nan,
+        'distance_rip_max': max(diff_rip) if diff_rip else np.nan,
+        'distance_cog_max': max(diff_cog) if diff_cog else np.nan,
+        'medoids': tuple(df_filtered.columns.tolist())
     }
 
     clusters.append(row)

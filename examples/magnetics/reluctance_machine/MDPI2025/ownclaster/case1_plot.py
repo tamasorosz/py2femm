@@ -1,7 +1,9 @@
 import pandas as pd
 from matplotlib import pyplot as plt
 
-clusters = pd.read_csv('case1_s001_e1_p19_average.csv')
+# clusters = pd.read_csv('case1_m2_s001_e2_average_doublecluster_random.csv')
+# clusters = pd.read_csv('case1_m2_s001_e2_average_doublecluster_forward.csv')
+clusters = pd.read_csv('case1_m2_s001_e2_average_doublecluster_backward.csv')
 
 # Create figure and first axis
 fig, ax1 = plt.subplots(figsize=(10, 6))
@@ -9,9 +11,12 @@ fig, ax1 = plt.subplots(figsize=(10, 6))
 # Unpack clusters into separate lists for plotting
 thresholds = clusters['threshold'].tolist()
 num_clusters = clusters['clusters'].tolist()
-max_avg = clusters['distance_avg'].tolist()
-max_rip = clusters['distance_rip'].tolist()
-max_cog = clusters['distance_cog'].tolist()
+average_avg = clusters['distance_avg_average'].tolist()
+average_rip = clusters['distance_rip_average'].tolist()
+average_cog = clusters['distance_cog_average'].tolist()
+max_avg = clusters['distance_avg_max'].tolist()
+max_rip = clusters['distance_rip_max'].tolist()
+max_cog = clusters['distance_cog_max'].tolist()
 
 # Plot number of clusters (left y-axis)
 ax1.set_xlabel('Threshold')

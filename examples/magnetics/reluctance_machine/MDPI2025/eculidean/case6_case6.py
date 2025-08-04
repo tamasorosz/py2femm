@@ -9,19 +9,8 @@ del df1['ANG']
 
 scaler = MinMaxScaler()
 
-print(df1)
-
-filtered_df = df1[
-    (df1.iloc[:, -1] < 20) &
-    (df1.iloc[:, -2] < 10) &
-    (df1.iloc[:, -3] < 1400)
-]
-
-print(filtered_df)
-print(len(filtered_df))
-
 # Ensure both dataframes have only the 8 feature columns in the same order
-df1 = filtered_df.iloc[:, :-3]
+df1 = df1.iloc[:, :-3]
 
 # Fit on combined data to ensure consistent scaling
 combined = pd.concat([df1, df1], axis=0)
@@ -41,4 +30,4 @@ distance_df = pd.DataFrame(
 
 distance_df.round(3).to_parquet("distance_df_case6_case6.parquet", index=False)
 
-# print(distance_df)
+print(distance_df)

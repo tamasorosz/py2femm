@@ -1,7 +1,7 @@
 import pandas as pd
 from matplotlib import pyplot as plt
 
-clusters = pd.read_csv('case2_s001_e1_p19_average.csv')
+clusters = pd.read_csv('case2_m2_s001_e2_average_doublecluster_forward.csv')
 
 # Create figure and first axis
 fig, ax1 = plt.subplots(figsize=(10, 6))
