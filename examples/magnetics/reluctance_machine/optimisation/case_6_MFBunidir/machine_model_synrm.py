@@ -20,13 +20,13 @@ class VariableParameters:
         self.out = out
         self.counter = counter
 
-        coil_area = 53.5104  # area of the slot [mm^2]
-        Nturns_pos = 11  # turns of the coil in one slot [u.]
-        Nturns_neg = 11  # turns of the coil in one slot [u.]
+        # coil_area = 53.5104  # area of the slot [mm^2]
+        # Nturns_pos = 11  # turns of the coil in one slot [u.]
+        # Nturns_neg = 11  # turns of the coil in one slot [u.]
 
-        # coil_area = 1  # area of the slot [mm^2]
-        # Nturns_pos = 1  # turns of the coil in one slot [u.]
-        # Nturns_neg = 1  # turns of the coil in one slot [u.]
+        coil_area = 1  # area of the slot [mm^2]
+        Nturns_pos = 1  # turns of the coil in one slot [u.]
+        Nturns_neg = 1  # turns of the coil in one slot [u.]
 
         self.JAp = IAp * Nturns_pos / coil_area
         self.JAn = IAn * Nturns_neg / coil_area
@@ -537,11 +537,11 @@ def add_materials(femm_problem: FemmProblem, var: VariableParameters, rot: rotor
     femm_problem.define_block_label(Node(22.05, 0.00).rotate_about(n0, 45, True), air)
     femm_problem.define_block_label(Node(7, 0.00).rotate_about(n0, 45, True), FeSi65)
 
-    # femm_problem.define_block_label(rot[10], ferrite_left)
-    # femm_problem.define_block_label(rot[11], ferrite_right)
+    femm_problem.define_block_label(rot[10], ferrite_left)
+    femm_problem.define_block_label(rot[11], ferrite_right)
 
-    femm_problem.define_block_label(rot[10], air)
-    femm_problem.define_block_label(rot[11], air)
+    # femm_problem.define_block_label(rot[10], air)
+    # femm_problem.define_block_label(rot[11], air)
 
 
 def problem_definition(var: VariableParameters):

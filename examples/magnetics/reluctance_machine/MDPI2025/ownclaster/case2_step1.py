@@ -1,72 +1,48 @@
 import os
-import random
-
 import pandas as pd
-from numpy.ma.extras import average
+from numpy import average
 from sklearn.preprocessing import MinMaxScaler
 from tqdm import tqdm
 import numpy as np
 
-# Importing precomputed distance matrix and model matrix
 df = pd.read_parquet('../eculidean/distance_df_case2_case2.parquet')
 df_all = pd.read_csv('../refined/case2_all.csv')
 
-# Normalisation of the base data
 del df_all['ANG']
 scaler = MinMaxScaler()
 scaler.fit(df_all)
 df_all = pd.DataFrame(scaler.transform(df_all))
 df_torq = df_all.iloc[:, -3:]
 
-# Creating lists and variables to store data
-length_df = len(df)  # length of the precomputed distance matrix for filtering
+length_df = len(df.columns)
 
 clusters = []
 
-out_path = ('../ownclaster/case2_m2_s001_e2_average_doublecluster_random.csv')
+out_path = ('../ownclaster/case2_m2_s001_e1_average_max_doublecluster_backward_all_noiloc_low.csv')
 os.makedirs(os.path.dirname(out_path), exist_ok=True)
 
-
-df_filtered = df.copy()
-
-
-forward = 0
-backward = 1
-
-min_members = 2
-
-random.seed(42)  # Set a fixed seed
-my_list = list(range(length_df))
-random.shuffle(my_list)
-
-for threshold in tqdm(np.concatenate((np.linspace(0.01, 0.025, 2), np.linspace(0.05, 1, 39), np.linspace(1.025, 2, 40)))):
+for threshold in tqdm(np.linspace(0.01, 0.25, 25)):
     diff_avg, diff_rip, diff_cog = [], [], []
     df_filtered = df.copy()
 
-    # for j in range(length_df, -1, -1):
-    # for j in range(length_df):
-    for j in my_list:
+    for j in range(length_df, -1, -1):
         try:
-            # Find cluster members (rows & columns with distance < threshold)
-            ind_int = df_filtered.index[df_filtered[str(j)] < threshold].tolist()
-            # print(ind_int)
-            if len(ind_int) < min_members:
-                continue  # Not enough for a cluster
+            ind_int = df_filtered.index[df_filtered[str(j)] < round(threshold,3)].tolist()
+            ind_str = [str(i) for i in ind_int]
 
-            # Compute distance matrix among cluster members
-            distance_matrix = df_filtered.iloc[ind_int, ind_int].values  # square submatrix
+            if len(ind_int) < 2:
+                continue
 
-            # Compute total distance from each point to all others in the subset
+            distance_matrix = df_filtered[ind_str].loc[ind_int].values
+
             total_distances = distance_matrix.sum(axis=1)
 
-            # Medoid is the index with minimum total distance
             medoid_index = ind_int[np.argmin(total_distances)]
 
-            medoid_ind_int = df_filtered.index[df_filtered[str(medoid_index)] < threshold].tolist()
+            medoid_ind_int = df_filtered.index[df_filtered[str(medoid_index)] < round(threshold,3)].tolist()
 
             merged = list(set(ind_int + medoid_ind_int))
 
-            # Extract torque characteristics
             df_avg = df_torq.iloc[merged, -3]
             df_rip = df_torq.iloc[merged, -2]
             df_cog = df_torq.iloc[merged, -1]
@@ -82,7 +58,6 @@ for threshold in tqdm(np.concatenate((np.linspace(0.01, 0.025, 2), np.linspace(0
             diff_rip.append(rip)
             diff_cog.append(cog)
 
-            # Remove all members except medoid
             ind_remaining = [ind for ind in merged if ind != medoid_index]
             col_remaining = [str(i) for i in ind_remaining]
 
@@ -91,13 +66,16 @@ for threshold in tqdm(np.concatenate((np.linspace(0.01, 0.025, 2), np.linspace(0
         except Exception as e:
             continue
 
-    # Save after each threshold
     row = {
-        'threshold': threshold,
+        'threshold': round(threshold,3),
         'clusters': df_filtered.shape[0],
-        'distance_avg': average(diff_avg) if diff_avg else np.nan,  # Biztos jó az átlagolás?
-        'distance_rip': average(diff_rip) if diff_rip else np.nan,
-        'distance_cog': average(diff_cog) if diff_cog else np.nan
+        'distance_avg_average': round(average(diff_avg),3) if diff_avg else np.nan,
+        'distance_rip_average': round(average(diff_rip),3) if diff_rip else np.nan,
+        'distance_cog_average': round(average(diff_cog),3) if diff_cog else np.nan,
+        'distance_avg_max': round(max(diff_avg),3) if diff_avg else np.nan,
+        'distance_rip_max': round(max(diff_rip),3) if diff_rip else np.nan,
+        'distance_cog_max': round(max(diff_cog),3) if diff_cog else np.nan,
+        'medoids': tuple(df_filtered.columns.tolist())
     }
 
     clusters.append(row)

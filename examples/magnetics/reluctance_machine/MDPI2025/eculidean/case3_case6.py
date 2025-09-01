@@ -10,7 +10,9 @@ with open('D:\Respositories\py2femm\examples\magnetics/reluctance_machine\MDPI20
 
 del df3['ANG']
 del df6['ANG']
+df6 = df6.dropna(ignore_index=True)
 
+print(df6.head())
 #%%%%%%%%%IMPORTANT%%%%%%%%%%%%
 #Here I removed df6 X9 and renamed X10 to X9 to keep consistent with the comparison, but do not forget that it is not X9
 del df6['X9']

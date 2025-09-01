@@ -5,20 +5,21 @@ from sklearn.preprocessing import MinMaxScaler
 from tqdm import tqdm
 import numpy as np
 
-df = pd.read_parquet('../eculidean/distance_df_case1_case1.parquet')
-df_all = pd.read_csv('../refined/case1_all.csv')
+df = pd.read_parquet('../eculidean/distance_df_case6_case6.parquet')
+df_all = pd.read_csv('../refined/case6_all.csv')
 
 del df_all['ANG']
 scaler = MinMaxScaler()
 scaler.fit(df_all)
 df_all = pd.DataFrame(scaler.transform(df_all))
 df_torq = df_all.iloc[:, -3:]
+df_torq = df_torq.dropna(ignore_index=True)
 
 length_df = len(df.columns)
 
 clusters = []
 
-out_path = ('../ownclaster/case1_m2_s001_e1_average_max_doublecluster_backward_all_noiloc_low.csv')
+out_path = ('../ownclaster/case6_m2_s001_e1_average_max_doublecluster_backward_all_noiloc_low.csv')
 os.makedirs(os.path.dirname(out_path), exist_ok=True)
 
 for threshold in tqdm(np.linspace(0.01, 0.25, 25)):
@@ -71,7 +72,7 @@ for threshold in tqdm(np.linspace(0.01, 0.25, 25)):
         'clusters': df_filtered.shape[0],
         'distance_avg_average': round(average(diff_avg),3) if diff_avg else np.nan,
         'distance_rip_average': round(average(diff_rip),3) if diff_rip else np.nan,
-        'distance_cog_average': round(average(diff_cog),3) if diff_cog else np.nan,
+        'distance_cog_average': round(average(diff_cog),3),
         'distance_avg_max': round(max(diff_avg),3) if diff_avg else np.nan,
         'distance_rip_max': round(max(diff_rip),3) if diff_rip else np.nan,
         'distance_cog_max': round(max(diff_cog),3) if diff_cog else np.nan,

@@ -8,7 +8,7 @@ with open('D:\Respositories\py2femm\examples\magnetics/reluctance_machine\MDPI20
 
 with open('D:\Respositories\py2femm\examples\magnetics/reluctance_machine\MDPI2025/refined\case6_all.csv', 'r') as f:
     df6 = pd.read_csv(f)
-
+df6 = df6.dropna(ignore_index=True)
 # Convert 'COG' columns to numpy arrays
 cog1 = df3['COG'].values[:, np.newaxis]  # shape (len(df1), 1)
 cog2 = df6['COG'].values[np.newaxis, :]  # shape (1, len(df2))

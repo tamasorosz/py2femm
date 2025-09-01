@@ -2,12 +2,17 @@ import pandas as pd
 from scipy.spatial.distance import cdist
 from sklearn.preprocessing import MinMaxScaler
 
-with open('../refined/case6_all.csv', 'r') as f:
-    df1 = pd.read_csv(f)
+df1 = pd.read_csv('../refined/case6_all.csv')
 
 del df1['ANG']
 
 scaler = MinMaxScaler()
+
+print(len(df1))
+df1 = df1.dropna(ignore_index=True)
+print(len(df1))
+
+# print(df1)
 
 # Ensure both dataframes have only the 8 feature columns in the same order
 df1 = df1.iloc[:, :-3]

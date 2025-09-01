@@ -5,8 +5,8 @@ from sklearn.preprocessing import MinMaxScaler
 from tqdm import tqdm
 import numpy as np
 
-df = pd.read_parquet('../eculidean/distance_df_case1_case1.parquet')
-df_all = pd.read_csv('../refined/case1_all.csv')
+df = pd.read_parquet('../eculidean/distance_df_case3_case3.parquet')
+df_all = pd.read_csv('../refined/case3_all.csv')
 
 del df_all['ANG']
 scaler = MinMaxScaler()
@@ -18,7 +18,7 @@ length_df = len(df.columns)
 
 clusters = []
 
-out_path = ('../ownclaster/case1_m2_s001_e1_average_max_doublecluster_backward_all_noiloc_low.csv')
+out_path = ('../ownclaster/case3_m2_s001_e1_average_max_doublecluster_backward_all_noiloc_low.csv')
 os.makedirs(os.path.dirname(out_path), exist_ok=True)
 
 for threshold in tqdm(np.linspace(0.01, 0.25, 25)):
