@@ -34,11 +34,11 @@ from matplotlib import pyplot as plt
 #     lst.append(rip)
 # print(min(lst))
 import calc_torque_avg_rip
-from examples.magnetics.reluctance_machine.optimisation.case_6_MFBunidir import calc_max_torque_angle
+from examples.magnetics.reluctance_machine.optimisation.case_6_MFBunidir import calc_max_torque_angle, calc_cogging
 
 if __name__ == '__main__':
 
-    f = calc_max_torque_angle.max_torque_angle(0, 20, 13, 0.5, 0.5, 3, 1, 1.5, 10, 15, 4, 6)
+    # f = calc_max_torque_angle.max_torque_angle(0, 20, 13, 0.5, 0.5, 3, 1, 1.5, 10, 15, 4, 6)
 
     #     # x =[24,13,2,1,1,11,16,2,5]
     #     #
@@ -105,7 +105,7 @@ if __name__ == '__main__':
     #     # # plt.plot(d)
     #     # # a, b, c, d = calc_torque_avg_rip.torque_avg_rip(30, 21, 14, 1, 0.5, 3, 1, 1.5, 12, 17, 6, 5)
     #     # # plt.plot(d)
-    #     # # a, b, c, d = calc_torque_avg_rip.torque_avg_rip(30, 21, 14, 1, 0.5, 3, 1, 1.5, 12, 17, 5.5, 3.5)
+    a = calc_cogging.cogging(0, 21, 14, 1, 0.5, 3, 1, 1.51, 12, 15, 4, 4)
     #     # # plt.plot(d)
     #     # plt.show()
     #

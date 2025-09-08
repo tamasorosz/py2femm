@@ -39,7 +39,7 @@ plt.text(370, 2.5, f"{round(c/a*100,1)}%",
          ha="left", va="top")
 
 # Add title and labels
-plt.xlabel("Medoid design [-]", fontsize=18)
+plt.xlabel("Index of differences [-]", fontsize=18)
 plt.ylabel("Cogging torque difference [mNm]", fontsize=18)
 
 # Add grid behind the bars
@@ -75,18 +75,18 @@ print(a, b, c)
 plt.axvline(x=277, color='gray', linestyle='--', linewidth=1.5)
 plt.axhline(y=0, color='gray', linestyle='--', linewidth=1.5)
 
-plt.fill_between([-5, 277], 0, -300, color=colors[3], alpha=0.3)
+plt.fill_between([-5, 277], 0, -300, color=colors[4], alpha=0.3)
 plt.text(250, -250, f"{round(b/a*100,1)}%",
          fontsize=24, color="black",
          ha="right", va="bottom")
 
-plt.fill_between([277, 513], 0, 300, color=colors[4], alpha=0.3)
+plt.fill_between([277, 513], 0, 300, color=colors[3], alpha=0.3)
 plt.text(290, 250, f"{round(c/a*100,1)}%",
          fontsize=24, color="black",
          ha="left", va="top")
 
 # Add title and labels
-plt.xlabel("Medoid design [-]", fontsize=18)
+plt.xlabel("Index of differences [-]", fontsize=18)
 plt.ylabel("Average torque difference [mNm]", fontsize=18)
 
 # Add grid behind the bars
@@ -132,7 +132,7 @@ plt.text(290, 50, f"{round(c/a*100,1)}%",
          ha="left", va="top")
 
 # Add title and labels
-plt.xlabel("Medoid design [-]", fontsize=18)
+plt.xlabel("Index of differences [-]", fontsize=18)
 plt.ylabel("Torque ripple difference [%]", fontsize=18)
 
 # Add grid behind the bars
@@ -156,7 +156,7 @@ for i, j in zip(sim_row, sim_col):
     diff_X.append(X.iloc[int(i), int(j)])
 
 plt.figure(figsize=(8, 6))
-plt.hist(diff_X, bins=30, color=colors[6], edgecolor='black', alpha=0.85, label='GAP (case B - case A')
+plt.hist(diff_X, bins=30, color=colors[6], edgecolor='black', alpha=0.85, label='GAP (case B - case A)')
 
 # Add title and labels
 plt.xlabel("The width of the gap next to the magnet [deg]", fontsize=18)

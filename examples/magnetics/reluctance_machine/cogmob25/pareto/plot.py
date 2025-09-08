@@ -45,8 +45,8 @@ plt.scatter(df_326p.iloc[:, -2] * -1, df_326p.iloc[:, -1], color=colors[2], labe
 plt.scatter(df_330p.iloc[:, -2] * -1, df_330p.iloc[:, -1], color=colors[3], label="M330", s=80, edgecolors="black", alpha=0.8)
 
 # Labels and title
-plt.xlabel("Average torque [mNm]", fontsize=18)
-plt.ylabel("Torque ripple [%]", fontsize=18)
+plt.xlabel("Nyomaték középérték [mNm]", fontsize=18)
+plt.ylabel("Nyomaték hullámosság [%]", fontsize=18)
 
 # Set tick font sizes
 plt.xticks(fontsize=18)  # X-axis ticks
@@ -56,5 +56,5 @@ plt.yticks(fontsize=18)  # Y-axis ticks
 plt.legend(fontsize=18, loc="best", frameon=True, edgecolor="black")
 
 # Show plot
-plt.savefig('pareto_front.png', dpi=300)
+plt.savefig('pareto_front_HU.png', dpi=300)
 plt.show()

@@ -48,16 +48,16 @@ lines1, labels1 = ax1.get_legend_handles_labels()
 lines2, labels2 = ax2.get_legend_handles_labels()
 ax2.legend(lines1 + lines2, labels1 + labels2, loc='upper right', fontsize=14)
 
-# # Add vertical and horizontal reference lines
-# ax1.axvline(x=0.05, color='gray', linestyle='--', linewidth=1.5)
-# ax1.axhline(y=13835, color='gray', linestyle='--', linewidth=1.5)
-#
-# # Add labels to the lines
-# ax1.text(0.05, ax1.get_ylim()[1]*0.975, '0.05',
-#          rotation=90, color='gray', fontsize=14, va='top', ha='right')
-#
-# ax1.text(ax1.get_xlim()[1]*0.075, 13835, '13835',
-#          color='gray', fontsize=14, va='bottom', ha='right')
+# Add vertical and horizontal reference lines
+ax1.axvline(x=0.06, color='gray', linestyle='--', linewidth=1.5)
+ax1.axhline(y=15223, color='gray', linestyle='--', linewidth=1.5)
+
+# Add labels to the lines
+ax1.text(0.06, ax1.get_ylim()[1]*0.925, '0.06',
+         rotation=90, color='gray', fontsize=14, va='top', ha='right')
+
+ax1.text(ax1.get_xlim()[1]*0.075, 15223, '13835',
+         color='gray', fontsize=14, va='bottom', ha='right')
 
 plt.grid(True)
 plt.tight_layout()

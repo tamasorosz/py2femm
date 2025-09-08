@@ -76,12 +76,12 @@ print(a, b, c)
 plt.axvline(x=215, color='gray', linestyle='--', linewidth=1.5)
 plt.axhline(y=0, color='gray', linestyle='--', linewidth=1.5)
 
-plt.fill_between([-5, 215], 0, -725, color=colors[3], alpha=0.3)
+plt.fill_between([-5, 215], 0, -725, color=colors[4], alpha=0.3)
 plt.text(195, -680, f"{round(b/a*100,1)}%",
          fontsize=24, color="black",
          ha="right", va="bottom")
 
-plt.fill_between([215, 312], 0, 150, color=colors[4], alpha=0.3)
+plt.fill_between([215, 312], 0, 150, color=colors[3], alpha=0.3)
 plt.text(225, 120, f"{round(c/a*100,1)}%",
          fontsize=24, color="black",
          ha="left", va="top")
