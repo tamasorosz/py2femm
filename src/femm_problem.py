@@ -722,7 +722,7 @@ class FemmProblem:
         H1          field intensity Hxif planar,Hrif axisymmetric
         H2          field intensity Hyif planar,Hzif axisymmetric
         Je          eddy current density
-        Js          source current density
+        Js          raw current density
         Mu1         relative permeability μxif planar,μrif axisymmetric
         Mu2relative permeability μyif planar,μzif axisymmetric
         Pe          Power density dissipated through ohmic losses

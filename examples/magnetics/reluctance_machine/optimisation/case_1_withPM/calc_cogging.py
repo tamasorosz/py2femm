@@ -55,7 +55,7 @@ def cogging(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m):
     else:
         os.makedirs('temp_cog')
     if mh > 1.5:
-        resol = 16
+        resol = 61
         e = 15
 
         for counter, ia in zip(range(0, resol), np.linspace(0, e, resol)):
@@ -90,7 +90,7 @@ def cogging(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m):
         else:
             cogging_pp = np.round(np.max(list(res)) - np.min(list(res)), 2)
 
-            res.clear()  # To make sure that there is no memory leak
+            # res.clear()  # To make sure that there is no memory leak
 
         df = pd.DataFrame({'X1': [ang_co], 'X2': [np.round(deg_co * 10, 2)], 'X3': [bd], 'X4': [bw],
                            'X5': [bh], 'X6': [np.round(bgp * 0.5 + mh, 2)], 'X7': [mh], 'X8': [ang_m],
@@ -114,7 +114,7 @@ def cogging(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m):
         print('COG: ' + f'{cogging_pp}' + ', IND: ' + f'{num_rows}' +
               '\n-----------------------------------------------')
 
-        return cogging_pp
+        return cogging_pp, res
 
     else:
         return random.randint(30, 50)

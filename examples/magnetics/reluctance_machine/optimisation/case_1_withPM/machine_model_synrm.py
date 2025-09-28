@@ -377,7 +377,7 @@ def add_boundaries(femm_problem: FemmProblem, var: VariableParameters, rot: roto
 
 def add_materials(femm_problem: FemmProblem, var: VariableParameters, rot: rotor_geometry):
     # Define wire material, air and steel material.
-    # There is an interesting bug in FEMM, that you can't add source current density to magnet wire, but it is possible
+    # There is an interesting bug in FEMM, that you can't add raw current density to magnet wire, but it is possible
     # using .lua code
     # To get the correct winding scheme, check: https://bavaria-direct.co.za/scheme/calculator/
     copper_Ap = MagneticMaterial(material_name="U+", J=var.JAp, Sigma=58, LamType=LamType.MAGNET_WIRE, WireD=1)

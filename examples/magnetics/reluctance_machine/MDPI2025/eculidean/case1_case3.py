@@ -2,10 +2,10 @@ import pandas as pd
 from scipy.spatial.distance import cdist
 from sklearn.preprocessing import MinMaxScaler
 
-with open('D:\Respositories\py2femm\examples\magnetics/reluctance_machine\MDPI2025/refined\case1_all.csv', 'r') as f:
+with open('../refined/case1_all.csv', 'r') as f:
     df1 = pd.read_csv(f)
 
-with open('D:\Respositories\py2femm\examples\magnetics/reluctance_machine\MDPI2025/refined\case3_all.csv', 'r') as f:
+with open('../refined/case3_all.csv', 'r') as f:
     df3 = pd.read_csv(f)
 
 del df1['ANG']
@@ -35,5 +35,5 @@ distance_df = pd.DataFrame(
 )
 
 print(distance_df.min())
-
+distance_df.columns = distance_df.columns.astype(str)
 distance_df.round(3).to_parquet("distance_df_case1_case3.parquet", index=False)

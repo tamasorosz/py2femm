@@ -165,7 +165,7 @@ if __name__ == '__main__':
     res = minimize(problem,
                    algorithm,
                    termination,
-                   seed=1,
+                   seed=28,
                    save_history=False,
                    verbose=True)
 

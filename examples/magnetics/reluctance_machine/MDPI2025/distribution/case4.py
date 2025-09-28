@@ -7,7 +7,7 @@ from sklearn.preprocessing import MinMaxScaler
 colors = ["#B90276", "#50237F", "#00A8B0", "#006249", "#525F6B",
           "#FF5733", "#2E86C1", "#28B463", "#F1C40F", "#8E44AD"]
 
-with open('D:\Respositories\py2femm\examples\magnetics/reluctance_machine\MDPI2025/refined\case6_all.csv', 'r') as f:
+with open('../refined/case6_all.csv', 'r') as f:
     df = pd.read_csv(f)
 
 del df['ANG']

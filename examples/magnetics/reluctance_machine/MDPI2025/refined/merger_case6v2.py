@@ -42,4 +42,18 @@ print(are_identical)
 
 merged_x['COG'] = merged_y['COG']
 
+merged_x = merged_x.dropna()
+print(len(merged_x))
+
+merged_x = merged_x.drop_duplicates(subset=merged_x.columns[:10])
+print(len(merged_x))
+
+cols = list(merged_x.columns)
+i = cols.index("X9")
+j = i + 1
+cols[i], cols[j] = cols[j], cols[i]
+
+# reorder DataFrame
+merged_x = merged_x[cols]
+
 merged_x.to_csv('case6v2_all.csv', index=False)
