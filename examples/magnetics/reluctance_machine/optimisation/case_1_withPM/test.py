@@ -71,3 +71,5 @@ if __name__ == "__main__":
     print(f[1])
     plt.plot(f[1])
     plt.show()
+
+

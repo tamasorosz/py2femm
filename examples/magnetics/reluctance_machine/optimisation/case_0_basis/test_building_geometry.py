@@ -2,7 +2,7 @@ from src.executor import Executor
 import machine_model as model
 
 variables = model.VariableParameters(output_folder_name='test',
-                                      output_file_name='test',
+                                     output_file_name='test',
                                      output_file_counter=0,
                                      current_density=0,
                                      initial_current_angle=0,

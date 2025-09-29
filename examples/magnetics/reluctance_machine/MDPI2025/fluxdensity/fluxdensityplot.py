@@ -45,4 +45,5 @@ plt.xticks(fontsize=18)
 plt.yticks(fontsize=18)
 
 plt.tight_layout()
+plt.savefig('absoluteflux.png', dpi=300)
 plt.show()

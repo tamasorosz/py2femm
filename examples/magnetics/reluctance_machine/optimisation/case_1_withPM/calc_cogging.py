@@ -35,7 +35,7 @@ def execute_model(counter):
 
             del_lua.unlink()
             del_fem.unlink()
-            del_ans.unlink()
+            # del_ans.unlink()
             del_csv.unlink()
 
         except PermissionError:
@@ -55,8 +55,8 @@ def cogging(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m):
     else:
         os.makedirs('temp_cog')
     if mh > 1.5:
-        resol = 61
-        e = 15
+        resol = 16
+        e = 7.5
 
         for counter, ia in zip(range(0, resol), np.linspace(0, e, resol)):
             variables = model.VariableParameters(fold='cog',
