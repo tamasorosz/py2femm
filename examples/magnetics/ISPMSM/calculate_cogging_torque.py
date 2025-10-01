@@ -82,4 +82,4 @@ def cogging(variables: model.VariableParameters,
     # Calculate cogging torque.
     cogging_torque = np.round((-1) * (np.max(result) - np.min(result)), rounding)
 
-    return cogging_torque, result
+    return cogging_torque, [float(i) for i in result]

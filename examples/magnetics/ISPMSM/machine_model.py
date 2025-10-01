@@ -28,7 +28,8 @@ class VariableParameters:
 
     def __init__(self, folder_name='test',
                  file_name='test',
-                 current_density=30,
+                 current=30,
+                 number_of_coil_turns=11,
                  initial_current_angle=0,
                  current_angle=0,
                  initial_rotor_position=0,
@@ -46,15 +47,7 @@ class VariableParameters:
         self.folder = folder_name
         self.filename = file_name
 
-        self.current_density = current_density
-        self.current_angle = current_angle
-        self.initial_current_angle = initial_current_angle
-        self.JUp = self.current_density * math.cos(math.radians(self.current_angle + self.initial_current_angle))
-        self.JUn = (-1) * self.JUp
-        self.JVp = self.current_density * math.cos(math.radians(self.current_angle + self.initial_current_angle + 120))
-        self.JVn = (-1) * self.JVp
-        self.JWp = self.current_density * math.cos(math.radians(self.current_angle + self.initial_current_angle + 240))
-        self.JWn = (-1) * self.JWp
+        self.number_of_coil_turns = number_of_coil_turns
 
         self.rotor_position = rotor_position
         self.initial_rotor_position = initial_rotor_position
@@ -66,43 +59,59 @@ class VariableParameters:
         self.shortening = shortening
 
         self.stack_lenght = stack_lenght
+        self.current = current
 
         # Check the validity of the winding scheme as it can crash the simulation.
         if bool(re.fullmatch(r"^(?:[A-Ca-c]\|){12}$", winding_scheme)):
             self.winding_scheme = list(filter(lambda item: item != '|', winding_scheme))
             self.winding_layers = False
             self.winding_type = 'distributed'
+            self.slot_cross_section_area = 113.895
+            self.current_density = self.current * self.number_of_coil_turns / self.slot_cross_section_area
         elif bool(re.fullmatch(r"^(?:[A-Ca-c][A-Ca-c]\|){12}$", winding_scheme)):
             self.winding_scheme = list(filter(lambda item: item != '|', winding_scheme))
             self.winding_layers = True
             self.winding_type = 'distributed'
+            self.slot_cross_section_area = 113.895 / 2
+            self.current_density = self.current * self.number_of_coil_turns / self.slot_cross_section_area
         elif bool(re.fullmatch(r"^(?:[A-Ca-c]){12}$", winding_scheme)):
             self.winding_scheme = list(filter(lambda item: item != '|', winding_scheme))
             self.winding_layers = False
             self.winding_type = 'concentrated'
+            self.slot_cross_section_area = 113.895 / 2
+            self.current_density = self.current * self.number_of_coil_turns / self.slot_cross_section_area
         else:
             raise Exception('Invalid input for winding scheme!')
+
+        self.current_angle = current_angle
+        self.initial_current_angle = initial_current_angle
+        self.JUp = self.current_density * math.cos(math.radians(self.current_angle + self.initial_current_angle))
+        self.JUn = (-1) * self.JUp
+        self.JVp = self.current_density * math.cos(math.radians(self.current_angle + self.initial_current_angle + 120))
+        self.JVn = (-1) * self.JVp
+        self.JWp = self.current_density * math.cos(math.radians(self.current_angle + self.initial_current_angle + 240))
+        self.JWn = (-1) * self.JWp
 
         self.output_file = f"{current_folder_path}/{self.folder}/{self.filename}_{self.rotor_position}"
         self.output_folder = f"{current_folder_path}/{self.folder}"
 
-    def update_current_density(self, new_current_density):
-        """ Updates current_density dynamically whenever current_density changes. """
-        self.current_angle = new_current_density
+    def update_current(self, new_current):
+        """ Update current dynamically whenever the current parameter changes and the definition of the phases. """
+        self.current_density = new_current * self.number_of_coil_turns / self.slot_cross_section_area
         self.update_phases()
 
     def update_initial_rotor_position(self, new_initial_rotor_position):
-        """ Update initial_rotor_position dynamically. """
+        """ Update initial_rotor_position dynamically whenever the rotor is rotated to its initial position. """
         self.initial_rotor_position = new_initial_rotor_position
 
     def update_rotor_position(self, new_rotor_position):
-        """ Update rotor_position and regenerate output_file and output_folder  dynamically. """
+        """ Update rotor_position and regenerate output_file and output_folder dynamically whenever the rotor is rotated. """
         self.rotor_position = new_rotor_position
         self.update_output_file()
         self.update_output_folder()
 
     def update_folder_name(self, new_folder_name):
-        """ Update folder and regenerate output_file and output_folder  dynamically. """
+        """ Update folder and regenerate output_file and output_folder dynamically. """
         self.folder = new_folder_name
         self.update_output_file()
         self.update_output_folder()
@@ -122,12 +131,12 @@ class VariableParameters:
         self.output_folder = f"{current_folder_path}/{self.folder}"
 
     def update_current_angle(self, new_current_angle):
-        """ Update current_angle dynamically whenever current_angle changes. """
+        """ Update current_angle dynamically whenever current_angle changes, so the stator magnetic field is rotated. """
         self.current_angle = new_current_angle
         self.update_phases()
 
     def update_phases(self):
-        """ Update phases dynamically whenever current_angle or current_density changes. """
+        """ Update phases dynamically whenever current_angle or current or number_of_coil_turns changes. """
         self.JUp = self.current_density * math.cos(math.radians(self.current_angle))
         self.JUn = (-1) * self.JUp
         self.JVp = self.current_density * math.cos(math.radians(self.current_angle + 120))
@@ -334,9 +343,9 @@ def winding_definition(femm_model: FemmProblem, variables: VariableParameters):
     # Create concentrated winding scheme.
     elif not variables.winding_layers and variables.winding_type == 'concentrated':
         for slot, phase in enumerate(variables.winding_scheme):
-            femm_model.define_block_label(Node(2, 30.5).rotate_about(N0, (-1) * 30 * slot, degrees=True),
+            femm_model.define_block_label(Node(2, 30.5).rotate_about(N0, 30 * slot, degrees=True),
                                           phase_map[phase])
-            femm_model.define_block_label(Node(13.5, 27.5).rotate_about(N0, (-1) * 30 * slot, degrees=True),
+            femm_model.define_block_label(Node(13.5, 27.5).rotate_about(N0, 30 * slot, degrees=True),
                                           phase_map[phase.swapcase()])
 
 
