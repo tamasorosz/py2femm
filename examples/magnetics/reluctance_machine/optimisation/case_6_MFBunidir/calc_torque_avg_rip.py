@@ -118,7 +118,7 @@ def torque_avg_rip(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m
 
                 current_file_path = os.path.abspath(__file__)
                 folder_path = os.path.dirname(current_file_path)
-                file_path = os.path.join(folder_path, f'results/all_res_avg_case6_20250904_10X.csv')
+                file_path = os.path.join(folder_path, f'results/all_res_avg_case6_20251105.csv')
 
                 # Check if the file exists
                 file_exists = os.path.isfile(file_path)
@@ -127,7 +127,7 @@ def torque_avg_rip(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m
                 with open(file_path, 'a', newline='') as f:
                     df.to_csv(f, header=not file_exists, index=False)
 
-                return torque_avg, torque_ripple, torque_angle, res
+                return torque_avg, torque_ripple, torque_angle
 
             else:
                 return random.randint(-300, 0), random.randint(100, 150), random.randint(-20, 0)

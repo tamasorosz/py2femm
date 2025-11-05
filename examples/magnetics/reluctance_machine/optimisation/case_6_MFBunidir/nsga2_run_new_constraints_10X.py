@@ -33,7 +33,7 @@ if __name__ == '__main__':
                              vtype=float)
 
         def _evaluate(self, x, out, *args, **kwargs):
-            f1 = calc_torque_avg_rip.torque_avg_rip(30, x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8], x[9], x[9])
+            f1 = calc_torque_avg_rip.torque_avg_rip(10, x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8], x[9], x[9])
             f2 = calc_cogging.cogging(0, x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8], x[9], x[9])
 
             gc.collect()
@@ -158,14 +158,14 @@ if __name__ == '__main__':
 
     current_file_path = os.path.abspath(__file__)
     folder_path = os.path.dirname(current_file_path)
-    file_path = os.path.join(folder_path, f'results/all_res_avg_case6_20250904_10X.csv')
+    file_path = os.path.join(folder_path, f'results/all_res_avg_case6_20251105.csv')
 
     termination = get_termination("n_size", file_path, 20000)
 
     res = minimize(problem,
                    algorithm,
                    termination,
-                   seed=28,
+                   seed=1,
                    save_history=False,
                    verbose=True)
 
@@ -185,7 +185,7 @@ if __name__ == '__main__':
     else:
         os.makedirs('results')
 
-    file_path = os.path.join(folder_path, f'results/nsga2_case6_20250904_10X.csv')
+    file_path = os.path.join(folder_path, f'results/nsga2_case6_20251105.csv')
     df.to_csv(file_path, encoding='utf-8', index=False)
 
     folder_path = ['temp_ang', 'temp_avg_rip', 'temp_cog']
