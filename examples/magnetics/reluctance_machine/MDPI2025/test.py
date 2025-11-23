@@ -165,17 +165,26 @@ b = [-0.010125138023269723, 2.6846077928845657, 5.0058705072966685, 6.6869535919
 colors = ["#B90276", "#50237F", "#00A8B0", "#006249", "#525F6B",
           "#FF5733", "#2E86C1", "#28B463", "#F1C40F", "#8E44AD"]
 
+
 plt.figure(figsize=(8, 6))
-plt.plot(a, color=colors[0], linewidth=2, label="case A")
-plt.plot(b, color=colors[1], linewidth=2, label="case B")
+plt.plot(a[0:int(len(a)/2)+1], color=colors[3], linewidth=2, label="case A")
+plt.plot(b[0:int(len(b)/2)+1], color=colors[5], linewidth=2, label="case B", linestyle='--')
 
 plt.xlabel("Rotor position [deg]", fontsize=18)
 plt.ylabel("Cogging torque [mNm]", fontsize=18)
 
+plt.fill_between(
+    range(int(len(a)/2)+1), a[0:int(len(a)/2)+1], b[0:int(len(a)/2)+1],
+    facecolor="none",
+    edgecolor="gray",
+    hatch="|",        # vertical stripes
+    linewidth=0.0     # make stripes thicker
+)
+
 plt.legend(fontsize=18)
 plt.grid(True, linestyle="--", alpha=0.6)
-
 plt.xticks(np.linspace(0, 60, 7), np.linspace(0, 15, 7), fontsize=18)
+plt.xlim(-1, 31)
 plt.yticks(fontsize=18)
 
 plt.tight_layout()

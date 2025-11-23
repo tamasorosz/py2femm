@@ -95,7 +95,7 @@ def cogging(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_m
                 else:
                     cogging_pp = np.round(np.max(list(res)) - np.min(list(res)), 2)
 
-                    # res.clear()  # To make sure that there is no memory leak
+                    res.clear()  # To make sure that there is no memory leak
 
                 df = pd.DataFrame({'X1': [ang_co], 'X2': [np.round(deg_co * 10, 2)], 'X3': [bd], 'X4': [bw],
                                    'X5': [bh], 'X6': [np.round(bgp * 0.5 + mh, 2)], 'X7': [mh], 'X8': [ang_m], 'X9': [ang_mp], 'X10': [deg_m],

@@ -3,8 +3,8 @@ import numpy as np
 import pandas as pd
 
 # Read CSV files
-dfAr = pd.read_csv("caseAr_f.csv")
-dfAt = pd.read_csv("caseAt_f.csv")
+dfAr = pd.read_csv("caseAr_right.csv")
+dfAt = pd.read_csv("caseAt_right.csv")
 
 # Define colors
 colors = ["#B90276", "#50237F", "#00A8B0", "#006249", "#525F6B",
@@ -16,7 +16,7 @@ x = np.linspace(0, 44, 2999)
 
 for i in range(len(dfAr.columns)):
     yAr = dfAr.iloc[:, i]
-    yAt = dfAt.iloc[:, i]
+    yAt = [-e for e in dfAt.iloc[:, i].tolist()]
 
     # Plot cases
     plt.plot(x, [-Ar*At/(4*np.pi*1e-7)/1e6 for Ar, At in zip(yAr, yAt)], color=colors[2], linewidth=2, label="case A", alpha=1)
@@ -26,9 +26,9 @@ for i in range(len(dfAr.columns)):
 plt.xlabel("Rotor position [deg]", fontsize=18)
 plt.ylabel("Tangential stress [N/mm\u00B2]", fontsize=18)
 
-plt.plot([15.2, 15.2], [-0.35, 0.4], color='gray', linestyle='--', linewidth=3)
-plt.text(5, -0.2, 'T1', fontsize=40, color='gray', va='bottom')
-plt.text(30, -0.2, 'T2', fontsize=40, color='gray', va='bottom')
+# plt.plot([15.2, 15.2], [-0.05, 0.05], color='gray', linestyle='--', linewidth=3)
+# plt.text(5, -0.2, 'T1', fontsize=40, color='gray', va='bottom')
+# plt.text(30, -0.2, 'T2', fontsize=40, color='gray', va='bottom')
 
 # Legend
 # plt.legend(fontsize=18)
@@ -40,5 +40,5 @@ plt.xticks(fontsize=18)
 plt.yticks(fontsize=18)
 
 plt.tight_layout()
-plt.savefig('shearstress_caseA.png', dpi=300)
+plt.savefig('shearstress_caseA_right.png', dpi=300)
 plt.show()

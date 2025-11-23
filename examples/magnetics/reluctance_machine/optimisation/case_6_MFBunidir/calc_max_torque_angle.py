@@ -52,9 +52,9 @@ def max_torque_angle(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg
     else:
         os.makedirs('temp_ang')
 
-    resol = 24
-    a = 25
-    b = 48
+    resol = 48
+    a = 0
+    b = 47
 
     for counter, alpha in zip(range(0, resol), np.linspace(a, b, resol)):
         variables = model.VariableParameters(fold='ang',

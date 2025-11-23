@@ -12,11 +12,9 @@ from pymoo.algorithms.moo.nsga2 import NSGA2
 from pymoo.core.repair import Repair
 from pymoo.operators.crossover.sbx import SBX
 from pymoo.operators.mutation.pm import PM
-from pymoo.operators.repair.rounding import RoundingRepair
-from pymoo.operators.sampling.rnd import IntegerRandomSampling, FloatRandomSampling
+from pymoo.operators.sampling.rnd import FloatRandomSampling
 from pymoo.termination import get_termination
 from pymoo.optimize import minimize
-from pymoo.termination.default import DefaultMultiObjectiveTermination
 
 import calc_torque_avg_rip
 import calc_cogging
@@ -25,20 +23,20 @@ if __name__ == '__main__':
     class MyProblem(ElementwiseProblem):
         def __init__(self):
             super().__init__(n_var=10,
-                             n_obj=4,
+                             n_obj=3,
                              n_ieq_constr=0,
                              n_eq_constr=0,
                              xl=np.array([15,  6,  .5, .001, .5, 1, 1.5, 10, 10, 0]),
-                             xu=np.array([25, 14,   4,    1,  4, 2,   2, 15, 18, 16]),
+                             xu=np.array([25, 14,   4,    1,  4, 2,   2, 15, 18, 12]),
                              vtype=float)
 
         def _evaluate(self, x, out, *args, **kwargs):
-            f1 = calc_torque_avg_rip.torque_avg_rip(10, x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8], x[9], x[9])
+            f1 = calc_torque_avg_rip.torque_avg_rip(15, x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8], x[9], x[9])
             f2 = calc_cogging.cogging(0, x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8], x[9], x[9])
 
             gc.collect()
 
-            out['F'] = [f1[0], f1[1], f1[2], f2]
+            out['F'] = [f1[0], f1[1], f2]
 
     class MyRepair(Repair):
         problem = MyProblem()
@@ -165,7 +163,7 @@ if __name__ == '__main__':
     res = minimize(problem,
                    algorithm,
                    termination,
-                   seed=1,
+                   seed=7,
                    save_history=False,
                    verbose=True)
 

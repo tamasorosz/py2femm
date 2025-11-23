@@ -9,9 +9,9 @@ colors = ["#B90276", '#50237F', '#00A8B0', "#006249", '#525F6B', '#000']
 
 df = pd.read_csv(os.getcwd() + '/results/' + 'taguchi_res_all.csv')
 
-plt.bar(df.keys(), df.iloc[0], label='AVG', color=colors[1])
-plt.bar(df.keys(), df.iloc[1], label='RIP', color=colors[2])
 plt.bar(df.keys(), df.iloc[2], label='COG', color=colors[3])
+plt.bar(df.keys(), df.iloc[1], bottom=df.iloc[2], label='RIP', color=colors[2])
+plt.bar(df.keys(), df.iloc[0], bottom=df.iloc[1] + df.iloc[2], label='COG', color=colors[1])
 
 plt.xlabel('Parameters', fontsize=14)
 plt.ylabel('SSB [u.]', fontsize=14)

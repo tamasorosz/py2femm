@@ -54,5 +54,5 @@ plt.ylabel('Position in the ranking [u.]', fontsize=14)
 ax.set_xticklabels(method_names, rotation=0, fontsize=14)
 ax.set_yticklabels(list(range(1, 10)), rotation=0, fontsize=14)
 
-plt.savefig('D:\Respositories\py2femm\examples\magnetics/reluctance_machine\optimisation\case_2/figures/flow_ranking_span5', bbox_inches='tight')
+# plt.savefig('D:\Respositories\py2femm\examples\magnetics/reluctance_machine\optimisation\case_2/figures/flow_ranking_span5', bbox_inches='tight')
 plt.show()

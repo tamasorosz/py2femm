@@ -36,11 +36,14 @@
 # #     calc_torque_avg_rip.torque_avg_rip(30, 21, 15, 1, 0.5, 3, 1.0, 1.5, 12, 17, 10, 0)
 # if __name__ == "__main__":
 #     f = calc_max_torque_angle.max_torque_angle(0, 20, 13, 0.5, 0.5, 3, 1, 1.5, 15, 18)
-from matplotlib import pyplot as plt
-from examples.magnetics.reluctance_machine.optimisation.case_2_withMFB import calc_cogging
+# from matplotlib import pyplot as plt
+# from examples.magnetics.reluctance_machine.optimisation.case_2_withMFB import calc_cogging
+#
+# if __name__ == "__main__":
+#     f = calc_cogging.cogging(0, 20, 13, 0.5, 0.5, 3, 1, 1.51, 15, 17)
+#     print(f[1])
+#     plt.plot(f[1])
+#     plt.show()
+import numpy as np
 
-if __name__ == "__main__":
-    f = calc_cogging.cogging(0, 20, 13, 0.5, 0.5, 3, 1, 1.51, 15, 17)
-    print(f[1])
-    plt.plot(f[1])
-    plt.show()
+print(np.linspace(-29,45,75))

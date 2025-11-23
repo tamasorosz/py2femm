@@ -61,5 +61,5 @@ ax1.text(ax1.get_xlim()[1]*0.075, 7029, '7029',
 
 plt.grid(True)
 plt.tight_layout()
-plt.savefig('case1_clusters_v2.png', dpi=300)
+# plt.savefig('case1_clusters_v2.png', dpi=300)
 plt.show()

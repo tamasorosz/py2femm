@@ -126,10 +126,11 @@
 #     #     plt.show()
 
 from matplotlib import pyplot as plt
-from examples.magnetics.reluctance_machine.optimisation.case_6_MFBunidir import calc_cogging
+import calc_max_torque_angle
 
 if __name__ == "__main__":
-    f = calc_cogging.cogging(0, 20, 13, 0.5, 0.5, 3, 1, 1.51, 13, 17, 6, 6)
+    f = calc_max_torque_angle.max_torque_angle(15, 20, 13, 0.5, 0.5, 3, 1, 1.51, 10, 10, 0, 0)
 
     plt.plot(f[1])
+    print(f[0])
     plt.show()

@@ -35,7 +35,7 @@ def execute_model(counter):
 
             del_lua.unlink()
             del_fem.unlink()
-            # del_ans.unlink()
+            del_ans.unlink()
             del_csv.unlink()
 
         except PermissionError:
@@ -56,7 +56,7 @@ def cogging(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp):
         os.makedirs('temp_cog')
     if mh > 1.5:
         if ang_m < ang_mp - 1:
-            resol = 61
+            resol = 16
             e = 15
 
             for counter, ia in zip(range(0, resol), np.linspace(0, e, resol)):
@@ -100,7 +100,7 @@ def cogging(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp):
 
             current_file_path = os.path.abspath(__file__)
             folder_path = os.path.dirname(current_file_path)
-            file_path = os.path.join(folder_path, f'results/all_res_cog_case2_20250528_all_variable.csv')
+            file_path = os.path.join(folder_path, f'results/all_res_cog_case2_20251105.csv')
 
             # Check if the file exists
             file_exists = os.path.isfile(file_path)
@@ -115,7 +115,7 @@ def cogging(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp):
                 print('COG: ' + f'{cogging_pp}' + ', IND: ' + f'{num_rows}' +
                       '\n-----------------------------------------------')
 
-            return cogging_pp, res
+            return cogging_pp
 
         else:
             return random.randint(30, 50)
