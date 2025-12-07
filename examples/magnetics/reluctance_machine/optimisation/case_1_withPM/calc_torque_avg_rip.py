@@ -14,7 +14,6 @@ from src.executor import Executor
 
 import calc_max_torque_angle
 
-
 def execute_model(counter):
     try:
         femm = Executor()
@@ -52,7 +51,7 @@ def execute_model(counter):
 
 
 def torque_avg_rip(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m):
-    if mh > 1.5:
+    if mh >= 1.5:
         initial = calc_max_torque_angle.max_torque_angle(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m)
 
         if initial is None:
@@ -113,7 +112,7 @@ def torque_avg_rip(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m):
 
         current_file_path = os.path.abspath(__file__)
         folder_path = os.path.dirname(current_file_path)
-        file_path = os.path.join(folder_path, f'results/all_res_avg_case1_20250506_all_variable.csv')
+        file_path = os.path.join(folder_path, f'results/all_res_avg_case1_20251105.csv')
 
         # Check if the file exists
         file_exists = os.path.isfile(file_path)
@@ -125,6 +124,6 @@ def torque_avg_rip(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m):
         return torque_avg, torque_ripple, torque_angle
 
     else:
-        return random.randint(-300, 0), random.randint(100, 150), random.randint(-20, 0)
+        return random.randint(0, 0), random.randint(300, 350), random.randint(-20, 0)
 
 

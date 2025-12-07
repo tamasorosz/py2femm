@@ -27,7 +27,7 @@ if __name__ == '__main__':
                              n_ieq_constr=0,
                              n_eq_constr=0,
                              xl=np.array([15,  6,  .5, .001, .5, 1, 1.5, 10, 10, 0]),
-                             xu=np.array([25, 14,   4,    1,  4, 2,   2, 15, 18, 12]),
+                             xu=np.array([25, 14,   4,    1,  4, 2,   2, 15, 18, 16]),
                              vtype=float)
 
         def _evaluate(self, x, out, *args, **kwargs):
@@ -158,7 +158,7 @@ if __name__ == '__main__':
     folder_path = os.path.dirname(current_file_path)
     file_path = os.path.join(folder_path, f'results/all_res_avg_case6_20251105.csv')
 
-    termination = get_termination("n_size", file_path, 20000)
+    termination = get_termination("n_size", file_path, 10000)
 
     res = minimize(problem,
                    algorithm,
@@ -176,7 +176,7 @@ if __name__ == '__main__':
         'X1': X[:, 0], 'X2': [np.round(i, 2) * 10 for i in X[:, 1]], 'X3': X[:, 2], 'X4': X[:, 3],
         'X5': X[:, 4], 'X6': [np.round(i / 2 + j, 2) for i, j in zip(X[:, 5], X[:, 6])], 'X7': X[:, 6],
         'X8': X[:, 7], 'X9': X[:, 8], 'X10': X[:, 9],
-        'ANG': F[:, 2], 'AVG': F[:, 0], 'RIP': F[:, 1], 'COG': F[:, 3]})
+        'AVG': F[:, 0], 'RIP': F[:, 1], 'COG': F[:, 2]})
 
     if os.path.exists('results'):
         pass

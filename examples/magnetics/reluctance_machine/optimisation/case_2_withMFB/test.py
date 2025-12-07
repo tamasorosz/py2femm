@@ -39,11 +39,8 @@
 # from matplotlib import pyplot as plt
 # from examples.magnetics.reluctance_machine.optimisation.case_2_withMFB import calc_cogging
 #
-# if __name__ == "__main__":
-#     f = calc_cogging.cogging(0, 20, 13, 0.5, 0.5, 3, 1, 1.51, 15, 17)
-#     print(f[1])
-#     plt.plot(f[1])
-#     plt.show()
-import numpy as np
-
-print(np.linspace(-29,45,75))
+if __name__ == "__main__":
+    f = calc_cogging.cogging(0, 20, 13, 0.5, 0.5, 3, 1, 1.51, 15, 17)
+    print(f[1])
+    plt.plot(f[1])
+    plt.show()

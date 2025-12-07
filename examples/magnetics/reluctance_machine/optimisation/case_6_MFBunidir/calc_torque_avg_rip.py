@@ -52,7 +52,7 @@ def execute_model(counter):
 
 
 def torque_avg_rip(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp, deg_m, deg_mp):
-    if mh > 1.5:
+    if mh >= 1.5:
         if ang_m != ang_mp:
             if not (deg_m == 0 and deg_mp == 0):
                 initial = calc_max_torque_angle.max_torque_angle(I0, ang_co, deg_co, bd, bw, bh, bgp, mh, ang_m, ang_mp,

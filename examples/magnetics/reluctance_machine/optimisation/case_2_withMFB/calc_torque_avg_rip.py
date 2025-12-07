@@ -14,7 +14,6 @@ from src.executor import Executor
 
 import calc_max_torque_angle
 
-
 def execute_model(counter):
     try:
         femm = Executor()
