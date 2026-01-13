@@ -91,7 +91,7 @@ def stator():
 
     # slot geometry
     slot = Geometry()
-    slot.import_dxf("resources/prius_slot_pyleecan.dxf")
+    slot.import_dxf("examples\magnetics\\toyota_prius\\resources\prius_slot_pyleecan.dxf")
 
     stator_geo.merge_geometry(slot)
 

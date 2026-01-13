@@ -170,4 +170,4 @@ def run_model(var: VariableParameters):
 
 
 if __name__ == '__main__':
-     run_model()
+     run_model(var = 5)
