@@ -142,7 +142,6 @@ class FemmProblem:
             cmd_list.append("closefile(mesh_file)")
             cmd_list.append("closefile(point_values)")
 
-        cmd_list.append("closefile(file_out)")
         cmd_list.append(f"{self.field.output_to_string()}_close()")
         cmd_list.append(f"{self.field.input_to_string()}_close()")
         cmd_list.append("quit()")
@@ -198,7 +197,7 @@ class FemmProblem:
         cmd = Template("${field}_addsegment($x1_coord, $y1_coord, $x2_coord, $y2_coord)")
         cmd = cmd.substitute(field=self.field.input_to_string(), x1_coord=start_pt.x, y1_coord=start_pt.y,
                              x2_coord=end_pt.x, y2_coord=end_pt.y)
-        # self.lua_script.append(cmd)
+        # self.lua_script.append(cmd)  # Duplicates input
         return cmd
 
     def add_blocklabel(self, label: Node):
@@ -791,7 +790,7 @@ class FemmProblem:
         H1          field intensity Hxif planar,Hrif axisymmetric
         H2          field intensity Hyif planar,Hzif axisymmetric
         Je          eddy current density
-        Js          source current density
+        Js          raw current density
         Mu1         relative permeability μxif planar,μrif axisymmetric
         Mu2relative permeability μyif planar,μzif axisymmetric
         Pe          Power density dissipated through ohmic losses
