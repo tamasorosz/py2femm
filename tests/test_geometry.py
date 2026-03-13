@@ -1,6 +1,6 @@
 import uuid
 from unittest import TestCase
-from src.geometry import Node, Line
+from py2femm.geometry import Node, Line
 
 
 class GeometryTestCase(TestCase):

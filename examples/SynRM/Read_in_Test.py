@@ -1,8 +1,8 @@
-from src.femm_problem import FemmProblem
+from py2femm.femm_problem import FemmProblem
 from examples.SynRM.geom_from_dxf import geom_from_dxf
-from src.general import LengthUnit
+from py2femm.general import LengthUnit
 import os
-from src.executor import Executor
+from py2femm.executor import Executor
 
 
 problem = FemmProblem(out_file="../Test.csv")

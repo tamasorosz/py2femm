@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from string import Template
 from typing import List
-from src.general import Material, Boundary
+from py2femm.general import Material, Boundary
 
 
 # Enums

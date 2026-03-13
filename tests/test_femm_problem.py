@@ -3,16 +3,16 @@ from unittest import TestCase
 
 import numpy as np
 
-from src.current_flow import CurrentFlowMaterial, CurrentFlowFixedVoltage, CurrentFlowMixed, CurrentFlowSurfaceCurrent, \
+from py2femm.current_flow import CurrentFlowMaterial, CurrentFlowFixedVoltage, CurrentFlowMixed, CurrentFlowSurfaceCurrent, \
     CurrentFlowPeriodic, CurrentFlowAntiPeriodic
-from src.electrostatics import ElectrostaticMaterial, ElectrostaticFixedVoltage, ElectrostaticMixed, \
+from py2femm.electrostatics import ElectrostaticMaterial, ElectrostaticFixedVoltage, ElectrostaticMixed, \
     ElectrostaticSurfaceCharge, ElectrostaticPeriodic, ElectrostaticAntiPeriodic
-from src.geometry import Geometry, Node, Line, CircleArc
-from src.heatflow import HeatFlowMaterial, HeatFlowFixedTemperature, HeatFlowHeatFlux, HeatFlowConvection, \
+from py2femm.geometry import Geometry, Node, Line, CircleArc
+from py2femm.heatflow import HeatFlowMaterial, HeatFlowFixedTemperature, HeatFlowHeatFlux, HeatFlowConvection, \
     HeatFlowRadiation, HeatFlowPeriodic, HeatFlowAntiPeriodic
-from src.magnetics import MagneticMaterial, MagneticDirichlet, MagneticMixed, LamType
-from src.femm_problem import FemmProblem
-from src.general import FemmFields, LengthUnit, AutoMeshOption
+from py2femm.magnetics import MagneticMaterial, MagneticDirichlet, MagneticMixed, LamType
+from py2femm.femm_problem import FemmProblem
+from py2femm.general import FemmFields, LengthUnit, AutoMeshOption
 
 
 class FemmTester(TestCase):

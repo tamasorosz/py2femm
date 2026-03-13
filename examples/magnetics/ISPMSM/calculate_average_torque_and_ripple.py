@@ -8,7 +8,7 @@ import pandas as pd
 import machine_model as model
 
 from multiprocessing import Pool
-from src.executor import Executor
+from py2femm.executor import Executor
 
 import calculate_max_torque_angle
 import run_nsga2

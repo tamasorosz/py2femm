@@ -17,10 +17,10 @@ from typing import Union
 
 import numpy as np
 
-from src.magnetics import MagneticMaterial, BHCurve
-from src.geometry import Geometry, Node
-from src.general import Material, AutoMeshOption, Boundary, FemmFields, LengthUnit
-from src.electrostatics import ElectrostaticVolumeIntegral
+from py2femm.magnetics import MagneticMaterial, BHCurve
+from py2femm.geometry import Geometry, Node
+from py2femm.general import Material, AutoMeshOption, Boundary, FemmFields, LengthUnit
+from py2femm.electrostatics import ElectrostaticVolumeIntegral
 
 
 class FemmProblem:

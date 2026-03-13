@@ -7,7 +7,7 @@ import numpy as np
 import machine_model as model
 
 from multiprocessing import Pool
-from src.executor import Executor
+from py2femm.executor import Executor
 
 
 def execute_model(args):

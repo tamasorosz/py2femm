@@ -7,13 +7,13 @@ import re
 
 from pathlib import Path  # For specifying the current folder path.
 
-from src.femm_problem import FemmProblem
+from py2femm.femm_problem import FemmProblem
 
-from src.general import LengthUnit
+from py2femm.general import LengthUnit
 
-from src.geometry import Geometry, Node, CircleArc, Line
+from py2femm.geometry import Geometry, Node, CircleArc, Line
 
-from src.magnetics import MagneticMaterial, LamType, MagneticDirichlet, MagneticVolumeIntegral
+from py2femm.magnetics import MagneticMaterial, LamType, MagneticDirichlet, MagneticVolumeIntegral
 
 # Creating static global variables
 # Gets the current file's folder path to specify the path of the output FEMM model file with .lua extension
