@@ -1,14 +1,19 @@
 [tool.poetry]
 name = "py2femm"
 version = "0.1.0"
-description = ""
+description = "Python interface utilities for FEMM simulations"
 authors = ["Tamás Orosz <tamas.orosz@yahoo.com>"]
+readme = "README.md"
+
+packages = [
+    { include = "py2femm" }
+]
 
 [tool.poetry.dependencies]
 python = "^3.10"
 aio-pika = "*"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 pytest = "^5.2"
 
 [build-system]

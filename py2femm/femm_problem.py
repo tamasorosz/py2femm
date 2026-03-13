@@ -17,10 +17,10 @@ from typing import Union
 
 import numpy as np
 
-from src.magnetics import MagneticMaterial, BHCurve
-from src.geometry import Geometry, Node
-from src.general import Material, AutoMeshOption, Boundary, FemmFields, LengthUnit
-from src.electrostatics import ElectrostaticVolumeIntegral
+from py2femm.magnetics import MagneticMaterial, BHCurve
+from py2femm.geometry import Geometry, Node
+from py2femm.general import Material, AutoMeshOption, Boundary, FemmFields, LengthUnit
+from py2femm.electrostatics import ElectrostaticVolumeIntegral
 
 
 class FemmProblem:
@@ -89,7 +89,7 @@ class FemmProblem:
                 )
             )
 
-    def init_problem(self, out_file="femm_data.csv"):
+    def init_problem(self, out_file="femm_data.csv", elements=False):
         """
         This commands initialize a femm console and flush the variables
         :param out_file: defines the default output file
@@ -112,12 +112,13 @@ class FemmProblem:
         cmd = cmd.substitute(outfile=out_file)
         cmd_list.append(cmd)
 
-        # mesh output
-        cmd_list.append(f'mesh_file = openfile("{self.mesh_file}", "w")')
-        self.lua_script.extend(cmd_list)
+        if elements:
+            # mesh output
+            cmd_list.append(f'mesh_file = openfile("{self.mesh_file}", "w")')
 
-        # node output
-        cmd_list.append(f'node_file = openfile("{self.node_file}", "w")')
+            # node output
+            cmd_list.append(f'node_file = openfile("{self.node_file}", "w")')
+
         self.lua_script.extend(cmd_list)
 
         # point values
@@ -130,22 +131,23 @@ class FemmProblem:
 
         return cmd_list
 
-    def close(self):
+    def close(self, elements=False):
 
         cmd_list = []
 
+        if elements:
+            cmd_list.append("closefile(file_out)")
+
+            #if self.post_processing_activated:
+            cmd_list.append("closefile(mesh_file)")
+            cmd_list.append("closefile(point_values)")
+
         cmd_list.append("closefile(file_out)")
-
-        #if self.post_processing_activated:
-        cmd_list.append("closefile(mesh_file)")
-        cmd_list.append("closefile(point_values)")
-
         cmd_list.append(f"{self.field.output_to_string()}_close()")
         cmd_list.append(f"{self.field.input_to_string()}_close()")
-
         cmd_list.append("quit()")
-
         self.lua_script.extend(cmd_list)
+
         return cmd_list
 
     def analyze(self, flag=0):
@@ -884,10 +886,9 @@ class FemmProblem:
         self.add_blocklabel(label)
         self.select_label(label)
 
-        if isinstance(material, MagneticMaterial):
+        if isinstance(material, MagneticMaterial) and material.remanence_angle is not None:
             self.set_blockprop(blockname=material.material_name, automesh=material.auto_mesh,
-                               meshsize=material.mesh_size)
-            # magdirection=material.remanence_angle)
+                               meshsize=material.mesh_size, magdirection=material.remanence_angle)
         else:
             self.set_blockprop(blockname=material.material_name, automesh=material.auto_mesh,
                                meshsize=material.mesh_size)
@@ -917,6 +918,18 @@ class FemmProblem:
 
         self.set_arc_segment_prop(propname=boundary.name or "<None>", maxsegdeg=maxsegdeg, hide=0, group=0)
         self.clear_selected()
+
+    def create_model(self, filename="temp"):
+        if self.field == FemmFields.MAGNETIC:
+            filename += ".fem"
+        elif self.field == FemmFields.ELECTROSTATIC:
+            filename += ".fee"
+        elif self.field == FemmFields.CURRENT_FLOW:
+            filename += ".fec"
+        elif self.field == FemmFields.HEAT_FLOW:
+            filename += ".feh"
+
+        self.save_as(filename)
 
     def make_analysis(self, filename="temp"):
 

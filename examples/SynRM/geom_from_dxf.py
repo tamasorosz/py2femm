@@ -1,5 +1,5 @@
 import ezdxf
-from src.geometry import Geometry, Node, Line, CircleArc
+from py2femm.geometry import Geometry, Node, Line, CircleArc
 
 
 def geom_from_dxf(filename,precision):

@@ -17,6 +17,7 @@ class Material(ABC):
     b = None
     h = None
     material_positions: list = None
+    remanence_angle = None
 
 
 @dataclass

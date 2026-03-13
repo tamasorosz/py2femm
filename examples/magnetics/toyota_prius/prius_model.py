@@ -3,11 +3,11 @@ import math
 import os
 from copy import copy
 
-from src.executor import Executor
-from src.femm_problem import FemmProblem
-from src.general import LengthUnit
-from src.geometry import Node, Geometry, Line, CircleArc
-from src.magnetics import MagneticMaterial, LamType, MagneticDirichlet, MagneticAnti, MagneticAntiPeriodicAirgap
+from py2femm.executor import Executor
+from py2femm.femm_problem import FemmProblem
+from py2femm.general import LengthUnit
+from py2femm.geometry import Node, Geometry, Line, CircleArc
+from py2femm.magnetics import MagneticMaterial, LamType, MagneticDirichlet, MagneticAnti, MagneticAntiPeriodicAirgap
 
 ORIGIN = Node(0.0, 0.0)
 
