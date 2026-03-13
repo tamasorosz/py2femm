@@ -95,7 +95,6 @@ def solenoid(n, w, h, radius, gap):
     z0 = -(h + gap) * n / 2
 
     problem.get_integral_values([Node(radius, z0)], save_image=True, variable_name=MagneticVolumeIntegral.A)
-
     # post-processing operations
     problem.get_back_fem_results()
 

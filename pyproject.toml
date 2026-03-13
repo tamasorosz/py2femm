@@ -11,6 +11,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.10"
+aio-pika = "*"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^5.2"

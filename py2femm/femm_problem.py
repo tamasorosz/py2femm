@@ -35,10 +35,12 @@ class FemmProblem:
         self.node_file = "node.csv"
         self.node_nr = "node_nr"
         self.element_nr = "element_nr"
+        self.point_values = "point_values.csv"
 
         ### Post processing
         self.nodal_coords = []
         self.element_coords = []
+        self.post_processing_activated = False
 
     def write(self, file_name, close_after=True):
         """Generate a runnable lua-script for a FEMM calculation.
@@ -119,6 +121,14 @@ class FemmProblem:
 
         self.lua_script.extend(cmd_list)
 
+        # point values
+        cmd_list.append(f'point_values = openfile("{self.point_values}", "w")')
+        self.lua_script.extend(cmd_list)
+        cmd = f"write(point_values, \"x, y, A, B1, B2, Sig, E, H1, H2, Je, Js, Mu1, Mu2, Pe, Ph, \\n\")"
+        cmd_list.append(cmd)
+        self.lua_script.extend(cmd_list)
+
+
         return cmd_list
 
     def close(self, elements=False):
@@ -127,7 +137,10 @@ class FemmProblem:
 
         if elements:
             cmd_list.append("closefile(file_out)")
+
+            #if self.post_processing_activated:
             cmd_list.append("closefile(mesh_file)")
+            cmd_list.append("closefile(point_values)")
 
         cmd_list.append("closefile(file_out)")
         cmd_list.append(f"{self.field.output_to_string()}_close()")
@@ -262,7 +275,7 @@ class FemmProblem:
     def delete_selected(self):
         """Delete all selected objects"""
 
-        cmd = f"{self.field.input_to_string()}_deleteselected"
+        cmd = f"{self.field.input_to_string()}_deleteselected()"
         self.lua_script.append(cmd)
         return cmd
 
@@ -271,21 +284,21 @@ class FemmProblem:
         Delete all selected nodes. The object should be selected using the node
         selection command.
         """
-        cmd = f"{self.field.input_to_string()}_deleteselectednodes"
+        cmd = f"{self.field.input_to_string()}_deleteselectednodes()"
         self.lua_script.append(cmd)
         return cmd
 
     def delete_selected_labels(self):
         """Delete all selected labels."""
 
-        cmd = f"{self.field.input_to_string()}_deleteselectedlabels"
+        cmd = f"{self.field.input_to_string()}_deleteselectedlabels()"
         self.lua_script.append(cmd)
 
         return cmd
 
     def delete_selected_segments(self):
         """Delete all selected segments."""
-        cmd = f"{self.field.input_to_string()}_deleteselectedsegments"
+        cmd = f"{self.field.input_to_string()}_deleteselectedsegments()"
         self.lua_script.append(cmd)
 
         return cmd
@@ -293,7 +306,7 @@ class FemmProblem:
     def delete_selected_arc_segments(self):
         """Delete all selected arc segments."""
 
-        cmd = f"{self.field.input_to_string()}_deleteselectedarcsegments"
+        cmd = f"{self.field.input_to_string()}_deleteselectedarcsegments()"
         self.lua_script.append(cmd)
 
         return cmd
@@ -789,40 +802,8 @@ class FemmProblem:
         if self.field == FemmFields.MAGNETIC:
             cmd = f"A, B1, B2, Sig, E, H1, H2, Je, Js, Mu1, Mu2, Pe, Ph = mo_getpointvalues({point.x}, {point.y})"
             self.lua_script.append(cmd)
-
-            cmd = "write(file_out, \"\\n Point values \\n\")"
-            self.lua_script.append(cmd)
-            cmd = "write(file_out, \"Node x:{0}, y:{1}, Vector potential = \", A ,\"\\n\")".format(point.x, point.y)
-            self.lua_script.append(cmd)
-
-            cmd = "write(file_out, \"Node x:{0}, y:{1}, Bx = \", B1 ,\"\\n\")".format(point.x, point.y)
-            self.lua_script.append(cmd)
-            cmd = "write(file_out, \"Point x:{0}, y:{1}, By = \", B2 ,\"\\n\")".format(point.x, point.y)
-            self.lua_script.append(cmd)
-
-            cmd = "write(file_out, \"Point x:{0}, y:{1}, Sigma = \", Sig ,\"\\n\")".format(point.x, point.y)
-            self.lua_script.append(cmd)
-            cmd = "write(file_out, \"Point x:{0}, y:{1}, E = \", E ,\"\\n\")".format(point.x, point.y)
-            self.lua_script.append(cmd)
-
-            cmd = "write(file_out, \"Point x:{0}, y:{1}, Hx = \", H1 ,\"\\n\")".format(point.x, point.y)
-            self.lua_script.append(cmd)
-            cmd = "write(file_out, \"Point x:{0}, y:{1}, Hy = \", H2 ,\"\\n\")".format(point.x, point.y)
-            self.lua_script.append(cmd)
-
-            cmd = "write(file_out, \"Point x:{0}, y:{1}, Je = \", Je ,\"\\n\")".format(point.x, point.y)
-            self.lua_script.append(cmd)
-            cmd = "write(file_out, \"Point x:{0}, y:{1}, Js = \", Js ,\"\\n\")".format(point.x, point.y)
-            self.lua_script.append(cmd)
-
-            cmd = "write(file_out, \"Point x:{0}, y:{1}, Mux = \", Mu1 ,\"\\n\")".format(point.x, point.y)
-            self.lua_script.append(cmd)
-            cmd = "write(file_out, \"Point x:{0}, y:{1}, Muy = \", Mu2 ,\"\\n\")".format(point.x, point.y)
-            self.lua_script.append(cmd)
-
-            cmd = "write(file_out, \"Point x:{0}, y:{1}, Pe = \", Pe ,\"\\n\")".format(point.x, point.y)
-            self.lua_script.append(cmd)
-            cmd = "write(file_out, \"Point x:{0}, y:{1}, Ph = \", Ph ,\"\\n\")".format(point.x, point.y)
+            # x, y, A, B1, B2, Sig, E, H1, H2, Je, Js, Mu1, Mu2, Pe, Ph
+            cmd = f"write(point_values, \"{point.x}, {point.y},\", A, \",\", B1, \",\",B2,\",\", Sig, \",\", E, \",\", H1, \",\",H2,\",\", Je, \",\", Js, \",\", Mu1, \",\",Mu2,\",\", Pe, \",\", Ph,\"\\n\")"
             self.lua_script.append(cmd)
 
         # Symbol Definition
