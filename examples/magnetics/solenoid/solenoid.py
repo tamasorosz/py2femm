@@ -1,10 +1,10 @@
 import os
 
-from src.magnetics import MagneticMaterial, MagneticDirichlet, MagneticVolumeIntegral
-from src.femm_problem import FemmProblem
-from src.general import LengthUnit
-from src.geometry import Geometry, Line, Node
-from src.executor import Executor
+from py2femm.magnetics import MagneticMaterial, MagneticDirichlet, MagneticVolumeIntegral
+from py2femm.femm_problem import FemmProblem
+from py2femm.general import LengthUnit
+from py2femm.geometry import Geometry, Line, Node
+from py2femm.executor import Executor
 
 
 def turn(radius, z0, w, h):

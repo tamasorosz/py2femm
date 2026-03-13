@@ -1,11 +1,11 @@
 import os
 from dataclasses import dataclass
 
-from src.executor import Executor
-from src.femm_problem import FemmProblem
-from src.general import LengthUnit
-from src.geometry import Geometry, Node
-from src.magnetics import MagneticDirichlet, MagneticPeriodicAirgap, MagneticPeriodic, MagneticBoundaryModification, \
+from py2femm.executor import Executor
+from py2femm.femm_problem import FemmProblem
+from py2femm.general import LengthUnit
+from py2femm.geometry import Geometry, Node
+from py2femm.magnetics import MagneticDirichlet, MagneticPeriodicAirgap, MagneticPeriodic, MagneticBoundaryModification, \
     MagneticMaterial, LamType
 
 current_file_path = os.path.abspath(__file__)

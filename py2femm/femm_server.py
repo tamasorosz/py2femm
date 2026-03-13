@@ -5,7 +5,7 @@ import uvicorn
 from fastapi import FastAPI
 from pydantic import BaseModel, Extra
 from __init__ import __version__
-from src.executor import Executor
+from py2femm.executor import Executor
 
 
 class InputJson(BaseModel):

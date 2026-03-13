@@ -1,11 +1,11 @@
 import os
 
-from src.electrostatics import ElectrostaticMaterial, ElectrostaticSurfaceCharge, ElectrostaticFixedVoltage, \
+from py2femm.electrostatics import ElectrostaticMaterial, ElectrostaticSurfaceCharge, ElectrostaticFixedVoltage, \
     ElectrostaticVolumeIntegral
-from src.executor import Executor
-from src.femm_problem import FemmProblem
-from src.general import LengthUnit
-from src.geometry import Geometry, Line, CircleArc, Node
+from py2femm.executor import Executor
+from py2femm.femm_problem import FemmProblem
+from py2femm.general import LengthUnit
+from py2femm.geometry import Geometry, Line, CircleArc, Node
 
 
 def planar_capacitor_problem(width, thickness, d):

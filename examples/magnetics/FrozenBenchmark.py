@@ -1,12 +1,12 @@
-from src.femm_problem import FemmProblem
-from src.general import LengthUnit
+from py2femm.femm_problem import FemmProblem
+from py2femm.general import LengthUnit
 import os
-from src.executor import Executor
-from src.magnetics import MagneticMaterial,MagneticDirichlet,MagneticVolumeIntegral,BHCurve, LamType
-from src.femm_problem import FemmProblem
-from src.general import LengthUnit
-from src.geometry import Geometry,Line,Node,CircleArc
-from src.executor import Executor
+from py2femm.executor import Executor
+from py2femm.magnetics import MagneticMaterial,MagneticDirichlet,MagneticVolumeIntegral,BHCurve, LamType
+from py2femm.femm_problem import FemmProblem
+from py2femm.general import LengthUnit
+from py2femm.geometry import Geometry,Line,Node,CircleArc
+from py2femm.executor import Executor
 import matplotlib.pyplot as plt
 import math
 
