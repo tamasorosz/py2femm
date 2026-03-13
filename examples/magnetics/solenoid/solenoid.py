@@ -1,10 +1,10 @@
 import os
 
-from src.magnetics import MagneticMaterial, MagneticDirichlet, MagneticVolumeIntegral
-from src.femm_problem import FemmProblem
-from src.general import LengthUnit
-from src.geometry import Geometry, Line, Node
-from src.executor import Executor
+from py2femm.magnetics import MagneticMaterial, MagneticDirichlet, MagneticVolumeIntegral
+from py2femm.femm_problem import FemmProblem
+from py2femm.general import LengthUnit
+from py2femm.geometry import Geometry, Line, Node
+from py2femm.executor import Executor
 
 
 def turn(radius, z0, w, h):
@@ -64,10 +64,10 @@ def solenoid(n, w, h, radius, gap):
     # Boundary conditions
     a0 = MagneticDirichlet(name="a0", a_0=0, a_1=0, a_2=0, phi=0)
     problem.add_boundary(a0)
-    problem.set_boundary_definition(l1.selection_point(), a0)
-    problem.set_boundary_definition(l2.selection_point(), a0)
-    problem.set_boundary_definition(l3.selection_point(), a0)
-    problem.set_boundary_definition(l4.selection_point(), a0)
+    problem.set_boundary_definition_segment(l1.selection_point(), a0)
+    problem.set_boundary_definition_segment(l2.selection_point(), a0)
+    problem.set_boundary_definition_segment(l3.selection_point(), a0)
+    problem.set_boundary_definition_segment(l4.selection_point(), a0)
 
     # Materials
     copper = MagneticMaterial(material_name="copper", J=1 / (w * h), Sigma=58.0)
@@ -94,15 +94,65 @@ def solenoid(n, w, h, radius, gap):
 
     z0 = -(h + gap) * n / 2
 
-    problem.get_integral_values([Node(radius, z0)], save_image=True, variable_name=MagneticVolumeIntegral.ResistiveLoss)
+    problem.get_integral_values([Node(radius, z0)], save_image=True, variable_name=MagneticVolumeIntegral.A)
+
+    # post-processing operations
+    problem.get_back_fem_results()
 
     problem.write("solenoid.lua")
 
+    return problem
+
 
 if __name__ == '__main__':
-    solenoid(10, 2, 2, 6, 1)
+    problem = solenoid(2, 2, 2, 6, 1)
 
     femm = Executor()
     current_dir = os.getcwd()
     lua_file = current_dir + "/solenoid.lua"
     femm.run(lua_file)
+
+    problem.post_process_mesh_data()
+    k_nn = problem.calc_stiffness_matrix()
+    n_nn = problem.calc_n_matrix()
+
+    # Temporary
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    # k_nn matrix
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    x = np.arange(k_nn.shape[0])
+    y = np.arange(k_nn.shape[1])
+    x, y = np.meshgrid(x, y)
+    z = k_nn[x, y]
+
+    row_sums = np.sum(k_nn, axis=1)
+    print('row_sums:', row_sums)
+    num_large_sum_rows = np.sum(row_sums > 1e-5)
+    print('number of large sums', num_large_sum_rows)
+    surface = ax.plot_surface(x, y, z, cmap='viridis')
+    fig.colorbar(surface, ax=ax, shrink=0.5, aspect=5)
+    ax.set_title('Surface Plot of Global Stiffness Matrix K_glb')
+    ax.set_xlabel('Node Index')
+    ax.set_ylabel('Node Index')
+    ax.set_zlabel('Value')
+
+    plt.show()
+
+    # n_nn matrix
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    x = np.arange(n_nn.shape[0])
+    y = np.arange(n_nn.shape[1])
+    x, y = np.meshgrid(x, y)
+    z = n_nn[x, y]
+
+    ax.plot_surface(x, y, z, cmap='viridis')
+    ax.set_title('Surface Plot of Global Matrix N_glb')
+    ax.set_xlabel('Node Index')
+    ax.set_ylabel('Node Index')
+    ax.set_zlabel('Value')
+
+    #plt.show()

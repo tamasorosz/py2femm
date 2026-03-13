@@ -1,5 +1,5 @@
 from unittest import TestCase
-from src.executor import Executor
+from py2femm.executor import Executor
 from importlib.resources import files
 import os
 import warnings

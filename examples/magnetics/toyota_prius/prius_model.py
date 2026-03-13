@@ -3,11 +3,11 @@ import math
 import os
 from copy import copy
 
-from src.executor import Executor
-from src.femm_problem import FemmProblem
-from src.general import LengthUnit
-from src.geometry import Node, Geometry, Line, CircleArc
-from src.magnetics import MagneticMaterial, LamType, MagneticDirichlet, MagneticAnti, MagneticAntiPeriodicAirgap
+from py2femm.executor import Executor
+from py2femm.femm_problem import FemmProblem
+from py2femm.general import LengthUnit
+from py2femm.geometry import Node, Geometry, Line, CircleArc
+from py2femm.magnetics import MagneticMaterial, LamType, MagneticDirichlet, MagneticAnti, MagneticAntiPeriodicAirgap
 
 ORIGIN = Node(0.0, 0.0)
 
@@ -186,7 +186,8 @@ def material_definitions(femm_problem: FemmProblem):
                               Node(81.5, 0.0).rotate(93.75, degrees=True),
                               Node(81.5, 0.0).rotate(86.25, degrees=True),
                               Node(81.5, 0.0).rotate(78.75, degrees=True),
-                              Node(81.5, 0.0).rotate(71.25, degrees=True), ]
+                              Node(81.5, 0.0).rotate(71.25, degrees=True),
+                              Node(0.0, 67.5)]
     femm_problem.add_material(air)
 
     # airgap material, to define different mesh size
@@ -286,10 +287,30 @@ def boundary_definitions(femm_problem: FemmProblem):
     femm_problem.add_boundary(pb4)
     femm_problem.add_boundary(apb)
 
+    # Add boundary conditions to stator segments
+    femm_problem.set_boundary_definition_segment(Node(70.0, 0.0).rotate(67.5,degrees=True), pb1)
+    femm_problem.set_boundary_definition_segment(Node(70.0, 0.0).rotate(112.5,degrees=True), pb1)
+
+    femm_problem.set_boundary_definition_segment(Node(80.25, 0.0).rotate(67.5,degrees=True), pb2)
+    femm_problem.set_boundary_definition_segment(Node(80.25, 0.0).rotate(112.5,degrees=True), pb2)
+
+    femm_problem.set_boundary_definition_segment(Node(80.8, 0.0).rotate(67.5,degrees=True), pb3)
+    femm_problem.set_boundary_definition_segment(Node(80.8, 0.0).rotate(112.5,degrees=True), pb3)
+
+    femm_problem.set_boundary_definition_segment(Node(110.0, 0.0).rotate(67.5,degrees=True), pb4)
+    femm_problem.set_boundary_definition_segment(Node(110.0, 0.0).rotate(112.5,degrees=True), pb4)
+
+    femm_problem.set_boundary_definition_arc(Node(0.0, 80.4494), apb)
+    femm_problem.set_boundary_definition_arc(Node(0.0, 80.7), apb)
+
+    femm_problem.set_boundary_definition_arc(Node(0.0,134.62), a0)
+    femm_problem.set_boundary_definition_arc(Node(0.0,55.319), a0)
+
+
 
 if __name__ == '__main__':
-    problem = FemmProblem(out_file="../prius.csv")
-    problem.magnetic_problem(50, LengthUnit.MILLIMETERS, "planar")
+    problem = FemmProblem(out_file="/prius.csv")
+    problem.magnetic_problem(0, LengthUnit.MILLIMETERS, "planar")
 
     variables = VariableParams()
 
