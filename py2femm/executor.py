@@ -15,7 +15,7 @@ from patio_rabbitmq import RabbitMQBroker
 class Executor:
     # using wine under linux environment
     femm_path_linux = str(Path.home()) + "/.wine/drive_c/femm42/bin/femm.exe"
-    femm_path_windows = r"D:\femm42\bin\femm.exe"
+    femm_path_windows = r"C:\femm42\bin\femm.exe"
 
     def run(self, script_file, timeout=1000):
         command = []
