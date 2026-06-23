@@ -3,6 +3,7 @@ import dataclasses
 import math
 from math import sin, cos, asin, acos, pi, radians, degrees, tan, sqrt
 from copy import copy
+from dataclasses import dataclass
 
 # importok
 from src.magnetics import MagneticDirichlet, MagneticMaterial, MagneticAnti, MagneticAntiPeriodicAirgap, LamType, MagneticPeriodic
@@ -14,25 +15,36 @@ from src.executor import Executor
 
 # parameterek
 ORIGIN = Node(0.0, 0.0)
+@dataclass
+class MotorParameters:
+    #BLDC motor geometriai es fizikat parametereit tartalmazo osztaly
+    #geometriai meretek:
 
-AXIAL_LENGTH = 50.0
-ROTOR_INNER_DIAMETER = 22.8
-ROTOR_OUTER_DIAMETER = 55.1
-AIR_GAP_LENGTH = 0.7
-STATOR_OUTER_DIAMETER = 100.0
-TOOTH_ROOT_DIAMETER = 86.6
-MAGNET_WIDTH = 15.9
-TOOTH_WIDTH = 4.0
+    AXIAL_LENGTH: float = 50.0
+    ROTOR_INNER_DIAMETER: float = 22.8
+    ROTOR_OUTER_DIAMETER: float = 55.1
+    AIR_GAP_LENGTH: float = 0.7
+    STATOR_OUTER_DIAMETER: float = 100.0
+    TOOTH_ROOT_DIAMETER: float = 86.6
+    MAGNET_WIDTH: float = 15.9
+    TOOTH_WIDTH: float = 4.0
 
-STATOR_SLOTS = 24
-SEGMENT_SIZE = 3
-SEGMENT_ANGLE_DEG = 360 / STATOR_SLOTS * SEGMENT_SIZE # 45.0 deg
+    #alloresz es fogazas
 
-TOOTH_TIP_ANGLE_DEG = 11.9
+    STATOR_SLOTS: int = 24
+    SEGMENT_SIZE: int = 3
 
-MAGNET_HEIGHT = 3.577
-MAGNET_HC = 724 * 1000
-MAGNET_MUR = 1.11
+    TOOTH_TIP_ANGLE_DEG: float = 11.9
+
+    #magneses tulajdosagok
+
+    MAGNET_HEIGHT: float = 3.577
+    MAGNET_HC: float = 724 * 1000
+    MAGNET_MUR: float = 1.11
+    @property
+    def segment_angle_deg(self) -> float:
+        #automatikusan szamolt szegmens szog fokban
+        return 360. / self.STATOR_SLOTS * self.SEGMENT_SIZE
 
 # geometry_functions
 
